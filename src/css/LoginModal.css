@@ -1,0 +1,62 @@
+.modal-overlay {
+    position: fixed;
+    top: -100px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7); /* 반투명 배경 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* 모달을 최상위에 위치하게 함 */
+}
+
+.modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 그림자 효과 */
+    width: 300px; /* 모달 너비 */
+    text-align: center; /* 텍스트 중앙 정렬 */
+}
+
+#login-text {
+    font-size: 24px;
+    margin-top: 0px;
+    margin-bottom: 20px; /* 제목과 내용 사이 간격 */
+}
+
+.login-form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0px 20px 0px;
+    padding: 10px;
+    cursor: pointer; /* 마우스 커서 포인터로 변경 */
+    border: 1px solid #ccc;
+    border-radius: 5px; 
+}
+
+.login-form:hover {
+    background: #f0f0f0; /* 호버 시 배경 색상 변경 */
+}
+
+.login-form img {
+    width: 24px; /* 아이콘 크기 */
+    height: 24px; /* 아이콘 크기 */
+    margin-right: 10px; /* 아이콘과 텍스트 간격 */
+}
+
+#login-close {
+    margin-top: 5px; /* 닫기 버튼과 내용 간격 */
+    padding: 10px 20px; /* 버튼 패딩 */
+    border: none; /* 테두리 없음 */
+    border-radius: 5px; /* 둥근 모서리 */
+    background-color: #1297da; /* 버튼 배경색 */
+    color: white; /* 버튼 텍스트 색상 */
+    cursor: pointer; /* 마우스 커서 포인터로 변경 */
+}
+
+#login-close:hover {
+    background-color: #1BAEF8; /* 호버 시 배경 색상 변경 */
+}
