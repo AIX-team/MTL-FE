@@ -1,0 +1,63 @@
+/* 서브 헤더 컨테이너 */
+.WS-SubHeader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 402px;
+    padding: 10px;
+    z-index: 100;
+    position: relative;  /* 인디케이터의 기준점 */
+}
+
+/* 각 탭의 기본 스타일 */
+.WS-SubHeader-Tab {
+    flex: 1;
+    text-align: center;
+    padding: 15px 0;
+    text-decoration: none;
+    color: #666;
+    font-size: 14px;
+    position: relative;
+}
+
+/* 활성화된 탭 스타일 */
+.WS-SubHeader-Tab.active {
+    color: #dc3545;  /* 빨간색 */
+    font-weight: bold;
+}
+
+/* 이동하는 인디케이터(빨간 선) 스타일 */
+.WS-SubHeader .indicator {
+    position: absolute;
+    bottom: 10px;  /* 바닥에서의 간격 */
+    left: 50%;  /* 중앙 정렬 시작점 */
+    transform: translateX(-50%);  /* 중앙 정렬 보정 */
+    width: 80px;  /* 인디케이터 너비 */
+    height: 2px;
+    background-color: #dc3545;
+    transition: transform 0.3s ease;  /* 이동 애니메이션 */
+}
+
+/* 각 탭이 활성화될 때 인디케이터 위치 */
+.WS-SubHeader-Tab:nth-child(1).active ~ .indicator {
+    transform: translateX(-168px);  /* 첫 번째 탭(링크) 중앙 */
+}
+
+.WS-SubHeader-Tab:nth-child(2).active ~ .indicator {
+    transform: translateX(-50%);  /* 두 번째 탭(유튜브검색) 중앙 */
+}
+
+.WS-SubHeader-Tab:nth-child(3).active ~ .indicator {
+    transform: translateX(87px);  /* 세 번째 탭(선택) 중앙 */
+}
+
+/* 선택 탭의 숫자 3 스타일 */
+.number {
+    display: inline-block;
+    margin-left: 4px;
+    color: #dc3545;
+    font-weight: bold;
+}

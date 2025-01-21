@@ -1,0 +1,10 @@
+/* 헤더 컨테이너 스타일 */
+.header-container {
+    display: flex;  
+    position: fixed;
+    top: 10px;
+    width: 402px;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+}

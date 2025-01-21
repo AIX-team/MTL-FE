@@ -1,0 +1,66 @@
+/* 하단 푸터 컨테이너 스타일 */
+.footer-container {
+    position: fixed;
+    bottom: 10px;
+    width: 402px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 10px;
+}
+
+/* 푸터 메뉴 아이템 기본 스타일 */
+.WS-Footer-Item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+    position: relative;
+}
+
+/* 푸터 메뉴 아이콘 이미지 스타일 */
+.WS-Footer-Item img {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    filter: grayscale(100%);  /* 기본 상태는 흑백으로 표시 */
+    transition: all 0.3s;  /* 호버 효과 부드럽게 적용 */
+    position: relative;
+    z-index: 2;
+}
+
+/* 푸터 메뉴 텍스트 스타일 */
+.WS-Footer-Item div {
+    margin-top: 4px;
+    font-size: 12px;
+    position: relative;
+    z-index: 2;
+}
+
+/* 호버 및 활성화 상태일 때 원형 배경 스타일 */
+.WS-Footer-Item:hover::before,
+.WS-Footer-Item.active::before {
+    content: '';
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    background-color: #dc3545;  /* 빨간색 원형 배경 */
+    border-radius: 50%;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+}
+
+/* 호버 및 활성화 상태일 때 아이콘 색상 변경 */
+.WS-Footer-Item:hover img,
+.WS-Footer-Item.active img {
+    filter: brightness(0) invert(1);  /* 이미지를 흰색으로 변경 */
+}
+
+/* 호버 및 활성화 상태일 때 텍스트 색상 변경 */
+.WS-Footer-Item:hover div,
+.WS-Footer-Item.active div {
+    color: white;
+}

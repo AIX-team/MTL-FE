@@ -1,0 +1,74 @@
+.WS-LinkList {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* 검색 입력창 스타일 */
+.WS-LinkList-Search {
+    display: flex;
+    gap: 10px;
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+
+.WS-LinkList-SearchInput {
+    flex: 1;
+    padding: 12px 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 25px;
+    font-size: 14px;
+    outline: none;
+}
+
+.WS-LinkList-AddButton {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    background-color: #f0f0f0;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* 링크 아이템 스타일 */
+.WS-LinkList-Items {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.WS-LinkList-Item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 15px;
+    background-color: #f8f8f8;
+    border-radius: 10px;
+}
+
+.WS-LinkList-Badge {
+    padding: 4px 8px;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.WS-LinkList-Item.youtube .WS-LinkList-Badge {
+    background-color: #FF0000;
+    color: white;
+}
+
+.WS-LinkList-Item.blog .WS-LinkList-Badge {
+    background-color: #2DB400;
+    color: white;
+}
+
+.WS-LinkList-Text {
+    flex: 1;
+    font-size: 14px;
+    color: #666;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

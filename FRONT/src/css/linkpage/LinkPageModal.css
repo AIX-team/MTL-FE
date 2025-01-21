@@ -1,0 +1,41 @@
+.WS-LinkPage-Modal-Overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.WS-LinkPage-Modal {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 80%;
+    max-width: 300px;
+    text-align: center;
+}
+
+.WS-LinkPage-Modal-Message {
+    margin: 0 0 20px 0;
+    font-size: 16px;
+    color: #333;
+}
+
+.WS-LinkPage-Modal-Button {
+    padding: 8px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007AFF;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.WS-LinkPage-Modal-Button:hover {
+    background-color: #0056b3;
+} 
