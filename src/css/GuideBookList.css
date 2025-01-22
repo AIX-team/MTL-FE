@@ -1,0 +1,296 @@
+.YC-GuideBookList-Container {
+    overflow-y: auto;
+    margin-top: 30px;
+    height: 82vh;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+#YC-GuideBook-Header-contents-recommandations {
+    text-decoration: none;
+    color: #D65E5D;
+    font-weight: bold;
+    font-size: 12px;
+
+}
+
+.YC-GuideBook-place-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.YC-GuideBookList-menus-menu {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.YC-GuideBookList-menus-menu::-webkit-scrollbar {
+    display: none;
+}
+
+.YC-GuideBookList-menus-menu button {
+    margin-right: 10px;
+    padding: 6px 15px;
+    background-color: #fafafa;
+    color: rgb(0, 0, 0);
+    border: 1px solid #8f8f8f;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 12px;
+    flex-shrink: 0;
+    /* 버튼이 찌그러지지 않도록 설정 */
+    white-space: nowrap;
+    /* 텍스트가 줄바꿈되지 않도록 설정 */
+}
+
+.YC-GuideBookList-menus-menu button:hover {
+    background-color: #D65E5D;
+    border: 1px solid #D65E5D;
+    color: white;
+}
+
+.YC-GuideBookList-menus-editBtn {
+    display: flex;
+    justify-content: flex-end;
+}
+
+#YC-GuideBookList-menus-editBtn-edit {
+    background-color: transparent;
+    color: #D65E5D;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 900;
+
+}
+
+.YC-GuideBookList-editOptions {
+    display: flex;
+    gap: 10px;
+}
+
+.YC-GuideBookList-editOptions button {
+    padding: 8px 16px;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+
+.YC-GuideBook-place {
+    position: relative;
+    padding-left: 50px;
+    /* 번호를 위한 공간 확보 */
+}
+
+.YC-GuideBook-place-Container {
+    margin-bottom: 15px;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 10px;
+    background-color: #f8f8f8;
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    margin-right: 40px;
+    /* drag-handle를 위한 공간 확보 */
+}
+
+#YC-GuideBook-place-number {
+    position: absolute;
+    left: -40px;
+    top: 0;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+    z-index: 2;
+}
+
+/* 번호 색상 변경 */
+.YC-GuideBook-place-Container:nth-child(5n+1) #YC-GuideBook-place-number {
+    background-color: #FF6B6B;
+}
+
+.YC-GuideBook-place-Container:nth-child(5n+2) #YC-GuideBook-place-number {
+    background-color: #4ECDC4;
+}
+
+.YC-GuideBook-place-Container:nth-child(5n+3) #YC-GuideBook-place-number {
+    background-color: #45B7D1;
+}
+
+.YC-GuideBook-place-Container:nth-child(5n+4) #YC-GuideBook-place-number {
+    background-color: #96CEB4;
+}
+
+.YC-GuideBook-place-Container:nth-child(5n) #YC-GuideBook-place-number {
+    background-color: #D4A5A5;
+}
+
+/* 세로선 추가 */
+.YC-GuideBook-place-Container::before {
+    content: '';
+    position: absolute;
+    left: -28px;
+    top: 24px;
+    /* 원의 아래부터 시작 */
+    width: 2px;
+    height: calc(100% + 15px);
+    /* 컨테이너 높이 + 마진 */
+    background-color: #e0e0e0;
+    z-index: 1;
+}
+
+/* 마지막 아이템의 세로선 제거 */
+.YC-GuideBook-place-Container:last-child::before {
+    display: none;
+}
+
+#YC-GuideBook-place-image {
+    width: 90px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+#YC-GuideBook-place-name {
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+    display: block;
+    margin-bottom: 5px;
+}
+
+#YC-GuideBook-place-type {
+    font-size: 12px;
+    color: #666;
+    display: block;
+}
+
+#YC-GuideBook-place-description {
+    font-size: 12px;
+    color: #888;
+    margin: 5px 0;
+}
+
+.drag-handle {
+    position: absolute;
+    right: -30px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: move;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    z-index: 1;
+}
+
+.drag-handle::before,
+.drag-handle::after,
+.drag-handle span {
+    content: '';
+    display: block;
+    width: 12px;
+    height: 2px;
+    background-color: #666;
+    border-radius: 1px;
+}
+
+.drag-handle:hover {
+    background-color: #e0e0e0;
+}
+
+.YC-GuideBook-place-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.YC-GuideBook-place-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.YC-GuideBook-place-Container.dragging {
+    background-color: #f0f0f0;
+    opacity: 0.8;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.YC-GuideBook-place-Container.dragging::before {
+    display: none; /* 드래그 중일 때 세로선 숨기기 */
+}
+
+.YC-GuideBook-place-Container.dragging #YC-GuideBook-place-number {
+    display: none; /* 드래그 중일 때 번호 숨기기 */
+}
+
+/* 드래그 중인 아이템의 placeholder 스타일 */
+.YC-GuideBook-place [data-rbd-placeholder-context-id] {
+    position: relative;
+}
+
+.YC-GuideBook-place [data-rbd-placeholder-context-id]::before {
+    content: '';
+    position: absolute;
+    left: -28px;
+    top: 24px;
+    width: 2px;
+    height: calc(100% + 15px);
+    background-color: #e0e0e0;
+    z-index: 1;
+}
+
+.YC-GuideBookList-moveModal,
+.YC-GuideBookList-deleteModal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+#YC-GuideBookList-moveModal-title,
+#YC-GuideBookList-deleteModal-title {
+    margin-bottom: 15px;
+}
+
+.YC-GuideBookList-content {
+    overflow-y: auto;
+    max-height: 70vh;
+    margin: 0px auto;
+}
+
+.YC-GuideBookList-map {
+    margin-top: 20px;
+
+}
+
+.YC-GuideBookList-map-iframe {
+    width: 100%;
+    height: 500px;
+    border: 0;
+    border-radius: 5px;
+}
