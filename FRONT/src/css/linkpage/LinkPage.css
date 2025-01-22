@@ -1,0 +1,18 @@
+.WS-Link-Page {
+    width: 100%;
+    margin-top: 20px;
+    /* SubHeader 아래 여백 */
+    overflow-y: auto;
+    /* 내용이 넘칠 때만 스크롤 */
+    display: flex;
+    /* Flexbox 사용 */
+    justify-content: center;
+    /* 수평 중앙 정렬 */
+}
+
+.WS-Link-Content {
+    max-width: 800px;
+    /* 콘텐츠의 최대 너비 */
+    width: 100%;
+    text-align: center;
+}
