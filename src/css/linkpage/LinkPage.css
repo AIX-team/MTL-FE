@@ -1,6 +1,6 @@
 .WS-Link-Page {
     width: 100%;
-    margin-top: 20px;
+    margin-top: 30px;
     /* SubHeader 아래 여백 */
     overflow-y: auto;
     /* 내용이 넘칠 때만 스크롤 */
@@ -15,4 +15,5 @@
     /* 콘텐츠의 최대 너비 */
     width: 100%;
     text-align: center;
+    height: 100%;
 }

@@ -1,6 +1,5 @@
 .WS-LinkList {
-    width: 100%;
-    max-width: 600px;
+    width: 90%;
     margin: 0 auto;
 }
 
@@ -36,15 +35,35 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
+    margin-bottom: 80px;
+    /* 분석하기 버튼 영역만큼 여백 추가 */
+    max-height: calc(100vh - 200px);
+    /* 화면 높이에서 헤더, 푸터, 분석버튼 영역을 뺀 높이 */
+    overflow-y: auto;
 }
 
 .WS-LinkList-Item {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    gap: 10px;
-    padding: 15px;
-    background-color: #f8f8f8;
-    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 8px;
+    border-radius: 4px;
+    background-color: #ffffff;
+    transition: background-color 0.2s ease;
+}
+
+.WS-LinkList-Item:hover {
+    background-color: #cecece;
+}
+
+.WS-LinkList-Content {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    min-width: 0;
+    /* 텍스트 오버플로우 방지 */
+
 }
 
 .WS-LinkList-Badge {
@@ -52,6 +71,8 @@
     border-radius: 5px;
     font-size: 12px;
     font-weight: bold;
+    margin-right: 10px;
+    width: 70px;
 }
 
 .WS-LinkList-Item.youtube .WS-LinkList-Badge {
@@ -69,6 +90,74 @@
     font-size: 14px;
     color: #666;
     white-space: nowrap;
-    overflow: hidden;
     text-overflow: ellipsis;
+    text-align: left;
+}
+
+.WS-LinkList-DeleteButton {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin-left: 10px;
+    font-size: 18px;
+    transition: background-color 0.2s;
+}
+
+.WS-LinkList-DeleteButton:hover {
+    background-color: #ff3333;
+}
+
+.WS-LinkList-Analyze {
+    position: fixed;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%); /* 중앙 정렬을 위해 추가 */
+    width: 402px; /* 메인 컨테이너 너비와 동일하게 설정 */
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+/* 모바일 환경을 위한 반응형 처리 */
+@media screen and (max-width: 402px) {
+    .WS-LinkList-Analyze {
+        width: 100%;
+    }
+}
+
+.WS-LinkList-AnalyzeButton {
+    background-color: #ff0000;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 12px 40px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.WS-LinkList-AnalyzeButton:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+.WS-LinkList-AnalyzeButton:not(:disabled):hover {
+    transform: scale(1.02);
+    background-color: #e60000;
+}
+
+.WS-LinkList-Counter {
+    color: #666;
+    font-size: 14px;
 }

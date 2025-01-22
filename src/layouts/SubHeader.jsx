@@ -1,6 +1,7 @@
-import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import LinkPage from '../pages/link/LinkPage';
 import '../css/layout/SubHeader.css';
+import youtubeIcon from '../../src/images/youtube.png'; // YouTube 로고 이미지 import
 
 /**
  * 서브 헤더 컴포넌트
@@ -8,30 +9,54 @@ import '../css/layout/SubHeader.css';
  * 현재 선택된 탭 아래에 빨간색 인디케이터 표시
  */
 const SubHeader = () => {
-    const location = useLocation();
-    
-    // 현재 경로에 따라 활성화된 탭 스타일 적용
+    const [activeTab, setActiveTab] = useState('youtube');
+    const [linkCount, setLinkCount] = useState(0);
+    const [linkData, setLinkData] = useState([]); // 빈 배열로 초기화
+
+    // 현재 탭에 따라 활성화된 탭 스타일 적용
     const getClassName = (path) => {
-        return `WS-SubHeader-Tab${location.pathname === path ? ' active' : ''}`;
+        const tabMapping = {
+            'links': '/link',
+            'youtube': '/link/searchYouTube'
+        };
+        return `WS-SubHeader-Tab${tabMapping[activeTab] === path ? ' active' : ''}`;
     };
 
+    // 링크 데이터가 변경될 때마다 카운트 업데이트
+    useEffect(() => {
+        setLinkCount(linkData.length);
+    }, [linkData]);
+
     return (
-        <nav className="WS-SubHeader">
-            {/* 링크 탭 */}
-            <Link to="/link" className={getClassName('/link')}>
-                링크
-            </Link>
-            {/* 유튜브검색 탭 */}
-            <Link to="/link/searchYouTube" className={getClassName('/link/searchYouTube')}>
-                유튜브검색
-            </Link>
-            {/* 선택 탭 */}
-            <Link to="/link/selected" className={getClassName('/link/selected')}>
-                선택<span className="number">3</span>
-            </Link>
-            {/* 이동하는 인디케이터(빨간 선) */}
-            <div className="indicator" />
-        </nav>
+        <>
+            <nav className="WS-SubHeader">
+                {/* 유튜브검색 탭 */}
+                <div
+                    onClick={() => setActiveTab('youtube')}
+                    className={getClassName('/link/searchYouTube')}
+                >
+                    <div className="WS-SubHeader-youtube-tab">
+                        <img src={youtubeIcon} alt="YouTube" className="WS-SubHeader-youtube-icon" />
+                        <span>유튜브 검색</span>
+                    </div>
+                </div>
+                {/* 링크 탭 */}
+                <div
+                    onClick={() => setActiveTab('links')}
+                    className={getClassName('/link')}
+                >
+                    링크<span className="number">{linkCount}</span>
+                </div>
+
+                {/* 이동하는 인디케이터(빨간 선) */}
+                <div className="indicator" />
+            </nav>
+            <LinkPage
+                activeTab={activeTab}
+                linkData={linkData}
+                setLinkData={setLinkData}
+            />
+        </>
     );
 };
 
