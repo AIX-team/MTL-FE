@@ -20,6 +20,8 @@ const GuideBookList = () => {
     const [selectedItems, setSelectedItems] = useState([]); // 선택된 장소들
     const [targetCourse, setTargetCourse] = useState(null); // 이동할 대상 코스
     const [places, setPlaces] = useState([]); // 현재 코스의 장소들
+    const [showDetailModal, setShowDetailModal] = useState(false);
+    const [selectedPlace, setSelectedPlace] = useState(null);
 
     // 테스트용 더미 데이터
     const dummyData = {
@@ -150,6 +152,20 @@ const GuideBookList = () => {
         setPlaces(items);
     };
 
+    // 장소 클릭 핸들러
+    const handlePlaceClick = (place) => {
+        if (!isEditMode) {
+            setSelectedPlace(place);
+            setShowDetailModal(true);
+        }
+    };
+
+    // 모달 닫기 핸들러
+    const handleDetailModalClose = () => {
+        setShowDetailModal(false);
+        setSelectedPlace(null);
+    };
+
     // 콘텐츠 렌더링
     const renderContent = () => {
         return (
@@ -163,36 +179,41 @@ const GuideBookList = () => {
                                         <div
                                             ref={provided.innerRef}
                                             {...provided.draggableProps}
-                                            className={`YC-GuideBook-place-Container ${snapshot.isDragging ? 'dragging' : ''}`}
+                                            className={`YC-GuideBook-place-Container ${snapshot.isDragging ? 'dragging' : ''} ${isEditMode ? 'edit-mode' : ''}`}
                                         >
-                                            <div id="YC-GuideBook-place-number">{index + 1}</div>
-                                            {isEditMode && (
-                                                <>
-                                                    <input
-                                                        type="checkbox"
-                                                        className="YC-GuideBook-place-checkbox"
-                                                        onChange={() => handleCheckboxChange(place.id)}
-                                                    />
+                                            {isEditMode ? (
+                                                <input
+                                                    type="checkbox"
+                                                    className="YC-GuideBook-place-checkbox"
+                                                    onChange={() => handleCheckboxChange(place.id)}
+                                                />
+                                            ) : (
+                                                <div id="YC-GuideBook-place-number">{index + 1}</div>
+                                            )}
+                                            <div className="YC-GuideBook-place-draggable" onClick={() => handlePlaceClick(place)}
+                                            >
+                                                {isEditMode && (
                                                     <div
                                                         {...provided.dragHandleProps}
                                                         className="drag-handle"
                                                     >
                                                         <span></span>
                                                     </div>
-                                                </>
-                                            )}
-                                            <img
-                                                id="YC-GuideBook-place-image"
-                                                src={place.image || "https://placehold.co/90x70?text=No+Image"}
-                                                alt="관광지 이미지"
-                                                onError={(e) => {
-                                                    e.target.src = "https://placehold.co/90x70?text=No+Image";
-                                                }}
-                                            />
-                                            <div className="YC-GuideBook-place-info">
-                                                <span id="YC-GuideBook-place-name">{place.name}</span>
-                                                <span id="YC-GuideBook-place-type">{place.type}</span>
-                                                <p id="YC-GuideBook-place-description">{place.description}</p>
+                                                )}
+
+                                                <img
+                                                    id="YC-GuideBook-place-image"
+                                                    src={place.image || "https://placehold.co/90x70?text=No+Image"}
+                                                    alt="관광지 이미지"
+                                                    onError={(e) => {
+                                                        e.target.src = "https://placehold.co/90x70?text=No+Image";
+                                                    }}
+                                                />
+                                                <div className="YC-GuideBook-place-info">
+                                                    <span id="YC-GuideBook-place-name">{place.name}</span>
+                                                    <span id="YC-GuideBook-place-type">{place.type}</span>
+                                                    <p id="YC-GuideBook-place-description">{place.description}</p>
+                                                </div>
                                             </div>
                                         </div>
                                     )}
@@ -223,7 +244,9 @@ const GuideBookList = () => {
                     <button onClick={() => handleTabClick(5)}>코스 5</button>
                 </div>
                 <div className="YC-GuideBookList-menus-editBtn">
-                    <button id="YC-GuideBookList-menus-editBtn-edit" onClick={handleEditClick}>편집</button>
+                    <button id="YC-GuideBookList-menus-editBtn-edit" onClick={handleEditClick}>
+                        {isEditMode ? '완료' : '편집'}
+                    </button>
                 </div>
 
                 <div className="YC-GuideBookList-content">
@@ -259,9 +282,68 @@ const GuideBookList = () => {
             {/* 삭제 모달 */}
             {showDeleteModal && (
                 <div className="YC-GuideBookList-deleteModal">
-                    <p id="YC-GuideBookList-deleteModal-title">삭제하시겠습니까?</p>
-                    <button id="YC-GuideBookList-deleteModal-confirm" onClick={handleDeleteConfirm}>예</button>
-                    <button id="YC-GuideBookList-deleteModal-cancel" onClick={handleModalClose}>아니오</button>
+                    <div className="YC-GuideBookList-deleteModal-content">
+                        <p id="YC-GuideBookList-deleteModal-title">삭제하시겠습니까?</p>
+                        <p id="YC-GuideBookList-deleteModal-description">삭제된 장소는 복구할 수 없습니다.</p>
+                    </div>
+                    <div className="YC-GuideBookList-deleteModal-buttons">
+                        <button id="YC-GuideBookList-deleteModal-cancel" onClick={handleModalClose}>취소</button>
+                        <button id="YC-GuideBookList-deleteModal-confirm" onClick={handleDeleteConfirm}>확인</button>
+                    </div>
+                </div>
+            )}
+
+            {/* 장소 상세 모달 */}
+            {showDetailModal && selectedPlace && (
+                <div className="YC-GuideBook-detail-modal-overlay">
+                    <div className="YC-GuideBook-detail-modal">
+                        <div className="YC-GuideBook-detail-modal-header">
+                            <button className="YC-GuideBook-detail-modal-back" onClick={handleDetailModalClose}>
+                                ←
+                            </button>
+                            
+                        </div>
+                        <div className="YC-GuideBook-detail-modal-content">
+                            <img
+                                className="YC-GuideBook-detail-modal-image"
+                                src={selectedPlace.image || "https://placehold.co/400x300?text=No+Image"}
+                                alt={selectedPlace.name}
+                                onError={(e) => {
+                                    e.target.src = "https://placehold.co/400x300?text=No+Image";
+                                }}
+                            />
+                            <div className="YC-GuideBook-detail-modal-info">
+                                <h3 className="YC-GuideBook-detail-modal-title">{selectedPlace.name}</h3>
+                                <div className="YC-GuideBook-detail-modal-title-jp">道後温泉本館</div>
+                                <div className="YC-GuideBook-detail-modal-address">
+                                    주소: 5-6 Dogoyunomachi, Matsuyama,Ehime 790-0842 일본
+                                </div>
+                                <div className="YC-GuideBook-detail-modal-hours">
+                                    운영시간: 6:00~23:00 ⓘ
+                                </div>
+                                <div className="YC-GuideBook-detail-modal-recommended-time">
+                                    추천 관광시간: 2-3시간
+                                </div>
+                                <div className="YC-GuideBook-detail-modal-description-title">
+                                    '마쓰야마' 여행의 중심이 되는 지역
+                                </div>
+                                <p className="YC-GuideBook-detail-modal-description">
+                                    약 3,000년 역사를 간직한 온천 마을, '도고온천 본관' 주변으로 식당, 카페, 기념품 숍이 들어서 있다.
+                                    소설 '도련님'의 세계를 보여주는 옛자와 시게를 비롯해 산사, 상점가 등 구경거리가 풍부하고, 특산물 골로 만든 먹거리와 캐릭터 굿즈 등이 눈에 띈다.
+                                    전통 속박 사찰 '코간'도 둘러봤다 가기도 제격이다. 늦은 인력거 투어를 통해 곳곳을 편안하게 둘러보기 좋다.
+                                </p>
+                            </div>
+                            <div className="YC-GuideBook-detail-modal-map">
+                                <iframe
+                                    className="YC-GuideBook-detail-modal-map-iframe"
+                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3269.8668888888887!2d135.5016858152176!3d34.69373778042199!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6000e68f5ddb6b43%3A0x1c5edc85620f065e!2z7J207Iqk7Yq466-47J207Iqk7Yq466-4!5e0!3m2!1sko!2skr!4v1716418888888!5m2!1sko!2skr"
+                                    allowFullScreen=""
+                                    loading="lazy"
+                                    referrerPolicy="no-referrer-when-downgrade"
+                                />
+                            </div>
+                        </div>
+                    </div>
                 </div>
             )}
         </div>
