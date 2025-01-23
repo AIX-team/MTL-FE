@@ -3,6 +3,7 @@ import MainLayout from "./layouts/MainLayout";
 import LinkPage from './pages/link/LinkPage';
 import TravelPage from './pages/travel/TravelPage';
 import MyPage from './pages/mypage/MyPage';
+import GuideBookList from './pages/travel/GuideBookList';
 
 function App() {
   return (
@@ -15,12 +16,15 @@ function App() {
         <Route path="/" element={<MainLayout />}>
           {/* Link 페이지와 하위 라우트들 */}
           <Route path="link/*" element={<LinkPage />} />
-          
+
           {/* Travel 페이지 */}
           <Route path="travel/*" element={<TravelPage />} />
-          
+
           {/* MyPage */}
           <Route path="mypage/*" element={<MyPage />} />
+
+          {/* GuideBookList */}
+          <Route path="guidebooklist/*" element={<GuideBookList />} />
         </Route>
       </Routes>
     </BrowserRouter>
