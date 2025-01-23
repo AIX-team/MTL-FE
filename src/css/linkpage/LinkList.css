@@ -95,9 +95,9 @@
 }
 
 .WS-LinkList-DeleteButton {
-    background-color: #ff4d4d;
-    color: white;
-    border: none;
+    background-color: white;
+    color: red;
+    border: 1px solid red;
     border-radius: 50%;
     width: 24px;
     height: 24px;
@@ -106,15 +106,15 @@
     justify-content: center;
     cursor: pointer;
     margin-left: 10px;
-    font-size: 18px;
     transition: background-color 0.2s;
 }
 
 .WS-LinkList-DeleteButton:hover {
     background-color: #ff3333;
+    color: white;
 }
 
-.WS-LinkList-Analyze {
+.WS-LinkList-Next {
     position: fixed;
     bottom: 80px;
     left: 50%;
@@ -130,13 +130,13 @@
 
 /* 모바일 환경을 위한 반응형 처리 */
 @media screen and (max-width: 402px) {
-    .WS-LinkList-Analyze {
+    .WS-LinkList-NextButton {
         width: 100%;
     }
 }
 
-.WS-LinkList-AnalyzeButton {
-    background-color: #ff0000;
+.WS-LinkList-NextButton {
+    background-color: #d65e5d;
     color: white;
     border: none;
     border-radius: 25px;
@@ -147,12 +147,12 @@
     transition: all 0.2s ease;
 }
 
-.WS-LinkList-AnalyzeButton:disabled {
+.WS-LinkList-NextButton:disabled {
     background-color: #cccccc;
     cursor: not-allowed;
 }
 
-.WS-LinkList-AnalyzeButton:not(:disabled):hover {
+.WS-LinkList-NextButton:not(:disabled):hover {
     transform: scale(1.02);
     background-color: #e60000;
 }

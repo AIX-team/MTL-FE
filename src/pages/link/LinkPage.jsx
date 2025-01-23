@@ -17,7 +17,7 @@ const LinkPage = ({ activeTab, linkData, setLinkData }) => {
 
     return (
         <div className="WS-Link-Page">
-            <div className="WS-Link-Content">
+            <div className="WS-Link-Page-Content">
                 {renderContent()}
             </div>
         </div>
@@ -25,3 +25,5 @@ const LinkPage = ({ activeTab, linkData, setLinkData }) => {
 };
 
 export default LinkPage;
+
+// 완료 ===================================================================

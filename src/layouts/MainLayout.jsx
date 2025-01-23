@@ -5,26 +5,36 @@ import FooterComponent from './Footer';
 import SubHeader from './SubHeader';
 import '../css/layout/MainLayout.css';
 
-// 전체 레이아웃을 구성하는 메인 컴포넌트
-// 헤더, 본문 영역, 푸터를 포함하는 기본 레이아웃 구조를 정의
+/**
+ * 전체 레이아웃을 관리하는 메인 컴포넌트
+ * 로고 헤더, 서브 헤더(조건부), 메인 컨텐츠, 푸터로 구성
+ */
 const MainLayout = () => {
     const location = useLocation();
     
-    // 현재 경로가 /link로 시작하는지 확인
-    const showSubHeader = location.pathname.toLowerCase().startsWith('/link');
+    // SubHeader를 표시할 경로 확인
+    const subHeaderPaths = ['/link', '/link/searchYouTube'];
+    const shouldShowSubHeader = subHeaderPaths.includes(location.pathname);
 
     return (
         <div className="WS-Main-Layout">
-            <LogoHeader />  {/* 상단 로고 헤더 */}
+            {/* 로고 헤더 영역 */}
+            <LogoHeader />
             
-            {/* /link 경로일 때만 SubHeader 표시 */}
-            {showSubHeader && <SubHeader />}
+            {/* 서브 헤더 영역 - 특정 경로에서만 표시 */}
+            {shouldShowSubHeader && <SubHeader />}
             
+            {/* 메인 컨텐츠 영역 */}
             <main className="WS-Main-Container">
-                <Outlet />  {/* 라우팅된 컴포넌트가 렌더링되는 영역 */}
+                <Outlet />
             </main>
-            <FooterComponent />  {/* 하단 네비게이션 바 */}
+
+            {/* 푸터 영역 */}
+            <FooterComponent />
         </div>
     );
 };
+
 export default MainLayout;
+
+// 완료 ==================================================================

@@ -1,0 +1,90 @@
+.WS-LinkPage-Modal-Overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.WS-LinkPage-Modal {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 80%;
+    max-width: 300px;
+    text-align: center;
+}
+
+.WS-LinkPage-Modal-Message {
+    margin: 0 0 20px 0;
+    font-size: 16px;
+    color: #333;
+}
+
+.WS-LinkPage-Modal-Button {
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    color: #ffffff;
+    width: 40%;
+    height: 50px;
+    background-color: #ff0000;
+    font-weight: bold;
+    display: flex;
+    margin: 0 auto;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    transition: color 0.2s;
+}
+
+.WS-LinkPage-Modal-Button:hover {
+    cursor: pointer;
+    opacity: 0.8;
+    scale: 1.05;
+}
+
+
+/*  완료 ============================================================ */
+
+/*  모달 ============================================================ */
+.WS-Modal-Overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    transition: all 0.3s ease-in-out;
+}
+
+.WS-Modal-Overlay.active {
+    opacity: 1;
+}
+
+.WS-Modal-Close-Button {
+    position: absolute;
+    color: #3E3E3E;
+    top: 10px;
+    right: 5px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    transition: all 0.3s ease;
+}
+
+.WS-Modal-Close-Button:hover {
+    cursor: pointer;
+    scale: 1.1;
+    color: #E3E3E3;
+}

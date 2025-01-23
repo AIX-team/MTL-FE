@@ -1,7 +1,6 @@
 import React from 'react';
-import '../../css/linkpage/LinkPageModal.css';
-
-const Modal = ({ isOpen, message, onClose }) => {
+import '../css/layout/SomethingModal.css';
+const SomethingModal = ({ isOpen, message, onClose }) => {
     if (!isOpen) return null;
 
     return (
@@ -16,4 +15,4 @@ const Modal = ({ isOpen, message, onClose }) => {
     );
 };
 
-export default Modal; 
+export default SomethingModal; 

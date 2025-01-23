@@ -1,17 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
-import { FaSearch, FaTimes } from 'react-icons/fa'; // 돋보기 아이콘 import, FaTimes 아이콘 추가
+import { FaSearch, FaTimes, FaCheck } from 'react-icons/fa'; // 돋보기 아이콘 import, FaTimes 아이콘 추가
 import '../../css/linkpage/SearchYoutube.css';
-import youtubeIcon from '../../images/youtube.png';
+import youtubeIcon from '../../images/YOUTUBE_LOGO.png';
 
-const SearchYoutube = ({ linkData, setLinkData }) => {
+const SearchYoutube = ({ linkData, setLinkData, isLinkLimitReached }) => {
     const [searchQuery, setSearchQuery] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [selectedVideo, setSelectedVideo] = useState(null);
-    const loadingRef = useRef(null);
-    const [modalActive, setModalActive] = useState(false);
+    const [selectedVideos, setSelectedVideos] = useState(new Set()); // 선택된 비디오 ID 저장
 
     // .env 파일에서 API 키 가져오기
     const YOUTUBE_API_KEY = process.env.REACT_APP_YOUTUBE_API_KEY;
@@ -37,16 +34,13 @@ const SearchYoutube = ({ linkData, setLinkData }) => {
         return title;
     };
 
-    const searchYoutube = async (query = searchQuery) => {
-        if (!query.trim()) return;
-        if (!YOUTUBE_API_KEY) {
-            console.error('YouTube API Key is not configured');
-            return;
-        }
+    const searchYoutube = async () => {
+        // searchQuery가 없거나 공백만 있는 경우 검색하지 않음
+        if (!searchQuery?.trim()) return;
 
+        setIsLoading(true);
         try {
-            setIsLoading(true);
-            console.log('Searching for:', query);
+            console.log('Searching for:', searchQuery);
 
             const response = await axios.get(
                 `https://www.googleapis.com/youtube/v3/search`,
@@ -55,7 +49,7 @@ const SearchYoutube = ({ linkData, setLinkData }) => {
                         part: 'snippet',
                         maxResults: 20,
                         key: YOUTUBE_API_KEY,
-                        q: query,
+                        q: searchQuery,
                         type: 'video'
                     }
                 }
@@ -77,6 +71,7 @@ const SearchYoutube = ({ linkData, setLinkData }) => {
             }
         } catch (error) {
             console.error('YouTube 검색 중 오류 발생:', error);
+            setSearchResults([]); // 에러 발생 시 빈 배열
         } finally {
             setIsLoading(false);
         }
@@ -98,81 +93,83 @@ const SearchYoutube = ({ linkData, setLinkData }) => {
     // 검색어 초기화 함수
     const clearSearch = () => {
         setSearchQuery('');
+        setSearchResults([]);
     };
 
-    // 모달이 열릴 때 애니메이션을 위한 useEffect
-    useEffect(() => {
-        if (isModalOpen) {
-            // 모달이 DOM에 마운트된 직후에 active 클래스를 추가
-            setTimeout(() => {
-                setModalActive(true);
-            }, 10);
-        } else {
-            setModalActive(false);
-        }
-    }, [isModalOpen]);
-
-    // 비디오 선택 핸들러 수정
-    const handleVideoSelect = (video) => {
-        setSelectedVideo(video);
-        setIsModalOpen(true);
+    const handleVideoSelect = (videoId, e) => {
+        e.stopPropagation();
+        setSelectedVideos(prev => {
+            const newSelected = new Set(prev);
+            if (newSelected.has(videoId)) {
+                newSelected.delete(videoId);
+            } else {
+                if (newSelected.size < 5) { // 최대 5개까지만 선택 가능
+                    newSelected.add(videoId);
+                }
+            }
+            return newSelected;
+        });
     };
 
-    // 모달 닫기 핸들러 수정
-    const handleCloseModal = () => {
-        setModalActive(false);
-        // 애니메이션이 완료된 후 모달 닫기
-        setTimeout(() => {
-            setIsModalOpen(false);
-            setSelectedVideo(null);
-        }, 300); // CSS 트랜지션 시간과 동일하게 설정
+    const handleYoutubeIconClick = () => {
+        window.open('https://www.youtube.com', '_blank', 'noopener,noreferrer');
     };
 
     // 렌더링 시 현재 상태 확인
     console.log('현재 검색 결과:', searchResults);
     console.log('로딩 상태:', isLoading);
 
+    // YouTube 비디오 URL 생성 함수
+    const getVideoUrl = (videoId) => {
+        return `https://www.youtube.com/watch?v=${videoId}`;
+    };
+
     return (
-        <div className="WS-SearchYoutube">
-            <div className="WS-SearchYoutube-Header">
-                <div className="WS-SearchYoutube-InputWrapper">
+        <div className="WS-SearchYoutube-Tab">
+            <div className="WS-SearchYoutube-Search">
+                <div className="WS-Link-Input-Container">
                     <input
                         type="text"
-                        value={searchQuery}
+                        value={searchQuery || ''}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         onKeyPress={(e) => e.key === 'Enter' && searchYoutube()}
                         placeholder="YouTube 검색어를 입력하세요"
-                        className="WS-SearchYoutube-Input"
+                        className="WS-Link-Input"
                     />
-                    {searchQuery && (
+
+                    <div className="WS-Link-Button-Container" id="WS-SearchYoutube-Button-Container">
+                        {searchQuery && (
+                            <button
+                                className="WS-SearchYoutube-ClearButton"
+                                onClick={clearSearch}
+                                type="button"
+                                aria-label="검색어 지우기"
+                            >
+                                <FaTimes />
+                            </button>
+                        )}
+
                         <button
-                            className="WS-SearchYoutube-ClearButton"
-                            onClick={clearSearch}
-                            type="button"
+                            onClick={searchYoutube}
+                            className="WS-SearchYoutube-SearchButton"
+                            disabled={isLoading}
+                            aria-label="검색"
                         >
-                            <FaTimes />
+                            <FaSearch />
                         </button>
-                    )}
+                    </div>
                 </div>
-                <button
-                    onClick={() => searchYoutube()}
-                    className="WS-SearchYoutube-Button"
-                    disabled={isLoading}
-                >
-                    <FaSearch />
-                </button>
             </div>
 
             <div className="WS-SearchYoutube-Results">
                 {isLoading ? (
                     <div className="WS-SearchYoutube-Loading">검색 중...</div>
                 ) : searchResults.length > 0 ? (
-                    searchResults.map(video => (
+                    searchResults.map((video) => (
                         <div
                             key={video.id}
-                            className="WS-SearchYoutube-Item"
-                            onClick={() => handleVideoSelect(video)}
-                            style={{ cursor: 'pointer' }}
+                            className={`WS-SearchYoutube-Results-Item ${selectedVideos.has(video.id) ? 'selected' : ''}`}
+                            onClick={(e) => handleVideoSelect(video.id, e)}
                         >
                             <div className="WS-SearchYoutube-Thumbnail-Container">
                                 <img
@@ -180,9 +177,26 @@ const SearchYoutube = ({ linkData, setLinkData }) => {
                                     alt={video.fullTitle}
                                     className="WS-SearchYoutube-Thumbnail"
                                 />
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        window.open(`https://www.youtube.com/watch?v=${video.id}`, '_blank', 'noopener,noreferrer');
+                                    }}
+                                    className="WS-youtube-icon-link"
+                                >
+                                    <img
+                                        src={youtubeIcon}
+                                        alt="YouTube"
+                                        className="WS-youtube-icon"
+                                    />
+                                </button>
+                                <div className="WS-SearchYoutube-Checkbox">
+                                    <FaCheck id="WS-SearchYoutube-Checkbox-Check"/>
+                                </div>
                             </div>
-                            <div className="WS-SearchYoutube-Info">
-                                <h3 title={video.fullTitle}>{video.title}</h3>
+
+                            <div className="WS-SearchYoutube-Info-Container">
+                                <h3 className="WS-SearchYoutube-Title" title={video.fullTitle}>{video.title}</h3>
                                 <div className="WS-SearchYoutube-ChannelInfo">
                                     <span className="WS-SearchYoutube-ChannelName">
                                         {video.channelTitle}
@@ -199,76 +213,8 @@ const SearchYoutube = ({ linkData, setLinkData }) => {
                         검색 결과가 없습니다.
                     </div>
                 )}
-                <div ref={loadingRef} className="WS-SearchYoutube-LoadingMore">
-                    {isLoading && (
-                        <div className="loading-dots">
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                        </div>
-                    )}
-                </div>
             </div>
-
-            {/* 모달 컴포넌트 추가 */}
-            {isModalOpen && selectedVideo && (
-                <div className={`WS-SearchYoutube-Modal-Overlay ${modalActive ? 'active' : ''}`} onClick={handleCloseModal}>
-                    <div
-                        className={`WS-SearchYoutube-Modal-Content ${modalActive ? 'active' : ''}`}
-                        onClick={e => e.stopPropagation()}
-                    >
-                        <button className="WS-SearchYoutube-Modal-Close" onClick={handleCloseModal}>
-                            <FaTimes />
-                        </button>
-                        <div className="WS-SearchYoutube-Modal-Body">
-                            <div
-                                className="WS-SearchYoutube-Modal-Thumbnail-Wrapper"
-                                onClick={() => openYoutubeLink(selectedVideo.url)}
-                            >
-                                <img
-                                    src={selectedVideo.thumbnail}
-                                    alt={selectedVideo.fullTitle}
-                                    className="WS-SearchYoutube-Modal-Thumbnail"
-                                />
-                                <span className="WS-SearchYoutube-Modal-Video-Icon">
-                                    <img src={youtubeIcon} alt="YouTube" className="WS-SearchYoutube-Modal-Button-Icon" />
-                                </span>
-
-                            </div>
-                            <h2 className="WS-SearchYoutube-Modal-Title">{selectedVideo.fullTitle}</h2>
-                            <div className="WS-SearchYoutube-Modal-ChannelInfo">
-                                <p className="WS-SearchYoutube-Modal-ChannelTitle">{selectedVideo.channelTitle}</p>
-                                <p className="WS-SearchYoutube-Modal-Date">{selectedVideo.publishedAt}</p>
-                            </div>
-
-
-                            {!isAlreadySaved(selectedVideo.url) && (
-                                <button
-                                    onClick={() => {
-                                        // 저장할 링크 데이터 형식 수정
-                                        const linkToSave = {
-                                            url: selectedVideo.url,
-                                            title: selectedVideo.fullTitle,
-                                            thumbnail: selectedVideo.thumbnail,
-                                            type: 'youtube',  // 링크 타입을 구분하기 위해 추가
-                                            channelTitle: selectedVideo.channelTitle,
-                                            publishedAt: selectedVideo.publishedAt
-                                        };
-                                        setLinkData([...linkData, linkToSave]);
-                                        handleCloseModal();
-                                    }}
-                                    className="WS-SaveLink-Modal-Button"
-                                >
-                                    링크 저장하기
-                                </button>
-                            )}
-
-                        </div>
-                    </div>
-                </div>
-            )
-            }
-        </div >
+        </div>
     );
 };
 

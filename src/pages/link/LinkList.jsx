@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import Modal from '../link/LinkPageModal';
-import '../../css/linkpage/LinkPageModal.css';
+import Modal from '../../layouts/SomethingModal';
 import '../../css/linkpage/LinkList.css';
 import axios from 'axios';
 import { FaMinus } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
+import NextTab from './NextTab';
 
 const LinkList = ({ linkData, setLinkData }) => {
     const [inputLink, setInputLink] = useState('');
     const [modalOpen, setModalOpen] = useState(false);
     const [modalMessage, setModalMessage] = useState('');
+    const [showNextTab, setShowNextTab] = useState(false);
+    const navigate = useNavigate();
 
     // 모달 표시 함수
     const showModal = (message) => {
@@ -37,9 +40,24 @@ const LinkList = ({ linkData, setLinkData }) => {
         return null; // 지원하지 않는 URL인 경우
     };
 
-    // 링크 추가 처리 수정
+    // URL 중복 체크 함수
+    const isLinkDuplicate = (url) => {
+        return linkData.some(link => {
+            // URL을 정규화하여 비교 (http/https, www 유무, 끝의 슬래시 등 무시)
+            const normalizeUrl = (url) => {
+                try {
+                    const normalized = new URL(url);
+                    return normalized.hostname + normalized.pathname + normalized.search;
+                } catch {
+                    return url;
+                }
+            };
+            return normalizeUrl(link.url) === normalizeUrl(url);
+        });
+    };
+
+    // 링크 추가 처리
     const handleAddLink = () => {
-        // 링크가 5개 이상이면 추가 불가
         if (linkData.length >= 5) {
             showModal('링크는 최대 5개까지만 추가할 수 있습니다.');
             return;
@@ -50,23 +68,23 @@ const LinkList = ({ linkData, setLinkData }) => {
             return;
         }
 
-        // URL 형식 검사
         if (!isValidUrl(inputLink)) {
             showModal('올바른 URL 형식이 아닙니다.');
             return;
         }
 
-        // 링크 타입 확인
-        const linkType = getLinkType(inputLink);
-        if (!linkType) {
-            showModal('YouTube 또는 네이버 블로그 URL만 입력해주세요.');
+        if (isLinkDuplicate(inputLink)) {
+            showModal('이미 등록된 링크입니다.');
+            setInputLink(''); // 입력창 초기화
             return;
         }
 
+        // 링크 타입 확인 및 추가
+        const type = getLinkType(inputLink);
         const newLink = {
-            id: Date.now(),
-            type: linkType,
-            url: inputLink
+            url: inputLink,
+            type: type,
+            id: Date.now() // 고유 ID 생성
         };
 
         setLinkData([...linkData, newLink]);
@@ -109,14 +127,21 @@ const LinkList = ({ linkData, setLinkData }) => {
         setLinkData(linkData.filter(link => link.id !== idToDelete));
     };
 
+    // 다음으로 버튼 클릭 핸들러
+    const handleNextClick = () => {
+        if (linkData.length > 0) {
+            setShowNextTab(true);
+        }
+    };
+
     return (
         <div className="WS-LinkList">
             {/* 검색 입력창 */}
-            <div className="WS-LinkList-Search">
+            <div className="WS-Link-Input-Container">
                 <input
                     type="text"
                     placeholder="유튜브 또는 블로그 링크 붙여넣기"
-                    className="WS-LinkList-SearchInput"
+                    className="WS-Link-Input"
                     value={inputLink}
                     onChange={(e) => setInputLink(e.target.value)}
                     onKeyPress={(e) => e.key === 'Enter' && handleAddLink()}
@@ -153,21 +178,30 @@ const LinkList = ({ linkData, setLinkData }) => {
                 ))}
             </div>
 
-            {/* 분석하기 버튼 추가 */}
-            <div className="WS-LinkList-Analyze">
+            {/* 다음으로 버튼 */}
+            <div className="WS-LinkList-Next">
                 <div className="WS-LinkList-Counter">
                     {linkData.length}/5
                 </div>
                 <button
-                    className="WS-LinkList-AnalyzeButton"
+                    className="WS-LinkList-NextButton"
                     disabled={linkData.length === 0}
-                    onClick={() => {/* 분석 로직 추가 */ }}
+                    onClick={handleNextClick}
                 >
-                    분석하기
+                    다음으로
                 </button>
-
             </div>
 
+            {/* NextTab 모달 */}
+            {showNextTab && (
+                <div className="WS-Modal-Overlay" onClick={() => setShowNextTab(false)}>
+                    <div className="WS-Modal-Content" onClick={e => e.stopPropagation()}>
+                        <NextTab onClose={() => setShowNextTab(false)} />
+                    </div>
+                </div>
+            )}
+
+            {/* 기존 알림 모달 */}
             <Modal
                 isOpen={modalOpen}
                 message={modalMessage}

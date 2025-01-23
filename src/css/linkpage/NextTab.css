@@ -1,0 +1,116 @@
+.WS-NextTab {
+    position: relative;
+    padding: 20px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+}
+
+.WS-NextTab-Header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.WS-NextTab-Header h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.WS-NextTab-Header p {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.WS-NextTab-Progress {
+    color: #ff0000;
+    font-size: 12px;
+    text-align: right;
+}
+
+.WS-NextTab-Styles {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.WS-NextTab-Row {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.WS-NextTab-Style {
+    flex: 1;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 25px;
+    background: white;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.WS-NextTab-Style.active {
+    background-color: #ff0000;
+    color: white;
+    border-color: #ff0000;
+}
+
+.WS-NextTab-Button {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 400px;
+    padding: 15px;
+    background-color: #ff0000;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.WS-NextTab-Button:hover {
+    background-color: #e60000;
+}
+
+.WS-Modal-Overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.WS-Modal-Content {
+    background-color: white;
+    border-radius: 20px;
+    padding: 20px;
+    width: 90%;
+    max-width: 400px;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+}
+
+.WS-NextTab-CloseButton {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #666;
+} 
