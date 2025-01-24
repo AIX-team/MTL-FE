@@ -24,7 +24,7 @@ const FooterComponent = () => {
     };
 
     return (
-        <footer className="WS-Footer-Container">
+        <footer className="WS-Main-Footer">
             {/* Link 메뉴 아이템 */}
             <Link to="/link" className={getClassName('/link')}>
                 <img src={LINK} alt="Link" className="WS-Footer-Link" />

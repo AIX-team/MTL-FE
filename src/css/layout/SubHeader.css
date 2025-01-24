@@ -1,23 +1,7 @@
-/* 서브 헤더 컨테이너 */
-.WS-SubHeader {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    top: 40px;
-    left: 50%;
-    transform: translateX(-50%);
-    max-width: 402px;
-    padding: 10px;
-    z-index: 100;
-    position: relative;
-    /* 인디케이터의 기준점 */
-}
-
 /* 각 탭의 기본 스타일 */
 .WS-SubHeader-Tab {
     flex: 1;
     text-align: center;
-    padding: 15px 0;
     text-decoration: none;
     color: #C92B2A;
     font-size: 14px;
@@ -38,7 +22,7 @@
 }
 
 .WS-check-icon {
-    background-color: #28a745;
+    background-color: #48B669;
     border-radius: 25px;
     width: 20px;
     height: 20px;
@@ -85,7 +69,7 @@
 /* 이동하는 인디케이터(빨간 선) 스타일 */
 #WS-SubHeader-link-indicator {
     position: absolute;
-    bottom: 30px;
+    top: 40px;
     /* 바닥에서의 간격 */
     left: 50%;
     /* 중앙 정렬 시작점 */

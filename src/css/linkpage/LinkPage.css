@@ -1,7 +1,8 @@
 .WS-Link-Page {
-    margin-top: 3cqh;
+    top: 0px;
     display: flex;
     /* Flexbox 사용 */
+  
 }
 
 .WS-Link-Page-Content {

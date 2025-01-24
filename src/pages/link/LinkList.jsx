@@ -3,7 +3,6 @@ import Modal from '../../layouts/SomethingModal';
 import '../../css/linkpage/LinkList.css';
 import axios from 'axios';
 import { FaMinus } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
 import NextTab from './NextTab';
 
 const LinkList = ({ linkData, setLinkData }) => {
@@ -11,7 +10,11 @@ const LinkList = ({ linkData, setLinkData }) => {
     const [modalOpen, setModalOpen] = useState(false);
     const [modalMessage, setModalMessage] = useState('');
     const [showNextTab, setShowNextTab] = useState(false);
-    const navigate = useNavigate();
+
+    // linkData가 변경될 때마다 localStorage에 저장
+    useEffect(() => {
+        localStorage.setItem('linkListData', JSON.stringify(linkData));
+    }, [linkData]);
 
     // 모달 표시 함수
     const showModal = (message) => {
@@ -90,7 +93,7 @@ const LinkList = ({ linkData, setLinkData }) => {
         setLinkData([...linkData, newLink]);
         setInputLink(''); // 입력창 초기화
     };
-
+    
     // axios 나중에 수정=================================
     const fetchLinks = async () => {
         try {
@@ -113,6 +116,41 @@ const LinkList = ({ linkData, setLinkData }) => {
 
         fetchData();
     }, [linkData.length, setLinkData]);
+
+    useEffect(() => {
+        const checkSelectedLinks = () => {
+            try {
+
+
+                
+                const selectedLinks = localStorage.getItem('selectedYoutubeLinks');
+                if (selectedLinks) {
+                    const links = JSON.parse(selectedLinks);
+                    if (links && Array.isArray(links) && links.length > 0) {
+                        setLinkData(prevLinks => {
+                            const newTotalLength = prevLinks.length + links.length;
+                            if (newTotalLength > 5) {
+                                showModal('링크는 최대 5개까지만 추가할 수 있습니다.');
+                                return prevLinks;
+                            }
+                            return [...prevLinks, ...links];
+                        });
+                        localStorage.removeItem('selectedYoutubeLinks');
+                    }
+                }
+            } catch (error) {
+                console.error('Error checking selected links:', error);
+            }
+        };
+
+        // 초기 실행
+        checkSelectedLinks();
+
+        // 주기적으로 확인
+        const interval = setInterval(checkSelectedLinks, 300);
+
+        return () => clearInterval(interval);
+    }, []); // 의존성 배열을 비워서 컴포넌트 마운트 시에만 실행
 
     // URL 텍스트 제한 함수 추가
     const truncateUrl = (url) => {

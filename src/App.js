@@ -4,6 +4,7 @@ import LinkPage from './pages/link/LinkPage';
 import TravelPage from './pages/travel/TravelPage';
 import MyPage from './pages/mypage/MyPage';
 
+
 function App() {
   return (
     <BrowserRouter>

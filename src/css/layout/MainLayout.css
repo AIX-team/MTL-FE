@@ -3,32 +3,67 @@ body {
     background-color: #C92B2A;
     font-family: 'NanumBarunGothic', sans-serif;
     /* 나눔바른고딕 폰트 적용 */
+    overflow-y: hidden;
 }
-
 
 /* 메인 레이아웃 컨테이너 */
 .WS-Main-Layout {
-    width: 100%;
-    max-width: 402px;  /* 최대 너비 402px로 제한 */
-    height: 100vh;
+    position: fixed;
     flex-direction: column;
-    background-color: white;
-    position: absolute;
     left: 50%;
-    transform: translateX(-50%);  /* 화면 중앙 정렬 */
-    font-family: 'NanumBarunGothic', sans-serif;
+    transform: translateX(-50%);
+
+    width: 402px;
+    height: 100vh;
+
+    background-color: white;
 }
 
+.WS-main-header {
+    position: fixed;
+    display: flex;  
+    justify-content: center;
+    align-items: center;
+
+    width: 402px;
+    height: 60px;
+
+}
 
 /* 메인 컨텐츠 영역 */
 .WS-Main-Container {
-    flex: 1;
-    padding: 20px;
-    margin-bottom: 60px;
-    /* Footer 영역만큼 하단 여백 추가 */
-    overflow-y: auto;
-    /* 내용이 넘칠 경우 스크롤 생성 */
+    position: fixed;
+    top: 60px;
+    bottom: 100px;
+
+    width: 402px;
+
+    background-color: rgb(145, 145, 255);
 }
 
-/* 완료 ================================================================== */
+.WS-Main-Layout-SubHeader{
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
+    width: 402px;
+    height: 50px;
+
+    background-color: black;
+
+}
+
+.WS-Main-Footer {
+    position: fixed;
+    bottom: 0;
+
+    width: 402px;
+    height: 100px;
+
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+}
+/* 완료 ================================================================== */
