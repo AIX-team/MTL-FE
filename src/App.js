@@ -4,6 +4,8 @@ import LinkPage from './pages/link/LinkPage';
 import TravelPage from './pages/travel/TravelPage';
 import MyPage from './pages/mypage/MyPage';
 import GuideBookList from './pages/travel/GuideBookList';
+import TravelInfo from './pages/link/TravelInfo';
+import './css/styles/variables.css';
 
 function App() {
   return (
@@ -16,7 +18,7 @@ function App() {
         <Route path="/" element={<MainLayout />}>
           {/* Link 페이지와 하위 라우트들 */}
           <Route path="link/*" element={<LinkPage />} />
-
+          <Route path="travelinfo/*" element={<TravelInfo />} />
           {/* Travel 페이지 */}
           <Route path="travel/*" element={<TravelPage />} />
 

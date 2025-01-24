@@ -1,0 +1,151 @@
+.carousel-item {
+  padding: 10px;
+}
+
+.HG-select-place{
+  border: 1px solid var(--color-main);}
+
+/* 슬라이더 화살표 스타일링 */
+.slick-prev,
+.slick-next {
+  z-index: 1;
+  width: 30px;
+  height: 30px;
+}
+
+.slick-prev {
+  left: 25px !important;
+}
+
+.slick-next {
+  right: 25px !important;
+}
+
+.slick-prev:before,
+.slick-next:before {
+  color: #000;
+  font-size: 30px;
+  opacity: 0.75;
+}
+
+.slick-prev:hover:before,
+.slick-next:hover:before {
+  opacity: 1;
+}
+
+.slick-slide {
+  padding: 0 10px;
+  visibility: hidden;
+}
+
+.slick-slide.slick-active {
+  visibility: visible;
+}
+
+.slide-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.slide-image, .slide-description {
+  width: 100%;
+  height: 100%;
+}
+
+.HG-TravelInfo-Title-Frame{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #e0e0e0;
+
+}
+
+.HG-TravelInfo-Title{
+  font-size: var(--font-size-xl);
+  font-weight: bold;
+}
+
+.HG-TravelInfo-Content-Frame-Title{
+  font-size: var(--font-size-xl);
+  font-weight: bold;
+}
+
+.HG-TravelInfo-Btn{
+  display: inline-flex;
+  align-items: center;
+  height: 40px;
+  transform: translateX(10px);
+}
+
+.HG-TravelInfo-Select-Btn{
+  display: flex;
+  align-items: center;
+  font-size: var(--font-size-xl);
+  font-weight: bold;
+}
+
+.HG-TravelInfo-Select-Cnt{
+  font-size: var(--font-size-sm);
+  background-color: var(--color-main);
+  color: white;
+  border-radius: var(--border-radius-full);
+  padding: 4px 8px;
+  margin-bottom: auto;
+  transform: translateX(-10px);
+}
+
+.HG-travelinfo-content-frame-list{
+  display: flex;
+  gap: 8px;
+}
+
+.HG-TravelInfo-Content-Frame-Place-Type-List{
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.HG-TravelInfo-Content-Frame-Place-Type{
+  font-size: var(--font-size-lg);
+  font-weight: bold;
+  border: 1px solid var(--color-main);
+  border-radius: var(--border-radius-full);
+  padding: 4px 8px;
+}
+
+.HG-TravelInfo-Content-Frame-Place-Selected-Type{
+  font-size: var(--font-size-lg);
+  font-weight: bold;
+  color: white;
+  background-color: red;
+  border: 1px solid var(--color-main);
+  border-radius: var(--border-radius-full);
+  padding: 4px 8px;
+}
+
+.HG-travelinfo-content-frame-url{
+  font-size: var(--font-size-lg);
+}
+
+.HG-underline{
+  border-bottom: 1px solid var(--color-main);
+}
+
+.HG-trevelinfo-content-frame-select{
+  width: 20px;
+  height: 20px;
+}
+
+.HG-slide-content-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+/* none */
+.none{
+  display: none;
+}
