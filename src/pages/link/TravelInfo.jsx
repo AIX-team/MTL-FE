@@ -59,7 +59,7 @@ const TravelInfo = () => {
   useEffect(() => {
     setTravelDays(travelInfo.travelDays);
     setTravelInfoTitle(travelInfo.travelInfoTitle);
-  }, [travelInfo]);
+  }, []);
 
 
 const data = {
@@ -148,7 +148,6 @@ const handlePlaceClick = (placeId) => {
 
 const handleAISelected = () => {
   setIsAISelected(!isAISelected);
-
   setSelectedPlaces([]);
 };
 
