@@ -4,10 +4,10 @@ const SomethingModal = ({ isOpen, message, onClose }) => {
     if (!isOpen) return null;
 
     return (
-        <div className="WS-LinkPage-Modal-Overlay">
-            <div className="WS-LinkPage-Modal">
-                <p className="WS-LinkPage-Modal-Message">{message}</p>
-                <button className="WS-LinkPage-Modal-Button" onClick={onClose}>
+        <div className="WS-Modal-Overlay">
+            <div className="WS-Modal">
+                <p className="WS-Modal-Message">{message}</p>
+                <button className="WS-Modal-Button" onClick={onClose}>
                     확인
                 </button>
             </div>

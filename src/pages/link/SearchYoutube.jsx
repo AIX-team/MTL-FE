@@ -181,13 +181,6 @@ const SearchYoutube = () => {
             )
         );
 
-        // 중복된 링크들의 ID만 추출하여 선택 해제
-        const duplicateIds = searchResults
-            .filter(video => duplicateLinks.some(link =>
-                normalizeUrl(link.url) === normalizeUrl(`https://www.youtube.com/watch?v=${video.id}`)
-            ))
-            .map(video => video.id);
-
         setSelectedVideos(prev => {
             const newSelected = new Set(prev);
             // duplicateIds.forEach(id => newSelected.delete(id));

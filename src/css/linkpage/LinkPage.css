@@ -1,15 +1,27 @@
 .WS-Link-Page {
     top: 0px;
     display: flex;
-    /* Flexbox 사용 */
-  
+
+    height: 100%;
+    /* lexbox 사용 */
+}
+
+.WS-Link-Page-SubHeader {
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 402px;
+    height: 50px;
 }
 
 .WS-Link-Page-Content {
-    width: 90%;
-    margin: 0 auto;
-    text-align: center;
+    padding-top: 60px;
+    margin-left: 10px;
 }
+
+
 
 
 /* 완료 ============================================== */

@@ -27,7 +27,6 @@ body {
 
     width: 402px;
     height: 60px;
-
 }
 
 /* 메인 컨텐츠 영역 */
@@ -37,21 +36,6 @@ body {
     bottom: 100px;
 
     width: 402px;
-
-    background-color: rgb(145, 145, 255);
-}
-
-.WS-Main-Layout-SubHeader{
-    position: fixed;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    width: 402px;
-    height: 50px;
-
-    background-color: black;
-
 }
 
 .WS-Main-Footer {

@@ -3,10 +3,7 @@
     margin: 0 auto;
 }
 
-
-
 .WS-LinkList-AddButton {
-
     position: absolute;
     display: flex;
     align-items: center;
@@ -36,6 +33,7 @@
 
 /* 링크 아이템 스타일 */
 .WS-LinkList-Items {
+
     display: flex;
     flex-direction: column;
     margin-top: 20px;
@@ -70,7 +68,6 @@
     flex: 1;
     min-width: 0;
     /* 텍스트 오버플로우 방지 */
-
 }
 
 .WS-LinkList-Badge {
@@ -80,6 +77,7 @@
     font-weight: bold;
     margin-right: 10px;
     width: 70px;
+    text-align: center;
 }
 
 .WS-LinkList-Item.youtube .WS-LinkList-Badge {
@@ -122,32 +120,38 @@
     color: white;
 }
 
-.WS-LinkList-Next {
-    position: fixed;
-    bottom: 80px;
+.WS-LinkList-Next-Container {
+    position: absolute;
+    bottom: 4px;
     left: 50%;
     transform: translateX(-50%);
-    /* 중앙 정렬을 위해 추가 */
-    width: 402px;
-    /* 메인 컨테이너 너비와 동일하게 설정 */
-    padding: 15px;
+
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 10px;
+}
+
+.WS-LinkList-Counter {
+    color: #3e3e3e;
+    font-size: 14px;
+    margin-bottom: 10px;
 }
 
 .WS-LinkList-NextButton {
-    background-color: #C92B2A;
-    color: white;
+    padding: 12px 40px;
+
+    width: 350px;
     border: none;
     border-radius: 25px;
-    padding: 12px 40px;
+    background-color: #C92B2A;
+
+    color: white;
     font-size: 16px;
     font-weight: bold;
     cursor: pointer;
-    transition: all 0.2s ease;
+
+    transition: all 0.3s ease;
 }
 
 .WS-LinkList-NextButton:disabled {
@@ -160,7 +164,3 @@
     background-color: #A52421;
 }
 
-.WS-LinkList-Counter {
-    color: #666;
-    font-size: 14px;
-}

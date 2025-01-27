@@ -3,13 +3,13 @@ import Modal from '../../layouts/SomethingModal';
 import '../../css/linkpage/LinkList.css';
 import axios from 'axios';
 import { FaMinus } from 'react-icons/fa';
-import NextTab from './NextTab';
+import SelectDayTab from './SelectDayTab';  
 
 const LinkList = ({ linkData, setLinkData }) => {
     const [inputLink, setInputLink] = useState('');
     const [modalOpen, setModalOpen] = useState(false);
     const [modalMessage, setModalMessage] = useState('');
-    const [showNextTab, setShowNextTab] = useState(false);
+    const [showDayTab, setShowDayTab] = useState(false);
 
     // linkData가 변경될 때마다 localStorage에 저장
     useEffect(() => {
@@ -93,7 +93,7 @@ const LinkList = ({ linkData, setLinkData }) => {
         setLinkData([...linkData, newLink]);
         setInputLink(''); // 입력창 초기화
     };
-    
+
     // axios 나중에 수정=================================
     const fetchLinks = async () => {
         try {
@@ -120,9 +120,6 @@ const LinkList = ({ linkData, setLinkData }) => {
     useEffect(() => {
         const checkSelectedLinks = () => {
             try {
-
-
-                
                 const selectedLinks = localStorage.getItem('selectedYoutubeLinks');
                 if (selectedLinks) {
                     const links = JSON.parse(selectedLinks);
@@ -165,12 +162,17 @@ const LinkList = ({ linkData, setLinkData }) => {
         setLinkData(linkData.filter(link => link.id !== idToDelete));
     };
 
-    // 다음으로 버튼 클릭 핸들러
     const handleNextClick = () => {
-        if (linkData.length > 0) {
-            setShowNextTab(true);
-        }
+        setShowDayTab(true);
     };
+
+    const handleBack = () => {
+        setShowDayTab(false);
+    };
+
+    if (showDayTab) {
+        return <SelectDayTab onBack={handleBack} />;
+    }
 
     return (
         <div className="WS-LinkList">
@@ -214,30 +216,21 @@ const LinkList = ({ linkData, setLinkData }) => {
                         </button>
                     </div>
                 ))}
-            </div>
 
-            {/* 다음으로 버튼 */}
-            <div className="WS-LinkList-Next">
-                <div className="WS-LinkList-Counter">
-                    {linkData.length}/5
-                </div>
-                <button
-                    className="WS-LinkList-NextButton"
-                    disabled={linkData.length === 0}
-                    onClick={handleNextClick}
-                >
-                    다음으로
-                </button>
-            </div>
-
-            {/* NextTab 모달 */}
-            {showNextTab && (
-                <div className="WS-Modal-Overlay" onClick={() => setShowNextTab(false)}>
-                    <div className="WS-Modal-Content" onClick={e => e.stopPropagation()}>
-                        <NextTab onClose={() => setShowNextTab(false)} />
+                {/* 다음으로 버튼 */}
+                <div className="WS-LinkList-Next-Container">
+                    <div className="WS-LinkList-Counter">
+                        {linkData.length}/5
                     </div>
+                    <button
+                        className="WS-LinkList-NextButton"
+                        disabled={linkData.length === 0}
+                        onClick={handleNextClick}
+                    >
+                        다음으로
+                    </button>
                 </div>
-            )}
+            </div>
 
             {/* 기존 알림 모달 */}
             <Modal

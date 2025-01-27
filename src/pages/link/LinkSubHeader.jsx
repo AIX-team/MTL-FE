@@ -76,7 +76,7 @@ const SubHeader = () => {
     return (
         <>
             {/* 서브헤더 영역 */}
-            <nav className="WS-Main-Layout-SubHeader">
+            <nav className="WS-Link-Page-SubHeader">
                 {/* 유튜브검색 탭 */}
                 <div 
                     id="WS-Link-SubHeader-youtube-tab-Container" 
