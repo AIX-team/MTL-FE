@@ -32,7 +32,9 @@
   align-items: center;
   gap: 10px;
   margin-left: auto;
-  margin-right: 55px;
+  margin-right: 0;
+  width: 100%;
+  margin-bottom: 20px;
 }
 
 .search-title {
@@ -45,19 +47,32 @@
 
 .search-bar {
   position: relative;
-  width: 180px;
+  width: 100%;
+  max-width: calc(100% - 120px);
 }
 
 .search-bar input {
   width: 100%;
-  padding: 10px 40px 10px 15px;
-  border-radius: 20px;
+  padding: 8px;
+  padding-left: 12px;
   border: 1px solid #ddd;
+  border-radius: 22px;
+  outline: none;
+}
+
+.search-bar input::placeholder {
+  padding-left: 5px;
+}
+
+.search-bar input:focus {
+  outline: none; /*검색창이 포커스되었을 때의 스타일*/
+  border: 1px solid #ddd;
+  box-shadow: none;
 }
 
 .search-bar .search-icon {
-  position: absolute;
-  right: -45px;
+  position: absolute; /*검색 아이콘(🔍)의 위치와 스타일*/
+  right: 5px;
   top: 50%;
   transform: translateY(-50%);
   background: none;
@@ -74,22 +89,28 @@
 
 .travel-card {
   position: relative;
+  display: flex;
   background: white;
   border-radius: 15px;
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  height: 150px;
+  height: 130px;
 }
 
-.travel-card img {
-  width: 100%;
-  height: 100px;
-  object-fit: cover;
-  border-radius: 15px 15px 0 0;
+.travel-img {
+  width: 80px;
+  height: 90px;
+  margin: 15px;
+  border-radius: 10px;
+  /*object-fit: cover; /* 박스크기에 맞게 이미지 크기 조절 */
 }
 
 .card-content {
-  padding: 20px;
+  position: relative;
+  width: 100%;
+  padding: 5px;
+  padding-left: 20px;
+  margin-top: 30px;
   height: calc(100% - 200px);
   display: flex;
   flex-direction: column;
@@ -99,70 +120,75 @@
 .card-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 1px;
-  flex-direction: column;
-  padding-top: 10px; /* 이미지 자리를 위한 왼쪽 패딩 추가 */
-  position: relative; /* 이미지 위치 기준점 */
+  margin-bottom: 8px;
+  padding-top: 10px;
+  position: relative;
+  border-bottom: #919191 2px solid;
+  padding-bottom: 5px;
+  padding-right: 40px;
+  width: 100%;
 }
 
-.card-header h3 {
+.card-header span {
+  /* 여행 제목 */
   margin: 0;
-  font-size: 1.1em;
-  gap: 0px;
+  font-size: 16px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 120px; /* 제목 최대 너비 제한 */
+  flex: 0 1 auto; /* 너비 자동 조절 */
 }
 
 .date {
-  color: #666;
-  font-size: 0.8em;
-  padding-left: 180px;
-  margin-left: auto; /* date를 오른쪽으로 밀기 */
-  padding-left: 10px;
+  color: #919191;
+  font-size: 12px !important;
+  white-space: nowrap;
+  position: absolute; /* 절대 위치로 변경 */
+  padding-top: 5px;
+  right: 45px; /* 오른쪽에서의 거리 */
+  top: 10px; /* 상단에서의 거리 */
 }
 
 .period {
-  color: #666;
-  font-size: 0.9em;
-  margin: 0;
-  padding-left: 90px;
-  padding-top: 10px;
+  color: #919191; /* 일정 */
+  font-size: 12px;
+  text-align: left;
+  margin-top: 0px;
 }
 
 .more-options {
-  position: absolute;
-  right: 10px;
-  bottom: 0px;
+  font-size: 20px;
+  color: #666;
+  cursor: pointer;
   background: none;
   border: none;
-  color: #666;
-  font-size: 1.3em;
-  cursor: pointer;
+  padding: 10px;
+  padding-left: 10px;
+  padding-bottom: 20px;
 }
 
 .favorite-button {
-  position: absolute;
-  right: 10px;
-  top: 10px;
+  font-size: 20px;
+  color: #c92b2a;
+  cursor: pointer;
   background: none;
   border: none;
-  font-size: 1.6em;
-  cursor: pointer;
-  z-index: 1;
-  color: #c92b2a;
-  line-height: 0;
-  padding: 0;
+  padding: 3px;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.favorite-button.filled {
-  text-shadow: 1px 0 0 #c92b2a, /* 우측 테두리 */ -1px 0 0 #c92b2a,
-    /* 좌측 테두리 */ 0 1px 0 #c92b2a, /* 하단 테두리 */ 0 -1px 0 #c92b2a; /* 상단 테두리 */
+  width: 30px;
+  height: 10px;
 }
 
 .favorite-button.outlined {
-  color: #c92b2a;
+  font-size: 20px; /* 비워진 하트를 더 크게 */
+  transform: scale(1.1); /* 약간 더 크게 스케일 조정 */
+}
+
+.favorite-button.filled {
+  font-size: 20px; /* 채워진 하트는 기본 크기 유지 */
 }
 
 button:hover,
@@ -177,7 +203,7 @@ h2 {
   font-size: 16px;
   font-weight: bold;
   color: #000;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 .tab-container {
@@ -191,7 +217,7 @@ h2 {
   border-bottom: 1px solid #ddd;
   width: 100%;
   padding: 0 15px;
-  margin-left: 15px;
+  margin-left: 30px;
 }
 
 .tab {
@@ -218,4 +244,14 @@ h2 {
   width: calc(100% + 110px);
   height: 3px;
   background-color: #c92b2a;
+}
+.SJ-btn-frame {
+  position: absolute;
+  right: 10px;
+  top: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 10px 0;
 }

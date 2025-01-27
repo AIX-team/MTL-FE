@@ -1,5 +1,8 @@
 import React from "react";
 import "./TravelList.css";
+import osakaImg from "../../../images/osaka.png"; 
+import matsuyamaImg from "../../../images/matsuyama.png";
+import tokyoImg from "../../../images/tokyo.png";
 
 const TravelList = () => {
   const travelItems = [
@@ -8,7 +11,7 @@ const TravelList = () => {
       title: "오사카 여행",
       date: "2025-05-18",
       period: "일정 3일",
-      image: "/images/osaka.png",
+      image: osakaImg,     // import한 이미지 사용
       isFavorite: true,
     },
     {
@@ -16,7 +19,7 @@ const TravelList = () => {
       title: "마쓰야마 여행",
       date: "2025-03-27",
       period: "일정 5일",
-      image: "/images/matsuyama.png",
+      image: matsuyamaImg,  // import한 이미지 사용
       isFavorite: true,
     },
     {
@@ -24,7 +27,7 @@ const TravelList = () => {
       title: "도쿄 여행",
       date: "2025-02-21",
       period: "일정 4일",
-      image: "/images/tokyo.jpg",
+      image: tokyoImg,  // import한 이미지 사용
       isFavorite: false,
     },
   ];
@@ -55,22 +58,26 @@ const TravelList = () => {
       <div className="travel-grid">
         {travelItems.map((item) => (
           <div key={item.id} className="travel-card">
-            <img src={item.image} alt={item.title} />
+            <div className="travel-img">
+              <img src={item.image} alt={item.title} />
+            </div>
             <div className="card-content">
               <div className="card-header">
-                <h3>{item.title}</h3>
+                <span>{item.title}</span>
                 <span className="date">{item.date}</span>
               </div>
               <p className="period">{item.period}</p>
-              <button className="more-options">⋮</button>
             </div>
-            <button
+            <div className="SJ-btn-frame">
+            <div
               className={`favorite-button ${
                 item.isFavorite ? "filled" : "outlined"
               }`}
             >
               {item.isFavorite ? "♥" : "♡"}
-            </button>
+            </div>
+            <div className="more-options">⋮</div>
+            </div>
           </div>
         ))}
       </div>
