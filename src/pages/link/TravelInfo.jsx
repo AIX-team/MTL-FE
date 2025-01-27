@@ -10,42 +10,57 @@ import "slick-carousel/slick/slick-theme.css";
 import planeIcon from '../../images/Plane.svg';
 import selectIcon from '../../images/select.svg';
 import isSelectedIcon from '../../images/isselect.svg';
+import aiSelectIcon from '../../images/aiSelect.svg';
+import backArrowIcon from '../../images/backArrow.svg';
+import TitleEditModal from './TitleEditModal';
 
 const TravelInfo = () => {
 
-  const [placeType, setPlaceType] = useState({}); 
-  const [activeSpan, setActiveSpan] = useState(null);
+  const [placeType, setPlaceType] = useState("landmark"); 
+  const [activeSpan, setActiveSpan] = useState(1);
   const [selectedPlaces, setSelectedPlaces] = useState([]);
+  const [isAISelected, setIsAISelected] = useState(false);
+  const [travelDays, setTravelDays] = useState();
+  const [travelInfoTitle, setTravelInfoTitle] = useState();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  useEffect(() => {
-    setPlaceType("landmark");
-    setActiveSpan("span1");
-  }, []);
 
   const travelInfo = {
     "success": true,
     "message": "여행 정보 조회 성공",
     "travelInfoId": "1",
     "travelInfoTitle": "여행 정보 제목",
+    "travelDays": 4,
     "urlCnt": 5,
     "urlList": [
       {
-        "url": "https://www.youtube.com"
+        "url": "https://www.youtube.com",
+        "title": "영상1: 여행 정보 제목, 여행 정보 제목, 여행 정보 제목, 여행 정보 제목, 여행 정보 제목"
       },
       {
-        "url": "https://www.youtube.com"
+        "url": "https://www.youtube.com",
+        "title": "영상2: 여행 정보 제목, 여행 정보 제목, 여행 정보 제목, 여행 정보 제목, 여행 정보 제목"
       },
       {
-        "url": "https://www.youtube.com"
+        "url": "https://www.youtube.com",
+        "title": "영상3: 여행 정보 제목, 여행 정보 제목, 여행 정보 제목, 여행 정보 제목, 여행 정보 제목"
       },
       {
-        "url": "https://www.youtube.com"
+        "url": "https://www.youtube.com",
+        "title": "영상4: 여행 정보 제목, 여행 정보 제목, 여행 정보 제목, 여행 정보 제목, 여행 정보 제목"
       },
       {
-        "url": "https://blong.naver.com"
+        "url": "https://blong.naver.com",
+        "title": "블로그1: 여행 정보 제목, 여행 정보 제목, 여행 정보 제목, 여행 정보 제목, 여행 정보 제목"
       }
     ]
   }
+
+  useEffect(() => {
+    setTravelDays(travelInfo.travelDays);
+    setTravelInfoTitle(travelInfo.travelInfoTitle);
+  }, []);
+
 
 const data = {
   "success": true,
@@ -63,7 +78,8 @@ const data = {
       "placeAddress": "서울시 강남구",
       "placeImage": "https://placehold.co/300x200",
       "placeDescription": "맛집1 설명",
-      "intro": "맛집1 소개"
+      "intro": "맛집1 소개",
+      "placeScore": 4.4
     },
     {
       "placeId": "2",
@@ -72,7 +88,8 @@ const data = {
       "placeAddress": "서울시 강남구",
       "placeImage": "https://placehold.co/300x200",
       "placeDescription": "맛집2 설명",
-      "intro": "맛집2 소개"
+      "intro": "맛집2 소개",
+      "placeScore": 4.3
     },
     {
       "placeId": "3",
@@ -81,7 +98,8 @@ const data = {
       "placeAddress": "서울시 강남구", 
       "placeImage": "https://placehold.co/300x200",
       "placeDescription": "명소1 설명",
-      "intro": "명소1 소개"
+      "intro": "명소1 소개",
+      "placeScore": 4.2
     },
     {
       "placeId": "4",
@@ -90,7 +108,8 @@ const data = {
       "placeAddress": "서울시 강남구",
       "placeImage": "https://placehold.co/300x200",
       "placeDescription": "명소2 설명",
-      "intro": "명소2 소개"
+      "intro": "명소2 소개",
+      "placeScore": 4.1
     },
     {
       "placeId": "5",
@@ -99,7 +118,8 @@ const data = {
       "placeAddress": "서울시 강남구",
       "placeImage": "https://placehold.co/300x200",
       "placeDescription": "맛집5 설명",
-      "intro": "맛집5 소개"
+      "intro": "맛집5 소개",
+      "placeScore": 4.5
     }
   ]
 }
@@ -110,30 +130,59 @@ const sliderSettings = {
   speed: 500,
   slidesToShow: 1,
   slidesToScroll: 1,
-  fade: true,
   arrows: true,
 };
 
-const handleSpanClick = (spanId) => {
-  setActiveSpan(spanId);
+const handleSpanClick = (num) => {
+  setActiveSpan(num);
 };
 
 const handlePlaceClick = (placeId) => {
   setSelectedPlaces(prev => {
     if (prev.includes(placeId)) {
+      console.log(prev.filter(id => id !== placeId));
       return prev.filter(id => id !== placeId);
-    } else {
-      return [...prev, placeId];
-    }
+    } else  return [...prev, placeId];
   });
+};
+
+const handleAISelected = () => {
+  setIsAISelected(!isAISelected);
+
+  setSelectedPlaces([]);
+};
+
+const handleTitleEdit = () => {
+  setIsModalOpen(true);
+};
+
+const handleModalClose = () => {
+  setIsModalOpen(false);
+};
+
+const handleTitleSave = ({days, title}) => {
+  // 여기에 제목 저장 로직 추가
+  setTravelDays(days);
+  setTravelInfoTitle(title);
+  setIsModalOpen(false);
+  console.log(days, title);
 };
 
 return (
   <main>
     <h1 className='none'>여행 정보</h1>
     <div className='HG-TravelInfo-Title-Frame'>
-      <span>
-        <h2 className='HG-TravelInfo-Title'>{travelInfo.travelInfoTitle}</h2> {/* DATA: 여행 정보 제목 데이터 바인딩 */}
+      <span className='HG-TravelInfo-Back-Btn'>
+        <img src={backArrowIcon} alt="backArrowIcon" />
+        <div>
+        <div className='HG-TravelInfo-Travel-Days-Input'>{travelDays}일</div>
+        <div className='HG-TravelInfo-Title-Edit-Frame'>
+          <div className='HG-TravelInfo-Title'>{travelInfoTitle}</div>
+          <span className='HG-TravelInfo-Title-Edit-text'
+          onClick={handleTitleEdit}
+          >편집</span>
+          </div> 
+        </div>
       </span>
       <span className='HG-TravelInfo-Btn'>
         <span className='HG-TravelInfo-Select-Btn' >선택 </span><img src={planeIcon} alt="selectIcon" /> {/* FEAT: 선택 버튼 선택 여행지 모달 팝업 */}
@@ -145,28 +194,49 @@ return (
         영상정보
       </h3>
       <div className='HG-travelinfo-content-frame-list'>
-        <span className={`HG-travelinfo-content-frame-url ${activeSpan === 'span1' ? 'HG-underline' : ''}`} onClick={() => handleSpanClick('span1')}>
+        <span className={`HG-travelinfo-content-frame-url ${activeSpan === 1 ? 'HG-underline' : ''}`} onClick={() => handleSpanClick(1)}>
           전체보기
         </span>
         {travelInfo.urlList.map((item, index) => (
           item.url.includes("youtube") ?
           <span 
-            className={`HG-travelinfo-content-frame-url ${activeSpan === `span${index + 2}` ? 'HG-underline' : ''}`}
+            className={`HG-travelinfo-content-frame-url ${activeSpan === `{index + 2}` ? 'HG-underline' : ''}`}
             key={index}
-            onClick={() => handleSpanClick(`span${index + 2}`)}
+            onClick={() => handleSpanClick(`${index + 2}`)}
           >
             영상{index + 1}
           </span>
           :
           <span 
-            className={`HG-travelinfo-content-frame-url ${activeSpan === `span${index + 2}` ? 'HG-underline' : ''}`}
+            className={`HG-travelinfo-content-frame-url ${activeSpan === `${index + 2}` ? 'HG-underline' : ''}`}
             key={index}
-            onClick={() => handleSpanClick(`span${index + 2}`)}
+            onClick={() => handleSpanClick(`${index + 2}`)}
           >
             블로그{index + 1}
           </span>
         ))}
       </div>
+
+      <div className={` ${activeSpan === 1 ? 'HG-TravelInfo-Content-Blank' : 'HG-TravelInfo-Content-Title'}`}>
+        {(() => {
+          try {
+            if (activeSpan === 1) {
+              return '';
+            }
+            
+            const index = activeSpan - 2;
+            if (index < 0 || index >= travelInfo.urlList.length) {
+              return '제목을 찾을 수 없습니다'; // 기본값 설정
+            }
+            
+            return travelInfo.urlList[index].title;
+          } catch (error) {
+            console.error('제목 표시 중 오류 발생:', error);
+            return '제목을 불러오는 중 오류가 발생했습니다';
+          }
+        })()}
+      </div>
+
       <div className='HG-TravelInfo-Content-Frame-Place-Type-List'>
         <h3 className='none'>장소정보</h3>
         <span 
@@ -175,8 +245,10 @@ return (
         >
           관광지
         </span>
-        <span className={`${placeType === "restaurant" ? 'HG-TravelInfo-Content-Frame-Place-Selected-Type' : 'HG-TravelInfo-Content-Frame-Place-Type'}`}
-         onClick={() => setPlaceType("restaurant")}>
+        <span 
+          className={`${placeType === "restaurant" ? 'HG-TravelInfo-Content-Frame-Place-Selected-Type' : 'HG-TravelInfo-Content-Frame-Place-Type'}`}
+          onClick={() => setPlaceType("restaurant")}
+        >
           맛집
           </span>
         <span className={`${placeType === "etc" ? 'HG-TravelInfo-Content-Frame-Place-Selected-Type' : 'HG-TravelInfo-Content-Frame-Place-Type'}`} 
@@ -184,37 +256,55 @@ return (
           그 외
           </span>
       </div>   
-        {data.content.map((item, index) => (
-          item.placeType === placeType ?
-          <div 
-            key={index} 
-            className={`carousel-item ${selectedPlaces.includes(item.placeId) ? 'HG-select-place' : ''}`}
-            onClick={() => handlePlaceClick(item.placeId)}
-          >
-            <img className='HG-trevelinfo-content-frame-select' src={`${selectedPlaces.includes(item.placeId) ? isSelectedIcon : selectIcon}`} alt="selectIcon" />
-            <span>{item.placeName}</span>
-            <span>{item.intro}</span>
-            <Slider {...sliderSettings}>
-              {/* 첫 번째 슬라이드 */}
-              <div >
-                <img className="HG-slide-content-image" src={item.placeImage} alt="placeImage" />
+      <div className='HG-TravelInfo-aiselect-btn'
+      onClick={handleAISelected}
+      >
+        <img src={`${isAISelected ? isSelectedIcon : aiSelectIcon}`} alt="aiSelectIcon" />
+        <span className='HG-TravelInfo-aiselect-btn-text'>AI 추천선택</span>
+      </div>
+      
+      <div className='HG-TravelInfo-Content-Frame-Place-Slider'>
+          {data.content.map((item, index) => (
+            item.placeType === placeType ?
+            <div 
+              key={index} 
+              className={`carousel-item ${selectedPlaces.includes(item.placeId) ? 'HG-select-place' : ''}`}
+              onClick={() => handlePlaceClick(item.placeId)}
+            >
+              <div className='HG-trevelinfo-content-frame-select-frame'>
+              <img className='HG-trevelinfo-content-frame-select' src={`${selectedPlaces.includes(item.placeId) ? isSelectedIcon : selectIcon}`} alt="selectIcon" />
+              <span className='HG-trevelinfo-content-frame-select-name'>{item.placeName}</span>
+              <span className='HG-trevelinfo-content-frame-select-intro'>{item.intro}</span>
               </div>
-              
-              {/* 두 번째 슬라이드 */}
-              <div className="slide-content">
-                <span>{item.placeDescription}</span>
-                <p>{item.placeAddress}</p>
+                <Slider {...sliderSettings}>
+                  {/* 첫 번째 슬라이드 */}
+                  <div >
+                    <img className="HG-slide-content-image" src={item.placeImage} alt="placeImage" />
+                  </div>
+                  
+                  {/* 두 번째 슬라이드 */}
+                  <div className="slide-content">
+                    <span>{item.placeDescription}</span>
+                    <p>{item.placeAddress}</p>
+                  </div>
+                  
+                  {/* 세 번째 슬라이드 */}
+                  <div className="slide-content">
+                    {/* 구글 맵 */}
+                  </div>
+                </Slider>
               </div>
-              
-              {/* 세 번째 슬라이드 */}
-              <div className="slide-content">
-                {/* 구글 맵 */}
-              </div>
-            </Slider>
-          </div>
-          : null
-        ))}
+            : null
+          ))}
+      </div>
     </div>
+    <TitleEditModal 
+      isOpen={isModalOpen}
+      onClose={handleModalClose}
+      travelDays={travelDays}
+      travelInfoTitle={travelInfoTitle}
+      onSave={handleTitleSave}
+    />
   </main>
   );
 };
