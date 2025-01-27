@@ -1,0 +1,221 @@
+.travel-list {
+  padding: 20px;
+  font-family: "NanumBarunGothic", sans-serif;
+}
+
+.travel-header {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.filter-buttons {
+  display: flex;
+  gap: 10px;
+  margin: 15px 0;
+}
+
+.filter-buttons button {
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 1px solid #ddd;
+  background: white;
+}
+
+.filter-buttons button.active {
+  background: #c92b2a;
+  color: white;
+  border: none;
+}
+
+.search-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: auto;
+  margin-right: 55px;
+}
+
+.search-title {
+  font-family: "NanumBarunGothic", sans-serif;
+  font-size: 14px;
+  font-weight: bold;
+  color: #000;
+  white-space: nowrap;
+}
+
+.search-bar {
+  position: relative;
+  width: 180px;
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 10px 40px 10px 15px;
+  border-radius: 20px;
+  border: 1px solid #ddd;
+}
+
+.search-bar .search-icon {
+  position: absolute;
+  right: -45px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+}
+
+.travel-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.travel-card {
+  position: relative;
+  background: white;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  height: 150px;
+}
+
+.travel-card img {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 15px 15px 0 0;
+}
+
+.card-content {
+  padding: 20px;
+  height: calc(100% - 200px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1px;
+  flex-direction: column;
+  padding-top: 10px; /* 이미지 자리를 위한 왼쪽 패딩 추가 */
+  position: relative; /* 이미지 위치 기준점 */
+}
+
+.card-header h3 {
+  margin: 0;
+  font-size: 1.1em;
+  gap: 0px;
+}
+
+.date {
+  color: #666;
+  font-size: 0.8em;
+  padding-left: 180px;
+  margin-left: auto; /* date를 오른쪽으로 밀기 */
+  padding-left: 10px;
+}
+
+.period {
+  color: #666;
+  font-size: 0.9em;
+  margin: 0;
+  padding-left: 90px;
+  padding-top: 10px;
+}
+
+.more-options {
+  position: absolute;
+  right: 10px;
+  bottom: 0px;
+  background: none;
+  border: none;
+  color: #666;
+  font-size: 1.3em;
+  cursor: pointer;
+}
+
+.favorite-button {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  background: none;
+  border: none;
+  font-size: 1.6em;
+  cursor: pointer;
+  z-index: 1;
+  color: #c92b2a;
+  line-height: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.favorite-button.filled {
+  text-shadow: 1px 0 0 #c92b2a, /* 우측 테두리 */ -1px 0 0 #c92b2a,
+    /* 좌측 테두리 */ 0 1px 0 #c92b2a, /* 하단 테두리 */ 0 -1px 0 #c92b2a; /* 상단 테두리 */
+}
+
+.favorite-button.outlined {
+  color: #c92b2a;
+}
+
+button:hover,
+button:focus {
+  background-color: #c92b2a;
+  color: white;
+}
+
+h2 {
+  /* 여행 목록 텍스트 스타일 */
+  font-family: "NanumBarunGothic", sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+  color: #000;
+  margin-bottom: 20px;
+}
+
+.tab-container {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.tabs {
+  display: flex;
+  gap: 90px;
+  border-bottom: 1px solid #ddd;
+  width: 100%;
+  padding: 0 15px;
+  margin-left: 15px;
+}
+
+.tab {
+  position: relative;
+  font-family: "NanumBarunGothic", sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 10px 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: #666;
+}
+
+.tab.active {
+  color: #000; /* 활성 탭 색상 */
+}
+
+.tab.active::after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: -50px;
+  width: calc(100% + 110px);
+  height: 3px;
+  background-color: #c92b2a;
+}
