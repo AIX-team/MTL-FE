@@ -40,6 +40,7 @@ export const loginRequest = async (method, url, data) => {
     });
 };
 
+
 // fastapi 요청
 export const fastAPIrequest = async (method, url, data) => {
 
