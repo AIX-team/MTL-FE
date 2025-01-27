@@ -1,17 +1,15 @@
-import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import React from "react";
+import { Routes, Route } from "react-router-dom";
+import TravelList from "./TravelList/TravelList";
 
 const TravelPage = () => {
-    return (
-        <div className="travel-page">
-            <div className="travel-content">
-                <h1>Travel Page</h1>
-                <Routes>
-                    <Route path="/" element={<div>Travel Main Content</div>} />
-                </Routes>
-            </div>
-        </div>
-    );
+  return (
+    <div className="travel-content">
+      <Routes>
+        <Route path="/" element={<TravelList />} />
+      </Routes>
+    </div>
+  );
 };
 
 export default TravelPage;
