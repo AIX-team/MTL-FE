@@ -59,7 +59,7 @@ const TravelInfo = () => {
   useEffect(() => {
     setTravelDays(travelInfo.travelDays);
     setTravelInfoTitle(travelInfo.travelInfoTitle);
-  }, []);
+  }, [travelInfo]);
 
 
 const data = {
@@ -200,7 +200,7 @@ return (
         {travelInfo.urlList.map((item, index) => (
           item.url.includes("youtube") ?
           <span 
-            className={`HG-travelinfo-content-frame-url ${activeSpan === `{index + 2}` ? 'HG-underline' : ''}`}
+            className={`HG-travelinfo-content-frame-url ${activeSpan === `${index + 2}` ? 'HG-underline' : ''}`}
             key={index}
             onClick={() => handleSpanClick(`${index + 2}`)}
           >

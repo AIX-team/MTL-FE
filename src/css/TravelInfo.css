@@ -64,6 +64,8 @@
 }
 
 .HG-TravelInfo-Title-Frame{
+  margin: 10px 0px;
+  padding: 10px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -74,7 +76,7 @@
 .HG-TravelInfo-Back-Btn{
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 20px;
   cursor: pointer;
 }
 
@@ -102,6 +104,8 @@
 
 .HG-TravelInfo-aiselect-btn{
   margin-top: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
   padding-bottom: 10px;
   display: flex;
   align-items: center;
@@ -120,8 +124,7 @@
 }
 
 .HG-TravelInfo-Content-Title{
-  margin-top: 10px;
-  margin-bottom: 10px;
+  margin: 10px 20px;
   padding: 5px;
   border-radius: var(--border-radius-base);
   background-color: var(--color-light-gray);
@@ -133,6 +136,7 @@
 }
 
 .HG-TravelInfo-Content-Frame-Title{
+  margin-left: 20px;
   font-size: var(--font-size-xl);
   font-weight: bold;
 }
@@ -163,15 +167,22 @@
   margin-bottom: auto;
   transform: translateX(-10px);
 }
+.HG-TravelInfo-Content-Frame{
+  overflow-y: auto;
+}
 
 .HG-travelinfo-content-frame-list{
+  margin-left: 20px;
+  margin-right: 20px;
   display: flex;
-  gap: 8px;
+  gap: 10px;
+  overflow-y: auto;
 }
 
 .HG-TravelInfo-Content-Frame-Place-Slider {
-  overflow-y: auto; /* 세로 스크롤만 표시 */
-  width: 100%;
+  margin-left: 20px;
+  margin-right: 20px;
+  width: 90%;
   height: 33em;
   
   /* 크롬, 사파리, 엣지를 위한 스크롤바 스타일링 */
@@ -198,6 +209,8 @@
 }
 
 .HG-TravelInfo-Content-Frame-Place-Type-List{
+  margin: 10ps 0px;
+  margin-left:20px;
   display: flex;
   gap: 8px;
   margin-top: 10px;

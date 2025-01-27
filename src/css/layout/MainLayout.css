@@ -1,4 +1,10 @@
 /* 전체 페이지 기본 스타일 */
+*{
+    cursor: none;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;  /* 모바일에서 탭 시 하이라이트 제거 */
+}
+
 body {
     background-color: #C92B2A;
     font-family: 'NanumBarunGothic', sans-serif;
@@ -34,7 +40,6 @@ body {
     position: fixed;
     top: 60px;
     bottom: 100px;
-
     width: 402px;
 }
 
@@ -49,5 +54,11 @@ body {
     justify-content: space-around;
     align-items: center;
 
+}
+
+/* 헤더 없는 레이아웃 컨텐츠 영역 */
+.WS-Main-Container-Headerless {
+    position: fixed;
+    width: 402px;
 }
 /* 완료 ================================================================== */

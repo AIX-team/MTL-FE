@@ -14,7 +14,7 @@ const HeaderlessLayout = () => {
     return (
         <div className="WS-Main-Layout">
             
-            <main className="WS-Main-Container">
+            <main className="WS-Main-Container-Headerless">
                 <Outlet />  {/* 라우팅된 컴포넌트가 렌더링되는 영역 */}
             </main>
             <FooterComponent />  {/* 하단 네비게이션 바 */}
