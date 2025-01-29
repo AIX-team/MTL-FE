@@ -30,6 +30,10 @@
   --border-radius-base: 8px;
   --border-radius-lg: 16px;
   --border-radius-full: 9999px;
+
+
+  /* 푸터 높이 */
+  --footer-height: 100px;
 }
 
 /* 전역 스타일 */

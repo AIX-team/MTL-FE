@@ -1,7 +1,26 @@
 * {
-  cursor: none;
   outline: none;
   -webkit-tap-highlight-color: transparent;  /* 모바일에서 탭 시 하이라이트 제거 */
+  cursor: default;  /* 기본 커서 설정 */
+}
+
+/* 클릭 가능한 요소들에 대한 포인터 커서 설정 */
+button, 
+a, 
+[role="button"],
+.HG-TravelInfo-Back-Btn,
+.HG-TravelInfo-Title-Edit-text,
+.HG-TravelInfo-aiselect-btn,
+.HG-TravelInfo-Btn,
+.HG-TravelInfo-Select-Btn,
+.HG-travelinfo-content-frame-url,
+.HG-TravelInfo-Content-Frame-Place-Type,
+.HG-TravelInfo-Content-Frame-Place-Selected-Type,
+.HG-trevelinfo-content-frame-select-frame,
+.HG-trevelinfo-content-frame-select-intro,
+.HG-trevelinfo-content-frame-select-name,
+.HG-trevelinfo-content-frame-select {
+  cursor: pointer !important;
 }
 
 .carousel-item {
@@ -66,6 +85,7 @@
 .HG-TravelInfo-Title-Frame{
   margin: 10px 0px;
   padding: 10px 20px;
+  flex-shrink: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -167,7 +187,16 @@
   transform: translateX(-10px);
 }
 .HG-TravelInfo-Content-Frame{
+  flex: 1;
   overflow-y: auto;
+  overflow-x: hidden;
+  height: auto; /* 컨텐츠 크기만큼만 높이 설정 */
+  max-height: calc(100vh - var(--header-height)); /* 최대 높이 제한 */
+  /* 안드로이드 시스템 UI 고려 */
+  padding-bottom: env(safe-area-inset-bottom);
+  /* 이전 버전 안드로이드 대응 */
+  padding-bottom: constant(safe-area-inset-bottom);
+  
 }
 
 .HG-travelinfo-content-frame-list{
@@ -271,6 +300,16 @@
   object-position: center;
   border-radius: var(--border-radius-base);
 }
+
+.HG-TravelInfo-Select-Modal{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  z-index: 1000;
+} 
 
 /* none */
 .none{

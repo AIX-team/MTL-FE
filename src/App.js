@@ -5,7 +5,7 @@ import LinkPage from './pages/link/LinkPage';
 import TravelPage from './pages/travel/TravelPage';
 import MyPage from './pages/mypage/MyPage';
 import GuideBookList from './pages/travel/GuideBookList';
-import TravelInfo from './pages/link/TravelInfo';
+import TravelInfo from './pages/link/travelInfo/TravelInfo';
 import './css/styles/variables.css';
 
 

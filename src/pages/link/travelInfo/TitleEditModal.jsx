@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import '../../css/Modal.css';
-import resetIcon from '../../images/resetBtn.svg';
+import '../../../css/Modal.css';
+import resetIcon from '../../../images/resetBtn.svg';
 
 const TitleEditModal = ({ isOpen, onClose, travelDays, travelInfoTitle, onSave }) => {
   const [daysValue, setDaysValue] = React.useState(travelDays);

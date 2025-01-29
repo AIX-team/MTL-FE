@@ -53,7 +53,7 @@ body {
     display: flex;
     justify-content: space-around;
     align-items: center;
-
+    z-index: 1000;
 }
 
 /* 헤더 없는 레이아웃 컨텐츠 영역 */

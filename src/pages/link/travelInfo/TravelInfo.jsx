@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import youtubeIcon from '../../images/youtube_icon.svg';
-import blogIcon from '../../images/blog_icon.svg';
-import '../../css/TravelInfo.css';
+import '../../../css/TravelInfo.css';
 import Slider from 'react-slick';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import planeIcon from '../../images/Plane.svg';
-import selectIcon from '../../images/select.svg';
-import isSelectedIcon from '../../images/isselect.svg';
-import aiSelectIcon from '../../images/aiSelect.svg';
-import backArrowIcon from '../../images/backArrow.svg';
+import planeIcon from '../../../images/Plane.svg';
+import selectIcon from '../../../images/select.svg';
+import isSelectedIcon from '../../../images/isselect.svg';
+import aiSelectIcon from '../../../images/select_check_deactive.svg';
+import backArrowIcon from '../../../images/backArrow.svg';
 import TitleEditModal from './TitleEditModal';
+import SelectModal from './SelectModal';
 
 const TravelInfo = () => {
 
@@ -23,7 +22,7 @@ const TravelInfo = () => {
   const [travelDays, setTravelDays] = useState();
   const [travelInfoTitle, setTravelInfoTitle] = useState();
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const [isSelectModalOpen, setIsSelectModalOpen] = useState(false);
 
   const travelInfo = {
     "success": true,
@@ -55,11 +54,6 @@ const TravelInfo = () => {
       }
     ]
   }
-
-  useEffect(() => {
-    setTravelDays(travelInfo.travelDays);
-    setTravelInfoTitle(travelInfo.travelInfoTitle);
-  }, []);
 
 
 const data = {
@@ -124,6 +118,11 @@ const data = {
   ]
 }
 
+useEffect(() => {
+  setTravelDays(travelInfo.travelDays);
+  setTravelInfoTitle(travelInfo.travelInfoTitle);
+}, []);
+
 const sliderSettings = {
   dots: true,
   infinite: true,
@@ -137,12 +136,15 @@ const handleSpanClick = (num) => {
   setActiveSpan(num);
 };
 
-const handlePlaceClick = (placeId) => {
+const handlePlaceClick = (place) => {
   setSelectedPlaces(prev => {
-    if (prev.includes(placeId)) {
-      console.log(prev.filter(id => id !== placeId));
-      return prev.filter(id => id !== placeId);
-    } else  return [...prev, placeId];
+    // placeId를 기준으로 객체가 이미 존재하는지 확인
+    const isExist = prev.some(item => item.placeId === place.placeId);
+    
+    if (isExist) {
+      return prev.filter(item => item.placeId !== place.placeId);
+    } 
+    return [...prev, place];
   });
 };
 
@@ -159,6 +161,16 @@ const handleModalClose = () => {
   setIsModalOpen(false);
 };
 
+const handleSelectModalClose = () => {
+  setIsSelectModalOpen(false);
+};
+
+const handlePlaceDelete = (placeList) => {
+  // setSelectedPlaces state 초기화 후 placeList 추가
+  setSelectedPlaces([]);
+  setSelectedPlaces(placeList);
+};
+
 const handleTitleSave = ({days, title}) => {
   // 여기에 제목 저장 로직 추가
   setTravelDays(days);
@@ -167,8 +179,12 @@ const handleTitleSave = ({days, title}) => {
   console.log(days, title);
 };
 
+const handleSelectBtn = () => {
+  setIsSelectModalOpen(true);
+};
+
 return (
-  <main>
+  <main className='HG-TravelInfo-Container'>
     <h1 className='none'>여행 정보</h1>
     <div className='HG-TravelInfo-Title-Frame'>
       <span className='HG-TravelInfo-Back-Btn'>
@@ -184,7 +200,9 @@ return (
         </div>
       </span>
       <span className='HG-TravelInfo-Btn'>
-        <span className='HG-TravelInfo-Select-Btn' >선택 </span><img src={planeIcon} alt="selectIcon" /> {/* FEAT: 선택 버튼 선택 여행지 모달 팝업 */}
+        <span className='HG-TravelInfo-Select-Btn' 
+        onClick={handleSelectBtn}
+        >선택 </span><img src={planeIcon} alt="selectIcon" /> {/* FEAT: 선택 버튼 선택 여행지 모달 팝업 */}
         <span className='HG-TravelInfo-Select-Cnt'>{selectedPlaces.length}</span> {/* DATA: 선택 여행지 갯수 카운트 */}
       </span>
     </div>
@@ -267,32 +285,33 @@ return (
             item.placeType === placeType ?
             <div 
               key={index} 
-              className={`carousel-item ${selectedPlaces.includes(item.placeId) ? 'HG-select-place' : ''}`}
-              onClick={() => handlePlaceClick(item.placeId)}
+              className={`carousel-item ${selectedPlaces.some(selected => selected.placeId === item.placeId) ? 'HG-select-place' : ''}`}
             >
-              <div className='HG-trevelinfo-content-frame-select-frame'>
-              <img className='HG-trevelinfo-content-frame-select' src={`${selectedPlaces.includes(item.placeId) ? isSelectedIcon : selectIcon}`} alt="selectIcon" />
-              <span className='HG-trevelinfo-content-frame-select-name'>{item.placeName}</span>
-              <span className='HG-trevelinfo-content-frame-select-intro'>{item.intro}</span>
+              <div className='HG-trevelinfo-content-frame-select-frame'
+                onClick={() => handlePlaceClick(item)}
+              >
+                <img className='HG-trevelinfo-content-frame-select' src={`${selectedPlaces.some(selected => selected.placeId === item.placeId) ? isSelectedIcon : selectIcon}`} alt="selectIcon" />
+                <span className='HG-trevelinfo-content-frame-select-name'>{item.placeName}</span>
+                <span className='HG-trevelinfo-content-frame-select-intro'>{item.intro}</span>
               </div>
-                <Slider {...sliderSettings}>
-                  {/* 첫 번째 슬라이드 */}
-                  <div >
-                    <img className="HG-slide-content-image" src={item.placeImage} alt="placeImage" />
-                  </div>
-                  
-                  {/* 두 번째 슬라이드 */}
-                  <div className="slide-content">
-                    <span>{item.placeDescription}</span>
-                    <p>{item.placeAddress}</p>
-                  </div>
-                  
-                  {/* 세 번째 슬라이드 */}
-                  <div className="slide-content">
-                    {/* 구글 맵 */}
-                  </div>
-                </Slider>
-              </div>
+              <Slider {...sliderSettings}>
+                {/* 첫 번째 슬라이드 */}
+                <div >
+                  <img className="HG-slide-content-image" src={item.placeImage} alt="placeImage" />
+                </div>
+                
+                {/* 두 번째 슬라이드 */}
+                <div className="slide-content">
+                  <span>{item.placeDescription}</span>
+                  <p>{item.placeAddress}</p>
+                </div>
+                
+                {/* 세 번째 슬라이드 */}
+                <div className="slide-content">
+                  {/* 구글 맵 */}
+                </div>
+              </Slider>
+            </div>
             : null
           ))}
       </div>
@@ -304,6 +323,15 @@ return (
       travelInfoTitle={travelInfoTitle}
       onSave={handleTitleSave}
     />
+    <div className={`${isSelectModalOpen ? 'HG-TravelInfo-Select-Modal' : 'none'}`}>
+      <SelectModal
+        isOpen={isSelectModalOpen}
+        onClose={handleSelectModalClose}
+        selectedPlaces={selectedPlaces}
+        onPlaceSelect={handlePlaceDelete}
+        travelDays={travelDays}
+      />
+    </div>
   </main>
   );
 };
