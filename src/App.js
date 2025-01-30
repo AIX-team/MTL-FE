@@ -5,7 +5,6 @@ import TravelPage from './pages/travel/TravelPage';
 import MyPage from './pages/mypage/MyPage';
 import Login from "./pages/user/Login";
 import LoginSuccess from "./pages/user/LoiginSuccess";
-// import LoginSuccess from "./pages/user/LoiginSuccess";
 
 function App() {
   return (

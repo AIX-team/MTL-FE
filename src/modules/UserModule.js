@@ -1,7 +1,4 @@
-import { useNavigate } from "react-router-dom";
 import { createActions, handleActions } from "redux-actions"
-
-const navigate = useNavigate;
 
 // 초기 state 값
 const initialState = {
@@ -20,7 +17,7 @@ export const SHOW_SIGN_UP = 'user/SHOW_SIGN_UP';
 export const HIDE_SIGN_UP = 'user/HIDE_SIGN_UP';
 
 //유저 관련 액션 함수
-export const { user: {login, logOut,getAllProfileImage,loadUser,showSignUp}} = createActions({
+export const { user: {login, logOut,getAllProfileImage,loadUser,showSignUp,hideSignUp}} = createActions({
     [LOGIN] : ({ token, userInfo }) => ({ token, userInfo }),
     [LOG_OUT]: ({ token, userInfo }) => ({ token, userInfo }),
     [GET_ALL_PROFILE_IMAGE]: (data) => (data),

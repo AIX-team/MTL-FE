@@ -40,6 +40,24 @@ export const loginRequest = async (method, url, data) => {
     });
 };
 
+// 회원가입 요청
+export const signUpRequest = async (signupData) => {
+    const url = '/auth/signUp'; // 회원가입 API 엔드포인트
+    return await axios({
+        method: 'POST', // POST 요청
+        url: `${DOMAIN}${url}`, // 전체 URL
+        data: signupData, // 회원가입 데이터
+        headers: {
+            'Content-Type': 'application/json', // JSON으로 요청
+        },
+    })
+    .then(res => res.data) // 응답 데이터 반환
+    .catch(error => {
+        console.log(error); // 에러 로깅
+        throw error; // 에러를 다시 던져서 호출한 곳에서 처리할 수 있도록
+    });
+}; 
+
 
 // fastapi 요청
 export const fastAPIrequest = async (method, url, data) => {
