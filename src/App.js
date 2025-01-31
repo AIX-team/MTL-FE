@@ -4,7 +4,7 @@ import LinkPage from './pages/link/LinkPage';
 import TravelPage from './pages/travel/TravelPage';
 import MyPage from './pages/mypage/MyPage';
 import GuideBookList from './pages/travel/GuideBookList';
-
+import Wish from './layouts/Wish';
 
 function App() {
   return (
@@ -26,6 +26,9 @@ function App() {
 
           {/* GuideBookList */}
           <Route path="guidebooklist/*" element={<GuideBookList />} />
+
+          {/* Wish */}
+          <Route path="wish/*" element={<Wish />} />
         </Route>
       </Routes>
     </BrowserRouter>
