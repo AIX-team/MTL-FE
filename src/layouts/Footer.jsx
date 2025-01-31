@@ -8,7 +8,12 @@ import MYPAGE from '../images/MyPage.png';
 const FooterComponent = () => {
     const location = useLocation();
     const currentPath = location.pathname.toLowerCase();
-
+    
+    // 모달이 열려있을 때는 Footer를 숨김
+    const isModalPath = currentPath.includes('/select-modal');
+    
+    if (isModalPath) return null;
+    
     const getClassName = (path) => {
         switch(path) {
             case '/link':
