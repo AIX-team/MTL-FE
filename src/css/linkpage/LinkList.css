@@ -1,50 +1,73 @@
 .WS-LinkList {
     width: 100%;
-    max-width: 600px;
     margin: 0 auto;
 }
 
-/* 검색 입력창 스타일 */
-.WS-LinkList-Search {
-    display: flex;
-    gap: 10px;
-    margin-top: 30px;
-    margin-bottom: 20px;
-}
-
-.WS-LinkList-SearchInput {
-    flex: 1;
-    padding: 12px 20px;
-    border: 1px solid #e0e0e0;
-    border-radius: 25px;
-    font-size: 14px;
-    outline: none;
-}
-
 .WS-LinkList-AddButton {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    right: 0px;
+
     width: 40px;
     height: 40px;
+
     border: none;
     border-radius: 50%;
-    background-color: #f0f0f0;
+
     font-size: 20px;
+
+    background-color: #E3E3E3;
+    color: #3E3E3E;
+
+    transition: all 0.3s ease;
+}
+
+.WS-LinkList-AddButton:hover {
     cursor: pointer;
+    color: #E3E3E3;
+    background-color: #3E3E3E;
+    scale: 1.05;
 }
 
 /* 링크 아이템 스타일 */
 .WS-LinkList-Items {
+
     display: flex;
     flex-direction: column;
+    margin-top: 20px;
     gap: 10px;
+    margin-bottom: 80px;
+    /* 분석하기 버튼 영역만큼 여백 추가 */
+    max-height: calc(100vh - 200px);
+    /* 화면 높이에서 헤더, 푸터, 분석버튼 영역을 뺀 높이 */
+    overflow-y: auto;
+
+    transition: all 0.3s ease;
 }
 
 .WS-LinkList-Item {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    gap: 10px;
-    padding: 15px;
-    background-color: #f8f8f8;
-    border-radius: 10px;
+    padding: 5px;
+    margin-bottom: 8px;
+    border-radius: 20px;
+    background-color: #E3E3E3;
+    transition: all 0.3s ease;
+}
+
+.WS-LinkList-Item:hover {
+    background-color: #cecece;
+}
+
+.WS-LinkList-Content {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    min-width: 0;
+    /* 텍스트 오버플로우 방지 */
 }
 
 .WS-LinkList-Badge {
@@ -52,10 +75,13 @@
     border-radius: 5px;
     font-size: 12px;
     font-weight: bold;
+    margin-right: 10px;
+    width: 70px;
+    text-align: center;
 }
 
 .WS-LinkList-Item.youtube .WS-LinkList-Badge {
-    background-color: #FF0000;
+    background-color: #C92B2A;
     color: white;
 }
 
@@ -67,8 +93,74 @@
 .WS-LinkList-Text {
     flex: 1;
     font-size: 14px;
-    color: #666;
+    color: #3E3E3E;
     white-space: nowrap;
-    overflow: hidden;
     text-overflow: ellipsis;
+    text-align: left;
 }
+
+.WS-LinkList-DeleteButton {
+    background-color: white;
+    color: #3e3e3e;
+    font-size: 16px;
+    border-radius: 50%;
+    border: none;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin-left: 10px;
+    transition: background-color 0.2s;
+}
+
+.WS-LinkList-DeleteButton:hover {
+    background-color: #A52421;
+    color: white;
+}
+
+.WS-LinkList-Next-Container {
+    position: absolute;
+    bottom: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.WS-LinkList-Counter {
+    color: #3e3e3e;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.WS-LinkList-NextButton {
+    padding: 12px 40px;
+
+    width: 350px;
+    border: none;
+    border-radius: 25px;
+    background-color: #C92B2A;
+
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+
+    transition: all 0.3s ease;
+}
+
+.WS-LinkList-NextButton:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+.WS-LinkList-NextButton:not(:disabled):hover {
+    transform: scale(1.02);
+    background-color: #A52421;
+}
+

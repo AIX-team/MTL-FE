@@ -1,63 +1,106 @@
-/* 서브 헤더 컨테이너 */
-.WS-SubHeader {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    top: 60px;
-    left: 50%;
-    transform: translateX(-50%);
-    max-width: 402px;
-    padding: 10px;
-    z-index: 100;
-    position: relative;  /* 인디케이터의 기준점 */
-}
-
 /* 각 탭의 기본 스타일 */
 .WS-SubHeader-Tab {
     flex: 1;
     text-align: center;
-    padding: 15px 0;
     text-decoration: none;
-    color: #666;
+    color: #C92B2A;
     font-size: 14px;
+    font-weight: 600;
     position: relative;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* 활성화된 탭 스타일 */
 .WS-SubHeader-Tab.active {
-    color: #dc3545;  /* 빨간색 */
-    font-weight: bold;
+    color: C92B2A;
+    /* 빨간색 */
+    font-weight: 900;
+    scale: 1.1;
+}
+
+.WS-check-icon {
+    background-color: #48B669;
+    border-radius: 25px;
+    width: 20px;
+    height: 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 5px;
+    color: white;
+    font-size: 14px;
+}
+
+.WS-Count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 6px;
+    margin-bottom: 2px;
+
+    width: 22px;
+    height: 20px;
+    background-color: #C92B2A;
+    border-radius: 50%;
+
+    color: white;
+    font-size: 12px;
+
+    padding-top: 2px;
+}
+
+/* 광역 스타일 ============================================== */
+/* 탭 커스터마이징 ============================================== */
+#WS-SubHeader-Link-youtube-tab {
+    gap: 4px;
+    height: 14px;
+}
+
+#WS-SubHeader-youtube-icon {
+    height: 14px;
+    width: 20px;
+    margin-bottom: 3px;
+    /* 미세 조정 */
 }
 
 /* 이동하는 인디케이터(빨간 선) 스타일 */
-.WS-SubHeader .indicator {
+#WS-SubHeader-link-indicator {
     position: absolute;
-    bottom: 10px;  /* 바닥에서의 간격 */
-    left: 50%;  /* 중앙 정렬 시작점 */
-    transform: translateX(-50%);  /* 중앙 정렬 보정 */
-    width: 80px;  /* 인디케이터 너비 */
-    height: 2px;
-    background-color: #dc3545;
-    transition: transform 0.3s ease;  /* 이동 애니메이션 */
+    top: 40px;
+    /* 바닥에서의 간격 */
+    left: 50%;
+    /* 중앙 정렬 시작점 */
+    transform: translateX(-50%);
+    /* 중앙 정렬 보정 */
+    width: 100px;
+    /* 인디케이터 너비 */
+    height: 4px;
+    background-color: #C92B2A;
+    transition: transform 0.3s ease;
+    /* 이동 애니메이션 */
 }
+
+/* 애니메이션 ============================================== */
 
 /* 각 탭이 활성화될 때 인디케이터 위치 */
-.WS-SubHeader-Tab:nth-child(1).active ~ .indicator {
-    transform: translateX(-168px);  /* 첫 번째 탭(링크) 중앙 */
+.WS-SubHeader-Tab:nth-child(1).active~#WS-SubHeader-link-indicator {
+    transform: translateX(-145%);
+    /* 첫 번째 탭(링크) */
 }
 
-.WS-SubHeader-Tab:nth-child(2).active ~ .indicator {
-    transform: translateX(-50%);  /* 두 번째 탭(유튜브검색) 중앙 */
+.WS-SubHeader-Tab:nth-child(2).active~#WS-SubHeader-link-indicator {
+    transform: translateX(43%);
+    /* 두 번째 탭(유튜브검색) */
 }
 
-.WS-SubHeader-Tab:nth-child(3).active ~ .indicator {
-    transform: translateX(87px);  /* 세 번째 탭(선택) 중앙 */
+.WS-SubHeader-Tab:hover {
+    color: red;
+    /* 빨간색 */
+    font-weight: 900;
+    scale: 1.05;
 }
 
-/* 선택 탭의 숫자 3 스타일 */
-.number {
-    display: inline-block;
-    margin-left: 4px;
-    color: #dc3545;
-    font-weight: bold;
-}
+/* 완료 ============================================== */
