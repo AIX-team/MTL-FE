@@ -1,6 +1,8 @@
 /* 검색 컨테이너 ============================================= */
 .WS-SearchYoutube-Search {
     padding-bottom: 10px;
+    width: 400px;
+    
 }
 
 /* 검색 결과 ============================================= */
@@ -8,18 +10,13 @@
     display: grid;
     overflow-y: auto;
     overflow-x: hidden;
-    height: 680px;
+    height: 500px;
     transition: all 0.3s ease;
 }
 
-.WS-SearchYoutube-Results.has-selected {
-    height: 620px;
-}
-
-
 /* 검색 입력창 ============================================= */
 .WS-Link-Input-Container {
-    width: 380px;
+    width: 100%;
     position: relative;
     flex: 1;
     display: flex;
@@ -94,10 +91,6 @@
 
 
 .WS-SearchYoutube-Results-Item.selected .WS-SearchYoutube-Thumbnail {
-    filter: brightness(1);
-}
-
-.WS-SearchYoutube-Results-Item:hover .WS-SearchYoutube-Thumbnail {
     filter: brightness(1);
 }
 

@@ -1,0 +1,11 @@
+.SJ-Travel-Page {
+    top: 0px;
+    display: flex;
+
+    height: 100%;
+ }
+
+.SJ-Travel-Page-Content {
+    margin-top: 20%;    
+    width: 100%;
+}

@@ -1,6 +1,5 @@
 .WS-LinkList {
-    width: 100%;
-    margin: 0 auto;
+    width: 400px;
 }
 
 .WS-LinkList-AddButton {
@@ -18,16 +17,16 @@
 
     font-size: 20px;
 
-    background-color: #E3E3E3;
-    color: #3E3E3E;
+    background-color: var(--color-light-gray);
+    color: var(--color-dark-gray);
 
     transition: all 0.3s ease;
 }
 
 .WS-LinkList-AddButton:hover {
     cursor: pointer;
-    color: #E3E3E3;
-    background-color: #3E3E3E;
+    color: var(--color-dark-gray);
+    background-color: var(--color-main);
     scale: 1.05;
 }
 
@@ -54,12 +53,12 @@
     padding: 5px;
     margin-bottom: 8px;
     border-radius: 20px;
-    background-color: #E3E3E3;
+    background-color: var(--color-light-gray);
     transition: all 0.3s ease;
 }
 
 .WS-LinkList-Item:hover {
-    background-color: #cecece;
+    background-color: var(--color-light-gray);
 }
 
 .WS-LinkList-Content {
@@ -71,8 +70,12 @@
 }
 
 .WS-LinkList-Badge {
-    padding: 4px 8px;
-    border-radius: 5px;
+    padding-top: 4px;
+    padding-bottom: 2px;
+    padding-left: 8px;
+    padding-right: 8px;
+    
+    border-radius: var(--border-radius-full);
     font-size: 12px;
     font-weight: bold;
     margin-right: 10px;
@@ -81,19 +84,19 @@
 }
 
 .WS-LinkList-Item.youtube .WS-LinkList-Badge {
-    background-color: #C92B2A;
+    background-color: var(--color-main);
     color: white;
 }
 
 .WS-LinkList-Item.blog .WS-LinkList-Badge {
-    background-color: #2DB400;
+    background-color: var(--color-success);
     color: white;
 }
 
 .WS-LinkList-Text {
     flex: 1;
     font-size: 14px;
-    color: #3E3E3E;
+    color: var(--color-dark-gray);
     white-space: nowrap;
     text-overflow: ellipsis;
     text-align: left;
@@ -101,7 +104,7 @@
 
 .WS-LinkList-DeleteButton {
     background-color: white;
-    color: #3e3e3e;
+    color: var(--color-dark-gray);
     font-size: 16px;
     border-radius: 50%;
     border: none;
@@ -116,7 +119,7 @@
 }
 
 .WS-LinkList-DeleteButton:hover {
-    background-color: #A52421;
+    background-color: var(--color-main);
     color: white;
 }
 
@@ -133,7 +136,7 @@
 }
 
 .WS-LinkList-Counter {
-    color: #3e3e3e;
+    color: var(--color-dark-gray);
     font-size: 14px;
     margin-bottom: 10px;
 }
@@ -144,7 +147,7 @@
     width: 350px;
     border: none;
     border-radius: 25px;
-    background-color: #C92B2A;
+    background-color: var(--color-main);
 
     color: white;
     font-size: 16px;
@@ -155,12 +158,11 @@
 }
 
 .WS-LinkList-NextButton:disabled {
-    background-color: #cccccc;
+    background-color: var(--color-light-gray);
     cursor: not-allowed;
 }
 
 .WS-LinkList-NextButton:not(:disabled):hover {
     transform: scale(1.02);
-    background-color: #A52421;
+    background-color: var(--color-main-hover);
 }
-

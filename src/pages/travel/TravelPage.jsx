@@ -1,13 +1,27 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
-import TravelList from "./TravelList/TravelList";
+import TravelList from "./TravelList";
+import GuidebookList from "./GuidebookList";
+import TravelTab from "./TravelTab";
+import '../../css/travel/TravelPage.css';
 
-const TravelPage = () => {
+const TravelPage = ({ activeTab }) => {
+  const renderContent = () => {
+    switch (activeTab) {
+      case 'TravelList':  
+        return <TravelList />;
+      case 'GuidebookList':
+        return <GuidebookList />;
+      default:
+        return null;
+    }
+  };
+
   return (
-    <div className="travel-content">
-      <Routes>
-        <Route path="/" element={<TravelList />} />
-      </Routes>
+    <div className="SJ-Travel-Page">
+      <TravelTab />
+      <div className="SJ-Travel-Page-Content">
+        {renderContent()}
+      </div>
     </div>
   );
 };
