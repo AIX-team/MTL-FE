@@ -1,0 +1,108 @@
+.WS-SelectDayTab {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+
+    left: 50%;
+    transform: translateX(-50%);
+    top: 250px;
+
+    width: 350px;
+    padding: 20px;
+
+    align-items: center;
+    justify-content: center;
+}
+
+.WS-SelectDayTab-Title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.WS-SelectDayTab-SubTitle {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.WS-SelectDayTab-Counter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    height: 50px;
+    width: 100%;
+
+    gap: 115px;
+    background-color: #C92B2A;
+    border-radius: 25px;
+}
+
+.WS-Counter-Button {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    background-color: #e3e3e3;
+    cursor: pointer;
+
+    color: #3E3E3E;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.WS-Counter-Button:hover {
+    background-color: #3E3E3E;
+}
+
+.WS-Counter-Button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: #e3e3e3;
+}
+
+.WS-Counter-Value {
+    color: #3E3E3E;
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+
+    width: 30px;
+    border-radius: 20px;
+    border: none;
+}
+
+.WS-SelectDayTab-Button-Container {
+    margin-top: 50px;
+    gap: 10px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.WS-SelectDayTab-BackButton,
+.WS-SelectDayTab-NextButton {
+    padding: 12px 40px;
+
+    width: 170px;
+    border: none;
+    border-radius: 25px;
+    background-color: #C92B2A;
+
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+
+    transition: all 0.3s ease;
+}
+
+.WS-SelectDayTab-BackButton:hover,
+.WS-SelectDayTab-NextButton:hover {
+    transform: scale(1.05);
+    background-color: #A52421;
+
+}
