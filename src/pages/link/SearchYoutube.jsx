@@ -145,71 +145,111 @@ const SearchYoutube = () => {
         });
     };
 
-    const handleSaveLinks = () => {
-        // 선택된 비디오 링크 생성
-        const selectedVideoLinks = searchResults
-            .filter(video => selectedVideos.has(video.id))
-            .map(video => ({
-                url: `https://www.youtube.com/watch?v=${video.id}`,
-                type: 'youtube',
-                id: Date.now() + Math.random()
-            }));
+    // const handleSaveLinks = () => {
+    //     // 선택된 비디오 링크 생성
+    //     const selectedVideoLinks = searchResults
+    //         .filter(video => selectedVideos.has(video.id))
+    //         .map(video => ({
+    //             url: `https://www.youtube.com/watch?v=${video.id}`,
+    //             type: 'youtube',
+    //             id: Date.now() + Math.random()
+    //         }));
 
-        // 현재 저장된 링크 데이터 확인
-        const currentLinks = JSON.parse(localStorage.getItem('linkListData') || '[]');
+    //     // 현재 저장된 링크 데이터 확인
+    //     const currentLinks = JSON.parse(localStorage.getItem('linkListData') || '[]');
 
-        // URL 중복 체크 및 중복되지 않은 링크만 필터링
-        const normalizeUrl = (url) => {
+    //     // URL 중복 체크 및 중복되지 않은 링크만 필터링
+    //     const normalizeUrl = (url) => {
+    //         try {
+    //             const normalized = new URL(url);
+    //             return normalized.hostname + normalized.pathname + normalized.search;
+    //         } catch {
+    //             return url;
+    //         }
+    //     };
+
+    //     // 중복 링크와 비중복 링크 분리
+    //     const duplicateLinks = selectedVideoLinks.filter(newLink =>
+    //         currentLinks.some(existingLink =>
+    //             normalizeUrl(existingLink.url) === normalizeUrl(newLink.url)
+    //         )
+    //     );
+
+    //     const nonDuplicateLinks = selectedVideoLinks.filter(newLink =>
+    //         !currentLinks.some(existingLink =>
+    //             normalizeUrl(existingLink.url) === normalizeUrl(newLink.url)
+    //         )
+    //     );
+
+    //     setSelectedVideos(prev => {
+    //         const newSelected = new Set(prev);
+    //         // duplicateIds.forEach(id => newSelected.delete(id));
+    //         return newSelected;
+    //     });
+
+    //     if (nonDuplicateLinks.length === 0) {
+    //         setModalMessage('선택한 모든 링크가 이미 등록되어 있습니다.');
+    //         setModalOpen(true);
+    //         return;
+    //     }
+
+
+    //     // 총 링크 개수가 5개를 초과하는지 확인
+    //     if (currentLinks.length + nonDuplicateLinks.length > 5) {
+    //         setModalMessage(`더이상 링크를 추가 할 수 없습니다.`);
+    //         setModalOpen(true);
+    //         return;
+    //     }
+
+    //     // 중복되지 않은 링크들만 저장
+    //     localStorage.setItem('selectedYoutubeLinks', JSON.stringify(nonDuplicateLinks));
+
+    //     const duplicateCount = duplicateLinks.length;
+    //     const message = duplicateCount > 0
+    //         ? `${nonDuplicateLinks.length}개의 링크가 저장되었습니다. (${duplicateCount}개는 중복)`
+    //         : `${nonDuplicateLinks.length}개의 링크가 저장되었습니다.`;
+
+    //     setModalMessage(message);
+    //     setModalOpen(true);
+    // };
+
+    const handleSaveLinks = async () => {
+        const selectedVideoLinks = searchResults.filter(video => selectedVideos.has(video.id));
+        if (selectedVideoLinks.length === 0) {
+            setModalMessage('선택된 링크가 없습니다.');
+            setModalOpen(true);
+            return;
+        }
+
+        // 사용자 이메일은 로그인 정보나 localStorage에서 가져온다고 가정합니다.
+        const email = localStorage.getItem('userEmail'); // 예시
+
+        let successCount = 0;
+        let failedCount = 0;
+        let failedMessages = [];
+        for (let video of selectedVideoLinks) {
             try {
-                const normalized = new URL(url);
-                return normalized.hostname + normalized.pathname + normalized.search;
-            } catch {
-                return url;
+                const response = await axios.post(
+                    'http://localhost:8080/youtube/saveLink',
+                    {
+                        email: email,
+                        url: `https://www.youtube.com/watch?v=${video.id}`
+                    }
+                );
+                if (response.data.message) {
+                    successCount += 1;
+                }
+            } catch (error) {
+                failedCount += 1;
+                failedMessages.push(error.response?.data?.detail || error.message);
             }
-        };
-
-        // 중복 링크와 비중복 링크 분리
-        const duplicateLinks = selectedVideoLinks.filter(newLink =>
-            currentLinks.some(existingLink =>
-                normalizeUrl(existingLink.url) === normalizeUrl(newLink.url)
-            )
-        );
-
-        const nonDuplicateLinks = selectedVideoLinks.filter(newLink =>
-            !currentLinks.some(existingLink =>
-                normalizeUrl(existingLink.url) === normalizeUrl(newLink.url)
-            )
-        );
-
-        setSelectedVideos(prev => {
-            const newSelected = new Set(prev);
-            // duplicateIds.forEach(id => newSelected.delete(id));
-            return newSelected;
-        });
-
-        if (nonDuplicateLinks.length === 0) {
-            setModalMessage('선택한 모든 링크가 이미 등록되어 있습니다.');
-            setModalOpen(true);
-            return;
-        }
-        
-
-        // 총 링크 개수가 5개를 초과하는지 확인
-        if (currentLinks.length + nonDuplicateLinks.length > 5) {
-            setModalMessage(`더이상 링크를 추가 할 수 없습니다.`);
-            setModalOpen(true);
-            return;
         }
 
-        // 중복되지 않은 링크들만 저장
-        localStorage.setItem('selectedYoutubeLinks', JSON.stringify(nonDuplicateLinks));
-
-        const duplicateCount = duplicateLinks.length;
-        const message = duplicateCount > 0
-            ? `${nonDuplicateLinks.length}개의 링크가 저장되었습니다. (${duplicateCount}개는 중복)`
-            : `${nonDuplicateLinks.length}개의 링크가 저장되었습니다.`;
-
-        setModalMessage(message);
+        if (successCount > 0) {
+            setModalMessage(`${successCount}개의 링크가 저장되었습니다.${failedCount > 0 ? ` (${failedCount}개는 저장 실패: ${failedMessages.join('; ')})` : ''}`);
+        } else {
+            setModalMessage(`링크 저장에 실패했습니다: ${failedMessages.join('; ')}`);
+        }
         setModalOpen(true);
     };
 
