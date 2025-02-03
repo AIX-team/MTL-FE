@@ -1,0 +1,327 @@
+* {
+  outline: none;
+  -webkit-tap-highlight-color: transparent;  /* 모바일에서 탭 시 하이라이트 제거 */
+  cursor: default;  /* 기본 커서 설정 */
+}
+
+/* 클릭 가능한 요소들에 대한 포인터 커서 설정 */
+button, 
+a, 
+[role="button"],
+.HG-TravelInfo-Back-Btn,
+.HG-TravelInfo-Title-Edit-text,
+.HG-TravelInfo-aiselect-btn,
+.HG-TravelInfo-Btn,
+.HG-TravelInfo-Select-Btn,
+.HG-travelinfo-content-frame-url,
+.HG-TravelInfo-Content-Frame-Place-Type,
+.HG-TravelInfo-Content-Frame-Place-Selected-Type,
+.HG-trevelinfo-content-frame-select-frame,
+.HG-trevelinfo-content-frame-select-intro,
+.HG-trevelinfo-content-frame-select-name,
+.HG-trevelinfo-content-frame-select {
+  cursor: pointer !important;
+}
+
+.carousel-item {
+  margin-bottom: 10px;
+  height: 300px;
+  border-radius: var(--border-radius-base);
+  padding: 10px;
+}
+
+.HG-select-place{  
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+}
+
+/* 슬라이더 화살표 스타일링 */
+.slick-prev,
+.slick-next {
+  z-index: 100;
+  width: 30px;
+  height: 30px;
+}
+
+.slick-prev {
+  left: 5px !important;
+}
+
+.slick-next {
+  right: 5px !important;
+}
+
+.slick-prev:before,
+.slick-next:before {
+  color: var(--color-main);
+  font-size: 30px;
+  opacity: 0.75;
+}
+
+.slick-prev:hover:before,
+.slick-next:hover:before {
+  opacity: 1;
+}
+
+.slick-slide {
+  padding: 0 10px;
+  visibility: hidden;
+}
+
+.slick-slide.slick-active {
+  visibility: visible;
+}
+
+.slide-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.slide-image, .slide-description {
+  width: 100%;
+  height: 100%;
+}
+
+.HG-TravelInfo-Title-Frame{
+  margin: 10px 0px;
+  padding: 10px 20px;
+  flex-shrink: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #e0e0e0;
+
+}
+
+.HG-TravelInfo-Back-Btn{
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  cursor: pointer;
+}
+
+.HG-TravelInfo-Travel-Days-Input{
+  height: 20px;
+  border: none;
+  background-color: transparent;
+  font-size: var(--font-size-sm);
+  font-weight: bold;
+}
+
+.HG-TravelInfo-Title-Edit-Frame{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.HG-TravelInfo-Title-Edit-text{
+  font-size: var(--font-size-sm);
+  font-weight: bold;
+  color: var(--color-guide);
+  cursor: pointer;
+}
+
+.HG-TravelInfo-aiselect-btn{
+  margin-top: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid var(--color-main);
+  cursor: pointer;
+}
+
+.HG-TravelInfo-Title{
+  font-size: var(--font-size-xl);
+  font-weight: bold;
+}
+
+.HG-TravelInfo-Content-Blank{
+  height: 33.5px;
+}
+
+.HG-TravelInfo-Content-Title{
+  margin: 10px 20px;
+  padding: 5px;
+  border-radius: var(--border-radius-base);
+  background-color: var(--color-light-gray);
+  font-size: var(--font-size-xs);
+  font-weight: bold;
+  white-space: nowrap;        /* 텍스트를 한 줄로 유지 */
+  overflow: hidden;           /* 넘치는 텍스트 숨기기 */
+  text-overflow: ellipsis;    /* 넘치는 텍스트를 ...으로 표시 */
+}
+
+.HG-TravelInfo-Content-Frame-Title{
+  margin-left: 20px;
+  font-size: var(--font-size-xl);
+  font-weight: bold;
+}
+
+.HG-TravelInfo-Btn{
+  display: inline-flex;
+  align-items: center;
+  height: 40px;
+  transform: translateX(10px);
+  cursor: pointer;
+}
+
+.HG-TravelInfo-Select-Btn{
+  display: flex;
+  align-items: center;
+  color: var(--color-guide);
+  font-size: var(--font-size-base);
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.HG-TravelInfo-Select-Cnt{
+  font-size: var(--font-size-sm);
+  background-color: var(--color-main);
+  color: white;
+  border-radius: var(--border-radius-full);
+  padding: 4px 8px;
+  margin-bottom: auto;
+  transform: translateX(-10px);
+}
+.HG-TravelInfo-Content-Frame{
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: auto; /* 컨텐츠 크기만큼만 높이 설정 */
+  max-height: calc(100vh - var(--header-height)); /* 최대 높이 제한 */
+  /* 안드로이드 시스템 UI 고려 */
+  padding-bottom: env(safe-area-inset-bottom);
+  /* 이전 버전 안드로이드 대응 */
+  padding-bottom: constant(safe-area-inset-bottom);
+  
+}
+
+.HG-travelinfo-content-frame-list{
+  margin-left: 20px;
+  margin-right: 20px;
+  display: flex;
+  gap: 10px;
+  overflow-y: auto;
+}
+
+.HG-TravelInfo-Content-Frame-Place-Slider {
+  margin-left: 20px;
+  margin-right: 20px;
+  width: 90%;
+  height: 33em;
+  
+  /* 크롬, 사파리, 엣지를 위한 스크롤바 스타일링 */
+  &::-webkit-scrollbar {
+    width: 8px;  /* 스크롤바의 너비 */
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background-color: #888;  /* 스크롤바 색상 */
+    border-radius: 20px;  /* 스크롤바 모서리 둥글게 */
+  }
+  
+  &::-webkit-scrollbar-track {
+    background-color: #f1f1f1;  /* 스크롤바 트랙 색상 */
+  }
+  
+  /* Firefox를 위한 스크롤바 스타일링 */
+  scrollbar-width: thin;  /* 스크롤바 너비 (thin 또는 none) */
+  scrollbar-color: #888 #f1f1f1;  /* thumb와 track 색상 */
+}
+/* fade: false일 때 슬라이드 간격 조정 */
+.slick-slide {
+  margin: 0 -10px; /* 원하는 간격 설정 */
+}
+
+.HG-TravelInfo-Content-Frame-Place-Type-List{
+  margin: 10ps 0px;
+  margin-left:20px;
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.HG-TravelInfo-Content-Frame-Place-Type{
+  font-size: var(--font-size-lg);
+  font-weight: bold;
+  border: 1px solid var(--color-main);
+  border-radius: var(--border-radius-full);
+  padding: 4px 8px;
+}
+
+.HG-TravelInfo-Content-Frame-Place-Selected-Type{
+  font-size: var(--font-size-lg);
+  font-weight: bold;
+  color: white;
+  background-color: red;
+  border: 1px solid var(--color-main);
+  border-radius: var(--border-radius-full);
+  padding: 4px 8px;
+}
+
+.HG-travelinfo-content-frame-url{
+  font-size: var(--font-size-lg);
+}
+
+.HG-underline{
+  border-bottom: 1px solid var(--color-main);
+}
+
+.HG-trevelinfo-content-frame-select{
+  width: 20px;
+  height: 20px;
+}
+.HG-trevelinfo-content-frame-select-frame{
+  margin-top: 5px;
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.HG-trevelinfo-content-frame-select-name{
+  font-size: var(--font-size-lg);
+  font-weight: bold;
+} 
+
+.HG-trevelinfo-content-frame-select-intro{
+  font-size: var(--font-size-sm);
+  font-weight: bold;  
+}
+
+.HG-slide-content-image {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+  border-radius: var(--border-radius-base);
+}
+
+.HG-TravelInfo-Select-Modal{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  z-index: 1000;
+} 
+
+/* none */
+.none{
+  display: none;
+}
+/* 캐러셀 수정사항 */
+.slick-slider {
+  margin-top: 20px;
+}
+.slick-prev{
+  left: 0;
+}
+.slick-next{
+  right: 0;
+}

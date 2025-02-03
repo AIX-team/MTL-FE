@@ -1,10 +1,14 @@
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import MainLayout from "./layouts/MainLayout";
+import HeaderlessLayout from "./layouts/HeaderlessLayout";
 import LinkPage from './pages/link/LinkPage';
 import TravelPage from './pages/travel/TravelPage';
 import MyPage from './pages/mypage/MyPage';
 import GuideBookList from './pages/travel/GuideBookList';
 import Wish from './layouts/Wish';
+import TravelInfo from './pages/link/travelInfo/TravelInfo';
+import './css/styles/variables.css';
+
 
 function App() {
   return (
@@ -17,7 +21,6 @@ function App() {
         <Route path="/" element={<MainLayout />}>
           {/* Link 페이지와 하위 라우트들 */}
           <Route path="link/*" element={<LinkPage />} />
-
           {/* Travel 페이지 */}
           <Route path="travel/*" element={<TravelPage />} />
 
@@ -30,6 +33,11 @@ function App() {
           {/* Wish */}
           <Route path="wish/*" element={<Wish />} />
         </Route>
+        
+        <Route path="/" element={<HeaderlessLayout />}>
+        <Route path="travelinfo/*" element={<TravelInfo />} />
+        </Route>
+
       </Routes>
     </BrowserRouter>
   );
