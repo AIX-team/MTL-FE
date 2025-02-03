@@ -5,6 +5,7 @@ import LinkPage from './pages/link/LinkPage';
 import TravelPage from './pages/travel/TravelPage';
 import MyPage from './pages/mypage/MyPage';
 import GuideBookList from './pages/travel/GuideBookList';
+import Wish from './layouts/Wish';
 import TravelInfo from './pages/link/travelInfo/TravelInfo';
 import './css/styles/variables.css';
 
@@ -28,6 +29,9 @@ function App() {
 
           {/* GuideBookList */}
           <Route path="guidebooklist/*" element={<GuideBookList />} />
+
+          {/* Wish */}
+          <Route path="wish/*" element={<Wish />} />
         </Route>
         
         <Route path="/" element={<HeaderlessLayout />}>
