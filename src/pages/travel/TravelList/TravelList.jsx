@@ -3,6 +3,7 @@ import "./TravelList.css";
 import osakaImg from "../../../images/osaka.png";
 import matsuyamaImg from "../../../images/matsuyama.png";
 import tokyoImg from "../../../images/tokyo.png";
+import GuidebookList from "../GuidebookList/GuidebookList";
 
 const TravelList = () => {
   const [travelItems, setTravelItems] = useState([
@@ -43,6 +44,8 @@ const TravelList = () => {
   const [showFavorites, setShowFavorites] = useState(false);
   const [sortOption, setSortOption] = useState("latest");
   const [pinnedItems, setPinnedItems] = useState([]); // 고정된 항목 관리
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [activeTab, setActiveTab] = useState("travel"); // 가이드북 탭 관리
 
   const handleFilterClick = (filter) => {
     setActiveFilter(filter);
@@ -150,148 +153,212 @@ const TravelList = () => {
   console.log("필터링된 데이터:", filteredData);
   console.log("현재 showFavorites 상태:", showFavorites);
 
+  // 삭제 모달 열기
+  const handleDeleteClick = (itemId) => {
+    setShowDeleteModal(true);
+    // ⭐️임시로 console.log만 추가⭐️
+    console.log("삭제 기능은 백엔드 연동 후 구현 예정");
+  };
+
+  // 삭제 확인 (임시로 모달만 닫기)
+  const handleDeleteConfirm = () => {
+    setShowDeleteModal(false);
+    setShowModal(false);
+    // ⭐️실제 삭제 로직은 주석 처리⭐️
+    // setData(prev => prev.filter(item => item.id !== itemToDelete));
+  };
+
   return (
     <div className="travel-list">
       <div className="tab-container">
         <div className="tabs">
-          <button className="tab active">여행 목록</button>
-          <button className="tab">가이드북 목록</button>
-        </div>
-      </div>
-
-      <div className="SJ-filter-buttons">
-        <button
-          className={`SJ-filter-btn ${
-            activeFilter === "latest" ? "active" : ""
-          }`}
-          onClick={() => handleFilterClick("latest")}
-        >
-          최신순
-        </button>
-        <button
-          className={`SJ-filter-btn ${
-            activeFilter === "created" ? "active" : ""
-          }`}
-          onClick={() => handleFilterClick("created")}
-        >
-          생성일
-        </button>
-        <button
-          className={`SJ-filter-btn ${
-            activeFilter === "favorite" ? "active" : ""
-          }`}
-          onClick={() => handleFilterClick("favorite")}
-        >
-          즐겨찾기
-        </button>
-      </div>
-
-      <div className="search-section">
-        <span className="search-title">내가 찾았던 여행</span>
-        <div className="search-bar">
-          <input type="text" placeholder="검색어를 입력하세요" />
-          <button className="search-icon">🔍</button>
-        </div>
-      </div>
-
-      <div className="travel-grid">
-        {sortedAndFilteredData.map((item) => (
-          <div key={item.id} className="travel-card">
-            {pinnedItems.includes(item.id) && (
-              <div className="SJ-pin-icon">📌</div>
-            )}
-            <div className="travel-img">
-              <img src={item.image} alt={item.title} />
-            </div>
-            <div className="SJ-card-content">
-              <div className="SJ-card-header">
-                {isEditing && selectedItemId === item.id ? (
-                  <div className="SJ-edit-title">
-                    <input
-                      type="text"
-                      value={editingTitle}
-                      onChange={(e) => setEditingTitle(e.target.value)}
-                      autoFocus
-                    />
-                    <div className="SJ-edit-buttons">
-                      <button
-                        onClick={() => handleEditSubmit(item.id)}
-                        className="SJ-confirm"
-                      >
-                        확인
-                      </button>
-                      <button
-                        onClick={() => setIsEditing(false)}
-                        className="SJ-cancel"
-                      >
-                        취소
-                      </button>
-                    </div>
-                  </div>
-                ) : (
-                  <span>{item.title}</span>
-                )}
-              </div>
-              <div className="SJ-card-footer">
-                <span className="SJ-period">{item.period}</span>
-                <span className="SJ-date">{item.date}</span>
-              </div>
-            </div>
-            <div className="SJ-btn-frame">
-              <div
-                className={`favorite-button ${
-                  item.isFavorite ? "filled" : "outlined"
-                }`}
-                onClick={() => toggleFavorite(item.id)}
-              >
-                {item.isFavorite ? "♥" : "♡"}
-              </div>
-              <div
-                className="more-options"
-                onClick={() => handleMoreOptionsClick(item.id)}
-              >
-                ⋮
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* 모달 */}
-      {showModal && (
-        <>
           <div
-            className="SJ-modal-overlay"
-            onClick={() => setShowModal(false)}
-          />
-          <div className="SJ-modal-bottom">
-            <div className="SJ-modal-content">
-              <button
-                className="SJ-modal-option"
-                onClick={() => {
-                  handlePinToggle(selectedItemId);
-                  setShowModal(false);
-                }}
-              >
-                <span className="SJ-modal-icon">📌</span>
-                {pinnedItems.includes(selectedItemId)
-                  ? "고정 해제"
-                  : "고정 하기"}
-              </button>
-              <button
-                className="SJ-modal-option"
-                onClick={() => handleEditClick(selectedItemId)}
-              >
-                <span className="SJ-modal-icon">✏️</span>
-                이름 수정
-              </button>
-              <button className="SJ-modal-option">
-                <span className="SJ-modal-icon">🗑️</span>
-                삭제
-              </button>
+            className={`tab ${activeTab === "travel" ? "active" : ""}`}
+            onClick={() => setActiveTab("travel")}
+          >
+            여행 목록
+          </div>
+          <div
+            className={`tab ${activeTab === "guide" ? "active" : ""}`}
+            onClick={() => setActiveTab("guide")}
+          >
+            가이드북 목록
+          </div>
+        </div>
+        <div
+          className="tab-indicator"
+          style={{
+            transform: `translateX(${activeTab === "travel" ? "0" : "100%"})`,
+          }}
+        ></div>
+      </div>
+
+      {activeTab === "travel" ? ( // 가이드북 탭
+        <div className="travel-container">
+          <div className="SJ-filter-buttons">
+            <button
+              className={`SJ-filter-btn ${
+                activeFilter === "latest" ? "active" : ""
+              }`}
+              onClick={() => handleFilterClick("latest")}
+            >
+              최신순
+            </button>
+            <button
+              className={`SJ-filter-btn ${
+                activeFilter === "created" ? "active" : ""
+              }`}
+              onClick={() => handleFilterClick("created")}
+            >
+              생성일
+            </button>
+            <button
+              className={`SJ-filter-btn ${
+                activeFilter === "favorite" ? "active" : ""
+              }`}
+              onClick={() => handleFilterClick("favorite")}
+            >
+              즐겨찾기
+            </button>
+          </div>
+
+          <div className="search-section">
+            <span className="search-title">내가 찾았던 여행</span>
+            <div className="search-bar">
+              <input type="text" placeholder="검색어를 입력하세요" />
+              <button className="search-icon">🔍</button>
             </div>
           </div>
-        </>
+
+          <div className="travel-grid">
+            {sortedAndFilteredData.map((item) => (
+              <div key={item.id} className="travel-card">
+                {pinnedItems.includes(item.id) && (
+                  <div className="SJ-pin-icon">📌</div>
+                )}
+                <div className="travel-img">
+                  <img src={item.image} alt={item.title} />
+                </div>
+                <div className="SJ-card-content">
+                  <div className="SJ-card-header">
+                    {isEditing && selectedItemId === item.id ? (
+                      <div className="SJ-edit-title">
+                        <input
+                          type="text"
+                          value={editingTitle}
+                          onChange={(e) => setEditingTitle(e.target.value)}
+                          autoFocus
+                        />
+                        <div className="SJ-edit-buttons">
+                          <button
+                            onClick={() => handleEditSubmit(item.id)}
+                            className="SJ-confirm"
+                          >
+                            확인
+                          </button>
+                          <button
+                            onClick={() => setIsEditing(false)}
+                            className="SJ-cancel"
+                          >
+                            취소
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <span>{item.title}</span>
+                    )}
+                  </div>
+                  <div className="SJ-card-footer">
+                    <span className="SJ-period">{item.period}</span>
+                    <span className="SJ-date">{item.date}</span>
+                  </div>
+                </div>
+                <div className="SJ-btn-frame">
+                  <div
+                    className={`favorite-button ${
+                      item.isFavorite ? "filled" : "outlined"
+                    }`}
+                    onClick={() => toggleFavorite(item.id)}
+                  >
+                    {item.isFavorite ? "♥" : "♡"}
+                  </div>
+                  <button
+                    className="SJ-more-button"
+                    onClick={() => handleMoreOptionsClick(item.id)}
+                  >
+                    ⋮
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* 모달 */}
+          {showModal && (
+            <>
+              <div
+                className="SJ-modal-overlay"
+                onClick={() => setShowModal(false)}
+              />
+              <div className="SJ-modal-bottom">
+                <div className="SJ-modal-content">
+                  <button
+                    className="SJ-modal-option"
+                    onClick={() => {
+                      handlePinToggle(selectedItemId);
+                      setShowModal(false);
+                    }}
+                  >
+                    <span className="SJ-modal-icon">📌</span>
+                    {pinnedItems.includes(selectedItemId)
+                      ? "고정 해제"
+                      : "고정 하기"}
+                  </button>
+                  <button
+                    className="SJ-modal-option"
+                    onClick={() => handleEditClick(selectedItemId)}
+                  >
+                    <span className="SJ-modal-icon">✏️</span>
+                    이름 수정
+                  </button>
+                  <button
+                    className="SJ-modal-option"
+                    onClick={() => handleDeleteClick(selectedItemId)}
+                  >
+                    <span className="SJ-modal-icon">🗑️</span>
+                    삭제
+                  </button>
+                </div>
+              </div>
+            </>
+          )}
+
+          {/* ⭐️삭제 확인 모달 (기능만 비활성화)⭐️ */}
+          {showDeleteModal && (
+            <div className="SJ-delete-modal-overlay">
+              <div className="SJ-delete-modal">
+                <p className="SJ-delete-title">삭제하시겠습니까?</p>
+                <p className="SJ-delete-subtitle">여행 목록에서 삭제됩니다.</p>
+                <div className="SJ-delete-buttons">
+                  <button
+                    className="SJ-delete-button cancel"
+                    onClick={() => setShowDeleteModal(false)}
+                  >
+                    취소
+                  </button>
+                  <button
+                    className="SJ-delete-button confirm"
+                    onClick={handleDeleteConfirm}
+                  >
+                    확인
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      ) : (
+        <GuidebookList />
       )}
     </div>
   );

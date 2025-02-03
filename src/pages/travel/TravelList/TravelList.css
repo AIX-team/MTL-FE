@@ -31,23 +31,24 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  margin: 0 20px 20px 20px;
+  margin: 0 20px 20px 10px; /* 오른쪽이 왼쪽 여백 결정함 */
   width: auto;
 }
 
 .search-title {
   font-family: "NanumBarunGothic", sans-serif;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: bold;
   color: #000;
   white-space: nowrap;
-  min-width: 110px;
+  min-width: 120px; /* 검색창과 내가찾았던 여행 사이 여백 */
 }
 
 .search-bar {
   position: relative;
   width: calc(100% - 110px);
   max-width: 100%;
+  margin-left: -13px;
 }
 
 .search-bar input {
@@ -83,7 +84,7 @@
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 20px;
   width: 100%;
-  margin-top: 20px;
+  margin-top: 5px; /* 카드 상단 여백 */
 }
 
 .travel-card {
@@ -91,10 +92,11 @@
   display: flex;
   align-items: center;
   background: white;
-  border-radius: 15px;
-  overflow: hidden;
+  border-radius: 20px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  height: 130px;
+  width: calc(100% - 8px); /* 1px 줄임 */
+  height: calc(100%);
+  overflow: hidden;
 }
 
 .travel-img {
@@ -168,18 +170,21 @@
   padding-bottom: 20px;
 }
 
-.favorite-button {
-  font-size: 20px;
-  color: #c92b2a;
+.travel-card .favorite-button {
+  position: absolute;
+  right: 25px; /* 15px에서 25px로 수정 */
+  top: 15px;
   cursor: pointer;
-  background: none;
-  border: none;
-  padding: 3px;
+  font-size: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 30px;
-  height: 10px;
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: none;
+  padding: 0;
+  z-index: 2;
 }
 
 .favorite-button.outlined {
@@ -207,44 +212,40 @@ h2 {
 }
 
 .tab-container {
-  /*  position: relative; */
+  position: relative;
   margin-bottom: 20px;
 }
 
 .tabs {
   display: flex;
-  gap: 90px;
-  border-bottom: 0px solid #ddd;
-  width: 100%;
-  padding: 0 15px;
-  margin-left: 30px;
+  justify-content: space-around;
+  border-bottom: 1px solid #e0e0e0;
 }
 
 .tab {
-  position: relative;
-  font-family: "NanumBarunGothic", sans-serif;
-  font-size: 16px;
-  font-weight: bold;
-  padding: 10px 0;
-  border: none;
-  background: none;
+  flex: 1;
+  text-align: center;
+  padding: 15px 0;
   cursor: pointer;
   color: #666;
+  transition: color 0.3s;
 }
 
 .tab.active {
-  color: #000; /* 활성 탭 색상 */
+  color: #c92b2a;
+  font-weight: bold;
 }
 
-.tab.active::after {
-  content: "";
+.tab-indicator {
   position: absolute;
-  bottom: -1px;
-  left: -50px;
-  width: calc(100% + 110px);
-  height: 3px;
+  bottom: 0;
+  left: 0;
+  width: 50%;
+  height: 2px;
   background-color: #c92b2a;
+  transition: transform 0.3s;
 }
+
 .SJ-btn-frame {
   position: absolute;
   right: 10px;
@@ -297,6 +298,7 @@ h2 {
   display: flex;
   gap: 10px;
   margin: 20px 0;
+  margin-left: 10px; /* 왼쪽 마진 */
 }
 
 .SJ-filter-buttons button {
@@ -430,7 +432,7 @@ h2 {
 .SJ-travel-card {
   position: relative;
   display: flex;
-  align-items: center; /* 수평 중앙 정렬 */
+  align-items: center;
   background: white;
   border-radius: 15px;
   overflow: hidden;
@@ -572,4 +574,219 @@ h2 {
 
 .SJ-filter-btn:hover {
   border-color: #c92b2a;
+}
+
+/* 여행 목록 컨테이너 스크롤 설정 */
+.travel-container {
+  height: calc(100vh - 165px); /* 푸터 위 5px 공간 확보 */
+  overflow-y: auto;
+  padding-bottom: 5px; /* 하단 패딩 추가 */
+  -webkit-overflow-scrolling: touch; /* iOS 스크롤 부드럽게 */
+}
+
+/* 모바일 환경 대응 */
+@media screen and (max-width: 768px) {
+  .travel-container {
+    height: calc(100vh - 180px); /* 모바일에서 높이 조정 */
+    position: relative;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* 스크롤바 스타일 */
+.travel-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.travel-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.travel-container::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+/* 삭제 확인 모달 스타일 */
+.SJ-delete-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1001; /* 기존 모달보다 위에 표시 */
+}
+
+.SJ-delete-modal {
+  background-color: white;
+  border-radius: 12px;
+  padding: 40px;
+  width: 80%;
+  max-width: 300px;
+  text-align: center;
+}
+
+.SJ-delete-title {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.SJ-delete-subtitle {
+  color: #666;
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+.SJ-delete-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 25px;
+}
+
+.SJ-delete-button {
+  padding: 10px 30px;
+  border-radius: 6px;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.SJ-delete-button.cancel {
+  background-color: #f0f0f0;
+  color: #666;
+}
+
+.SJ-delete-button.confirm {
+  background-color: #c92b2a;
+  color: white;
+}
+
+.SJ-more-button {
+  position: absolute;
+  right: 15px;
+  bottom: 15px; /* 하단으로 이동 */
+  top: auto;
+  transform: none;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 0;
+  color: #666;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+}
+
+.travel-card .SJ-more-button {
+  position: absolute;
+  right: 5px;
+  bottom: 30px; /* 하단으로 이동 */
+  top: auto;
+  transform: none;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 0;
+  color: #666;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+}
+
+.travel-card .SJ-btn-frame .favorite-button {
+  position: absolute !important; /* 우선순위 강제 적용 */
+  right: 5px !important;
+  top: 15px !important;
+  cursor: pointer;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: none;
+  padding: 0;
+  z-index: 2;
+  color: #c92b2a; /* 메인 컬러 복구 */
+}
+
+/* 기존 스타일이 있다면 덮어쓰기 위해 추가 */
+.favorite-button.filled,
+.favorite-button.outlined {
+  right: 25px !important;
+  top: 15px !important;
+}
+
+/* 여행목록의 필터 버튼 위치 조정 */
+.travel-container .SJ-filter-buttons {
+  display: flex;
+  gap: 8px;
+  margin: 10 26px 16px 21px; /* 왼쪽 마진을 16px에서 21px로 변경 */
+  margin-left: 25px; /* 최신순 왼쪽 마진 여백 줌 */
+}
+
+/* 여행목록 검색창 커서 위치만 조정 */
+.travel-container .search-bar input {
+  text-indent: 2px; /* 검색어의 '검' 자 위치와 동일하게 커서 위치 조정 */
+}
+
+/* 여행목록의 하트 버튼 스타일 */
+.travel-card .SJ-btn-frame .favorite-button {
+  position: absolute;
+  right: 25px;
+  top: 15px;
+  cursor: pointer;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: none;
+  padding: 0;
+  z-index: 2;
+}
+
+/* 여행목록의 하트 상태별 스타일 */
+.travel-card .SJ-btn-frame .favorite-button.filled {
+  color: #c92b2a; /* 메인 컬러 복구 */
+}
+
+.travel-card .SJ-btn-frame .favorite-button.outlined {
+  color: #c92b2a; /* 메인 컬러 복구 */
+}
+
+/* 나머지 TravelList 스타일은 유지 */
+
+/* 검색창 돋보기 위치 조정 */
+.travel-container .search-bar .search-icon {
+  position: absolute;
+  right: -15px; /* 기존 10px에서 12px로 수정 */
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* 검색창 입력필드 여백 조정 */
+.travel-container .search-bar input {
+  padding-right: 6px; /* 기존 32px에서 34px로 수정 */
 }
