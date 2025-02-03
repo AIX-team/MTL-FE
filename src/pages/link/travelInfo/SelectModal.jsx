@@ -9,7 +9,7 @@ import '../../../css/SelectModal.css';
 const SelectModal = ({ isOpen, onClose, selectedPlaces, onPlaceSelect, travelDays }) => {
 
   
-  const [isSelected, setIsSelected] = useState(selectedPlaces);
+  const [isSelected, setIsSelected] = useState([]);
   const [selectedFilters, setSelectedFilters] = useState(['전체보기']);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState(null);
@@ -100,6 +100,10 @@ const SelectModal = ({ isOpen, onClose, selectedPlaces, onPlaceSelect, travelDay
     };
   }, [isOpen]);
 
+  useEffect(() => {
+    setIsSelected(selectedPlaces);
+  }, [selectedPlaces]);
+
     return (
       <div className={` ${isOpen ? 'HG-select-modal-container' : 'none'}`}>
         <div className='HG-select-modal-header'>
@@ -145,10 +149,14 @@ const SelectModal = ({ isOpen, onClose, selectedPlaces, onPlaceSelect, travelDay
             'restaurant': '음식/카페',
             'etc': '그 외'
           }).map(([type, koreanType]) => {
-            const placesOfType = selectedPlaces.filter(place => 
-              (selectedFilters.includes('전체보기') || selectedFilters.some(filter => filterTypeMap[filter] === place.placeType)) 
-              && place.placeType === type
-            );
+            const placesOfType = selectedPlaces.filter(place => {
+              if (type === 'etc') {
+                // etc 타입일 경우 landmark와 restaurant가 아닌 모든 항목 필터링
+                return !['landmark', 'restaurant'].includes(place.placeType);
+              }
+              // 그 외의 경우 일치하는 타입만 필터링
+              return place.placeType === type;
+            });
 
             return placesOfType.length > 0 && (
               <div className='HG-select-modal-select-list-type' key={type}>
@@ -157,10 +165,11 @@ const SelectModal = ({ isOpen, onClose, selectedPlaces, onPlaceSelect, travelDay
                   <div key={index} className='HG-select-modal-select-list-item'>
                     <div className='HG-select-modal-select-list-item-content'>
                       <span>
-                        <img className='HG-trevelinfo-content-frame-select' 
-                             onClick={() => handlePlaceSelect(place.placeId)}
-                             src={isSelected.some(item => item.placeId === place.placeId) ? isSelectedIcon : selectIcon} 
-                             alt="selectIcon" />
+                        <img 
+                          className='HG-trevelinfo-content-frame-select' 
+                          onClick={() => handlePlaceSelect(place.placeId)}
+                          src={isSelected.some(item => item.placeId === place.placeId) ? isSelectedIcon : selectIcon} 
+                          alt="selectIcon" />
                       </span>
                       <span onClick={() => handlePlaceSelect(place.placeId)}>
                         <img className='HG-select-modal-select-list-item-place-img' src={place.placeImage} alt="placeImage" />
@@ -203,8 +212,6 @@ const SelectModal = ({ isOpen, onClose, selectedPlaces, onPlaceSelect, travelDay
         )}
       </div>
     );
-
-    
 };
 
 export default SelectModal;

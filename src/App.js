@@ -31,7 +31,7 @@ function App() {
         </Route>
         
         <Route path="/" element={<HeaderlessLayout />}>
-        <Route path="travelinfo/*" element={<TravelInfo />} />
+        <Route path="travelinfos/:travelInfoId" element={<TravelInfo />} />
         </Route>
 
       </Routes>
