@@ -5,9 +5,12 @@ import LinkPage from './pages/link/LinkPage';
 import TravelPage from './pages/travel/TravelPage';
 import MyPage from './pages/mypage/MyPage';
 import GuideBookList from './pages/travel/GuideBookList';
+import Wish from './layouts/Wish';
 import TravelInfo from './pages/link/travelInfo/TravelInfo';
 import './css/styles/variables.css';
 
+import Login from "./pages/user/Login";
+import LoginSuccess from "./pages/user/LoiginSuccess";
 
 function App() {
   return (
@@ -15,6 +18,10 @@ function App() {
       <Routes>
         {/* 루트 경로를 /link로 리다이렉트 */}
         <Route path="/" element={<Navigate to="/link" replace />} />
+
+        {/* 로그인 페이지  */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/loginSuccess" element={<LoginSuccess/>}/>
 
         {/* MainLayout을 모든 페이지의 기본 레이아웃으로 사용 */}
         <Route path="/" element={<MainLayout />}>
@@ -28,6 +35,9 @@ function App() {
 
           {/* GuideBookList */}
           <Route path="guidebooklist/*" element={<GuideBookList />} />
+
+          {/* Wish */}
+          <Route path="wish/*" element={<Wish />} />
         </Route>
         
         <Route path="/" element={<HeaderlessLayout />}>
