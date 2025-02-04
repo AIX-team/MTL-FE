@@ -3,7 +3,7 @@ import MainLayout from "./layouts/MainLayout";
 import LinkPage from './pages/link/LinkPage';
 import TravelPage from './pages/travel/TravelPage';
 import MyPage from './pages/mypage/MyPage';
-import GuideBookList from './pages/travel/GuidebookList';
+import GuideBookList from './pages/travel/GuideBookList';
 import Wish from './layouts/Wish';
 import TravelInfo from './pages/link/travelInfo/TravelInfo';
 import './css/styles/variables.css';

@@ -298,7 +298,7 @@ function GuidebookList() {
       </div>
 
       {/* 모달 컴포넌트 추가 */}
-      <TravelPageModal 
+      <TravelPageModal
         showModal={showModal}
         setShowModal={setShowModal}
         selectedItemId={selectedGuideId}

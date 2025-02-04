@@ -1,36 +1,7 @@
 .guidebook-list {
-  width: 100%;
-  padding: 0;
-  margin: 0;
-  position: relative;
+  width: 400px;
 }
 
-
-.guidebook-list .SJ-filter-buttons {
-  display: flex;
-  gap: 8px;
-  padding: 0;
-  margin-top: 0; /* 여행목록과 동일한 위치로 조정 */
-  margin-bottom: 16px;
-}
-
-.SJ-filter-btn {
-  padding: 8px 16px;
-  border: 1px solid #ddd;
-  border-radius: 20px;
-  background: white;
-  cursor: pointer;
-  font-size: 14px;
-  color: #666;
-  margin-left: -20px;
-  margin-right: 23px; /* 버튼 사이 간격을 3px로 설정 */
-}
-
-.SJ-filter-btn.active {
-  background: #c92b2a;
-  color: white;
-  border-color: #c92b2a;
-}
 
 /* 검색창 스타일 */
 .guidebook-list .search-bar {
@@ -39,39 +10,10 @@
   position: relative;
 }
 
-.SJ-search-container {
-  position: relative;
-  margin-bottom: 20px;
-  width: 240px; /* 카드의 실제 너비로 조정 (402px - 좌우 패딩 40px) */
-  padding: 0 20px;
-  margin-left: -35px; /* 왼쪽 여백 추가 */
-}
-
-.SJ-search-input {
-  width: 100%;
-  padding: 12px 40px 12px 22px; /* 22가 검색어를 입력하세요 위치 */
-  border: none;
-  border-radius: 20px;
-  background-color: #f5f5f5;
-  font-size: 16px;
-  text-indent: 0;
-  letter-spacing: normal;
-}
-
-.SJ-search-input:focus {
-  outline: none;
-  border: none;
-  box-shadow: none;
-}
-
-.SJ-search-input::placeholder {
-  text-indent: 0;
-  letter-spacing: normal;
-}
-
 .SJ-search-clear {
   position: absolute;
-  right: 10px; /* 돋보기 버튼 왼쪽에 위치 */
+  right: 10px;
+  /* 돋보기 버튼 왼쪽에 위치 */
   top: 50%;
   transform: translateY(-50%);
   background: none;
@@ -100,7 +42,8 @@
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  gap: 3px; /* 카드 간격만 3px로 설정 */
+  gap: 3px;
+  /* 카드 간격만 3px로 설정 */
   margin-bottom: 100px;
 }
 
@@ -108,8 +51,10 @@
   position: relative;
   background: white;
   border-radius: 16px;
-  padding: 20px 1px 20px 20px; /* 오른쪽 패딩만 20px에서 17px로 줄임 */
-  margin-right: 11px; /* 오른쪽 여백줌 */
+  padding: 20px 1px 20px 20px;
+  /* 오른쪽 패딩만 20px에서 17px로 줄임 */
+  margin-right: 11px;
+  /* 오른쪽 여백줌 */
   margin-bottom: 16px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
@@ -136,7 +81,8 @@
 .SJ-guide-title {
   font-size: 16px;
   font-weight: 500;
-  padding-right: 50px; /* 코스 텍스트를 위한 여백 */
+  padding-right: 50px;
+  /* 코스 텍스트를 위한 여백 */
   display: block;
   white-space: nowrap;
   overflow: hidden;
@@ -145,8 +91,10 @@
 
 .SJ-guide-score {
   position: absolute;
-  right: 10px; /* 하트와 동일한 위치 */
-  top: 45px; /* 하트(15px) 아래 적절한 간격 */
+  right: 10px;
+  /* 하트와 동일한 위치 */
+  top: 45px;
+  /* 하트(15px) 아래 적절한 간격 */
   color: #919191;
   font-size: 10px;
 }
@@ -160,14 +108,16 @@
 .SJ-guide-date {
   color: #919191;
   font-size: 12px;
-  order: -1; /* 태그들 위로 이동 */
+  order: -1;
+  /* 태그들 위로 이동 */
 }
 
 /* 태그 컨테이너 스타일 */
 .SJ-guide-tags-container {
   flex: 1;
   overflow: hidden;
-  padding-right: 20px; /* 더보기 버튼 너비(20px) + 여유 공간(5px) */
+  padding-right: 20px;
+  /* 더보기 버튼 너비(20px) + 여유 공간(5px) */
 }
 
 .SJ-guide-tags {
@@ -197,8 +147,10 @@
 /* 가이드북 목록의 하트 버튼 스타일 */
 .SJ-guide-card .favorite-button {
   position: absolute !important;
-  right: 10px !important; /* 오른쪽 위치 강제 적용 */
-  top: 15px !important; /* 상단 위치 강제 적용 */
+  right: 10px !important;
+  /* 오른쪽 위치 강제 적용 */
+  top: 15px !important;
+  /* 상단 위치 강제 적용 */
   cursor: pointer;
   font-size: 20px;
   display: flex;
@@ -263,11 +215,4 @@
   color: #ff7d7d;
   font-size: 12px;
   margin-bottom: 3px;
-}
-
-@media screen and (max-width: 430px) {
-  .guidebook-list {
-    width: 100%;
-    padding: 20px 15px;
-  }
 }
