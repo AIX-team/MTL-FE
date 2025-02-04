@@ -425,7 +425,7 @@ const TravelInfo = () => {
                       <div>테스트 텍스트</div>
                       {item?.latitude && item?.longitude && (
                         <iframe 
-                          className="YC-GuideBookList-map-iframe" 
+                          className="HG-TravelInfo-map-iframe" 
                           src={`https://maps.google.com/maps?q=${encodeURIComponent(item.placeName)}+(${item.latitude},${item.longitude})&t=&z=17&ie=UTF8&iwloc=&output=embed`}
                           width="100%"
                           height="100%"

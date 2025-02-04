@@ -172,7 +172,11 @@ const SelectModal = ({ isOpen, onClose, selectedPlaces, onPlaceSelect, travelDay
                           alt="selectIcon" />
                       </span>
                       <span onClick={() => handlePlaceSelect(place.placeId)}>
-                        <img className='HG-select-modal-select-list-item-place-img' src={place.placeImage} alt="placeImage" />
+                        <img className='HG-select-modal-select-list-item-place-img' src={place.placeImage}
+                      onError={(e) => {
+                        e.target.src = 'https://picsum.photos/600/300';
+                      }}
+                      alt="placeImage" />
                       </span>
                       <div onClick={() => handlePlaceSelect(place.placeId)}>
                         <div className='HG-select-modal-select-list-item-place-info-name'>{place.placeName}</div>
