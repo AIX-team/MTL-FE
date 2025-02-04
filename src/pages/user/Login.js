@@ -4,9 +4,9 @@ import LoginModal from '../../components/LoginModal';
 function Login() {
     const [isModalOpen, setModalOpen] = useState(true); 
 
-    const openLoginModal = () => {
+   /* const openLoginModal = () => {
         setModalOpen(true);
-    };
+    }; */
 
     const closeModal = () => {
         setModalOpen(false);

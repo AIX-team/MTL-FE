@@ -2,12 +2,16 @@ import React, { useState, useRef, useEffect } from 'react';
 import { FaComments, FaTimes } from 'react-icons/fa';
 import '../css/layout/Wish.css';
 import OpenAI from 'openai';
+import { v4 as uuidv4 } from 'uuid';
+
+import { searchContent } from '../apis/Apis';
+
 
 const Wish = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState([
         {
-            id: 1,
+            id: uuidv4(),
             type: 'bot',
             content: '안녕하세요! 여행 계획에 대해 어떤 도움이 필요하신가요?'
         }
@@ -146,7 +150,7 @@ const Wish = () => {
 
     // 챗봇 응답 생성 함수
     const generateBotResponse = async (userMessage) => {
-        // 특정 키워드에 대한 즉각 응답
+        // 특정 키워드에 대한 즉각 응답 처리 (예: 날씨, 환율)
         if (userMessage.includes('날씨')) {
             return "현재 날씨 버튼을 클릭하시면 실시간 날씨 정보를 확인하실 수 있습니다.";
         }
@@ -155,98 +159,103 @@ const Wish = () => {
         }
 
         try {
+            // OpenAI API에 보낼 프롬프트 구성
             const prompt = `
-시스템: 당신은 일본 여행 전문가입니다. 다음 규칙을 따라 답변해주세요:
-- 한국어로 답변합니다
-- 친절하고 상세하게 설명합니다
-- 존댓말을 사용합니다
-- 일본 여행에 대한 전문적인 조언을 제공합니다
-- 답변은 3-4문장으로 구성합니다
+      시스템: 당신은 일본 여행 전문가입니다. 다음 규칙을 따라 답변해주세요:
+      - 한국어로 답변합니다.
+      - 친절하고 상세하게 설명합니다.
+      - 존댓말을 사용합니다.
+      - 일본 여행에 대한 전문적인 조언을 제공합니다.
+      - 답변은 3-4문장으로 구성합니다.
+      
+      사용자 질문: ${userMessage}
+      
+      답변:`;
 
-사용자 질문: ${userMessage}
-
-답변:`;
-
-            const response = await fetch(
-                "https://api-inference.huggingface.co/models/EleutherAI/polyglot-ko-12.8b",
-                {
-                    method: "POST",
-                    headers: {
-                        "Authorization": `Bearer ${process.env.REACT_APP_HUGGINGFACE_API_KEY}`,
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        inputs: prompt,
-                        parameters: {
-                            max_length: 200,
-                            temperature: 0.7,
-                            top_p: 0.9,
-                            return_full_text: false
-                        }
-                    }),
-                }
-            );
+            // OpenAI API 호출 (예시: text-davinci-003 모델 사용)
+            const response = await fetch("https://api.openai.com/v1/completions", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${process.env.REACT_APP_OPENAI_API_KEY}`,
+                },
+                body: JSON.stringify({
+                    model: "text-davinci-003",  // 혹은 원하는 모델을 사용
+                    prompt: prompt,
+                    max_tokens: 200,
+                    temperature: 0.7,
+                    top_p: 1,
+                    n: 1,
+                    stop: null
+                }),
+            });
 
             if (!response.ok) {
                 throw new Error('API 응답 오류');
             }
 
-            const result = await response.json();
-            console.log('API 응답:', result); // 응답 확인용 로그
-
-            if (Array.isArray(result) && result[0]?.generated_text) {
-                return result[0].generated_text;
+            const data = await response.json();
+            if (data && data.choices && data.choices[0] && data.choices[0].text) {
+                return data.choices[0].text.trim();
             }
-
             throw new Error('응답 형식 오류');
-
         } catch (error) {
             console.error('응답 생성 중 오류:', error);
             return "죄송합니다. 질문을 더 구체적으로 해주시면 자세히 답변 드리도록 하겠습니다. 특정 도시, 관광지, 교통, 숙소, 음식 등에 대해 궁금하신 점을 말씀해 주세요.";
         }
     };
 
-    // 메시지 전송 처리
+
+    // 메시지 전송 처리 예시
     const handleSendMessage = async () => {
         if (inputMessage.trim() === '' || isLoading) return;
 
         try {
             setIsLoading(true);
 
-            // 사용자 메시지 추가
+            // 사용자 메시지 생성 시 고유 id 부여
             const userMessage = {
-                id: messages.length + 1,
+                id: uuidv4(), // 고유한 id 사용
                 type: 'user',
                 content: inputMessage
             };
             setMessages(prev => [...prev, userMessage]);
             setInputMessage(''); // 입력창 초기화
 
-            // 봇 응답 생성
-            const botResponse = await generateBotResponse(inputMessage);
+            // 검색 분기나 일반 응답 처리...
+            if (inputMessage.startsWith("검색:")) {
+                const query = inputMessage.replace("검색:", "").trim();
+                const searchResults = await searchContent(query);
 
-            // 봇 메시지 추가
-            const botMessage = {
-                id: messages.length + 2,
-                type: 'bot',
-                content: botResponse
-            };
-            setMessages(prev => [...prev, botMessage]);
+                const botResponse = searchResults.length > 0
+                    ? searchResults.map((result, index) =>
+                        `검색 결과 ${index + 1}:\n내용: ${result.content}\n메타데이터: ${JSON.stringify(result.metadata)}`
+                    ).join("\n\n")
+                    : "검색 결과가 없습니다.";
 
+                const botMessage = {
+                    id: uuidv4(), // 고유 id 사용
+                    type: 'bot',
+                    content: botResponse
+                };
+                setMessages(prev => [...prev, botMessage]);
+            } else {
+                const botResponse = await generateBotResponse(inputMessage);
+                const botMessage = {
+                    id: uuidv4(), // 고유 id 사용
+                    type: 'bot',
+                    content: botResponse
+                };
+                setMessages(prev => [...prev, botMessage]);
+            }
         } catch (error) {
-            console.error('메시지 처리 중 오류:', error);
-            // 에러 메시지 추가
-            const errorMessage = {
-                id: messages.length + 2,
-                type: 'bot',
-                content: '죄송합니다. 응답 생성 중 문제가 발생했습니다. 다시 시도해 주시겠어요?'
-            };
-            setMessages(prev => [...prev, errorMessage]);
+            // 오류 처리...
         } finally {
             setIsLoading(false);
             scrollToBottom();
         }
     };
+
 
     // Enter 키 처리
     const handleKeyPress = (e) => {
