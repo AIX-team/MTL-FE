@@ -1,64 +1,63 @@
-/* 전체 페이지 기본 스타일 */
-*{
-    cursor: none;
-    outline: none;
-    -webkit-tap-highlight-color: transparent;  /* 모바일에서 탭 시 하이라이트 제거 */
-}
-
-body {
-    background-color: #C92B2A;
-    font-family: 'NanumBarunGothic', sans-serif;
-    /* 나눔바른고딕 폰트 적용 */
-    overflow-y: hidden;
-}
-
-/* 메인 레이아웃 컨테이너 */
-.WS-Main-Layout {
-    position: fixed;
-    flex-direction: column;
-    left: 50%;
-    transform: translateX(-50%);
-
-    width: 402px;
-    height: 100vh;
-
-    background-color: white;
-}
-
-.WS-main-header {
-    position: fixed;
-    display: flex;  
-    justify-content: center;
-    align-items: center;
-
-    width: 402px;
-    height: 60px;
-}
-
 /* 메인 컨텐츠 영역 */
 .WS-Main-Container {
     position: fixed;
-    top: 60px;
-    bottom: 100px;
-    width: 402px;
+    top: 2%;
+    bottom: var(--footer-height);
+
+    width: 96%;
+ 
+    transition: all 0.3s;
 }
 
 .WS-Main-Footer {
     position: fixed;
     bottom: 0;
 
-    width: 402px;
-    height: 100px;
+    left: 0;
+    width: 100%;
+    height: var(--footer-height);
 
     display: flex;
     justify-content: space-around;
     align-items: center;
-    z-index: 1000;
+
+    background-color: white;
 }
 
-/* 헤더 없는 레이아웃 컨텐츠 영역 */
-.WS-Main-Container-Headerless {
+/* 플로팅 버튼 스타일 */
+.WS-Wish-Floating-Button {
     position: fixed;
-    width: 402px;
+
+    bottom: 15%;
+    right: 30px;
+
+    width: 50px;
+    height: 50px;
+    border-radius: var(--border-radius-full);
+    background-color: var(--color-guide);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+
+    color: white;
+    font-size: var(--font-size-xl);
+    border: none;
+
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+ 
+    transition: all 0.3s ease;
+    z-index: 1020;
+}
+
+.WS-Wish-Floating-Button:hover {
+    transform: scale(1.1);
+    background-color: var(--color-main-dark);
+}
+
+.WS-Wish-Floating-Button.active {
+    transform: scale(0);
+    opacity: 0;
 }
 /* 완료 ================================================================== */

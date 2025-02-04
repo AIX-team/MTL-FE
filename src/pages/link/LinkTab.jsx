@@ -3,15 +3,9 @@ import { FaCheck } from 'react-icons/fa'; // 체크 아이콘 import
 import LinkList from './LinkList';
 import SearchYoutube from './SearchYoutube';
 import youtubeIcon from '../../images/youtube.png'; // YouTube 로고 이미지 import
-import '../../css/layout/SubHeader.css';
+import '../../css/linkpage/LinkTab.css';
 
-/**
- * 서브 헤더 컴포넌트
- * 링크, 유튜브검색, 선택 탭으로 구성
- * 현재 선택된 탭 아래에 빨간색 인디케이터 표시
- */
-
-const SubHeader = () => {
+const LinkTab = () => {
     const [activeTab, setActiveTab] = useState('youtube');
     const [linkData, setLinkData] = useState(() => {
         const savedLinks = localStorage.getItem('linkListData');
@@ -65,49 +59,54 @@ const SubHeader = () => {
         return () => clearInterval(interval);
     }, []);
 
-    const getClassName = (path) => {
-        const tabMapping = {
-            'links': '/link',
-            'youtube': '/link/searchYouTube'
-        };
-        return `WS-SubHeader-Tab${tabMapping[activeTab] === path ? ' active' : ''}`;
-    };
-
     return (
         <>
-            {/* 서브헤더 영역 */}
-            <nav className="WS-Link-Page-SubHeader">
+            {/* 탭 영역 */}
+            <nav className="WS-Link-Tab-Container">
                 {/* 유튜브검색 탭 */}
-                <div 
-                    id="WS-Link-SubHeader-youtube-tab-Container" 
-                    onClick={() => setActiveTab('youtube')} 
-                    className={getClassName('/link/searchYouTube')}
-                >
-                    <div className="WS-SubHeader-Tab" id="WS-SubHeader-Link-youtube-tab">
-                        <img src={youtubeIcon} alt="YouTube" className="WS-youtube-icon" id="WS-SubHeader-youtube-icon" />
-                        <span id="WS-Link-SubHeader-text">유튜브 검색</span>
+                <div className="WS-Link-Tabs">
+                    <div
+                        id="WS-Link-youtube-tab"
+                        className={`WS-Link-Tab ${activeTab === 'youtube' ? 'active' : ''}`}
+                        onClick={() => setActiveTab('youtube')}
+                    >
+
+                        <div className="WS-Link-Tab-Content">
+                            <img src={youtubeIcon} alt="YouTube" className="WS-youtube-icon" />
+                            <span className="WS-Link-Tab-text">유튜브 검색</span>
+                        </div>
+
+                    </div>
+
+                    {/* 링크 탭 */}
+                    <div
+                        id="WS-Link-links-tab"
+                        onClick={() => setActiveTab('links')}
+                        className={`WS-Link-Tab ${activeTab === 'links' ? 'active' : ''}`}
+                    >
+                        <div className="WS-Link-Tab-Content">
+                            <span className="WS-Link-Tab-text">링크</span>
+
+                            {linkCount >= 5 ? (
+                                <span className="WS-check-icon">
+                                    <FaCheck />
+                                </span>
+                            ) : (
+                                <span className="WS-Count">{linkCount}</span>
+                            )}
+
+                        </div>
                     </div>
                 </div>
 
-                {/* 링크 탭 */}
-                <div 
-                    id="WS-Link-SubHeader-link-tab-Container" 
-                    onClick={() => setActiveTab('links')} 
-                    className={`${getClassName('/link')} ${linkCount >= 5 ? 'complete' : ''}`}
-                >
-                    <div className="WS-SubHeader-Tab" id="WS-SubHeader-Link-Link-tab">
-                        <span id="WS-Link-SubHeader-text">링크</span>
-                        {linkCount >= 5 ? (
-                            <span className="WS-check-icon">
-                                <FaCheck />
-                            </span>
-                        ) : (
-                            <span className="WS-Count">{linkCount}</span>
-                        )}
-                    </div>
+                <div className="SJ-Tab-Indicator-Container">
+                    <div
+                        className="SJ-Tab-Indicator"
+                        style={{
+                            transform: `translateX(${activeTab === 'youtube' ? '0' : '100%'})`,
+                        }}
+                    ></div>
                 </div>
-
-                <div className="WS-indicator" id="WS-SubHeader-link-indicator" />
             </nav>
 
             {/* 컨텐츠 영역 */}
@@ -118,13 +117,13 @@ const SubHeader = () => {
                     ) : (
                         <SearchYoutube linkData={linkData} />
                     )}
-                    
+
                 </div>
             </div>
         </>
     );
 };
 
-export default SubHeader;
+export default LinkTab;
 
 // 완료 ===================================================================

@@ -1,10 +1,9 @@
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import MainLayout from "./layouts/MainLayout";
-import HeaderlessLayout from "./layouts/HeaderlessLayout";
 import LinkPage from './pages/link/LinkPage';
 import TravelPage from './pages/travel/TravelPage';
 import MyPage from './pages/mypage/MyPage';
-import GuideBookList from './pages/travel/GuideBookList';
+import GuideBookList from './pages/travel/GuidebookList';
 import Wish from './layouts/Wish';
 import TravelInfo from './pages/link/travelInfo/TravelInfo';
 import './css/styles/variables.css';
@@ -44,8 +43,10 @@ function App() {
         <Route path="travelinfos/:travelInfoId" element={<TravelInfo />} />
         </Route>
 
+
+        <Route path="travelinfo/*" element={<TravelInfo />} />
       </Routes>
-    </BrowserRouter>
+    </BrowserRouter >
   );
 }
 
