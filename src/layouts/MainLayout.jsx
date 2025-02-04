@@ -1,6 +1,5 @@
 import React from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
-import LogoHeader from './LogoHeader';
 import FooterComponent from './Footer';
 import '../css/layout/MainLayout.css';
 import Wish from './Wish';
@@ -14,15 +13,13 @@ const MainLayout = () => {
 
     return (
         <div className="WS-Main-Layout">
-            {/* 로고 헤더 영역 */}
-            <LogoHeader className="WS-Main-Header" />
 
             {/* 메인 컨텐츠 영역 */}
             <main className="WS-Main-Container">
-                <Wish className="WS-Main-Wish"/>
+                <Wish className="WS-Main-Wish" />
                 <Outlet />
             </main>
-
+       
             {/* 푸터 영역 */}
             <FooterComponent className="WS-Main-Footer" />
         </div>

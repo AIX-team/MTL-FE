@@ -2,7 +2,7 @@ import React from 'react';
 import LinkList from './LinkList';          // 링크 목록 컴포넌트
 import SearchYoutube from './SearchYoutube';// 유튜브 검색 컴포넌트
 import '../../css/linkpage/LinkPage.css';
-import LinkSubHeader from './LinkSubHeader';
+import LinkTab from './LinkTab';
 
 const LinkPage = ({ activeTab, linkData, setLinkData }) => {
     const renderContent = () => {
@@ -18,7 +18,7 @@ const LinkPage = ({ activeTab, linkData, setLinkData }) => {
 
     return (
         <div className="WS-Link-Page">
-            <LinkSubHeader />
+            <LinkTab />
             <div className="WS-Link-Page-Content">
                 {renderContent()}
             </div>
