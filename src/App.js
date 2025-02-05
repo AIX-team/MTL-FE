@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import MainLayout from "./layouts/MainLayout";
 import LinkPage from './pages/link/LinkPage';
 import MyPage from './pages/mypage/MyPage';
+import GuideBookList from './pages/travel/GuideBookList';
 import Wish from './layouts/Wish';
 import TravelInfo from './pages/link/travelInfo/TravelInfo';
 import GuideBook from './pages/link/GuideBook';

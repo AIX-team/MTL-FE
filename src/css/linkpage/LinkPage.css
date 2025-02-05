@@ -3,11 +3,80 @@
     display: flex;
 
     height: 100%;
-    /* lexbox 사용 */
 }
+
+.WS-Link-Tab-Container {
+    position: fixed;
+
+    justify-content: center;
+    align-items: center;
+
+    width: 96%;
+
+    height: 7%;
+}
+
+.WS-Link-Tabs {
+    display: flex;
+    justify-content: space-around;
+    border-bottom: 1px solid #e0e0e0;
+
+}
+
+/* 각 탭의 기본 스타일 */
+.WS-Link-Tab {
+    flex: 1;
+    text-align: center;
+    padding: 15px 0;
+    cursor: pointer;
+    color: var(--color-dark-gray);
+    transition: all 0.3s ease;
+}
+
+/* 활성화된 탭 스타일 */
+.WS-Link-Tab.active {
+    color: var(--color-main-hover);
+    font-weight: 900;
+    scale: 1.1;
+}
+
+.WS-Link-Tab-Content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+}
+
+.WS-check-icon {
+    background-color: var(--color-success);
+    border-radius: var(--border-radius-full);
+    width: 20px;
+    height: 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 5px;
+    color: white;
+    font-size: var(--font-size-sm);
+}
+
+.WS-Count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 6px;
+
+    width: 22px;
+    height: 20px;
+    background-color: var(--color-main);
+    border-radius: var(--border-radius-full);
+
+    color: white;
+    font-size: 12px;
+
+}
+
 
 .WS-Link-Page-Content {
-    margin-top: 20%;    
+    margin-top: 20%;
 }
-
-/* 완료 ============================================== */
