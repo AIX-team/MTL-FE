@@ -4,7 +4,7 @@ import osakaImg from "../../images/osaka.png";
 import matsuyamaImg from "../../images/matsuyama.png";
 import tokyoImg from "../../images/tokyo.png";
 import TravelPageModal from "./TravelPageModal";
-import { FaSearch } from 'react-icons/fa';
+import { FaSearch, FaTimes } from 'react-icons/fa';
 
 const TravelList = () => {
   const [travelItems, setTravelItems] = useState([
@@ -60,18 +60,20 @@ const TravelList = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState(null);
   const [pinnedItems, setPinnedItems] = useState([]);
+  const [searchText, setSearchText] = useState("");
 
   const handleFilterClick = (filter) => {
     setActiveFilter(filter);
   };
 
   // 고정 토글 핸들러
-  const handlePinToggle = (itemId) => {
+  const handlePinClick = (itemId) => {
     if (pinnedItems.includes(itemId)) {
       setPinnedItems((prev) => prev.filter((id) => id !== itemId));
     } else {
       setPinnedItems((prev) => [...prev, itemId]);
     }
+    setShowModal(false);
   };
 
   // 즐겨찾기 토글 함수
@@ -87,15 +89,7 @@ const TravelList = () => {
     setSelectedItemId(id);
     setShowModal(true);
   };
-  // 고정핀 클릭 or 해제
-  const handlePinClick = (id) => {
-    setTravelItems(
-      travelItems.map((item) =>
-        item.id === id ? { ...item, isPinned: !item.isPinned } : item
-      )
-    );
-    setShowModal(false);
-  };
+
 
   // 데이터 구조 확인
   useEffect(() => {
@@ -137,6 +131,18 @@ const TravelList = () => {
   console.log("전체 데이터:", travelItems);
   console.log("필터링된 데이터:", filteredData);
 
+  // 아이템 이름 수정 함수
+  const handleUpdateTitle = (itemId, newTitle) => {
+    setTravelItems(travelItems.map(item =>
+      item.id === itemId ? { ...item, title: newTitle } : item
+    ));
+  };
+
+  // 아이템 삭제 함수
+  const handleDeleteItem = (itemId) => {
+    setTravelItems(travelItems.filter(item => item.id !== itemId));
+  };
+
   return (
     <div className="SJ-Travel-List">
       <div className="SJ-travel-container">
@@ -166,18 +172,27 @@ const TravelList = () => {
 
         <div className="SJ-search-Container">
           <input
+            type="text"
+            placeholder="내가 만든 여행을 검색하세요"
             className="SJ-search-input"
-            type="text" placeholder="내가 만든 여행을 검색해보세요" />
-          <button className="SJ-search-icon">
-            <FaSearch />
-          </button>
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
+          />
+
+          <div className="SJ-search-button-container">
+            {searchText && (
+              <button className="SJ-search-clear" onClick={() => setSearchText("")}>
+                <FaTimes />
+              </button>
+            )}
+            <button className="SJ-search-icon"><FaSearch /></button>
+          </div>
         </div>
 
         <div className="SJ-travel-grid">
           {sortedAndFilteredData.map((item) => (
 
             <div key={item.id} className="SJ-travel-card">
-
 
               {pinnedItems.includes(item.id) && (
                 <div className="SJ-pin-icon">📌</div>
@@ -220,8 +235,11 @@ const TravelList = () => {
           showModal={showModal}
           setShowModal={setShowModal}
           selectedItemId={selectedItemId}
-          handlePinToggle={handlePinToggle}
+          handlePinToggle={handlePinClick}
           pinnedItems={pinnedItems}
+          onUpdateTitle={handleUpdateTitle}
+          onDeleteItem={handleDeleteItem}
+          items={travelItems}
         />
       </div>
     </div>

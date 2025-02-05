@@ -8,6 +8,7 @@
   margin: 0 auto;
 
   width: 100%;
+ 
 }
 
 .SJ-filter-buttons {
@@ -90,29 +91,17 @@
 
 .SJ-travel-grid {
   display: grid;
+  align-content: start;
   gap: 8px;
   padding-top: 5px;
   padding-left: 5px;
   padding-right: 5px;
 
+  width: 380px;
   height: 420px;
 
   overflow-x: hidden;
   overflow-y: auto;
-}
-
-/* 스크롤바 스타일 */
-.SJ-travel-grid::-webkit-scrollbar {
-  width: 8px;
-}
-
-.SJ-travel-grid::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.SJ-travel-container::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 0, 0, 0.2);
-  border-radius: 4px;
 }
 
 .SJ-travel-card {
@@ -123,9 +112,9 @@
   border-radius: 20px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 
-  width: 98%;
+  width: 100%;
 
-  margin: auto;
+  background-color: white;
 }
 
 .SJ-travel-img {

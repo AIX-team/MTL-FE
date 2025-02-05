@@ -1,64 +1,58 @@
-.guidebook-list {
-  width: 400px;
+.SJ-guidebook-list {
+  width: 100%;
 }
 
-
-/* 검색창 스타일 */
-.guidebook-list .search-bar {
+.SJ-search-button-container {
+  position: absolute;
+  top: 6.5px;
+  right: 0;
   display: flex;
-  align-items: center;
-  position: relative;
 }
 
 .SJ-search-clear {
   position: absolute;
-  right: 10px;
-  /* 돋보기 버튼 왼쪽에 위치 */
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  padding: 4px;
-  cursor: pointer;
-  color: #666;
-  font-size: 14px;
-}
+  right: 40px;
+  top: 10px;
 
-.SJ-search-button {
-  position: absolute;
-  right: 35px;
-  top: 50%;
-  transform: translateY(-50%);
   background: none;
   border: none;
+
   cursor: pointer;
-  margin-right: -50px;
+
+  color: var(--color-dark-gray);
+  font-size: 14px;
+
+  transition: all 0.3s ease;
 }
 
 .guide-container {
-  width: 100%;
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  /* 카드 간격만 3px로 설정 */
-  margin-bottom: 100px;
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  padding-top: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+
+  width: 380px;
+  height: 420px;
+
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .SJ-guide-card {
   position: relative;
-  background: white;
-  border-radius: 16px;
+  display: flex;
+  align-items: center;
+
   padding: 20px 1px 20px 20px;
-  /* 오른쪽 패딩만 20px에서 17px로 줄임 */
-  margin-right: 11px;
-  /* 오른쪽 여백줌 */
-  margin-bottom: 16px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  width: 100%;
+  background-color: white;
+  border-radius: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+
   box-sizing: border-box;
-  margin-left: -15px;
 }
 
 .SJ-guide-content {
@@ -70,32 +64,26 @@
   padding-right: 25px;
 }
 
+.SJ-guide-category {
+  color: var(--color-guide);
+  font-size: 12px;
+  margin-bottom: 3px;
+}
+
 .SJ-guide-header {
   display: flex;
   justify-content: flex-start;
   align-items: center;
   padding-bottom: 5px;
   margin-bottom: 8px;
-}
 
-.SJ-guide-title {
-  font-size: 16px;
-  font-weight: 500;
-  padding-right: 50px;
-  /* 코스 텍스트를 위한 여백 */
-  display: block;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .SJ-guide-score {
   position: absolute;
-  right: 10px;
-  /* 하트와 동일한 위치 */
+  right: 15px;
   top: 45px;
-  /* 하트(15px) 아래 적절한 간격 */
-  color: #919191;
+  color: var(--color-dark-gray);
   font-size: 10px;
 }
 
@@ -106,113 +94,16 @@
 }
 
 .SJ-guide-date {
-  color: #919191;
+  color: var(--color-guide);
   font-size: 12px;
-  order: -1;
-  /* 태그들 위로 이동 */
-}
-
-/* 태그 컨테이너 스타일 */
-.SJ-guide-tags-container {
-  flex: 1;
-  overflow: hidden;
-  padding-right: 20px;
-  /* 더보기 버튼 너비(20px) + 여유 공간(5px) */
 }
 
 .SJ-guide-tags {
   display: flex;
   gap: 4px;
-  overflow: hidden;
-  position: relative;
 }
 
 .SJ-guide-tag {
-  color: #666;
-  white-space: nowrap;
+  color: var(--color-dark-gray);
   font-size: 12px;
-}
-
-/* 오버플로우 시 말줄임표 표시 */
-.SJ-guide-tags::after {
-  content: "...";
-  position: absolute;
-  right: 0;
-  background: white;
-  padding-left: 4px;
-  color: #666;
-  font-size: 12px;
-}
-
-/* 가이드북 목록의 하트 버튼 스타일 */
-.SJ-guide-card .favorite-button {
-  position: absolute !important;
-  right: 10px !important;
-  /* 오른쪽 위치 강제 적용 */
-  top: 15px !important;
-  /* 상단 위치 강제 적용 */
-  cursor: pointer;
-  font-size: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 24px;
-  border: none;
-  background: none;
-  padding: 0;
-  z-index: 2;
-}
-
-.SJ-guide-card .favorite-button.filled {
-  color: #c92b2a;
-}
-
-.SJ-guide-card .favorite-button.outlined {
-  color: #c92b2a;
-}
-
-/* 가이드북 목록의 더보기 버튼 스타일 */
-.SJ-guide-card .SJ-more-button {
-  position: absolute !important;
-  right: 15px !important;
-  bottom: 35px !important;
-  background: none;
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
-  padding: 0;
-  color: #666;
-  width: 20px;
-  height: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 2;
-}
-
-/* 버튼 프레임 위치 설정 */
-.SJ-guide-card .SJ-btn-frame {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  pointer-events: none;
-}
-
-.SJ-guide-card .SJ-btn-frame .favorite-button,
-.SJ-guide-card .SJ-btn-frame .SJ-more-button {
-  pointer-events: auto;
-}
-
-/* 스크롤바 숨기기 */
-.SJ-guide-tags::-webkit-scrollbar {
-  display: none;
-}
-
-.SJ-guide-category {
-  color: #ff7d7d;
-  font-size: 12px;
-  margin-bottom: 3px;
 }

@@ -48,7 +48,7 @@
 .WS-SearchYoutube-SearchButton,
 .WS-SearchYoutube-ClearButton {
 
-    color: #3E3E3E;
+    color: var(--color-dark-gray);
 
     right: 40px;
     top: 50%;
@@ -67,7 +67,7 @@
 .WS-SearchYoutube-SearchButton:hover,
 .WS-SearchYoutube-ClearButton:hover {
     cursor: pointer;
-    color: #E3E3E3;
+    color: var(--color-light-gray);
     scale: 1.05;
 }
 
