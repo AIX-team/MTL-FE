@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import '../../../css/TravelInfo.css';
@@ -145,7 +144,7 @@ const TravelInfo = () => {
     } finally {
       setLoading(false);
     }
-  }, [travelInfoId]);
+  }, []);
 
   const putTravelInfoUpdate = useCallback(async (days, title) => {
     try {
@@ -448,7 +447,8 @@ const TravelInfo = () => {
                       <div>테스트 텍스트</div>
                       {item?.latitude && item?.longitude && (
                         <iframe 
-                          className="YC-GuideBookList-map-iframe" 
+                          className="HG-TravelInfo-map-iframe" 
+                          title={`${item.placeName} 위치 지도`}
                           src={`https://maps.google.com/maps?q=${encodeURIComponent(item.placeName)}+(${item.latitude},${item.longitude})&t=&z=17&ie=UTF8&iwloc=&output=embed`}
                           width="100%"
                           height="100%"

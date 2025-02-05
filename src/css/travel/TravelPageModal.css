@@ -1,0 +1,103 @@
+.SJ-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+.SJ-modal-bottom {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: white;
+    border-radius: 20px 20px 0 0;
+    padding: 20px;
+    z-index: 1001;
+    animation: all 0.3s ease-out;
+}
+
+.SJ-modal-content {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.SJ-modal-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 15px;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.SJ-modal-icon {
+    font-size: 20px;
+}
+
+/* 삭제 확인 모달 스타일 */
+.SJ-second-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1002;
+    /* 기존 모달보다 위에 표시 */
+}
+
+.SJ-edit-modal,
+.SJ-delete-modal {
+    background-color: white;
+    border-radius: 12px;
+    padding: 40px;
+    width: 80%;
+    max-width: 300px;
+    text-align: center;
+
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    gap: 10px;
+}
+
+.SJ-second-modal-title {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.SJ-modal-input {
+    width: 80%;
+    height: 30px;
+    border: 2px solid var(--color-light-gray);
+    border-radius: 10px;
+    padding: 10px;
+    padding-left: 15px;
+    margin-bottom: 10px;
+
+    align-self: center;
+
+    transition: all 0.3s ease;
+}
+
+.SJ-modal-input:focus {
+    border-color: var(--color-dark-gray);
+}
+
+.SJ-modal-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

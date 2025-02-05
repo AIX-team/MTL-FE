@@ -9,7 +9,7 @@
   --color-light-gray: #E3E3E3;
   --color-guide: #919191;
   --color-success: #48B669;
-  --color-black: #000000;
+  --color-black: #000000; 
 
   /* 자주 사용하는 폰트 크기 */
   --font-size-xs: 12px;
@@ -34,7 +34,7 @@
 
 
   /* 푸터 높이 */
-  --footer-height: 100px;
+  --footer-height: 15%;
 }
 
 /* 전역 스타일 */
