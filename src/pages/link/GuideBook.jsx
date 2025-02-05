@@ -39,7 +39,7 @@ const GuideBook = () => {
     const [guideBook, setGuideBook] = useState({
         success: '',
         message: '',
-        guideBooktitle: '',
+        guideBookTitle: '',
         travelInfoTitle: '',
         travelInfoId: '',
         courseCnt: '',
@@ -67,32 +67,27 @@ const GuideBook = () => {
         ]
     };
 
+    // 가이드북 데이터 가져오기
     const getGuideBook = async () => {
         try {
-            const response = await axiosInstance.get(`/api/guidebooks/${guideBookId}`);
+            const response = await axiosInstance.get(`/api/v1/travels/guidebooks/${guideBookId}`);
             console.log(response.data);
-
-
+            setGuideBook(response.data);
+            setPlaces(response.data.courses[0].coursePlaces || []);
         } catch (error) {
             console.error('Error fetching guidebook:', error);
         }
     }   
 
+    useEffect(() => {
+        getGuideBook();
+    }, []);
+
     // 코스 탭 클릭 핸들러
     const handleTabClick = (courseNumber) => {
         setIsEditMode(false); // 편집 모드 해제
         setShowMoveModal(false); // 이동 모달 닫기
-        setActiveTab(courseNumber); // 활성화된 탭 변경
-    };
-
-    // 다음 페이지로 이동
-    const handleNextPage = () => {
-        setActivePage((prevPage) => (prevPage % 3) + 1);
-    };
-
-    // 이전 페이지로 이동
-    const handlePreviousPage = () => {
-        setActivePage((prevPage) => (prevPage === 1 ? 3 : prevPage - 1));
+        setActiveTab(Number(courseNumber) + 1); // 활성화된 탭 변경
     };
 
     // 편집 버튼 클릭 핸들러
@@ -114,19 +109,10 @@ const GuideBook = () => {
 
     // 코스 변경 시 장소 데이터 가져오기
     useEffect(() => {
-        fetchPlaces(activeTab);
-        setPlaces(dummyData[activeTab] || []); // 더미 데이터 설정
+        const coursesArray = Object.values(guideBook.courses);
+        const currentCourse = coursesArray.find(course => course.courseNum === activeTab);
+        setPlaces(currentCourse?.coursePlaces || []);
     }, [activeTab]);
-
-    // 장소 데이터 가져오기
-    const fetchPlaces = async (courseNumber) => {
-        try {
-            const response = await axios.get(`/api/courses/${courseNumber}/places`);
-            setPlaces(response.data); // 장소 데이터 설정
-        } catch (error) {
-            console.error('Error fetching places:', error);
-        }
-    };
 
     // 이동 확인 핸들러
     const handleMoveConfirm = async () => {
@@ -138,7 +124,6 @@ const GuideBook = () => {
                 });
                 setShowMoveModal(false); // 이동 모달 닫기
                 setIsEditMode(false); // 편집 모드 해제
-                fetchPlaces(activeTab); // 장소 데이터 갱신
             } catch (error) {
                 console.error('Error moving places:', error);
             }
@@ -157,7 +142,6 @@ const GuideBook = () => {
                 places: selectedItems
             });
             setShowDeleteModal(false); // 삭제 모달 닫기
-            fetchPlaces(activeTab); // 장소 데이터 갱신
         } catch (error) {
             console.error('Error deleting places:', error);
         }
@@ -201,7 +185,69 @@ const GuideBook = () => {
         setSelectedPlace(null);
     };
 
-
+            // 가이드북 데이터 구조 예시        
+            // {
+            //     "success": "success",
+            //     "message": "success",
+            //     "guideBookTitle": "Alice's Coastal Guide",
+            //     "travelInfoTitle": "Alice's",
+            //     "travelInfoId": "ti1",
+            //     "courseCnt": 2,
+            //     "courses": [
+            //       {
+            //         "courseId": "c1",
+            //         "courseNum": 1,
+            //         "coursePlaces": [
+            //           {
+            //             "placeNum": 1,
+            //             "placeId": "p1",
+            //             "placeName": "Sunny Beach",
+            //             "placeType": "beach",
+            //             "placeDescription": "A beautiful beach",
+            //             "placeImage": "https://example.com/images/beach.jpg",
+            //             "placeAddress": "123 Beach Road",
+            //             "placeHours": "08:00 - 18:00",
+            //             "placeIntro": "Relaxing beach",
+            //             "placeLatitude": "36.15964562",
+            //             "placeLongitude": "138.02694563"
+            //           },
+            //           {
+            //             "placeNum": 2,
+            //             "placeId": "p3",
+            //             "placeName": "Urban Park",
+            //             "placeType": "park",
+            //             "placeDescription": "A peaceful park in the city",
+            //             "placeImage": "https://example.com/images/park.jpg",
+            //             "placeAddress": "789 City Center",
+            //             "placeHours": "08:00 - 18:00",
+            //             "placeIntro": "City escape",
+            //             "placeLatitude": "43.06630501",
+            //             "placeLongitude": "141.36674663"
+            //           }
+            //         ]
+            //       },
+            //       {
+            //         "courseId": "c2",
+            //         "courseNum": 2,
+            //         "coursePlaces": [
+            //           {
+            //             "placeNum": 1,
+            //             "placeId": "p1",
+            //             "placeName": "Sunny Beach",
+            //             "placeType": "beach",
+            //             "placeDescription": "A beautiful beach",
+            //             "placeImage": "https://example.com/images/beach.jpg",
+            //             "placeAddress": "123 Beach Road",
+            //             "placeHours": "08:00 - 18:00",
+            //             "placeIntro": "Relaxing beach",
+            //             "placeLatitude": "36.15964562",
+            //             "placeLongitude": "138.02694563"
+            //           }
+            //         ]
+            //       }
+            //     ]
+            //   }
+      
 
     // 콘텐츠 렌더링
     const renderContent = () => {
@@ -249,7 +295,7 @@ const GuideBook = () => {
                                                 <div className="YC-GuideBook-place-info">
                                                     <span id="YC-GuideBook-place-name">{place.name}</span>
                                                     <span id="YC-GuideBook-place-type">{place.type}</span>
-                                                    <p id="YC-GuideBook-place-description">{place.description}</p>
+                                                    <p id="YC-GuideBook-place-description">{place.intro}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -270,8 +316,8 @@ const GuideBook = () => {
             <div className="HG-GuideBookList-Header">
             <div className="HG-GuideBookList-Header-contents">
                 {/* 이곳에는 상위 여행 정보 경로 추가 해야함*/}
-                <Link to="#" id="YC-GuideBook-Header-contents-recommandations">상위 여행 정보</Link>
-                <h3 id="YC-GuideBook-Tittle">오사카 여행 5일 코스</h3>
+                <Link to={`/travelInfos/${guideBook.travelInfoId}`} id="YC-GuideBook-Header-contents-recommandations">{guideBook.travelInfoTitle}</Link>
+                <h3 id="YC-GuideBook-Tittle">{guideBook.guideBookTitle}</h3>
                 </div>
                 <div>
                     <img src={downloadbtn} alt="여행 정보 이미지" 
@@ -280,11 +326,15 @@ const GuideBook = () => {
             </div>
             <div className="YC-GuideBookList-menus">
                 <div className="YC-GuideBookList-menus-menu">
-                    <button className={activeTab === 1 ? 'HG-button-clicked' : 'YC-GuideBookList-menus-menu-button'} onClick={() => handleTabClick(1)}>코스 1</button>
-                    <button className={activeTab === 2 ? 'HG-button-clicked' : 'YC-GuideBookList-menus-menu-button'} onClick={() => handleTabClick(2)}>코스 2</button>
-                    <button className={activeTab === 3 ? 'HG-button-clicked' : 'YC-GuideBookList-menus-menu-button'} onClick={() => handleTabClick(3)}>코스 3</button>
-                    <button className={activeTab === 4 ? 'HG-button-clicked' : 'YC-GuideBookList-menus-menu-button'} onClick={() => handleTabClick(4)}>코스 4</button>
-                    <button className={activeTab === 5 ? 'HG-button-clicked' : 'YC-GuideBookList-menus-menu-button'} onClick={() => handleTabClick(5)}>코스 5</button>
+                    {Object.keys(guideBook.courses).map((courseNumber) => (
+                        <button
+                            key={courseNumber}
+                            className={activeTab === Number(courseNumber) + 1 ? 'HG-button-clicked' : 'YC-GuideBookList-menus-menu-button'}
+                            onClick={() => handleTabClick(courseNumber)}
+                        >
+                            코스 {Number(courseNumber) + 1}
+                        </button>
+                    ))}
                 </div>
                 <div className="YC-GuideBookList-menus-editBtn">
                     <button id="YC-GuideBookList-menus-editBtn-edit" onClick={handleEditClick}>
@@ -345,16 +395,14 @@ const GuideBook = () => {
                                 <img src={backArrow} alt="뒤로가기" />
                             </button>
                             <div className="HG-GuideBookList-Header-contents">
-                                <div className="HG-GuideBookList-Header-contents-title">오사카 여행 5일 코스</div>
+                                <div className="HG-GuideBookList-Header-contents-title">{guideBook.guideBookTitle}</div>
                                 <div className="HG-GuideBookList-Header-contents-course">코스 {activeTab}</div>
                             </div>
                             
                         </div>
                         <div className="YC-GuideBook-detail-modal-content">
                             <div className="YC-GuideBook-detail-modal-info">
-                                <h3 className="YC-GuideBook-detail-modal-title">{selectedPlace.name}</h3>
-                                <div className="YC-GuideBook-detail-modal-title-jp">道後温泉本館</div>
-                                
+                                <h3 className="YC-GuideBook-detail-modal-title">{selectedPlace.name}</h3>                                
                             <img
                                 className="YC-GuideBook-detail-modal-image"
                                 src={selectedPlace.image || "https://placehold.co/400x300?text=No+Image"}
@@ -364,30 +412,32 @@ const GuideBook = () => {
                                 }}
                             />
                                 <div className="YC-GuideBook-detail-modal-address">
-                                    주소: 5-6 Dogoyunomachi, Matsuyama,Ehime 790-0842 일본
+                                    주소: {selectedPlace.address}
                                 </div>
                                 <div className="YC-GuideBook-detail-modal-hours">
-                                    운영시간: 6:00~23:00 ⓘ
+                                    운영시간: {selectedPlace.hours} ⓘ
                                 </div>
                                 <div className="YC-GuideBook-detail-modal-recommended-time">
                                     추천 관광시간: 2-3시간
                                 </div>
                                 <div className="YC-GuideBook-detail-modal-description-title">
-                                    '마쓰야마' 여행의 중심이 되는 지역
+                                    {selectedPlace.intro}
                                 </div>
                                 <p className="YC-GuideBook-detail-modal-description">
-                                    약 3,000년 역사를 간직한 온천 마을, '도고온천 본관' 주변으로 식당, 카페, 기념품 숍이 들어서 있다.
-                                    소설 '도련님'의 세계를 보여주는 옛자와 시게를 비롯해 산사, 상점가 등 구경거리가 풍부하고, 특산물 골로 만든 먹거리와 캐릭터 굿즈 등이 눈에 띈다.
-                                    전통 속박 사찰 '코간'도 둘러봤다 가기도 제격이다. 늦은 인력거 투어를 통해 곳곳을 편안하게 둘러보기 좋다.
+                                    {selectedPlace.description}
                                 </p>
                             </div>
-                            <div className="YC-GuideBook-detail-modal-map">
-                                <iframe
-                                    className="YC-GuideBook-detail-modal-map-iframe"
-                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3269.8668888888887!2d135.5016858152176!3d34.69373778042199!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6000e68f5ddb6b43%3A0x1c5edc85620f065e!2z7J207Iqk7Yq466-47J207Iqk7Yq466-4!5e0!3m2!1sko!2skr!4v1716418888888!5m2!1sko!2skr"
-                                    allowFullScreen=""
-                                    loading="lazy"
-                                    referrerPolicy="no-referrer-when-downgrade"
+                            <div className="YC-GuideBook-detail-modal-map">      
+                                <iframe 
+                                className="YC-GuideBook-detail-modal-map-iframe" 
+                                title={`${selectedPlace.name} 위치 지도`}
+                                src={`https://maps.google.com/maps?q=${encodeURIComponent(selectedPlace.name)}+(${selectedPlace.latitude},${selectedPlace.longitude})&t=&z=17&ie=UTF8&iwloc=&output=embed`}
+                                width="100%"
+                                height="100%"
+                                style={{ border: 0 }}
+                                allowFullScreen=""
+                                loading="lazy" 
+                                referrerPolicy="no-referrer-when-downgrade"
                                 />
                             </div>
                         </div>
