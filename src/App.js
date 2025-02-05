@@ -4,6 +4,7 @@ import LinkPage from './pages/link/LinkPage';
 import MyPage from './pages/mypage/MyPage';
 import GuideBookList from './pages/travel/GuideBookList';
 import Wish from './layouts/Wish';
+import TravelPage from "./pages/travel/TravelPage";
 import TravelInfo from './pages/link/travelInfo/TravelInfo';
 import GuideBook from './pages/link/GuideBook';
 import './css/styles/variables.css';
@@ -30,6 +31,9 @@ function App() {
 
           {/* MyPage */}
           <Route path="mypage/*" element={<MyPage />} />
+
+          {/* TravelPage */}
+          <Route path="travel/*" element={<TravelPage />} />
 
           {/* Wish */}
           <Route path="wish/*" element={<Wish />} />
