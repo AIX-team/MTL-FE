@@ -37,7 +37,7 @@ function App() {
           <Route path="travelinfos/:travelInfoId" element={<TravelInfo />} />
 
           {/* GuideBook 페이지 */}
-          <Route path="guideBook" element={<GuideBook />} />
+          <Route path="guideBooks/:guideBookId" element={<GuideBook />} />
         
         </Route>
 

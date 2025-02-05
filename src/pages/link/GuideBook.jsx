@@ -6,9 +6,17 @@ import axios from 'axios';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import downloadbtn from '../../images/download.png';
 import backArrow from '../../images/backArrow.svg';
-
+import { useParams } from 'react-router-dom';
 // CSS 파일 import
 import '../../css/GuideBookList.css';
+
+const axiosInstance = axios.create({
+    baseURL: process.env.REACT_APP_API_URL,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+});
+  
 
 // GuideBookList 컴포넌트 정의
 const GuideBook = () => {
@@ -26,8 +34,20 @@ const GuideBook = () => {
     const [showDetailModal, setShowDetailModal] = useState(false);
     const [selectedPlace, setSelectedPlace] = useState(null);
     const {toPDF, targetRef} = usePDF({filename: 'guidebook.pdf'});
+    const { guideBookId } = useParams();
+
+    const [guideBook, setGuideBook] = useState({
+        success: '',
+        message: '',
+        guideBooktitle: '',
+        travelInfoTitle: '',
+        travelInfoId: '',
+        courseCnt: '',
+        courses: {}
+    });
 
     // 테스트용 더미 데이터
+
     const dummyData = {
         1: [
             { id: 1, name: '오사카 성', type: '역사적 장소', image: '/images/osaka_castle.jpg', description: '오사카의 상징적인 성입니다.' },
@@ -46,6 +66,17 @@ const GuideBook = () => {
             { id: 6, name: '오사카 과학 박물관', type: '박물관', image: '/images/science_museum.jpg', description: '과학을 체험할 수 있는 박물관입니다.' }
         ]
     };
+
+    const getGuideBook = async () => {
+        try {
+            const response = await axiosInstance.get(`/api/guidebooks/${guideBookId}`);
+            console.log(response.data);
+
+
+        } catch (error) {
+            console.error('Error fetching guidebook:', error);
+        }
+    }   
 
     // 코스 탭 클릭 핸들러
     const handleTabClick = (courseNumber) => {
@@ -101,7 +132,7 @@ const GuideBook = () => {
     const handleMoveConfirm = async () => {
         if (targetCourse) {
             try {
-                await axios.post(`/api/courses/move`, {
+                await axiosInstance.post(`/api/courses/move`, {
                     places: selectedItems,
                     targetCourse
                 });
@@ -122,7 +153,7 @@ const GuideBook = () => {
     // 삭제 확인 핸들러
     const handleDeleteConfirm = async () => {
         try {
-            await axios.post(`/api/courses/delete`, {
+            await axiosInstance.post(`/api/courses/delete`, {
                 places: selectedItems
             });
             setShowDeleteModal(false); // 삭제 모달 닫기

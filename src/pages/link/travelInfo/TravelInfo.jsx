@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import '../../../css/TravelInfo.css';
@@ -9,7 +8,6 @@ import "slick-carousel/slick/slick-theme.css";
 import planeIcon from '../../../images/Plane.svg';
 import selectIcon from '../../../images/select.svg';
 import isSelectedIcon from '../../../images/isselect.svg';
-import aiSelectIcon from '../../../images/select_check_deactive.svg';
 import backArrowIcon from '../../../images/backArrow.svg';
 import TitleEditModal from './TitleEditModal';
 import SelectModal from './SelectModal';
@@ -145,7 +143,7 @@ const TravelInfo = () => {
     } finally {
       setLoading(false);
     }
-  }, [travelInfoId]);
+  }, []);
 
   const putTravelInfoUpdate = useCallback(async (days, title) => {
     try {
@@ -426,6 +424,7 @@ const TravelInfo = () => {
                       {item?.latitude && item?.longitude && (
                         <iframe 
                           className="HG-TravelInfo-map-iframe" 
+                          title={`${item.placeName} 위치 지도`}
                           src={`https://maps.google.com/maps?q=${encodeURIComponent(item.placeName)}+(${item.latitude},${item.longitude})&t=&z=17&ie=UTF8&iwloc=&output=embed`}
                           width="100%"
                           height="100%"
