@@ -3,8 +3,8 @@ import "../../css/travel/TravelList.css";
 import osakaImg from "../../images/osaka.png";
 import matsuyamaImg from "../../images/matsuyama.png";
 import tokyoImg from "../../images/tokyo.png";
-import GuidebookList from "./GuidebookList";
 import TravelPageModal from "./TravelPageModal";
+import { FaSearch, FaTimes } from 'react-icons/fa';
 
 const TravelList = () => {
   const [travelItems, setTravelItems] = useState([
@@ -36,30 +36,44 @@ const TravelList = () => {
       isFavorite: false,
       isPinned: false,
     },
+    {
+      id: 4,
+      title: "교토 여행",
+      date: "2025-02-21",
+      period: "일정 4일",
+      image: tokyoImg, // import한 이미지 사용
+      isFavorite: false,
+      isPinned: false,
+    },
+    {
+      id: 5,
+      title: "교토 여행",
+      date: "2025-02-21",
+      period: "일정 4일",
+      image: tokyoImg, // import한 이미지 사용
+      isFavorite: false,
+      isPinned: false,
+    },
   ]);
 
-  const [activeFilter, setActiveFilter] = useState("latest"); // 'latest', 'created', 'favorite'
-  const [showModal, setShowModal] = useState(false); // 모달 버튼
+  const [activeFilter, setActiveFilter] = useState("latest");
+  const [showModal, setShowModal] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState(null);
-  const [isEditing, setIsEditing] = useState(false); // 이름 수정
-  const [editingTitle, setEditingTitle] = useState(""); // 수정 적용 구현
-  const [showFavorites, setShowFavorites] = useState(false);
-  const [sortOption, setSortOption] = useState("latest");
-  const [pinnedItems, setPinnedItems] = useState([]); // 고정된 항목 관리
-
-  const [activeTab, setActiveTab] = useState("travel"); // 가이드북 탭 관리
+  const [pinnedItems, setPinnedItems] = useState([]);
+  const [searchText, setSearchText] = useState("");
 
   const handleFilterClick = (filter) => {
     setActiveFilter(filter);
   };
 
   // 고정 토글 핸들러
-  const handlePinToggle = (itemId) => {
+  const handlePinClick = (itemId) => {
     if (pinnedItems.includes(itemId)) {
       setPinnedItems((prev) => prev.filter((id) => id !== itemId));
     } else {
       setPinnedItems((prev) => [...prev, itemId]);
     }
+    setShowModal(false);
   };
 
   // 즐겨찾기 토글 함수
@@ -75,31 +89,7 @@ const TravelList = () => {
     setSelectedItemId(id);
     setShowModal(true);
   };
-  // 고정핀 클릭 or 해제
-  const handlePinClick = (id) => {
-    setTravelItems(
-      travelItems.map((item) =>
-        item.id === id ? { ...item, isPinned: !item.isPinned } : item
-      )
-    );
-    setShowModal(false);
-  };
-  // 여행 이름 수정
-  const handleEditClick = (id) => {
-    const item = travelItems.find((item) => item.id === id);
-    setEditingTitle(item.title);
-    setIsEditing(true);
-    setShowModal(false);
-  };
-  // 여행 이름 저장
-  const handleEditSubmit = (id) => {
-    setTravelItems(
-      travelItems.map((item) =>
-        item.id === id ? { ...item, title: editingTitle } : item
-      )
-    );
-    setIsEditing(false);
-  };
+
 
   // 데이터 구조 확인
   useEffect(() => {
@@ -115,19 +105,6 @@ const TravelList = () => {
     }
     return travelItems;
   }, [travelItems, activeFilter]);
-
-  // 정렬 옵션 변경 핸들러
-  const handleSortChange = (option) => {
-    console.log("정렬 옵션 변경:", option);
-    setSortOption(option);
-  };
-
-  // 즐겨찾기 토글 핸들러
-  const handleFavoriteToggle = () => {
-    setShowFavorites((prev) => !prev);
-    //setShowFavorites(!showFavorites);
-    console.log("즐겨찾기 필터:", !showFavorites);
-  };
 
   // 필터링 및 정렬된 데이터 계산
   const sortedAndFilteredData = useMemo(() => {
@@ -153,118 +130,118 @@ const TravelList = () => {
   // 데이터 확인용 콘솔 로그
   console.log("전체 데이터:", travelItems);
   console.log("필터링된 데이터:", filteredData);
-  console.log("현재 showFavorites 상태:", showFavorites);
+
+  // 아이템 이름 수정 함수
+  const handleUpdateTitle = (itemId, newTitle) => {
+    setTravelItems(travelItems.map(item =>
+      item.id === itemId ? { ...item, title: newTitle } : item
+    ));
+  };
+
+  // 아이템 삭제 함수
+  const handleDeleteItem = (itemId) => {
+    setTravelItems(travelItems.filter(item => item.id !== itemId));
+  };
 
   return (
     <div className="SJ-Travel-List">
-      {activeTab === "travel" ? ( // 가이드북 탭
-        <div className="travel-container">
-          <div className="SJ-filter-buttons">
-            <button
-              className={`SJ-filter-btn ${activeFilter === "latest" ? "active" : ""
-                }`}
-              onClick={() => handleFilterClick("latest")}
-            >
-              최신순
-            </button>
-            <button
-              className={`SJ-filter-btn ${activeFilter === "created" ? "active" : ""
-                }`}
-              onClick={() => handleFilterClick("created")}
-            >
-              생성일
-            </button>
-            <button
-              className={`SJ-filter-btn ${activeFilter === "favorite" ? "active" : ""
-                }`}
-              onClick={() => handleFilterClick("favorite")}
-            >
-              즐겨찾기
-            </button>
-          </div>
-
-          <div className="search-section">
-            <span className="search-title">내가 찾았던 여행</span>
-            <div className="search-bar">
-              <input type="text" placeholder="검색어를 입력하세요" />
-              <button className="search-icon">🔍</button>
-            </div>
-          </div>
-
-          <div className="travel-grid">
-            {sortedAndFilteredData.map((item) => (
-              <div key={item.id} className="travel-card">
-                {pinnedItems.includes(item.id) && (
-                  <div className="SJ-pin-icon">📌</div>
-                )}
-                <div className="travel-img">
-                  <img src={item.image} alt={item.title} />
-                </div>
-                <div className="SJ-card-content">
-                  <div className="SJ-card-header">
-                    {isEditing && selectedItemId === item.id ? (
-                      <div className="SJ-edit-title">
-                        <input
-                          type="text"
-                          value={editingTitle}
-                          onChange={(e) => setEditingTitle(e.target.value)}
-                          autoFocus
-                        />
-                        <div className="SJ-edit-buttons">
-                          <button
-                            onClick={() => handleEditSubmit(item.id)}
-                            className="SJ-confirm"
-                          >
-                            확인
-                          </button>
-                          <button
-                            onClick={() => setIsEditing(false)}
-                            className="SJ-cancel"
-                          >
-                            취소
-                          </button>
-                        </div>
-                      </div>
-                    ) : (
-                      <span>{item.title}</span>
-                    )}
-                  </div>
-                  <div className="SJ-card-footer">
-                    <span className="SJ-period">{item.period}</span>
-                    <span className="SJ-date">{item.date}</span>
-                  </div>
-                </div>
-                <div className="SJ-btn-frame">
-                  <div
-                    className={`favorite-button ${item.isFavorite ? "filled" : "outlined"
-                      }`}
-                    onClick={() => toggleFavorite(item.id)}
-                  >
-                    {item.isFavorite ? "♥" : "♡"}
-                  </div>
-                  <button
-                    className="SJ-more-button"
-                    onClick={() => handleMoreOptionsClick(item.id)}
-                  >
-                    ⋮
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-          <TravelPageModal
-            showModal={showModal}
-            setShowModal={setShowModal}
-            selectedItemId={selectedItemId}
-            handlePinToggle={handlePinToggle}
-            pinnedItems={pinnedItems}
-            handleEditClick={handleEditClick}
-       
-          />
+      <div className="SJ-travel-container">
+        <div className="SJ-filter-buttons">
+          <button
+            className={`SJ-filter-btn ${activeFilter === "latest" ? "active" : ""
+              }`}
+            onClick={() => handleFilterClick("latest")}
+          >
+            최신순
+          </button>
+          <button
+            className={`SJ-filter-btn ${activeFilter === "created" ? "active" : ""
+              }`}
+            onClick={() => handleFilterClick("created")}
+          >
+            생성일
+          </button>
+          <button
+            className={`SJ-filter-btn ${activeFilter === "favorite" ? "active" : ""
+              }`}
+            onClick={() => handleFilterClick("favorite")}
+          >
+            즐겨찾기
+          </button>
         </div>
-      ) : (
-        <GuidebookList />
-      )}
+
+        <div className="SJ-search-Container">
+          <input
+            type="text"
+            placeholder="내가 만든 여행을 검색하세요"
+            className="SJ-search-input"
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
+          />
+
+          <div className="SJ-search-button-container">
+            {searchText && (
+              <button className="SJ-search-clear" onClick={() => setSearchText("")}>
+                <FaTimes />
+              </button>
+            )}
+            <button className="SJ-search-icon"><FaSearch /></button>
+          </div>
+        </div>
+
+        <div className="SJ-travel-grid">
+          {sortedAndFilteredData.map((item) => (
+
+            <div key={item.id} className="SJ-travel-card">
+
+              {pinnedItems.includes(item.id) && (
+                <div className="SJ-pin-icon">📌</div>
+              )}
+
+              <div className="SJ-travel-img">
+                <img src={item.image} alt={item.title} />
+              </div>
+
+              <div className="SJ-card-content">
+
+                <div
+                  className={`WS-favorite-button ${item.isFavorite ? "filled" : "outlined"
+                    }`}
+                  onClick={() => toggleFavorite(item.id)}
+                >
+                  {item.isFavorite ? "♥" : "♡"}
+                </div>
+
+                <div className="SJ-card-header">
+                  <div className="SJ-card-title">{item.title}</div>
+                </div>
+
+                <div className="SJ-card-footer">
+                  <span className="SJ-card-period">{item.period}</span>
+                  <span className="SJ-card-date">{item.date}</span>
+                </div>
+
+                <button
+                  className="SJ-more-button"
+                  onClick={() => handleMoreOptionsClick(item.id)}
+                >
+                  ⋮
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+        <TravelPageModal
+          showModal={showModal}
+          setShowModal={setShowModal}
+          selectedItemId={selectedItemId}
+          handlePinToggle={handlePinClick}
+          pinnedItems={pinnedItems}
+          onUpdateTitle={handleUpdateTitle}
+          onDeleteItem={handleDeleteItem}
+          items={travelItems}
+        />
+      </div>
     </div>
   );
 };

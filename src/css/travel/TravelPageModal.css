@@ -44,7 +44,7 @@
 }
 
 /* 삭제 확인 모달 스타일 */
-.SJ-delete-modal-overlay {
+.SJ-second-modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -58,6 +58,7 @@
     /* 기존 모달보다 위에 표시 */
 }
 
+.SJ-edit-modal,
 .SJ-delete-modal {
     background-color: white;
     border-radius: 12px;
@@ -65,4 +66,38 @@
     width: 80%;
     max-width: 300px;
     text-align: center;
+
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    gap: 10px;
+}
+
+.SJ-second-modal-title {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.SJ-modal-input {
+    width: 80%;
+    height: 30px;
+    border: 2px solid var(--color-light-gray);
+    border-radius: 10px;
+    padding: 10px;
+    padding-left: 15px;
+    margin-bottom: 10px;
+
+    align-self: center;
+
+    transition: all 0.3s ease;
+}
+
+.SJ-modal-input:focus {
+    border-color: var(--color-dark-gray);
+}
+
+.SJ-modal-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

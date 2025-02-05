@@ -1,71 +1,70 @@
 import React, { useState } from 'react';
-import '../../css/travel/TravelModal.css';
+import '../../css/travel/TravelPageModal.css';
 import ReactDOM from 'react-dom';
 
-function TravelPageModal({
+const TravelPageModal = ({
     showModal,
     setShowModal,
     selectedItemId,
     handlePinToggle,
     pinnedItems,
-    handleEditClick
-}) {
+    onUpdateTitle,
+    onDeleteItem,
+    items = []
+}) => {
     const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [newTitle, setNewTitle] = useState("");
 
+    // 수정 클릭 핸들러 함수
+    const openEditModal = (itemId) => {
+        if (!items || !itemId) return;
 
-    if (!showModal) return null;
-
-    // 삭제 모달 열기
-    const handleDeleteClick = (itemId) => {
-        setShowDeleteModal(true);
-        // ⭐️임시로 console.log만 추가⭐️
-        console.log("삭제 기능은 백엔드 연동 후 구현 예정");
+        const selectedItem = items.find(item => item.id === itemId);
+        if (selectedItem) {
+            setNewTitle(selectedItem.title);
+            setIsEditModalOpen(true);
+        }
     };
 
-    // 삭제 확인 (임시로 모달만 닫기)
-    const handleDeleteConfirm = () => {
-        setShowDeleteModal(false);
+    // 제목 수정 저장 함수
+    const handleSaveTitle = () => {
+        onUpdateTitle(selectedItemId, newTitle);
+        setIsEditModalOpen(false);
         setShowModal(false);
-        // ⭐️실제 삭제 로직은 주석 처리⭐️
-        // setData(prev => prev.filter(item => item.id !== itemToDelete));
+    };
+
+    // 수정 모달 취소 핸들러
+    const handleEditCancel = () => {
+        setIsEditModalOpen(false);
     };
 
     return ReactDOM.createPortal(
         <div className="SJ-Travel-Modal">
-            {/* 모달 */}
             {showModal && (
                 <>
-                    <div
-                        className="SJ-modal-overlay"
-                        onClick={() => setShowModal(false)}
-                    />
+                    <div className="SJ-modal-overlay" onClick={() => setShowModal(false)} />
                     <div className="SJ-modal-bottom">
                         <div className="SJ-modal-content">
                             <button
                                 className="SJ-modal-option"
-                                onClick={() => {
-                                    handlePinToggle(selectedItemId);
-                                    setShowModal(false);
-                                }}
+                                onClick={() => handlePinToggle(selectedItemId)}
                             >
                                 <span className="SJ-modal-icon">📌</span>
-                                {pinnedItems.includes(selectedItemId)
-                                    ? "고정 해제"
-                                    : "고정 하기"}
+                                {pinnedItems.includes(selectedItemId) ? "고정 해제" : "고정 하기"}
                             </button>
+
                             <button
                                 className="SJ-modal-option"
-                                onClick={() => handleEditClick(selectedItemId)}
+                                onClick={() => openEditModal(selectedItemId)}
                             >
                                 <span className="SJ-modal-icon">✏️</span>
                                 이름 수정
                             </button>
+
                             <button
-                                className="SJ-modal-option"
-                                onClick={() => {
-                                    setShowDeleteModal(true);
-                                    setShowModal(false);
-                                }}
+                                className="SJ-modal-option delete"
+                                onClick={() => setShowDeleteModal(true)}
                             >
                                 <span className="SJ-modal-icon">🗑️</span>
                                 삭제
@@ -75,23 +74,54 @@ function TravelPageModal({
                 </>
             )}
 
-            {/* ⭐️삭제 확인 모달 (기능만 비활성화)⭐️ */}
+            {/* 수정 모달 */}
+            {isEditModalOpen && (
+                <div className="SJ-second-modal-overlay" style={{ zIndex: 1001 }}>
+                    <div className="SJ-edit-modal">
+                    <p className="SJ-delete-title">제목을 수정합니다</p>
+                        <input
+                            type="text"
+                            value={newTitle}
+                            onChange={(e) => setNewTitle(e.target.value)}
+                            className="SJ-modal-input"
+                            readOnly
+                            onClick={(e) => e.target.removeAttribute('readonly')}
+                        />
+                        <div className="SJ-modal-buttons">
+                            <button
+                                className="WS-Modal-Button"
+                                onClick={handleEditCancel}
+                            >
+                                취소
+                            </button>
+                            <button
+                                className="WS-Modal-Button"
+                                onClick={handleSaveTitle}
+                            >
+                                저장
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* 삭제 모달 */}
             {showDeleteModal && (
-                <div className="SJ-delete-modal-overlay">
+                <div className="SJ-second-modal-overlay" style={{ zIndex: 1001 }}>
                     <div className="SJ-delete-modal">
                         <p className="SJ-delete-title">삭제하시겠습니까?</p>
-                        <p className="SJ-delete-subtitle">여행 목록에서 삭제됩니다.</p>
-                        <div className="SJ-delete-buttons">
+                        <p className="WS-Modal-Message">여행 목록에서 삭제됩니다.</p>
+                        <div className="SJ-modal-buttons">
                             <button
-                                className="SJ-delete-button cancel"
+                                className="WS-Modal-Button"
                                 onClick={() => setShowDeleteModal(false)}
                             >
                                 취소
                             </button>
                             <button
-                                className="SJ-delete-button confirm"
+                                className="WS-Modal-Button"
                                 onClick={() => {
-                                    handleDeleteConfirm(selectedItemId);
+                                    onDeleteItem(selectedItemId);
                                     setShowDeleteModal(false);
                                 }}
                             >
@@ -104,6 +134,6 @@ function TravelPageModal({
         </div>,
         document.body
     );
-}
+};
 
 export default TravelPageModal;

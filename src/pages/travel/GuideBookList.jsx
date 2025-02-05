@@ -1,6 +1,8 @@
 import React, { useState, useMemo } from "react";
 import "../../css/travel/GuidebookList.css";
 import TravelPageModal from "./TravelPageModal";
+import { FaSearch, FaTimes } from 'react-icons/fa';
+
 
 function GuidebookList() {
   const [activeFilter, setActiveFilter] = useState("latest");
@@ -135,53 +137,15 @@ function GuidebookList() {
     setShowModal(true);
   };
 
-  // 이름 수정 핸들러
-  const handleEditClick = (id) => {
-    const guide = guideBookData.find((g) => g.id === id);
-    setEditingTitle(guide.title); // 현재 제목으로 초기화
-    setSelectedGuideId(id); // 선택된 가이드북 ID 저장
-    setIsEditing(true);
-    setShowModal(false);
-  };
-
-  // 이름 수정 저장
-  const handleEditSubmit = (id) => {
-    try {
-      setGuideBookData((prev) =>
-        prev.map((guide) =>
-          guide.id === id ? { ...guide, title: editingTitle } : guide
-        )
-      );
-      console.log("제목 수정됨:", editingTitle); // 디버깅용
-      setIsEditing(false);
-      setSelectedGuideId(null);
-      setEditingTitle("");
-    } catch (error) {
-      console.error("수정 중 오류 발생:", error);
-    }
-  };
-
-  // 나중에 백엔드 연동 시 사용할 API 함수 미리 준비 ⭐️⭐️⭐️
-  const updateGuidebookTitle = async (id, newTitle) => {
-    // TODO: 백엔드 API 호출
-    // const response = await api.put(`/guidebook/${id}`, { title: newTitle });
-    // return response.data;
-  };
-
-  // 삭제 모달 열기
-  const handleDeleteClick = () => {
-    setShowDeleteModal(true);
-    setShowModal(false);
-  };
-
-  // 삭제 확인
-  const handleDeleteConfirm = () => {
-    // 실제 구현에서는 여기에 삭제 로직 추가
-    setShowDeleteModal(false);
+  // 제목 업데이트 함수 추가
+  const handleUpdateTitle = (itemId, newTitle) => {
+    setGuideBookData(guideBookData.map(guide =>
+      guide.id === itemId ? { ...guide, title: newTitle } : guide
+    ));
   };
 
   return (
-    <div className="guidebook-list">
+    <div className="SJ-guidebook-list">
       {/* 필터 버튼 */}
       <div className="SJ-filter-buttons">
         <button
@@ -207,8 +171,7 @@ function GuidebookList() {
         </button>
       </div>
 
-      {/* 검색창 */}
-      <div className="SJ-search-container">
+      <div className="SJ-search-Container">
         <input
           type="text"
           placeholder="검색어를 입력하세요"
@@ -216,75 +179,50 @@ function GuidebookList() {
           value={searchText}
           onChange={(e) => setSearchText(e.target.value)}
         />
-        {searchText && (
-          <button className="SJ-search-clear" onClick={() => setSearchText("")}>
-            ✕
-          </button>
-        )}
-        <button className="SJ-search-button">🔍</button>
+        <div className="SJ-search-button-container">
+          {searchText && (
+            <button className="SJ-search-clear" onClick={() => setSearchText("")}>
+              <FaTimes />
+            </button>
+          )}
+          <button className="SJ-search-icon"><FaSearch /></button>
+        </div>
       </div>
 
       <div className="guide-container">
         {sortedGuideBooks.map((guide) => (
+
           <div key={guide.id} className="SJ-guide-card">
+
             <div className="SJ-guide-content">
+
               {pinnedGuides.has(guide.id) && (
-                <span className="SJ-pin-icon">📌</span>
+                <div className="SJ-pin-icon">📌</div>
               )}
+
               <div className="SJ-guide-category">{guide.category}</div>
-              <div className="SJ-guide-header">
-                {isEditing && selectedGuideId === guide.id ? (
-                  <div className="SJ-edit-title">
-                    <input
-                      type="text"
-                      value={editingTitle}
-                      onChange={(e) => setEditingTitle(e.target.value)}
-                      autoFocus
-                    />
-                    <div className="SJ-edit-buttons">
-                      <button
-                        onClick={() => handleEditSubmit(guide.id)}
-                        className="SJ-confirm"
-                      >
-                        확인
-                      </button>
-                      <button
-                        onClick={() => {
-                          setIsEditing(false);
-                          setSelectedGuideId(null);
-                          setEditingTitle("");
-                        }}
-                        className="SJ-cancel"
-                      >
-                        취소
-                      </button>
-                    </div>
-                  </div>
-                ) : (
-                  <span className="SJ-guide-title">{guide.title}</span>
-                )}
-                <div className="SJ-guide-score">코스 {guide.score}</div>
-              </div>
-              <div className="SJ-guide-footer">
-                <div className="SJ-guide-date">생성일 {guide.date}</div>
-                <div className="SJ-guide-tags-container">
-                  <div className="SJ-guide-tags">
-                    {guide.tags.map((tag, index) => (
-                      <span key={index} className="SJ-guide-tag">
-                        #{tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="SJ-btn-frame">
+
               <div
-                className={`favorite-button ${favorites.has(guide.id) ? "filled" : "outlined"
+                className={`WS-favorite-button  ${favorites.has(guide.id) ? "filled" : "outlined"
                   }`}
                 onClick={() => toggleFavorite(guide.id)}
               >
                 {favorites.has(guide.id) ? "♥" : "♡"}
+              </div>
+
+              <div className="SJ-guide-header">
+                <div className="SJ-guide-title">{guide.title}</div>
+                <div className="SJ-guide-score">코스 {guide.score}</div>
+              </div>
+              <div className="SJ-guide-footer">
+                <div className="SJ-guide-date">생성일 {guide.date}</div>
+                <div className="SJ-guide-tags">
+                  {guide.tags.map((tag, index) => (
+                    <span key={index} className="SJ-guide-tag">
+                      #{tag}
+                    </span>
+                  ))}
+                </div>
               </div>
               <button
                 className="SJ-more-button"
@@ -293,20 +231,21 @@ function GuidebookList() {
                 ⋮
               </button>
             </div>
+
           </div>
         ))}
       </div>
 
       {/* 모달 컴포넌트 추가 */}
-      <TravelPageModal 
+      <TravelPageModal
         showModal={showModal}
         setShowModal={setShowModal}
         selectedItemId={selectedGuideId}
+
         handlePinToggle={handlePinClick}
-        pinnedItems={Array.from(pinnedGuides)} // Set을 Array로 변환
-        handleEditClick={handleEditClick}
-        handleDeleteClick={handleDeleteClick}
-        handleDeleteConfirm={handleDeleteConfirm}
+        pinnedItems={Array.from(pinnedGuides)}
+        onUpdateTitle={handleUpdateTitle}
+        items={guideBookData}
       />
     </div>
   );
