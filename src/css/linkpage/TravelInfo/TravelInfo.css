@@ -1,0 +1,396 @@
+/* 클릭 가능한 요소들에 대한 포인터 커서 설정 */
+button,
+a,
+[role="button"],
+.HG-TravelInfo-Back-Btn,
+.HG-TravelInfo-Title-Edit-text,
+.HG-TravelInfo-aiselect-btn,
+.HG-TravelInfo-Btn,
+.HG-TravelInfo-Select-Btn,
+.HG-travelinfo-content-frame-url,
+.HG-TravelInfo-Content-Frame-Place-Type,
+.HG-TravelInfo-Content-Frame-Place-Selected-Type,
+.HG-trevelinfo-content-frame-select-frame,
+.HG-trevelinfo-content-frame-select-intro,
+.HG-trevelinfo-content-frame-select-name,
+.HG-trevelinfo-content-frame-select {
+  cursor: pointer;
+}
+
+.HG-TravelInfo-Header {
+
+  padding: 10px 20px;
+  flex-shrink: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #e0e0e0;
+
+  background-color: rgba(182, 233, 253, 0.555);
+}
+
+.HG-TravelInfo-Body {
+  align-content: start;
+}
+
+.HG-travelinfo-Title-list {
+  margin-left: 20px;
+  margin-top: 10px;
+  display: flex;
+
+  gap: 10px;
+}
+
+.HG-travelinfo-content-frame-url {
+  font-size: var(--font-size-lg);
+  color: var(--color-dark-gray);
+}
+
+.HG-TravelInfo-Content-Blank {
+  height: 44px;
+}
+
+.HG-TravelInfo-Content-Title {
+  margin: 10px 20px;
+  padding: 5px;
+  border-radius: var(--border-radius-base);
+  background-color: var(--color-light-gray);
+  font-size: var(--font-size-xs);
+  font-weight: bold;
+  white-space: nowrap;
+  /* 텍스트를 한 줄로 유지 */
+  overflow: hidden;
+  /* 넘치는 텍스트 숨기기 */
+  text-overflow: ellipsis;
+  /* 넘치는 텍스트를 ...으로 표시 */
+}
+
+.HG-TravelInfo-Type-List {
+  display: flex;
+
+  margin-left: 20px;
+  margin-bottom: 15px;
+
+  gap: 10px;
+
+  transition: all 0.3s ease;
+}
+
+.HG-TravelInfo-Selected-Type {
+  padding: 8px 16px;
+
+  border-radius: var(--border-radius-full);
+  background-color: var(--color-main-hover);
+
+  color: white;
+  font-weight: bold;
+
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.HG-TravelInfo-Unselected-Type {
+
+  padding: 8px 16px;
+
+
+  border-radius: var(--border-radius-full);
+  border: 1px solid var(--color-guide);
+  background: none;
+
+  color: var(--color-guide);
+
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.HG-TravelInfo-aiselect-btn {
+  margin-left: 5px;
+  margin-right: 5px;
+  padding-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  border-bottom: 1px solid var(--color-main);
+  width: 98%;
+
+  cursor: pointer;
+}
+
+.HG-TravelInfo-aiselect-btn-ai-icon-selected {
+  margin-left: 15px;
+  padding: 3px 10px;
+  display: flex;
+  align-items: center;
+  border: 2px solid var(--color-main-hover);
+  border-radius: var(--border-radius-full);
+
+  scale: 1.05;
+}
+
+.HG-TravelInfo-aiselect-btn-text {
+  margin-left: 15px;
+  padding: 3px 10px;
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--color-light-gray);
+  border-radius: var(--border-radius-full);
+}
+
+.HG-TravelInfo-aiselect-btn-ai-icon {
+  width: 30px;
+  height: 30px;
+}
+
+.HG-TravelInfo-Content-Frame-Place-Slider {
+  margin-left: 5px;
+  margin-right: 5px;
+
+  width: 98%;
+  height: 350px;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.HG-TravelInfo-Content-Frame-Place-Slider::-webkit-scrollbar {
+  width: 4px;
+}
+
+.HG-TravelInfo-Content-Frame-Place-Slider::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.HG-TravelInfo-Content-Frame-Place-Slider::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  border: transparent;
+}
+
+/* 스크롤바 호버 시 */
+.HG-TravelInfo-Content-Frame-Place-Slider::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+}
+
+/* 스크롤바 드래그 시 */
+.HG-TravelInfo-Content-Frame-Place-Slider::-webkit-scrollbar-thumb:active {
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+/* ------------------------------------------------------------------------------------- */
+
+.carousel-item {
+  margin-bottom: 10px;
+  height: 300px;
+  border-radius: var(--border-radius-base);
+  padding-top: 5px;
+  padding-bottom: 30px;
+  padding-left: 15px;
+  padding-right: 15px;
+
+}
+
+.HG-select-place {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 슬라이더 화살표 스타일링 */
+.slick-prev,
+.slick-next {
+  z-index: 100;
+  width: 30px;
+  height: 30px;
+  background-color: var(--color-main);
+}
+
+.slick-prev {
+  left: 5px !important;
+}
+
+.slick-next {
+  right: 5px !important;
+}
+
+.slick-prev:before,
+.slick-next:before {
+  color: var(--color-dark-gray) !important;
+  font-size: 30px;
+  opacity: 1;
+}
+
+.slick-prev:hover:before,
+.slick-next:hover:before {
+  opacity: 1;
+}
+
+.slick-slide {
+  padding: 0 10px;
+  visibility: visible !important;
+  /* 슬라이드 숨김 해제 */
+}
+
+.slick-slide.slick-active {
+  visibility: visible;
+}
+
+.slide-content {
+  position: relative;
+  width: 100%;
+  height: 250px;
+  /* iframe 높이와 동일하게 설정 */
+  margin: 0;
+  padding: 0;
+}
+
+.slide-image,
+.slide-description {
+  width: 100%;
+  height: 100%;
+}
+
+
+.HG-TravelInfo-Back-Btn {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  cursor: pointer;
+}
+
+.HG-TravelInfo-Travel-Days-Input {
+  height: 20px;
+  border: none;
+  background-color: transparent;
+  font-size: var(--font-size-sm);
+  font-weight: bold;
+}
+
+.HG-TravelInfo-Title-Edit-Frame {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.HG-TravelInfo-Title-Edit-text {
+  font-size: var(--font-size-sm);
+  font-weight: bold;
+  color: var(--color-guide);
+  cursor: pointer;
+}
+
+.HG-TravelInfo-Title {
+  font-size: var(--font-size-xl);
+  font-weight: bold;
+}
+
+.HG-TravelInfo-Btn {
+  display: inline-flex;
+  align-items: center;
+  height: 40px;
+  transform: translateX(10px);
+  cursor: pointer;
+}
+
+.HG-TravelInfo-Select-Btn {
+  display: flex;
+  align-items: center;
+  color: var(--color-guide);
+  font-size: var(--font-size-base);
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.HG-TravelInfo-Select-Cnt {
+  font-size: var(--font-size-sm);
+  background-color: var(--color-main);
+  color: white;
+  border-radius: var(--border-radius-full);
+  padding: 4px 8px;
+  margin-bottom: auto;
+  transform: translateX(-10px);
+}
+
+/* fade: false일 때 슬라이드 간격 조정 */
+.slick-slide {
+  margin: 0 -10px;
+  /* 원하는 간격 설정 */
+}
+
+
+
+
+.HG-underline {
+  border-bottom: 1px solid var(--color-main);
+}
+
+.HG-trevelinfo-content-frame-select {
+  width: 20px;
+  height: 20px;
+}
+
+.HG-trevelinfo-content-frame-select-frame {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.HG-trevelinfo-content-frame-select-name {
+  font-size: var(--font-size-lg);
+  font-weight: bold;
+}
+
+.HG-trevelinfo-content-frame-select-intro {
+  font-size: var(--font-size-sm);
+  font-weight: bold;
+}
+
+.HG-slide-content-image {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+  border-radius: var(--border-radius-base);
+}
+
+.HG-TravelInfo-Select-Modal {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  z-index: 1000;
+}
+
+
+
+
+.HG-TravelInfo-map-iframe {
+  width: 100% !important;
+  height: 100% !important;
+  border: none;
+  border-radius: 5px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  /* 중요: iframe 표시 문제 해결 */
+}
+
+
+/* 캐러셀 수정사항 */
+.slick-slider {
+  margin-top: 20px;
+}
+
+.slick-prev {
+  left: 0;
+}
+
+.slick-next {
+  right: 0;
+}

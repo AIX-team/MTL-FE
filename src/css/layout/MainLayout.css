@@ -1,3 +1,9 @@
+* {
+    -webkit-tap-highlight-color: transparent;
+    font-family: 'Noto Sans KR', sans-serif;
+    transition: all 0.3s;
+}
+
 /* 메인 컨텐츠 영역 */
 .WS-Main-Container {
     position: fixed;
@@ -5,8 +11,6 @@
     bottom: var(--footer-height);
 
     width: 96%;
- 
-    transition: all 0.3s;
 }
 
 .WS-Main-Footer {
@@ -22,6 +26,7 @@
     align-items: center;
 
     background-color: white;
+    transition: all 0.3s;
 }
 
 /* 플로팅 버튼 스타일 */
@@ -46,7 +51,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
- 
+
     transition: all 0.3s ease;
     z-index: 1020;
 }
@@ -60,4 +65,5 @@
     transform: scale(0);
     opacity: 0;
 }
+
 /* 완료 ================================================================== */

@@ -189,7 +189,7 @@ function GuidebookList() {
         </div>
       </div>
 
-      <div className="guide-container">
+      <div className="WS-guide-container">
         {sortedGuideBooks.map((guide) => (
 
           <div key={guide.id} className="SJ-guide-card">
