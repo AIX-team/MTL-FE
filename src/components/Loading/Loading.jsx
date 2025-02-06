@@ -19,11 +19,11 @@ function Loading({ type = "default" }) {
   const messages = {
     default: {
       main: "여행 기간에 맞는\n영상 정보를\n준비중입니다.",
-      sub: "잠시만 기다려 주세요.",
+      sub: "최상의 결과를 위해\n잠시만 기다려 주세요.",
     },
     guidebook: {
       main: "여행 장소를 담은\n가이드북을\n준비중입니다.",
-      sub: "잠시만 기다려 주세요.",
+      sub: "최상의 결과를 위해\n잠시만 기다려 주세요.",
     },
   };
 
@@ -99,7 +99,9 @@ function Loading({ type = "default" }) {
         <p className="SJ_loading_message">
           {"여행 기간에 맞는\n영상 정보를\n준비중입니다."}
         </p>
-        <p className="SJ_loading_sub_message">{"잠시만 기다려 주세요."}</p>
+        <p className="SJ_loading_sub_message">
+          {"최상의 결과를 위해 잠시만 기다려 주세요."}
+        </p>
         <div className="SJ_progress_wrapper">
           <img
             src={loadingAirplane}
