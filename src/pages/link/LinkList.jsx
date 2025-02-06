@@ -1,20 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Modal from '../../layouts/SomethingModal';
 import '../../css/linkpage/LinkList.css';
-import axios from 'axios';
 import { FaMinus } from 'react-icons/fa';
-import SelectDayTab from './SelectDayTab';  
+import SelectDayTab from './SelectDayTab';
 
 const LinkList = ({ linkData, setLinkData }) => {
     const [inputLink, setInputLink] = useState('');
     const [modalOpen, setModalOpen] = useState(false);
     const [modalMessage, setModalMessage] = useState('');
     const [showDayTab, setShowDayTab] = useState(false);
-
-    // linkData가 변경될 때마다 localStorage에 저장
-    useEffect(() => {
-        localStorage.setItem('linkListData', JSON.stringify(linkData));
-    }, [linkData]);
 
     // 모달 표시 함수
     const showModal = (message) => {
@@ -40,13 +34,12 @@ const LinkList = ({ linkData, setLinkData }) => {
         } else if (loweredUrl.includes('naver.com') || loweredUrl.includes('blog.naver')) {
             return 'blog';
         }
-        return null; // 지원하지 않는 URL인 경우
+        return null;
     };
 
     // URL 중복 체크 함수
     const isLinkDuplicate = (url) => {
         return linkData.some(link => {
-            // URL을 정규화하여 비교 (http/https, www 유무, 끝의 슬래시 등 무시)
             const normalizeUrl = (url) => {
                 try {
                     const normalized = new URL(url);
@@ -78,86 +71,27 @@ const LinkList = ({ linkData, setLinkData }) => {
 
         if (isLinkDuplicate(inputLink)) {
             showModal('이미 등록된 링크입니다.');
-            setInputLink(''); // 입력창 초기화
+            setInputLink('');
             return;
         }
 
-        // 링크 타입 확인 및 추가
         const type = getLinkType(inputLink);
+        if (!type) {
+            showModal('지원하지 않는 URL입니다.');
+            return;
+        }
+
         const newLink = {
             url: inputLink,
             type: type,
-            id: Date.now() // 고유 ID 생성
+            id: Date.now()
         };
 
-        setLinkData([...linkData, newLink]);
-        setInputLink(''); // 입력창 초기화
+        setLinkData(prev => [...prev, newLink]);
+        setInputLink('');
     };
 
-    // axios 나중에 수정=================================
-    const fetchLinks = async () => {
-        try {
-            const response = await axios.get('/api/links'); // API 엔드포인트에 맞게 수정 필요
-            return response.data;
-        } catch (error) {
-            console.error('Failed to fetch links:', error);
-            return [];
-        }
-    };
-    // axios 나중에 수정=================================
-
-    useEffect(() => {
-        const fetchData = async () => {
-            if (linkData.length === 0) {
-                const fetchedData = await fetchLinks();
-                setLinkData(fetchedData);
-            }
-        };
-
-        fetchData();
-    }, [linkData.length, setLinkData]);
-
-    useEffect(() => {
-        const checkSelectedLinks = () => {
-            try {
-                const selectedLinks = localStorage.getItem('selectedYoutubeLinks');
-                if (selectedLinks) {
-                    const links = JSON.parse(selectedLinks);
-                    if (links && Array.isArray(links) && links.length > 0) {
-                        setLinkData(prevLinks => {
-                            const newTotalLength = prevLinks.length + links.length;
-                            if (newTotalLength > 5) {
-                                showModal('링크는 최대 5개까지만 추가할 수 있습니다.');
-                                return prevLinks;
-                            }
-                            return [...prevLinks, ...links];
-                        });
-                        localStorage.removeItem('selectedYoutubeLinks');
-                    }
-                }
-            } catch (error) {
-                console.error('Error checking selected links:', error);
-            }
-        };
-
-        // 초기 실행
-        checkSelectedLinks();
-
-        // 주기적으로 확인
-        const interval = setInterval(checkSelectedLinks, 300);
-
-        return () => clearInterval(interval);
-    }, []); // 의존성 배열을 비워서 컴포넌트 마운트 시에만 실행
-
-    // URL 텍스트 제한 함수 추가
-    const truncateUrl = (url) => {
-        if (url.length > 25) {
-            return url.substring(0, 25) + '...';
-        }
-        return url;
-    };
-
-    // 링크 삭제 함수 추가
+    // 링크 삭제 함수
     const handleDeleteLink = (idToDelete) => {
         setLinkData(linkData.filter(link => link.id !== idToDelete));
     };
@@ -176,7 +110,6 @@ const LinkList = ({ linkData, setLinkData }) => {
 
     return (
         <div className="WS-LinkList">
-            {/* 검색 입력창 */}
             <div className="WS-Link-Input-Container">
                 <input
                     type="text"
@@ -189,11 +122,10 @@ const LinkList = ({ linkData, setLinkData }) => {
                 <button className="WS-LinkList-AddButton" onClick={handleAddLink}> + </button>
             </div>
 
-            {/* 링크 목록 */}
             <div className="WS-LinkList-Items">
-                {linkData.map(link => (
+                {linkData.map((link, index) => (
                     <div
-                        key={link.id}
+                        key={index}
                         className={`WS-LinkList-Item ${link.type}`}
                     >
                         <div className="WS-LinkList-Content">
@@ -204,7 +136,7 @@ const LinkList = ({ linkData, setLinkData }) => {
                                 className="WS-LinkList-Text"
                                 title={link.url}
                             >
-                                {truncateUrl(link.url)}
+                                {link.url.length > 25 ? `${link.url.substring(0, 25)}...` : link.url}
                             </span>
                         </div>
                         <button
@@ -217,7 +149,6 @@ const LinkList = ({ linkData, setLinkData }) => {
                     </div>
                 ))}
 
-                {/* 다음으로 버튼 */}
                 <div className="WS-LinkList-Next-Container">
                     <div className="WS-LinkList-Counter">
                         {linkData.length}/5
@@ -232,7 +163,6 @@ const LinkList = ({ linkData, setLinkData }) => {
                 </div>
             </div>
 
-            {/* 기존 알림 모달 */}
             <Modal
                 isOpen={modalOpen}
                 message={modalMessage}

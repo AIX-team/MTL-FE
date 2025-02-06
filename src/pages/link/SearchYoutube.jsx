@@ -6,24 +6,15 @@ import '../../css/linkpage/SearchYoutube.css';
 import youtubeIcon from '../../images/YOUTUBE_LOGO.png';
 import Modal from '../../layouts/SomethingModal';
 
-const SearchYoutube = () => {
-    // localStorage에서 이전 상태 불러오기
-    const [searchQuery, setSearchQuery] = useState(() => localStorage.getItem('youtubeSearchQuery') || '');
-    const [searchResults, setSearchResults] = useState(() => {
-        const saved = localStorage.getItem('youtubeSearchResults');
-        return saved ? JSON.parse(saved) : [];
-    });
-    const [selectedVideos, setSelectedVideos] = useState(() => {
-        const saved = localStorage.getItem('youtubeSelectedVideos');
-        return new Set(saved ? JSON.parse(saved) : []);
-    });
+const SearchYoutube = ({ linkData, setLinkData }) => {
+    const [searchResults, setSearchResults] = useState([]);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [selectedVideos, setSelectedVideos] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [modalOpen, setModalOpen] = useState(false);
     const [modalMessage, setModalMessage] = useState('');
-    const [recentSearches, setRecentSearches] = useState(() => {
-        const saved = localStorage.getItem('youtubeRecentSearches');
-        return saved ? JSON.parse(saved) : [];
-    });
+    const [recentSearches, setRecentSearches] = useState([]);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
     const navigate = useNavigate();
 
     // 상태가 변경될 때마다 localStorage에 저장
@@ -36,8 +27,33 @@ const SearchYoutube = () => {
     }, [searchResults]);
 
     useEffect(() => {
-        localStorage.setItem('youtubeSelectedVideos', JSON.stringify([...selectedVideos]));
+        localStorage.setItem('youtubeSelectedVideos', JSON.stringify(selectedVideos));
     }, [selectedVideos]);
+
+    // 컴포넌트 마운트 시 검색어 이력 조회
+    useEffect(() => {
+        const fetchRecentSearches = async () => {
+            const token = localStorage.getItem('token');
+            if (token) {
+                try {
+                    const response = await axios.get('http://localhost:8080/user/search/recent', {
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+                    setRecentSearches(response.data);
+                    setIsLoggedIn(true);
+                } catch (error) {
+                    console.error('검색어 이력 조회 실패:', error);
+                    setIsLoggedIn(true);
+                }
+            } else {
+                setIsLoggedIn(false);
+            }
+        };
+
+        fetchRecentSearches();
+    }, []);
 
     // .env 파일에서 API 키 가져오기
     const YOUTUBE_API_KEY = process.env.REACT_APP_YOUTUBE_API_KEY;
@@ -63,27 +79,33 @@ const SearchYoutube = () => {
         return title;
     };
 
-    // 최근 검색어 저장
-    const addRecentSearch = (query) => {
-        if (!query.trim()) return;
-
-        setRecentSearches(prev => {
-            const filtered = prev.filter(item => item !== query);
-            const newSearches = [query, ...filtered].slice(0, 5);
-            localStorage.setItem('youtubeRecentSearches', JSON.stringify(newSearches));
-            return newSearches;
-        });
-    };
-
-    // 검색 함수 수정
+    // 검색 함수 저장 및 호출 프로세스
     const searchYoutube = async () => {
         if (!searchQuery?.trim()) return;
 
-        addRecentSearch(searchQuery.trim());
         setIsLoading(true);
         try {
-            console.log('Searching for:', searchQuery);
+            // 검색어 저장
+            const token = localStorage.getItem('token');
+            if (token) {
+                try {
+                    await axios.post('http://localhost:8080/user/search/save',
+                        { searchTerm: searchQuery.trim() },
+                        {
+                            headers: {
+                                'Authorization': `Bearer ${token}`,
+                                'Content-Type': 'application/json'
+                            }
+                        }
+                    );
+                } catch (error) {
+                    console.error('검색어 저장 실패:', error);
+                    navigate('/login');
+                }
+            }
 
+            // 유튜브 검색 API 호출
+            console.log('Searching for:', searchQuery);
             const response = await axios.get(
                 `https://www.googleapis.com/youtube/v3/search`,
                 {
@@ -119,7 +141,7 @@ const SearchYoutube = () => {
         }
     };
 
-    // 검색어 초기화 함수 수정
+    // 검색어 초기화
     const clearSearch = () => {
         setSearchQuery('');
         setSearchResults([]);
@@ -127,130 +149,34 @@ const SearchYoutube = () => {
         localStorage.removeItem('youtubeSearchResults');
     };
 
-    const handleVideoSelect = (videoId, e) => {
-        e.stopPropagation();
-        setSelectedVideos(prev => {
-            const newSelected = new Set(prev);
-            if (newSelected.has(videoId)) {
-                newSelected.delete(videoId);
-            } else {
-                if (newSelected.size >= 5) {
-                    setModalMessage(`링크는 최대 ${newSelected.size}개까지만 가능합니다.`);
-                    setModalOpen(true);
-                    return prev;
-                }
-                newSelected.add(videoId);
+    const handleVideoSelect = (video) => {
+        // 이미 선택된 비디오인지 확인
+        const isAlreadySelected = selectedVideos.some(v => v.url === `https://www.youtube.com/watch?v=${video.id}`);
+
+        if (isAlreadySelected) {
+            // 이미 선택된 비디오라면 제거
+            setSelectedVideos(prev => prev.filter(v => v.url !== `https://www.youtube.com/watch?v=${video.id}`));
+        } else {
+            // 새로운 비디오 선택 시 최대 개수 체크
+            if (linkData.length + selectedVideos.length >= 5) {
+                setModalMessage('링크는 최대 5개까지만 추가할 수 있습니다.');
+                setModalOpen(true);
+                return;
             }
-            return newSelected;
-        });
+
+            // 새로운 비디오 추가
+            const newVideo = {
+                url: `https://www.youtube.com/watch?v=${video.id}`,
+                type: 'youtube',
+                id: Date.now()
+            };
+            setSelectedVideos(prev => [...prev, newVideo]);
+        }
     };
 
-    // const handleSaveLinks = () => {
-    //     // 선택된 비디오 링크 생성
-    //     const selectedVideoLinks = searchResults
-    //         .filter(video => selectedVideos.has(video.id))
-    //         .map(video => ({
-    //             url: `https://www.youtube.com/watch?v=${video.id}`,
-    //             type: 'youtube',
-    //             id: Date.now() + Math.random()
-    //         }));
-
-    //     // 현재 저장된 링크 데이터 확인
-    //     const currentLinks = JSON.parse(localStorage.getItem('linkListData') || '[]');
-
-    //     // URL 중복 체크 및 중복되지 않은 링크만 필터링
-    //     const normalizeUrl = (url) => {
-    //         try {
-    //             const normalized = new URL(url);
-    //             return normalized.hostname + normalized.pathname + normalized.search;
-    //         } catch {
-    //             return url;
-    //         }
-    //     };
-
-    //     // 중복 링크와 비중복 링크 분리
-    //     const duplicateLinks = selectedVideoLinks.filter(newLink =>
-    //         currentLinks.some(existingLink =>
-    //             normalizeUrl(existingLink.url) === normalizeUrl(newLink.url)
-    //         )
-    //     );
-
-    //     const nonDuplicateLinks = selectedVideoLinks.filter(newLink =>
-    //         !currentLinks.some(existingLink =>
-    //             normalizeUrl(existingLink.url) === normalizeUrl(newLink.url)
-    //         )
-    //     );
-
-    //     setSelectedVideos(prev => {
-    //         const newSelected = new Set(prev);
-    //         // duplicateIds.forEach(id => newSelected.delete(id));
-    //         return newSelected;
-    //     });
-
-    //     if (nonDuplicateLinks.length === 0) {
-    //         setModalMessage('선택한 모든 링크가 이미 등록되어 있습니다.');
-    //         setModalOpen(true);
-    //         return;
-    //     }
-
-
-    //     // 총 링크 개수가 5개를 초과하는지 확인
-    //     if (currentLinks.length + nonDuplicateLinks.length > 5) {
-    //         setModalMessage(`더이상 링크를 추가 할 수 없습니다.`);
-    //         setModalOpen(true);
-    //         return;
-    //     }
-
-    //     // 중복되지 않은 링크들만 저장
-    //     localStorage.setItem('selectedYoutubeLinks', JSON.stringify(nonDuplicateLinks));
-
-    //     const duplicateCount = duplicateLinks.length;
-    //     const message = duplicateCount > 0
-    //         ? `${nonDuplicateLinks.length}개의 링크가 저장되었습니다. (${duplicateCount}개는 중복)`
-    //         : `${nonDuplicateLinks.length}개의 링크가 저장되었습니다.`;
-
-    //     setModalMessage(message);
-    //     setModalOpen(true);
-    // };
-
-    const handleSaveLinks = async () => {
-        const selectedVideoLinks = searchResults.filter(video => selectedVideos.has(video.id));
-        if (selectedVideoLinks.length === 0) {
-            setModalMessage('선택된 링크가 없습니다.');
-            setModalOpen(true);
-            return;
-        }
-
-        // 사용자 이메일은 로그인 정보나 localStorage에서 가져온다고 가정합니다.
-        const email = localStorage.getItem('userEmail'); // 예시
-
-        let successCount = 0;
-        let failedCount = 0;
-        let failedMessages = [];
-        for (let video of selectedVideoLinks) {
-            try {
-                const response = await axios.post(
-                    'http://localhost:8080/youtube/saveLink',
-                    {
-                        email: email,
-                        url: `https://www.youtube.com/watch?v=${video.id}`
-                    }
-                );
-                if (response.data.message) {
-                    successCount += 1;
-                }
-            } catch (error) {
-                failedCount += 1;
-                failedMessages.push(error.response?.data?.detail || error.message);
-            }
-        }
-
-        if (successCount > 0) {
-            setModalMessage(`${successCount}개의 링크가 저장되었습니다.${failedCount > 0 ? ` (${failedCount}개는 저장 실패: ${failedMessages.join('; ')})` : ''}`);
-        } else {
-            setModalMessage(`링크 저장에 실패했습니다: ${failedMessages.join('; ')}`);
-        }
-        setModalOpen(true);
+    const handleSaveSelected = () => {
+        setLinkData(prev => [...prev, ...selectedVideos]);
+        setSelectedVideos([]); // 선택된 비디오 목록 초기화
     };
 
     // 렌더링 시 현재 상태 확인
@@ -292,9 +218,39 @@ const SearchYoutube = () => {
                         </button>
                     </div>
                 </div>
+
+                <div className="WS-SearchYoutube-RecentSearches">
+                    {isLoggedIn ? (
+                        recentSearches.length > 0 ? (
+                            <>
+                                <h4>최근 검색어</h4>
+                                <div className="WS-SearchYoutube-RecentSearches-List">
+                                    {recentSearches.map((term, index) => (
+                                        <div
+                                            key={index}
+                                            className="WS-SearchYoutube-RecentSearch-Item"
+                                            onClick={() => {
+                                                setSearchQuery(term.word);
+                                                searchYoutube();
+                                            }}
+                                        >
+                                            {term.word}
+                                        </div>
+                                    ))}
+                                </div>
+                            </>
+                        ) : (
+                            <p className="WS-SearchYoutube-NoSearches">최근 검색 기록이 없습니다.</p>
+                        )
+                    ) : (
+                        <p className="WS-SearchYoutube-LoginRequired">
+                            검색어 저장을 위해 로그인이 필요합니다.
+                        </p>
+                    )}
+                </div>
             </div>
 
-            <div className={`WS-SearchYoutube-Results ${selectedVideos.size > 0 ? 'has-selected' : ''}`}>
+            <div className={`WS-SearchYoutube-Results ${selectedVideos.length > 0 ? 'has-selected' : ''}`}>
                 {isLoading ? (
                     <div className="WS-SearchYoutube-Loading">검색 중...</div>
                 ) : searchResults.length > 0 ? (
@@ -302,8 +258,9 @@ const SearchYoutube = () => {
                         {searchResults.map((video) => (
                             <div
                                 key={video.id}
-                                className={`WS-SearchYoutube-Results-Item ${selectedVideos.has(video.id) ? 'selected' : ''}`}
-                                onClick={(e) => handleVideoSelect(video.id, e)}
+                                className={`WS-SearchYoutube-Results-Item ${selectedVideos.some(v => v.url === `https://www.youtube.com/watch?v=${video.id}`) ? 'selected' : ''
+                                    }`}
+                                onClick={() => handleVideoSelect(video)}
                             >
                                 <div className="WS-SearchYoutube-Thumbnail-Container">
                                     <img
@@ -342,14 +299,13 @@ const SearchYoutube = () => {
                                 </div>
                             </div>
                         ))}
-                        {selectedVideos.size > 0 && (
+                        {selectedVideos.length > 0 && (
                             <button
-                                className={`WS-SearchYoutube-SaveButton ${selectedVideos.size > 0 ? 'active' : ''}`}
-                                onClick={handleSaveLinks}
+                                className={`WS-SearchYoutube-SaveButton ${selectedVideos.length > 0 ? 'active' : ''}`}
+                                onClick={handleSaveSelected}
                             >
-                                링크 저장 ({selectedVideos.size} / 5)
+                                링크 저장 ({selectedVideos.length} / 5)
                             </button>
-
                         )}
                     </>
                 ) : (
