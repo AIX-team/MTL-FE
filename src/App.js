@@ -10,40 +10,40 @@ import './css/styles/variables.css';
 
 import Login from "./pages/user/Login";
 import LoginSuccess from "./pages/user/LoiginSuccess";
+import GoogleMapsWrapper from './components/GoogleMapsWrapper';
 
 function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        {/* 루트 경로를 /link로 리다이렉트 */}
-        <Route path="/" element={<Navigate to="/link" replace />} />
+      <GoogleMapsWrapper>
+        <Routes>
+          {/* 루트 경로를 /link로 리다이렉트 */}
+          <Route path="/" element={<Navigate to="/link" replace />} />
 
-        {/* 로그인 페이지  */}
-        <Route path="/login" element={<Login />} />
-        <Route path="/loginSuccess" element={<LoginSuccess/>}/>
+          {/* 로그인 페이지  */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/loginSuccess" element={<LoginSuccess/>}/>
 
-        {/* MainLayout을 모든 페이지의 기본 레이아웃으로 사용 */}
-        <Route path="/" element={<MainLayout />}>
+          {/* MainLayout을 모든 페이지의 기본 레이아웃으로 사용 */}
+          <Route path="/" element={<MainLayout />}>
+            {/* Link 페이지와 하위 라우트들 */}
+            <Route path="link/*" element={<LinkPage />} />
+            
+            {/* MyPage */}
+            <Route path="mypage/*" element={<MyPage />} />
 
-          {/* Link 페이지와 하위 라우트들 */}
-          <Route path="link/*" element={<LinkPage />} />
+            {/* Wish */}
+            <Route path="wish/*" element={<Wish />} />
+          
+            {/* TravelInfos */}
+            <Route path="travelinfos/:travelInfoId" element={<TravelInfo />} />
 
-          {/* MyPage */}
-          <Route path="mypage/*" element={<MyPage />} />
-
-          {/* Wish */}
-          <Route path="wish/*" element={<Wish />} />
-        
-          {/* TravelInfos */}
-          <Route path="travelinfos/:travelInfoId" element={<TravelInfo />} />
-
-          {/* GuideBook 페이지 */}
-          <Route path="guideBooks/:guideBookId" element={<GuideBook />} />
-        
-        </Route>
-
-      </Routes>
-    </BrowserRouter >
+            {/* GuideBook */}
+            <Route path="guidebooks/:guidebookId" element={<GuideBook />} />
+          </Route>
+        </Routes>
+      </GoogleMapsWrapper>
+    </BrowserRouter>
   );
 }
 
