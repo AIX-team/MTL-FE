@@ -3,7 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { usePDF } from 'react-to-pdf';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { GoogleMap, Polyline } from '@react-google-maps/api';
+import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import downloadbtn from '../../images/download.png';
 import backArrow from '../../images/backArrow.svg';
 import { useParams } from 'react-router-dom';
@@ -16,7 +17,143 @@ const axiosInstance = axios.create({
       'Content-Type': 'application/json',
     },
 });
-  
+
+// 구글 맵 컴포넌트(경로)
+const MapComponent = ({ places }) => {
+    if (!places) return null;
+
+    const mapContainerStyle = {
+        width: '100%',
+        height: '100%'
+    };
+
+    // places가 배열인 경우와 단일 객체인 경우 처리
+    const isArray = Array.isArray(places);
+    
+    const center = isArray ? {
+        lat: parseFloat(places[0].latitude),
+        lng: parseFloat(places[0].longitude)
+    } : {
+        lat: parseFloat(places.latitude),
+        lng: parseFloat(places.longitude)
+    };
+
+    // 배열인 경우에만 path 생성
+    const path = isArray ? places.map(place => ({
+        lat: parseFloat(place.latitude),
+        lng: parseFloat(place.longitude)
+    })) : null;
+
+    const onLoad = (map) => {
+        if (!window.google) {
+            console.error('Google Maps API not loaded');
+            return;
+        }
+
+        try {
+            // bounds 객체 생성            
+            const bounds = new window.google.maps.LatLngBounds();
+
+            if (isArray) {
+                // 여러 장소에 대한 마커 처리
+                places.forEach((place, index) => {
+                    const position = {
+                        lat: parseFloat(place.latitude),
+                        lng: parseFloat(place.longitude)
+                    };
+                    
+                    // bounds에 위치 추가
+                    bounds.extend(position);
+
+                    const markerView = new window.google.maps.marker.AdvancedMarkerElement({
+                        position,
+                        map,
+                        title: place.name,
+                        content: new window.google.maps.marker.PinElement({
+                            glyph: `${place.num}`,
+                            glyphColor: '#FFFFFF',
+                            background: '#4285f4',
+                            borderColor: '#4285f4'
+                        }).element
+                    });
+
+                    markerView.addListener('click', () => {
+                        const infoWindow = new window.google.maps.InfoWindow({
+                            content: `
+                                <div style="padding: 10px;">
+                                    <h3>${place.num}. ${place.name}</h3>
+                                    <p>${place.address || ''}</p>
+                                </div>
+                            `
+                        });
+                        infoWindow.open(map, markerView);
+                    });
+                });
+
+                // 모든 마커가 보이도록 맵 조정
+                map.fitBounds(bounds);
+
+                // 선택적: 최소/최대 줌 레벨 설정
+                const listener = map.addListener('idle', () => {
+                    if (map.getZoom() > 16) map.setZoom(16);
+                    window.google.maps.event.removeListener(listener);
+                });
+            } else {
+                // 단일 장소에 대한 마커 처리
+                const position = {
+                    lat: parseFloat(places.latitude),
+                    lng: parseFloat(places.longitude)
+                };
+                
+                bounds.extend(position);
+
+                const markerView = new window.google.maps.marker.AdvancedMarkerElement({
+                    position,
+                    map,
+                    title: places.name
+                });
+
+                map.fitBounds(bounds);
+                
+                // 단일 마커의 경우 적절한 줌 레벨 설정
+                map.setZoom(15);
+            }
+        } catch (error) {
+            console.error('Error creating markers:', error);
+        }
+    };
+
+    return (
+            <GoogleMap
+                mapContainerStyle={mapContainerStyle}
+                center={center}
+                zoom={13}
+                onLoad={onLoad}
+                options={{
+                    disableDefaultUI: false,
+                    zoomControl: true,
+                    mapTypeControl: true,
+                    scaleControl: true,
+                    streetViewControl: true,
+                    rotateControl: true,
+                    fullscreenControl: true,
+                    mapId: process.env.REACT_APP_GOOGLE_MAPS_ID
+                }}
+            >
+                {isArray && path && (
+                    <Polyline
+                        path={path}
+                        options={{
+                            strokeColor: '#FF0000',
+                            strokeOpacity: 1,
+                            strokeWeight: 2,
+                            geodesic: true
+                        }}
+                    />
+                )}
+            </GoogleMap>
+    );
+};
 
 // GuideBookList 컴포넌트 정의
 const GuideBook = () => {
@@ -24,7 +161,6 @@ const GuideBook = () => {
     const navigate = useNavigate();
     // 상태 변수 정의
     const [activeTab, setActiveTab] = useState(1); // 현재 활성화된 코스 탭
-    const [activePage, setActivePage] = useState(1); // 현재 활성화된 페이지
     const [isEditMode, setIsEditMode] = useState(false); // 편집 모드 활성화 여부
     const [showMoveModal, setShowMoveModal] = useState(false); // 이동 모달 표시 여부
     const [showDeleteModal, setShowDeleteModal] = useState(false); // 삭제 모달 표시 여부
@@ -34,7 +170,7 @@ const GuideBook = () => {
     const [showDetailModal, setShowDetailModal] = useState(false);
     const [selectedPlace, setSelectedPlace] = useState(null);
     const {toPDF, targetRef} = usePDF({filename: 'guidebook.pdf'});
-    const { guideBookId } = useParams();
+    const { guidebookId } = useParams();
 
     const [guideBook, setGuideBook] = useState({
         success: '',
@@ -46,32 +182,16 @@ const GuideBook = () => {
         courses: {}
     });
 
-    // 테스트용 더미 데이터
-
-    const dummyData = {
-        1: [
-            { id: 1, name: '오사카 성', type: '역사적 장소', image: '/images/osaka_castle.jpg', description: '오사카의 상징적인 성입니다.' },
-            { id: 2, name: '도톤보리', type: '쇼핑 거리', image: '/images/dotonbori.jpg', description: '유명한 쇼핑 및 엔터테인먼트 거리입니다.' }
-        ],
-        2: [
-            { id: 3, name: '유니버설 스튜디오 재팬', type: '테마파크', image: '/images/usj.jpg', description: '유명한 테마파크입니다.' }
-        ],
-        3: [
-            { id: 4, name: '신사이바시', type: '쇼핑 거리', image: '/images/shinsaibashi.jpg', description: '쇼핑의 중심지입니다.' }
-        ],
-        4: [
-            { id: 5, name: '오사카 수족관', type: '수족관', image: '/images/aquarium.jpg', description: '세계 최대의 수족관 중 하나입니다.' }
-        ],
-        5: [
-            { id: 6, name: '오사카 과학 박물관', type: '박물관', image: '/images/science_museum.jpg', description: '과학을 체험할 수 있는 박물관입니다.' }
-        ]
-    };
+    
+    const putCoursePlaceDto = {
+        courseId: 0,
+        coursePlaces: {}
+    }
 
     // 가이드북 데이터 가져오기
     const getGuideBook = async () => {
         try {
-            const response = await axiosInstance.get(`/api/v1/travels/guidebooks/${guideBookId}`);
-            console.log(response.data);
+            const response = await axiosInstance.get(`/api/v1/travels/guidebooks/${guidebookId}`);
             setGuideBook(response.data);
             setPlaces(response.data.courses[0].coursePlaces || []);
         } catch (error) {
@@ -83,6 +203,16 @@ const GuideBook = () => {
         getGuideBook();
     }, []);
 
+    const putCoursePlacesNum = async (places) => {
+        try {
+            await axiosInstance.post(`/api/v1/courses/${activeTab.courseNum}`, {
+                places
+            });
+        } catch (error) {
+            console.error('Error putting course places num:', error);
+        }
+    }
+
     // 코스 탭 클릭 핸들러
     const handleTabClick = (courseNumber) => {
         setIsEditMode(false); // 편집 모드 해제
@@ -92,8 +222,44 @@ const GuideBook = () => {
 
     // 편집 버튼 클릭 핸들러
     const handleEditClick = () => {
-        setIsEditMode(!isEditMode); // 편집 모드 토글
+        if(isEditMode) {
+            // Place장소 번호 재설정
+            const tmpPlaces = places.map((place, index) => ({
+                ...place,
+                num: index + 1
+            }));
+            
+            setPlaces(tmpPlaces);  // places 상태 업데이트
+            
+            // 맵 컴포넌트 강제 리렌더링을 위한 키 업데이트
+            setMapKey(prev => prev + 1);  // 새로운 상태 추가 필요
+
+            const coursesArray = Object.values(guideBook.courses);
+            const currentCourse = coursesArray.find(course => course.courseNum === activeTab);
+            if (currentCourse?.coursePlaces) {
+                const updatedPlaces = currentCourse.coursePlaces.map((place, index) => ({
+                    ...place,
+                    num: index + 1
+                }));
+                if(places !== updatedPlaces) {
+                    setPlaces(updatedPlaces);
+                    //updatedPlaces 순서대로 리스트 형태로 변환
+                    const placeRespList = updatedPlaces.map((place, index) => ({
+                        id: place.id.toString().replace(/\u0000/g, '').trim(),  // 널 문자와 공백 제거
+                        num: index + 1  // 1부터 시작하는 순서 번호
+                    }));
+                    putCoursePlaceDto.courseId = currentCourse.courseId;
+                    putCoursePlaceDto.coursePlaces = placeRespList;
+                    console.log('courseInfo :', putCoursePlaceDto);
+                    putCoursePlacesNum(putCoursePlaceDto);
+                    }
+                }
+            }
+        setIsEditMode(!isEditMode); // 편집 모드 토글        
     };
+
+    // 맵 키 상태 추가
+    const [mapKey, setMapKey] = useState(0);
 
     // 이동 버튼 클릭 핸들러
     const handleMoveClick = () => {
@@ -111,8 +277,17 @@ const GuideBook = () => {
     useEffect(() => {
         const coursesArray = Object.values(guideBook.courses);
         const currentCourse = coursesArray.find(course => course.courseNum === activeTab);
-        setPlaces(currentCourse?.coursePlaces || []);
-    }, [activeTab]);
+        if (currentCourse?.coursePlaces) {
+            const updatedPlaces = currentCourse.coursePlaces.map((place, index) => ({
+                ...place,
+                num: index + 1
+            }));
+            if(places !== updatedPlaces) {
+                setPlaces(updatedPlaces);
+            }
+        }
+    }, [activeTab, guideBook.courses]);
+
 
     // 이동 확인 핸들러
     const handleMoveConfirm = async () => {
@@ -185,77 +360,36 @@ const GuideBook = () => {
         setSelectedPlace(null);
     };
 
-            // 가이드북 데이터 구조 예시        
-            // {
-            //     "success": "success",
-            //     "message": "success",
-            //     "guideBookTitle": "Alice's Coastal Guide",
-            //     "travelInfoTitle": "Alice's",
-            //     "travelInfoId": "ti1",
-            //     "courseCnt": 2,
-            //     "courses": [
-            //       {
-            //         "courseId": "c1",
-            //         "courseNum": 1,
-            //         "coursePlaces": [
-            //           {
-            //             "placeNum": 1,
-            //             "placeId": "p1",
-            //             "placeName": "Sunny Beach",
-            //             "placeType": "beach",
-            //             "placeDescription": "A beautiful beach",
-            //             "placeImage": "https://example.com/images/beach.jpg",
-            //             "placeAddress": "123 Beach Road",
-            //             "placeHours": "08:00 - 18:00",
-            //             "placeIntro": "Relaxing beach",
-            //             "placeLatitude": "36.15964562",
-            //             "placeLongitude": "138.02694563"
-            //           },
-            //           {
-            //             "placeNum": 2,
-            //             "placeId": "p3",
-            //             "placeName": "Urban Park",
-            //             "placeType": "park",
-            //             "placeDescription": "A peaceful park in the city",
-            //             "placeImage": "https://example.com/images/park.jpg",
-            //             "placeAddress": "789 City Center",
-            //             "placeHours": "08:00 - 18:00",
-            //             "placeIntro": "City escape",
-            //             "placeLatitude": "43.06630501",
-            //             "placeLongitude": "141.36674663"
-            //           }
-            //         ]
-            //       },
-            //       {
-            //         "courseId": "c2",
-            //         "courseNum": 2,
-            //         "coursePlaces": [
-            //           {
-            //             "placeNum": 1,
-            //             "placeId": "p1",
-            //             "placeName": "Sunny Beach",
-            //             "placeType": "beach",
-            //             "placeDescription": "A beautiful beach",
-            //             "placeImage": "https://example.com/images/beach.jpg",
-            //             "placeAddress": "123 Beach Road",
-            //             "placeHours": "08:00 - 18:00",
-            //             "placeIntro": "Relaxing beach",
-            //             "placeLatitude": "36.15964562",
-            //             "placeLongitude": "138.02694563"
-            //           }
-            //         ]
-            //       }
-            //     ]
-            //   }
-      
+    const handleDragStart = (start) => {
+        // 드래그 시작 시 스크롤 이벤트 조정
+        document.body.style.touchAction = 'none';
+    };
+
+    const handleDragEnd = (result) => {
+        // 드래그 종료 시 스크롤 이벤트 복구
+        document.body.style.touchAction = 'pan-y';
+        handleOnDragEnd(result);
+    };
 
     // 콘텐츠 렌더링
     const renderContent = () => {
         return (
-            <DragDropContext onDragEnd={handleOnDragEnd}>
+            <DragDropContext 
+                onDragStart={handleDragStart}
+                onDragEnd={handleDragEnd}
+            >
                 <Droppable droppableId="places">
                     {(provided) => (
-                        <div className="YC-GuideBook-place" {...provided.droppableProps} ref={provided.innerRef}>
+                        <div 
+                            className="YC-GuideBook-place" 
+                            {...provided.droppableProps} 
+                            ref={provided.innerRef}
+                            style={{ 
+                                height: '100%',
+                                minHeight: '100px',
+                                overflow: 'visible' // 스크롤을 비활성화
+                            }}
+                        >
                             {places.map((place, index) => (
                                 <Draggable key={place.id.toString()} draggableId={place.id.toString()} index={index}>
                                     {(provided, snapshot) => (
@@ -273,13 +407,13 @@ const GuideBook = () => {
                                             ) : (
                                                 <div id="YC-GuideBook-place-number">{index + 1}</div>
                                             )}
-                                            <div className="YC-GuideBook-place-draggable" onClick={() => handlePlaceClick(place)}
+                                            <div 
+                                                className="YC-GuideBook-place-draggable"
+                                                {...provided.dragHandleProps}
+                                                onClick={() => handlePlaceClick(place)}
                                             >
                                                 {isEditMode && (
-                                                    <div
-                                                        {...provided.dragHandleProps}
-                                                        className="drag-handle"
-                                                    >
+                                                    <div className="drag-handle">
                                                         <span></span>
                                                     </div>
                                                 )}
@@ -351,10 +485,15 @@ const GuideBook = () => {
                         <button onClick={handleDeleteClick}>삭제</button>
                     </div>
                 )}
-            </div>
-            {/* 구글 맵 예시로 띄워 놓은 것이니, 장소에 대한 좌표를 받은후 맵을 띄워주는 것으로 변경 필요, 마커 + 마커끼리 연결 필요 */}
-            <div className="YC-GuideBookList-map">
-                <iframe className="YC-GuideBookList-map-iframe" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3269.8668888888887!2d135.5016858152176!3d34.69373778042199!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6000e68f5ddb6b43%3A0x1c5edc85620f065e!2z7J207Iqk7Yq466-47J207Iqk7Yq466-4!5e0!3m2!1sko!2skr!4v1716418888888!5m2!1sko!2skr" allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe>
+                {/* 구글 맵 예시로 띄워 놓은 것이니, 장소에 대한 좌표를 받은후 맵을 띄워주는 것으로 변경 필요, 마커 + 마커끼리 연결 필요 */}
+                <div className="YC-GuideBookList-map">
+                    {places && places.length > 0 && (
+                        <MapComponent 
+                            key={`map-${activeTab}-${places.length}-${mapKey}`}
+                            places={places} 
+                        />
+                    )}
+                </div>
             </div>
 
 
@@ -428,17 +567,7 @@ const GuideBook = () => {
                                 </p>
                             </div>
                             <div className="YC-GuideBook-detail-modal-map">      
-                                <iframe 
-                                className="YC-GuideBook-detail-modal-map-iframe" 
-                                title={`${selectedPlace.name} 위치 지도`}
-                                src={`https://maps.google.com/maps?q=${encodeURIComponent(selectedPlace.name)}+(${selectedPlace.latitude},${selectedPlace.longitude})&t=&z=17&ie=UTF8&iwloc=&output=embed`}
-                                width="100%"
-                                height="100%"
-                                style={{ border: 0 }}
-                                allowFullScreen=""
-                                loading="lazy" 
-                                referrerPolicy="no-referrer-when-downgrade"
-                                />
+                                {selectedPlace && <MapComponent places={selectedPlace} />}
                             </div>
                         </div>
                     </div>
