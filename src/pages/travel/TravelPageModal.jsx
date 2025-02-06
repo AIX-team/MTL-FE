@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import '../../css/travel/TravelPageModal.css';
 import ReactDOM from 'react-dom';
+import { FaTimes } from 'react-icons/fa';
 
 const TravelPageModal = ({
     showModal,
@@ -76,26 +77,41 @@ const TravelPageModal = ({
 
             {/* 수정 모달 */}
             {isEditModalOpen && (
-                <div className="SJ-second-modal-overlay" style={{ zIndex: 1001 }}>
-                    <div className="SJ-edit-modal">
-                    <p className="SJ-delete-title">제목을 수정합니다</p>
-                        <input
-                            type="text"
-                            value={newTitle}
-                            onChange={(e) => setNewTitle(e.target.value)}
-                            className="SJ-modal-input"
-                            readOnly
-                            onClick={(e) => e.target.removeAttribute('readonly')}
-                        />
-                        <div className="SJ-modal-buttons">
+                <div className="WS-second-Modal-Overlay">
+                    <div className="WS-second-Modal-Content">
+                        <div className="WS-Edit-Modal-Message-Container">
+                            <div className="WS-Edit-Modal-Title">이름 수정</div>
+                            <div className="WS-Edit-Modal-Message">나만의 여행 이름을 만들어보세요!</div>
+                        </div>
+
+                        <div className="WS-Edit-Modal-Input-Container">
+                            <input
+                                type="text"
+                                value={newTitle}
+                                onChange={(e) => setNewTitle(e.target.value)}
+                                className="WS-Edit-Modal-Input"
+                                readOnly
+                                onClick={(e) => e.target.removeAttribute('readonly')}
+                            />
+                            {newTitle && (
+                                <button
+                                    className="WS-Edit-Modal-Reset-Button"
+                                    onClick={() => setNewTitle('')}
+                                    type="button"
+                                >
+                                    <FaTimes />
+                                </button>
+                            )}
+                        </div>
+                        <div className="WS-second-Modal-Button-Container">
                             <button
-                                className="WS-Modal-Button"
+                                className="WS-second-Modal-Button"
                                 onClick={handleEditCancel}
                             >
                                 취소
                             </button>
                             <button
-                                className="WS-Modal-Button"
+                                className="WS-second-Modal-Button"
                                 onClick={handleSaveTitle}
                             >
                                 저장
@@ -107,19 +123,25 @@ const TravelPageModal = ({
 
             {/* 삭제 모달 */}
             {showDeleteModal && (
-                <div className="SJ-second-modal-overlay" style={{ zIndex: 1001 }}>
-                    <div className="SJ-delete-modal">
-                        <p className="SJ-delete-title">삭제하시겠습니까?</p>
-                        <p className="WS-Modal-Message">여행 목록에서 삭제됩니다.</p>
-                        <div className="SJ-modal-buttons">
+                <div className="WS-second-Modal-Overlay">
+                    <div className="WS-second-Modal-Content"
+                        id="WS-Delete-Modal-Content"
+                    >
+
+                        <div className="WS-Delete-Modal-Message-Container">
+                            <div className="WS-Delete-Modal-Title">삭제하시겠습니까?</div>
+                            <div className="WS-Delete-Modal-Message">여행 목록에서 삭제됩니다.</div>
+                        </div>
+
+                        <div className="WS-second-Modal-Button-Container">
                             <button
-                                className="WS-Modal-Button"
+                                className="WS-second-Modal-Button"
                                 onClick={() => setShowDeleteModal(false)}
                             >
                                 취소
                             </button>
                             <button
-                                className="WS-Modal-Button"
+                                className="WS-second-Modal-Button"
                                 onClick={() => {
                                     onDeleteItem(selectedItemId);
                                     setShowDeleteModal(false);

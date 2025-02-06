@@ -4,7 +4,7 @@ import axios from 'axios';
 import { FaSearch, FaTimes, FaCheck } from 'react-icons/fa'; // 돋보기 아이콘 import, FaTimes 아이콘 추가
 import '../../css/linkpage/SearchYoutube.css';
 import youtubeIcon from '../../images/YOUTUBE_LOGO.png';
-import Modal from '../../layouts/SomethingModal';
+import Modal from '../../layouts/AlertModal';
 
 const SearchYoutube = () => {
     // localStorage에서 이전 상태 불러오기

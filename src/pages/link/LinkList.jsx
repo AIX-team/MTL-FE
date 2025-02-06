@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Modal from '../../layouts/SomethingModal';
+import Modal from '../../layouts/AlertModal';
 import '../../css/linkpage/LinkList.css';
 import axios from 'axios';
 import { FaMinus } from 'react-icons/fa';

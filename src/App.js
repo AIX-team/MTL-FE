@@ -4,7 +4,6 @@ import LinkPage from './pages/link/LinkPage';
 import MyPage from './pages/mypage/MyPage';
 import TravelPage from './pages/travel/TravelPage';
 import Wish from './layouts/Wish';
-import TravelPage from "./pages/travel/TravelPage";
 import TravelInfo from './pages/link/travelInfo/TravelInfo';
 import GuideBook from './pages/link/GuideBook';
 import './css/styles/variables.css';
