@@ -35,12 +35,10 @@ function App() {
           <Route path="travelinfos/:travelInfoId" element={<TravelInfo />} />
 
           {/* MyPage */}
-          <Route path="mypage/*" element={<TravelInfo />} />
+          <Route path="mypage/*" element={<MyPage />} />
 
           {/* Wish */}
           <Route path="wish/*" element={<Wish />} />
-
-
 
           {/* GuideBook 페이지 */}
           <Route path="guideBooks/:guideBookId" element={<GuideBook />} />

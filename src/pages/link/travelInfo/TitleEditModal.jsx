@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import '../../../css/Modal.css';
+import '../../../css/linkpage/TravelInfo/TitleEditModal.css';
 import resetIcon from '../../../images/resetBtn.svg';
 
 const TitleEditModal = ({ isOpen, onClose, travelDays, travelInfoTitle, onSave }) => {
@@ -16,8 +16,7 @@ const TitleEditModal = ({ isOpen, onClose, travelDays, travelInfoTitle, onSave }
   return (
     <div className="HG-modal-overlay">
       <div className="HG-modal-content">
-        <h2 className='none'>여행일, 제목 수정 모달창</h2>
-        <div className='HG-modal-title'>여행일, 제목 수정</div>
+         <div className='HG-modal-title'>여행일, 제목 수정</div>
         <div className='HG-TravelInfo-Edit-Frame'>
           <span>여행일</span>
           <div className="HG-input-wrapper">

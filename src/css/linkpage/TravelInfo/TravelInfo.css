@@ -25,9 +25,71 @@ a,
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid #e0e0e0;
-
-  background-color: rgba(182, 233, 253, 0.555);
 }
+
+.HG-TravelInfo-Back-Btn {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  cursor: pointer;
+}
+
+.HG-TravelInfo-Travel-Days-Input {
+  height: 20px;
+  border: none;
+  background: none;
+  font-size: var(--font-size-sm);
+  font-weight: bold;
+}
+
+.HG-TravelInfo-Title-Edit-Frame {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.HG-TravelInfo-Title {
+  font-size: var(--font-size-xl);
+  font-weight: bold;
+}
+
+.HG-TravelInfo-Title-Edit-text {
+  font-size: var(--font-size-sm);
+  font-weight: bold;
+  color: var(--color-guide);
+  cursor: pointer;
+}
+
+.HG-TravelInfo-Btn {
+  display: inline-flex;
+  align-items: center;
+  height: 40px;
+  transform: translateX(10px);
+  cursor: pointer;
+}
+
+.HG-TravelInfo-Select-Btn {
+  display: flex;
+  align-items: center;
+  color: var(--color-guide);
+  font-size: var(--font-size-base);
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.HG-TravelInfo-Select-Cnt {
+  font-size: var(--font-size-sm);
+  background-color: var(--color-main);
+  color: white;
+  border-radius: var(--border-radius-full);
+  padding: 4px 8px;
+  margin-bottom: auto;
+  transform: translateX(-10px);
+}
+
+
+
+
 
 .HG-TravelInfo-Body {
   align-content: start;
@@ -44,6 +106,10 @@ a,
 .HG-travelinfo-content-frame-url {
   font-size: var(--font-size-lg);
   color: var(--color-dark-gray);
+}
+
+.HG-underline {
+  border-bottom: 1px solid var(--color-main);
 }
 
 .HG-TravelInfo-Content-Blank {
@@ -179,9 +245,7 @@ a,
   background-color: rgba(0, 0, 0, 0.4);
 }
 
-/* ------------------------------------------------------------------------------------- */
-
-.carousel-item {
+.WS-carousel-item {
   margin-bottom: 10px;
   height: 300px;
   border-radius: var(--border-radius-base);
@@ -189,20 +253,52 @@ a,
   padding-bottom: 30px;
   padding-left: 15px;
   padding-right: 15px;
-
 }
 
 .HG-select-place {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* 슬라이더 화살표 스타일링 */
+.HG-trevelinfo-select-Container {
+  display: flex;
+  align-items: center;
+  margin-top: 5px;
+
+  gap: 10px;
+}
+
+.HG-trevelinfo-content-frame-select {
+  width: 20px;
+  height: 20px;
+}
+
+.HG-trevelinfo-content-frame-select-name {
+  font-size: var(--font-size-lg);
+  font-weight: bold;
+}
+
+.HG-trevelinfo-content-frame-select-intro {
+  font-size: var(--font-size-sm);
+  font-weight: bold;
+}
+
+.slide-content {
+  position: relative;
+  width: 100%;
+  height: 250px;
+}
+
 .slick-prev,
 .slick-next {
   z-index: 100;
   width: 30px;
   height: 30px;
   background-color: var(--color-main);
+
+  transform: translateY(-50%) !important;
+  /* 수직 중앙 정렬 강제 */
+  /* 상단에서 50% 위치로 고정 */
+  position: absolute !important;
 }
 
 .slick-prev {
@@ -216,181 +312,52 @@ a,
 .slick-prev:before,
 .slick-next:before {
   color: var(--color-dark-gray) !important;
-  font-size: 30px;
-  opacity: 1;
+  opacity: 1 !important;
 }
 
-.slick-prev:hover:before,
-.slick-next:hover:before {
-  opacity: 1;
+.slick-slider {
+  margin-top: 10px;
 }
 
-.slick-slide {
-  padding: 0 10px;
-  visibility: visible !important;
-  /* 슬라이드 숨김 해제 */
-}
-
-.slick-slide.slick-active {
-  visibility: visible;
-}
-
-.slide-content {
-  position: relative;
-  width: 100%;
-  height: 250px;
-  /* iframe 높이와 동일하게 설정 */
-  margin: 0;
-  padding: 0;
-}
-
-.slide-image,
-.slide-description {
-  width: 100%;
-  height: 100%;
-}
-
-
-.HG-TravelInfo-Back-Btn {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  cursor: pointer;
-}
-
-.HG-TravelInfo-Travel-Days-Input {
-  height: 20px;
-  border: none;
-  background-color: transparent;
-  font-size: var(--font-size-sm);
-  font-weight: bold;
-}
-
-.HG-TravelInfo-Title-Edit-Frame {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.HG-TravelInfo-Title-Edit-text {
-  font-size: var(--font-size-sm);
-  font-weight: bold;
-  color: var(--color-guide);
-  cursor: pointer;
-}
-
-.HG-TravelInfo-Title {
-  font-size: var(--font-size-xl);
-  font-weight: bold;
-}
-
-.HG-TravelInfo-Btn {
-  display: inline-flex;
-  align-items: center;
-  height: 40px;
-  transform: translateX(10px);
-  cursor: pointer;
-}
-
-.HG-TravelInfo-Select-Btn {
-  display: flex;
-  align-items: center;
-  color: var(--color-guide);
-  font-size: var(--font-size-base);
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.HG-TravelInfo-Select-Cnt {
-  font-size: var(--font-size-sm);
-  background-color: var(--color-main);
-  color: white;
-  border-radius: var(--border-radius-full);
-  padding: 4px 8px;
-  margin-bottom: auto;
-  transform: translateX(-10px);
-}
-
-/* fade: false일 때 슬라이드 간격 조정 */
-.slick-slide {
-  margin: 0 -10px;
-  /* 원하는 간격 설정 */
-}
-
-
-
-
-.HG-underline {
-  border-bottom: 1px solid var(--color-main);
-}
-
-.HG-trevelinfo-content-frame-select {
-  width: 20px;
-  height: 20px;
-}
-
-.HG-trevelinfo-content-frame-select-frame {
-  margin-top: 5px;
-  margin-bottom: 5px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.HG-trevelinfo-content-frame-select-name {
-  font-size: var(--font-size-lg);
-  font-weight: bold;
-}
-
-.HG-trevelinfo-content-frame-select-intro {
-  font-size: var(--font-size-sm);
-  font-weight: bold;
-}
 
 .HG-slide-content-image {
-  width: 100%;
-  height: 100%;
   display: block;
   object-fit: cover;
   object-position: center;
+
+  border-radius: var(--border-radius-base);
+  width: 100%;
+  height: 100%;
+}
+
+.HG-TravelInfo-map-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
   border-radius: var(--border-radius-base);
 }
 
+.WS-TravelInfo-Description {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 5px;
+
+  font-weight: bold;
+  font-size: var(--font-size-lg);
+}
+
+.WS-TravelInfo-Address {
+  font-size: var(--font-size-sm);
+}
+
+/* ------------------------------------------------------------------------------------- */
+
 .HG-TravelInfo-Select-Modal {
   position: absolute;
-  top: 0;
-  left: 0;
+ 
   width: 100%;
   height: 100%;
-  background-color: white;
+ 
   z-index: 1000;
-}
-
-
-
-
-.HG-TravelInfo-map-iframe {
-  width: 100% !important;
-  height: 100% !important;
-  border: none;
-  border-radius: 5px;
-  position: absolute;
-  top: 0;
-  left: 0;
-  display: block;
-  /* 중요: iframe 표시 문제 해결 */
-}
-
-
-/* 캐러셀 수정사항 */
-.slick-slider {
-  margin-top: 20px;
-}
-
-.slick-prev {
-  left: 0;
-}
-
-.slick-next {
-  right: 0;
 }

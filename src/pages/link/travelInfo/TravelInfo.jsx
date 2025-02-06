@@ -391,15 +391,16 @@ const TravelInfo = () => {
             return (isMatchingType || isEtcType) ? (
               <div
                 key={index}
-                className={`carousel-item ${selectedPlaces.some(selected => selected.placeId === item.placeId) ? 'HG-select-place' : ''}`}
+                className={`WS-carousel-item ${selectedPlaces.some(selected => selected.placeId === item.placeId) ? 'HG-select-place' : ''}`}
               >
-                <div className='HG-trevelinfo-content-frame-select-frame'
+                <div className='HG-trevelinfo-select-Container'
                   onClick={() => handlePlaceClick(item)}
                 >
                   <img className='HG-trevelinfo-content-frame-select' src={`${selectedPlaces.some(selected => selected.placeId === item.placeId) ? isSelectedIcon : selectIcon}`} alt="selectIcon" />
                   <span className='HG-trevelinfo-content-frame-select-name'>{item.placeName}</span>
                   <span className='HG-trevelinfo-content-frame-select-intro'>{item.intro}</span>
                 </div>
+
                 <Slider {...sliderSettings}>
                   {/* 첫 번째 슬라이드 */}
                   <div className="slide-content">
@@ -412,22 +413,18 @@ const TravelInfo = () => {
 
                   {/* 두 번째 슬라이드 */}
                   <div className="slide-content">
-                    <span>{item.placeDescription}</span>
-                    <p>{item.placeAddress}</p>
+                    <span className='WS-TravelInfo-Description'>{item.placeDescription}</span>
+                    <p className='WS-TravelInfo-Address'>{item.placeAddress}</p>
                   </div>
 
                   {/* 세 번째 슬라이드 */}
                   <div className="slide-content" key={`map-${index}`}>
                     {console.log('세 번째 슬라이드 시도')}
-                    <div>테스트 텍스트</div>
                     {item?.latitude && item?.longitude && (
                       <iframe
                         className="HG-TravelInfo-map-iframe"
                         title={`${item.placeName} 위치 지도`}
                         src={`https://maps.google.com/maps?q=${encodeURIComponent(item.placeName)}+(${item.latitude},${item.longitude})&t=&z=17&ie=UTF8&iwloc=&output=embed`}
-                        width="100%"
-                        height="100%"
-                        style={{ border: 0 }}
                         allowFullScreen
                         loading="lazy"
                         referrerPolicy="no-referrer-when-downgrade"
