@@ -4,6 +4,9 @@ import '../../css/linkpage/LinkList.css';
 import axios from 'axios';
 import { FaMinus } from 'react-icons/fa';
 import SelectDayTab from './SelectDayTab';  
+import { useNavigate } from 'react-router-dom';  // 추가
+
+
 
 const LinkList = ({ linkData, setLinkData }) => {
     const [inputLink, setInputLink] = useState('');
