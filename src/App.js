@@ -12,12 +12,14 @@ import './css/styles/variables.css';
 import Login from "./pages/user/Login";
 import LoginSuccess from "./pages/user/LoiginSuccess";
 
+import LandingPage from "./components/LandingPage/LandingPage";
+
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         {/* 루트 경로를 /link로 리다이렉트 */}
-        <Route path="/" element={<Navigate to="/link" replace />} />
+        <Route path="/" element={<LandingPage />} />
 
         {/* 로그인 페이지  */}
         <Route path="/login" element={<Login />} />

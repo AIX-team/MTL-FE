@@ -1,0 +1,29 @@
+.WS-Landing-Page {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 100%;
+    height: 100%;
+
+    background-color: var(--color-light-gray);
+}
+
+.WS-Landing-Page-Button {
+    padding: 20px;
+
+    width: 90%;
+    height: 70px;
+
+    background-color: var(--color-main);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius-full);
+
+    font-size: var(--font-size-lg);
+    font-weight: bold;
+}

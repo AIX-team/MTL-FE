@@ -330,11 +330,10 @@ const Wish = () => {
                 const exchangeMessage = {
                     id: messages.length + 1,
                     type: 'bot',
-                    content: `현재 엔화/원화 환율 정보
+                    content: `엔화/원화 환율 정보
 
-1엔 = ${exchangeInfo.rate.toFixed(2)}원
-
-1000엔 = ${exchangeInfo.krwAmount}원`
+🇯🇵 100엔 
+🇰🇷 ${exchangeInfo.rate.toFixed(2) * 100}원`
                 };
                 setMessages(prev => [...prev, exchangeMessage]);
                 scrollToBottom();

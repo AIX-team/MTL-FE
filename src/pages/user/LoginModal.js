@@ -20,7 +20,7 @@ const LoginModal = ({ isOpen, onClose }) => {
 
     const handleClose = () => {
         onClose(); // 모달 닫기
-        navigate('/link'); // /link 페이지로 이동
+        navigate('/'); // 랜딩페이지로 이동
     };
 
     return (
