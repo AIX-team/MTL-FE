@@ -38,7 +38,7 @@
     position: absolute;
     width: 60px;
     height: 60px;
-    background-color: #C92B2A;
+    background-color: var(--color-main-hover);
     /* 빨간색 원형 배경 */
     border-radius: 50%;
     top: -10px;

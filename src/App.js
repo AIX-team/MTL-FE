@@ -2,9 +2,8 @@ import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import MainLayout from "./layouts/MainLayout";
 import LinkPage from './pages/link/LinkPage';
 import MyPage from './pages/mypage/MyPage';
-import GuideBookList from './pages/travel/GuideBookList';
+import TravelPage from './pages/travel/TravelPage';
 import Wish from './layouts/Wish';
-import TravelPage from "./pages/travel/TravelPage";
 import TravelInfo from './pages/link/travelInfo/TravelInfo';
 import GuideBook from './pages/link/GuideBook';
 import Loading from './components/Loading/Loading';  // 추가
@@ -22,7 +21,7 @@ function App() {
 
         {/* 로그인 페이지  */}
         <Route path="/login" element={<Login />} />
-        <Route path="/loginSuccess" element={<LoginSuccess/>}/>
+        <Route path="/loginSuccess" element={<LoginSuccess />} />
 
         {/* 로딩 페이지 추가 */}
         <Route path="/loading" element={<Loading message="여행 기간에 맞는
@@ -34,6 +33,12 @@ function App() {
           {/* Link 페이지와 하위 라우트들 */}
           <Route path="link/*" element={<LinkPage />} />
 
+          {/* Travel 페이지 */}
+          <Route path="travel/*" element={<TravelPage />} />
+
+          {/* TravelInfos */}
+          <Route path="travelinfos/:travelInfoId" element={<TravelInfo />} />
+
           {/* MyPage */}
           <Route path="mypage/*" element={<MyPage />} />
 
@@ -42,13 +47,10 @@ function App() {
 
           {/* Wish */}
           <Route path="wish/*" element={<Wish />} />
-        
-          {/* TravelInfos */}
-          <Route path="travelinfos/:travelInfoId" element={<TravelInfo />} />
 
           {/* GuideBook 페이지 */}
           <Route path="guideBooks/:guideBookId" element={<GuideBook />} />
-        
+
         </Route>
 
       </Routes>

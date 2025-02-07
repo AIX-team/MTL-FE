@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import Modal from '../../layouts/SomethingModal';
+import React, { useState, useEffect } from 'react';
+import Modal from '../../layouts/AlertModal';
 import '../../css/linkpage/LinkList.css';
 import { FaMinus } from 'react-icons/fa';
 import SelectDayTab from './SelectDayTab';
