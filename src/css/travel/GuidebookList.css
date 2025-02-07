@@ -65,9 +65,6 @@
   background-color: rgba(0, 0, 0, 0.4);
 }
 
-
-
-
 .SJ-guide-card {
   position: relative;
   display: flex;
@@ -109,7 +106,7 @@
 
 .SJ-guide-score {
   position: absolute;
-  right: 15px;
+  right: 18px;
   top: 45px;
   color: var(--color-dark-gray);
   font-size: 10px;

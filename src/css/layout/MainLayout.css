@@ -40,7 +40,6 @@
     height: 50px;
     border-radius: var(--border-radius-full);
     background-color: var(--color-guide);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 
     color: white;
     font-size: var(--font-size-xl);

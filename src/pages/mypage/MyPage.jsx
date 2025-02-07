@@ -4,6 +4,7 @@ import "./MyPage.css";
 import ProfileExample from "../../images/Profile_example.png"; // 현재는 이 이미지 사용
 import BasicProfile from "../../images/basic profile.png"; // 나중에 사용할 기본 이미지
 import AccountSettings from "../AccountSettings/AccountSettings";
+import Logo from "../../layouts/LogoHeader"
 
 function MyPage() {
   const [showSettings, setShowSettings] = useState(false);
@@ -60,7 +61,7 @@ function MyPage() {
   return (
     <div className="SJ_my_page">
       <div className="SJ_logo">
-        <h1>My Travel Link✈️</h1>
+        <Logo />
       </div>
 
       <div className="SJ_profile_section">
@@ -95,5 +96,5 @@ function MyPage() {
     </div>
   );
 }
- 
+
 export default MyPage;

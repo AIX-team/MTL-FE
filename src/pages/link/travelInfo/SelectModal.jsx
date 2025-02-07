@@ -193,7 +193,7 @@ const SelectModal = ({ isOpen, onClose, selectedPlaces, onPlaceSelect, travelDay
       </div>
       <div className='HG-select-modal-footer'>
         <div className='HG-select-modal-footer-text-frame'>
-          <span className='HG-select-modal-footer-text-bold'>!{travelDays}일 기준:</span>
+          <span className='HG-select-modal-footer-text-bold'>{travelDays}일 기준:</span>
           <span className='HG-select-modal-footer-text'>최소 {travelDays * 2}개 - 최대 {travelDays * 5}개까지 선택가능합니다</span>
         </div>
         <div className='HG-select-modal-footer-btn' onClick={handleGuidebookCreate}>

@@ -79,7 +79,6 @@
 }
 
 .HG-select-modal-title div:last-child {
-  padding-left: 25px;
   font-family: var(--font-size-sm);
   font-weight: 10;
   color: var(--color-guide);
@@ -87,7 +86,7 @@
 }
 
 .HG-select-modal-filter-btns {
-  margin: 13px 30px;
+  margin: 13px 15px;
   display: flex;
   justify-content: space-around;
   font-size: var(--font-size-xs);
@@ -287,7 +286,7 @@ body.modal-open .WS-Main-Footer {
   justify-content: center;
   gap: 10px;
   margin-top: 30px;
-  
+
 }
 
 .HG-delete-confirm-buttons button {

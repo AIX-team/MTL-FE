@@ -20,7 +20,7 @@
 .WS-Link-Tabs {
     display: flex;
     justify-content: space-around;
-    border-bottom: 1px solid #e0e0e0;
+    border-bottom: 2px solid var(--color-light-gray);
 }
 
 /* 각 탭의 기본 스타일 */
