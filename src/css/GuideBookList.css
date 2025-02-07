@@ -151,7 +151,8 @@
 /* 코스 메뉴 편집 옵션 컨테이너 */
 .YC-GuideBookList-editOptions {
     position: fixed;
-    bottom: 0;
+    display: flex;
+    bottom: 130;
     left: 0;
     right: 0;
     background-color: white;
@@ -177,6 +178,9 @@
 }
 
 .YC-GuideBookList-editOptions button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 100%;
     padding: 15px;
     margin: 5px 0;
