@@ -4,72 +4,39 @@ import SearchYoutube from './SearchYoutube';// 유튜브 검색 컴포넌트
 import '../../css/linkpage/LinkPage.css';
 import { FaCheck } from 'react-icons/fa'; // 체크 아이콘 import
 import youtubeIcon from '../../images/youtube.png'; // YouTube 로고 이미지 import
+import { useNavigate } from 'react-router-dom'; // 추가
 
 
 const LinkPage = () => {
+    const navigate = useNavigate(); // 추가
     const [activeTab, setActiveTab] = useState('youtube');
-    const [linkData, setLinkData] = useState(() => {
-        const savedLinks = localStorage.getItem('linkListData');
-        return savedLinks ? JSON.parse(savedLinks) : [];
-    });
-    const [linkCount, setLinkCount] = useState(() => {
-        const linkListData = JSON.parse(localStorage.getItem('linkListData') || '[]');
-        return linkListData.length;
-    });
+    const [linkData, setLinkData] = useState([]); // 빈 배열로 초기화
+    const [linkCount, setLinkCount] = useState(0); // 0으로 초기화
 
     const renderContent = () => {
         switch (activeTab) {
             case 'links':
                 return <LinkList linkData={linkData} setLinkData={setLinkData} />;
             case 'youtube':
-                return <SearchYoutube linkData={linkData} />;
+                return <SearchYoutube linkData={linkData} setLinkData={setLinkData} />;
             default:
                 return null;
         }
     };
 
-    // localStorage 관련 useEffect
+    // 토큰 검사 useEffect
     useEffect(() => {
-        const updateLinkCount = () => {
-            const linkListData = JSON.parse(localStorage.getItem('linkListData') || '[]');
-            const selectedLinks = JSON.parse(localStorage.getItem('selectedYoutubeLinks') || '[]');
-            setLinkCount(linkListData.length + selectedLinks.length);
-        };
+        const token = localStorage.getItem('token');
+        if (!token) {
+            navigate('/login');
+            return;
+        }
+    }, [navigate]);
 
-        updateLinkCount();
-        window.addEventListener('storage', updateLinkCount);
-        const interval = setInterval(updateLinkCount, 300);
-
-        return () => {
-            window.removeEventListener('storage', updateLinkCount);
-            clearInterval(interval);
-        };
-    }, []);
-
+    // linkCount 업데이트
     useEffect(() => {
-        const updateLinkData = () => {
-            const savedLinks = localStorage.getItem('linkListData');
-            const currentLinks = savedLinks ? JSON.parse(savedLinks) : [];
-            setLinkData(currentLinks);
-
-            const selectedLinks = localStorage.getItem('selectedYoutubeLinks');
-            if (selectedLinks) {
-                const newLinks = JSON.parse(selectedLinks);
-                if (newLinks && Array.isArray(newLinks) && newLinks.length > 0) {
-                    setLinkData(prevLinks => {
-                        const combinedLinks = [...prevLinks, ...newLinks];
-                        localStorage.setItem('linkListData', JSON.stringify(combinedLinks));
-                        localStorage.removeItem('selectedYoutubeLinks');
-                        return combinedLinks;
-                    });
-                }
-            }
-        };
-
-        updateLinkData();
-        const interval = setInterval(updateLinkData, 300);
-        return () => clearInterval(interval);
-    }, []);
+        setLinkCount(linkData.length);
+    }, [linkData]);
 
     return (
         <div className="WS-Link-Page">
