@@ -1,11 +1,12 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../css/LoginModal.css'; // 모달 스타일을 위한 CSS 파일
-import googleLogo from '../images/google_logo.png';
+import '../../css/login/LoginModal.css'; // 모달 스타일을 위한 CSS 파일
+import googleLogo from '../../images/google_logo.png';
+import Logo from '../../images/LOGO.png';
 
 const LoginModal = ({ isOpen, onClose }) => {
     const navigate = useNavigate();
-    
+
     if (!isOpen) return null;
 
     const handleGoogleLogin = () => {
@@ -23,14 +24,26 @@ const LoginModal = ({ isOpen, onClose }) => {
     };
 
     return (
-        <div className="modal-overlay" onClick={handleClose}>
-            <div className="modal-content" onClick={e => e.stopPropagation()}>
-                <h2 id='login-text'> 로그인 </h2>
-                <div className='login-form' onClick={handleGoogleLogin}>
-                    <img src={googleLogo}></img>
-                    <span>Google 계정으로 로그인</span>
+        <div className="WS-login" onClick={handleClose}>
+            <div className='WS-login-header-Container'>
+                <button className='WS-login-back-button' onClick={handleClose}>&lt;</button>
+            </div>
+
+            <div className="WS-login-body-container" onClick={e => e.stopPropagation()}>
+
+                <div className='WS-login-logo'>
+                    <img src={Logo}></img>
                 </div>
-                <button id='login-close' onClick={handleClose}>닫기</button>
+
+                <div className='WS-login-button' onClick={handleGoogleLogin}>
+                    <img src={googleLogo}></img>
+                    <span>구글 계정으로 시작하기</span>
+                </div>
+
+                <div className='WS-login-message-container'>
+                    <div>개인정보방침</div>
+                    <div>이용약관</div>
+                </div>
             </div>
         </div>
     );

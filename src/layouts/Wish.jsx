@@ -3,6 +3,7 @@ import { FaComments, FaTimes } from 'react-icons/fa';
 import '../css/layout/Wish.css';
 import OpenAI from 'openai';
 import { v4 as uuidv4 } from 'uuid';
+import ReactDOM from 'react-dom';
 
 import { searchContent } from '../apis/Apis';
 
@@ -256,7 +257,6 @@ const Wish = () => {
         }
     };
 
-
     // Enter 키 처리
     const handleKeyPress = (e) => {
         if (e.key === 'Enter' && !e.shiftKey) {
@@ -359,7 +359,7 @@ const Wish = () => {
         }
     };
 
-    return (
+    return ReactDOM.createPortal(
         <>
             {/* 플로팅 버튼 */}
             <button
@@ -371,10 +371,10 @@ const Wish = () => {
 
             {/* 챗봇 모달 */}
             {isOpen && (
-                <div className="WS-Modal-Overlay">
-                    <div className="WS-Wish-Modal" ref={modalRef}>
+                <div className="WS-AlertModal-Overlay">
+                    <div className="WS-Wish" ref={modalRef}>
 
-                        <div className="WS-Wish-Modal-Header">
+                        <div className="WS-Wish-Header">
                             <h3>AI 여행 도우미</h3>
                             <button
                                 className="WS-Wish-Close-Button"
@@ -391,7 +391,7 @@ const Wish = () => {
                                     className={`WS-Wish-Message ${message.type}`}
                                 >
                                     {message.type === 'bot' && (
-                                        <div className="WS-Wish-Bot-Avatar">A</div>
+                                        <div className="WS-Wish-Bot-Avatar">AI</div>
                                     )}
                                     <div className="WS-Wish-Message-Content">
                                         {message.content}
@@ -408,6 +408,7 @@ const Wish = () => {
                             )}
                             <div ref={messagesEndRef} />
                         </div>
+
                         <div className="WS-Wish-Weather-Button-Container">
                             {/* 날씨 정보 버튼 추가 */}
                             <button
@@ -425,6 +426,7 @@ const Wish = () => {
                         </div>
                         <div className="WS-Wish-Input-Container">
                             <input
+                                className="WS-Wish-Input"
                                 type="text"
                                 value={inputMessage}
                                 onChange={(e) => setInputMessage(e.target.value)}
@@ -443,7 +445,8 @@ const Wish = () => {
                     </div>
                 </div>
             )}
-        </>
+        </>,
+        document.body
     );
 };
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import LoginModal from '../../components/LoginModal';
+import LoginModal from './LoginModal';
 
 function Login() {
     const [isModalOpen, setModalOpen] = useState(true); 

@@ -1,5 +1,5 @@
 /* 모달 스타일 */
-.WS-Wish-Modal {
+.WS-Wish {
     display: flex;
     flex-direction: column;
     z-index: 1015;
@@ -12,44 +12,43 @@
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 
     overflow: hidden;
-    animation: all 0.3s ease; 
 }
 
 /* 모달 헤더 */
-.WS-Wish-Modal-Header {
+.WS-Wish-Header {
     padding: 16px;
-    background-color: #C92B2A;
-    color: white;
+    background-color: white;
+    color: var(--color-dark-gray);
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    border-bottom: 1px solid var(--color-light-gray);
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
 }
 
-.WS-Wish-Modal-Header h3 {
+.WS-Wish-Header h3 {
     margin: 0;
-    font-size: 18px;
+    font-size: var(--font-size-base);
 }
 
 .WS-Wish-Close-Button {
     background: none;
     border: none;
-    color: white;
+    color: var(--color-dark-gray);
     cursor: pointer;
-    font-size: 20px;
+    font-size: var(--font-size-base);
     padding: 4px;
-
-    transition: all 0.2s;
 }
 
-.WS-Wish-Close-Button:hover {
-    scale: 1.1;
-}
 /* 챗봇 메시지 */
 .WS-Wish-Messages {
     flex: 1;
     overflow-y: auto;
     overflow-x: hidden;
     padding: 20px;
+
+    margin-bottom: 10px;
 }
 
 .WS-Wish-Message {
@@ -65,7 +64,7 @@
 .WS-Wish-Bot-Avatar {
     width: 40px;
     height: 40px;
-    background-color: #C92B2A;
+    background-color: var(--color-main);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -78,7 +77,7 @@
     max-width: 70%;
     padding: 12px 16px;
     border-radius: 12px;
-    background: #E3E3E3;
+    background: var(--color-light-gray);
     white-space: pre-line;
     word-wrap: break-word;
 }
@@ -89,70 +88,63 @@
     transition: all 0.2s;
 }
 
-/* 챗봇 입력창 */
-.WS-Wish-Input-Container {
-    padding: 20px;
-    border-top: 1px solid #E3E3E3;
-    display: flex;
-    gap: 10px;
-}
-
-.WS-Wish-Input-Container input {
-    flex: 1;
-    padding: 12px;
-    border: 1px solid #E3E3E3;
-    border-radius: 6px;
-    font-size: 16px;
-}
-
-.WS-Wish-Input-Container button {
-    padding: 12px 24px;
-    background: #C92B2A;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.WS-Wish-Send-Button:hover {
-    background: #A52421;
-    scale: 1.05;
-}
-
-.WS-Wish-Weather-Button-Container{
+.WS-Wish-Weather-Button-Container {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 40px;
 }
+
 /* 날씨 정보 버튼 */
 .WS-Wish-Exchange-Button,
-.WS-Wish-Weather-Button{
+.WS-Wish-Weather-Button {
     width: 100px;
     height: 40px;
-    border-radius: 10px;
-    background-color: #C92B2A;
+    border-radius: 22px;
+    background-color: var(--color-guide);
     color: white;
     border: none;
     cursor: pointer;
-    transition: all 0.2s;
+
+    margin-bottom: 10px;
 }
 
 .WS-Wish-Weather-Button:hover,
-.WS-Wish-Exchange-Button:hover{
-    background-color: #A52421;
+.WS-Wish-Exchange-Button:hover {
+    background-color: var(--color-main-hover);
     scale: 1.05;
 }
 
-/* 모달 애니메이션 */
-@keyframes modalFadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+
+/* 챗봇 입력창 */
+.WS-Wish-Input-Container {
+    padding: 20px;
+    border-top: 1px solid var(--color-light-gray);
+    display: flex;
+    gap: 20px;
+}
+
+.WS-Wish-Input {
+    padding-bottom: 10px;
+    padding-top: 12px;
+    padding-left: 15px;
+    border-radius: 22px;
+    border: 1px solid var(--color-light-gray);
+    font-size: var(--font-size-base);
+
+    outline: none;
+}
+
+.WS-Wish-Send-Button {
+    padding: 12px 24px;
+    background: var(--color-main);
+    color: white;
+    border: none;
+    border-radius: 22px;
+    cursor: pointer;
+}
+
+.WS-Wish-Send-Button:hover {
+    background: var(--color-main-hover);
+    scale: 1.05;
 }
