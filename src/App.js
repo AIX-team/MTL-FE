@@ -5,8 +5,9 @@ import MyPage from './pages/mypage/MyPage';
 import GuideBookList from './pages/travel/GuideBookList';
 import Wish from './layouts/Wish';
 import TravelInfo from './pages/link/travelInfo/TravelInfo';
-import GuideBook from './pages/link/GuideBook';
+import GuideBook from './pages/link/guideBook/GuideBook';
 import './css/styles/variables.css';
+
 
 import Login from "./pages/user/Login";
 import LoginSuccess from "./pages/user/LoiginSuccess";

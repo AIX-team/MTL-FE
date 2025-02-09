@@ -1015,3 +1015,57 @@
   color: var(--color-main);
   font-weight: bold;
 }
+
+.pdf-container {
+    position: fixed;
+    left: 0;
+    top: 0;
+    visibility: hidden;
+    width: 210mm;
+    background: white;
+    z-index: -1;
+}
+
+.pdf-course-section {
+    break-inside: avoid;
+    margin-bottom: 30px;
+}
+
+.course-content {
+    margin-top: 20px;
+}
+
+.place-item {
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    break-inside: avoid;
+}
+
+.place-item img {
+    max-width: 100%;
+    height: auto;
+    margin-top: 10px;
+    display: block;
+}
+
+.map-image-container {
+    margin: 20px 0;
+    width: 100%;
+}
+
+.captured-map-image {
+    width: 100%;
+    height: auto;
+    border: 1px solid #ddd;
+}
+
+.HG-GuideBookList-map {
+    position: fixed;
+    left: 0;
+    top: 0;
+    visibility: hidden;
+    height: 400px;
+    width: 600px;
+    z-index: -1;
+}
