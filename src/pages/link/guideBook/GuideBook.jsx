@@ -9,6 +9,7 @@ import downloadbtn from '../../../images/download.png';
 import backArrow from '../../../images/backArrow.svg';
 import { useParams } from 'react-router-dom';
 import html2canvas from 'html2canvas';  // html2canvas 라이브러리 추가 필요
+import TitleEditModal from './GuideBookTitleEditModal';
 // CSS 파일 import
 
 import '../../../css/guide/GuideBook.css';
@@ -174,8 +175,8 @@ const GuideBook = () => {
             }
         }
         return false;
-    }
-    
+    }    
+    const [isTitleEditModalOpen, setIsTitleEditModalOpen] = useState(false);
     const [mapKey, setMapKey] = useState(0);
 
     const [guideBook, setGuideBook] = useState({
@@ -187,6 +188,8 @@ const GuideBook = () => {
         courseCnt: '',
         courses: {}
     });
+
+
 
     const CoursePlaceRequest = {
         id: 0,
@@ -210,9 +213,7 @@ const GuideBook = () => {
 
     const putCoursePlacesNum = async (coursePlaceRequest) => {
         try {
-            console.log('CoursePlaceRequest :', coursePlaceRequest);
-            console.log('Stringified CoursePlaceRequest :', JSON.stringify(coursePlaceRequest));
-
+            console.log('coursePlaceRequest',coursePlaceRequest);
             await axiosInstance.put(`/api/v1/courses/`, coursePlaceRequest);
         } catch (error) {
             //자세한 에러 정보 출력
@@ -228,10 +229,10 @@ const GuideBook = () => {
         setTargetCourse([]);
     };
 
+
     // 편집 버튼 클릭 핸들러
     const handleEditClick = () => {
         if(isEditMode) {
-            
             // 맵 컴포넌트 강제 리렌더링을 위한 키 업데이트
             setMapKey(prev => prev + 1);  // 새로운 상태 추가 필요
 
@@ -246,7 +247,8 @@ const GuideBook = () => {
                     place.id.toString().replace(/\u0000/g, '').trim());
                 const newPlaceRespList = places.map(place => 
                     place.id.toString().replace(/\u0000/g, '').trim());
-
+                console.log(newPlaceRespList);
+                console.log(oldPlaceRespList);
                 if(isPlaceNumChanged(oldPlaceRespList, newPlaceRespList)) {
                     //updatedPlaces 순서대로 리스트 형태로 변환
                     CoursePlaceRequest.id = currentCourse.courseId;
@@ -259,6 +261,29 @@ const GuideBook = () => {
         setIsEditMode(!isEditMode); // 편집 모드 토글
         setSelectedItems([]);
     };
+
+    const putGuideBookTitle = async (title) => {
+        try {
+            console.log(title);
+            await axiosInstance.put(`/api/v1/travels/guidebooks/${guidebookId}/title`, {
+                title: title
+            });
+            setGuideBook(prevGuideBook => ({
+                ...prevGuideBook,
+                guideBookTitle: title
+            }));
+            console.log(guideBook.guideBookTitle);
+        } catch (error) {
+            console.error('Error posting guidebook title:', error);
+        }
+    }
+
+    // 제목 편집 모달 클릭 핸들러
+    const handleTitleSave = (newTitle) => {
+        putGuideBookTitle(newTitle);
+        setIsTitleEditModalOpen(false);
+    }
+
 
     // 이동 버튼 클릭 핸들러
     const handleMoveClick = () => {
@@ -290,7 +315,9 @@ const GuideBook = () => {
                 num: index + 1
             }));
             if(places !== updatedPlaces) {
+                console.log('updatedPl aces',updatedPlaces);
                 setPlaces(updatedPlaces);
+                
             }
         }
     }, [activeTab, guideBook.courses]);
@@ -424,7 +451,6 @@ const GuideBook = () => {
         const items = Array.from(places);
         const [reorderedItem] = items.splice(result.source.index, 1);
         items.splice(result.destination.index, 0, reorderedItem);
-        setPlaces(items);
         setGuideBook(prevGuideBook => {
             const updatedCourses = { ...prevGuideBook.courses };
             updatedCourses[activeTab - 1] = {
@@ -437,6 +463,7 @@ const GuideBook = () => {
             };
         });
     };
+
 
     // 장소 클릭 핸들러
     const handlePlaceClick = (place) => {
@@ -488,7 +515,6 @@ const GuideBook = () => {
                                         <div
                                             ref={provided.innerRef}
                                             {...provided.draggableProps}
-                                            {...provided.dragHandleProps}
                                             className={`YC-GuideBook-place-Container ${isEditMode ? 'edit-mode' : ''}`}
                                         >
                                             {isEditMode ? (
@@ -545,7 +571,10 @@ const GuideBook = () => {
             <div className="HG-GuideBookList-Header-contents">
                 {/* 이곳에는 상위 여행 정보 경로 추가 해야함*/}
                 <Link to={`/travelInfos/${guideBook.travelInfoId}`} id="YC-GuideBook-Header-contents-recommandations">{guideBook.travelInfoTitle}</Link>
+                <div className="HG-GuideBookList-Header-contents-title">
                 <h3 id="YC-GuideBook-Tittle">{guideBook.guideBookTitle}</h3>
+                <span className="HG-GuideBookList-Header-contents-title-edit" onClick={() => setIsTitleEditModalOpen(true)}>편집</span>
+                </div>
                 </div>
                 <div>
                     <img src={downloadbtn} alt="여행 정보 이미지" />
@@ -606,6 +635,15 @@ const GuideBook = () => {
                     <button id="YC-GuideBookList-moveModal-confirm" onClick={handlePlaceAdd} disabled={!targetCourse}>예</button>
                     <button id="YC-GuideBookList-moveModal-cancel" onClick={handleModalClose}>아니오</button>
                 </div>
+            )}
+            {/* 제목 편집 모달 */}
+            {isTitleEditModalOpen && (
+                <TitleEditModal
+                    isOpen={isTitleEditModalOpen}
+                    onClose={() => setIsTitleEditModalOpen(false)}
+                    title={guideBook.guideBookTitle}
+                    onSave={(e) => handleTitleSave(e)}
+                />
             )}
 
             {/* 삭제 모달 */}

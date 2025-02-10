@@ -1,10 +1,19 @@
 import backArrow from '../../../images/backArrow.svg';
 import { useState, useEffect } from 'react';
+import axios from 'axios';
 import selectIcon from '../../../images/select.svg';
 import isSelectedIcon from '../../../images/isselect.svg';
 import allSelectIcon from '../../../images/select_check_deactive.svg';
 import xIcon from '../../../images/x-btn.svg';
 import '../../../css/SelectModal.css';
+import TasteModal from './TasteModal';
+
+const axiosInstance = axios.create({
+  baseURL: process.env.REACT_APP_API_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
 
 const SelectModal = ({ isOpen, onClose, selectedPlaces, onPlaceSelect, travelDays }) => {
 
@@ -13,7 +22,7 @@ const SelectModal = ({ isOpen, onClose, selectedPlaces, onPlaceSelect, travelDay
   const [selectedFilters, setSelectedFilters] = useState(['전체보기']);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState(null);
-
+  const [showTasteModal, setShowTasteModal] = useState(false);
   // 필터 타입을 매핑하는 객체 추가
   const filterTypeMap = {
     '전체보기': ['all', 'landmark', 'restaurant', 'etc'],
@@ -21,6 +30,22 @@ const SelectModal = ({ isOpen, onClose, selectedPlaces, onPlaceSelect, travelDay
     '음식/카페': 'restaurant',
     '그 외': 'etc'
   };
+
+
+  const postGuidebook = async (travelTaste) => {
+    try {
+      const response = await axiosInstance.post('/api/v1/travels/guidebook', {
+        placeIds: isSelected.map(place => place.placeId),
+        travelDays: travelDays,
+        travelTaste: travelTaste
+      });
+      console.log(response);
+
+    } catch (error) {
+      console.error('API Error:', error);
+    }
+  };
+
 
   const handlePlaceSelect = (placeId) => {
     setIsSelected(prev => {
@@ -68,6 +93,7 @@ const SelectModal = ({ isOpen, onClose, selectedPlaces, onPlaceSelect, travelDay
   };
 
   // 유효성 검사 및 가이드북 생성 핸들러 추가
+
   const handleGuidebookCreate = () => {
     const minPlaces = travelDays * 2;
     const maxPlaces = travelDays * 5;
@@ -81,12 +107,17 @@ const SelectModal = ({ isOpen, onClose, selectedPlaces, onPlaceSelect, travelDay
       alert(`최대 ${maxPlaces}개까지만 선택 가능합니다.`);
       return;
     }
-    
-    // 여기에 가이드북 생성 로직 추가
-    onClose();
+    setShowTasteModal(true);
   };
 
+
+  const handleTasteSave = (e) => {
+    postGuidebook(e);
+  };
+
+
   // useEffect를 사용하여 모달 상태에 따라 body 클래스 토글
+
   useEffect(() => {
     if (isOpen) {
       document.body.classList.add('modal-open');
@@ -201,6 +232,12 @@ const SelectModal = ({ isOpen, onClose, selectedPlaces, onPlaceSelect, travelDay
             가이드북 생성 {isSelected.length}
           </div>
         </div>
+
+        {/* 가이드북 생성 일정 취향 모달 추가 */}
+        <TasteModal 
+        isOpen={showTasteModal}
+        onClose={() => setShowTasteModal(false)} 
+        onSave={(e) => handleTasteSave(e)} />
 
         {/* 삭제 확인 모달 추가 */}
         {showDeleteModal && (
