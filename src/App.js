@@ -21,34 +21,29 @@ function App() {
     <BrowserRouter>
       <GoogleMapsWrapper>
         <Routes>
-          {/* 루트 경로를 /link로 리다이렉트 */}
-          <Route path="/" element={<Navigate to="/link" replace />} />
-      <Routes>
-        {/* 루트 경로를 /link로 리다이렉트 */}
-        <Route path="/" element={<LandingPage />} />
-
+          <Route path="/" element={<LandingPage />} />
+          
           {/* 로그인 페이지  */}
           <Route path="/login" element={<Login />} />
-          <Route path="/loginSuccess" element={<LoginSuccess/>}/>
+          <Route path="/loginSuccess" element={<LoginSuccess />} />
 
           {/* 로딩 페이지 추가 */}
-          <Route path="/loading" element={<Loading message="여행 기간에 맞는
-          영상 정보 준비중" />} />
-                                        
+          <Route path="/loading" element={<Loading message="여행 기간에 맞는 영상 정보 준비중" />} />
+
           {/* MainLayout을 모든 페이지의 기본 레이아웃으로 사용 */}
           <Route path="/" element={<MainLayout />}>
             {/* Link 페이지와 하위 라우트들 */}
             <Route path="link/*" element={<LinkPage />} />
-            
+
             {/* MyPage */}
             <Route path="mypage/*" element={<MyPage />} />
 
             {/* Wish */}
             <Route path="wish/*" element={<Wish />} />
-              
+
             {/* Travel 페이지 */}
             <Route path="travel/*" element={<TravelPage />} />
-          
+
             {/* TravelInfos */}
             <Route path="travelinfos/:travelInfoId" element={<TravelInfo />} />
 
@@ -58,7 +53,6 @@ function App() {
         </Routes>
       </GoogleMapsWrapper>
     </BrowserRouter>
-
   );
 }
 
