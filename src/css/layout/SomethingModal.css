@@ -1,0 +1,58 @@
+.WS-Modal-Overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    z-index: 1015;
+
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.WS-Modal {
+    background: white;
+    padding: 30px;
+    border-radius: 22px;
+    width: 80%;
+    max-width: 300px;
+    text-align: center;
+}
+
+.WS-Modal-Message {
+    margin: 10px 20px 17px 20px;
+    font-size: 16px;
+    color: #3E3E3E;
+}
+
+.WS-Modal-Button {
+    display: flex;
+    margin: 0 auto;
+    align-items: center;
+    justify-content: center;
+
+    width: 40%;
+    height: 50px;
+    border: none;
+    border-radius: 22px;
+    background-color: #C92B2A;
+   
+
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: bold;
+
+    transition: all 0.2s;
+}
+
+.WS-Modal-Button:hover {
+    cursor: pointer;
+    background-color: #A52421;
+    scale: 1.05;
+}
+
+/*  완료 ============================================================ */

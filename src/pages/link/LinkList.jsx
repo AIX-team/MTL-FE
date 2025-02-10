@@ -112,6 +112,7 @@ const LinkList = ({ linkData, setLinkData }) => {
         <div className="WS-LinkList">
             <div className="WS-Link-Input-Container">
                 <input
+                    id="WS-Link-Input"
                     type="text"
                     id="WS-Link-Input"
                     placeholder="유튜브 또는 블로그 링크 붙여넣기"
@@ -159,7 +160,7 @@ const LinkList = ({ linkData, setLinkData }) => {
                         disabled={linkData.length === 0}
                         onClick={handleNextClick}
                     >
-                        다음으로
+                        다음
                     </button>
                 </div>
             </div>
