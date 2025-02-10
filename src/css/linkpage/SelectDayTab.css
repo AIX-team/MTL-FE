@@ -18,7 +18,7 @@
   /* 수진,전체 내용 위아래위치 수정 */
   font-size: 28px;
   font-weight: bold;
-  margin-top: -80px;
+  margin-top: -10px; /* 전체 내용 위아래 여백 수정 */
   margin-bottom: 60px;
   line-height: 0px;
 }
@@ -66,7 +66,7 @@
 .WS-SelectDayTab-Button-Container {
   display: flex;
 
-  margin-top: 161px; /* SJ, 이전,다음 버튼 위치 수정 */
+  margin-top: 137px; /* SJ, 이전,다음 버튼 위치 수정 */
   padding: 16px;
   gap: 0px;
   background-color: white;
@@ -77,17 +77,17 @@
 .WS-SelectDayTab-BackButton,
 .WS-SelectDayTab-NextButton {
   padding: 20px;
-  border-radius: 22px;
+  border-radius: 25px; /* SJ,수정 */
   border: none;
   color: #3e3e3e;
   font-size: 16px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
-  min-width: 180px;
+  min-width: 185px;
   flex: 1;
   max-width: 100px;
-  font-family: 'NanumBarunGothic', sans-serif;
+  font-family: "NanumBarunGothic", sans-serif;
 }
 
 .WS-SelectDayTab-NextButton.active {

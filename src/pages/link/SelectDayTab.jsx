@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { FaPlus, FaMinus, FaArrowLeft } from "react-icons/fa"; // 아이콘 사용을 위한 import
 import { useNavigate } from "react-router-dom"; // 네비게이션 훅 추가
-import SelectpreferTab from "./SelectpreferTab"; // SelectpreferTab import 추가⭐️⭐️⭐️
 import "../../css/linkpage/SelectDayTab.css";
 
 const SelectDayTab = ({ onBack }) => {
   const [days, setDays] = useState(1); // 기본값 1일
   const [showPreferTab, setShowPreferTab] = useState(false); // 추가⭐️⭐️⭐️
+  const [isLoading, setIsLoading] = useState(false); // 로딩페이지로 전환⭐️⭐️⭐️
   const navigate = useNavigate(); // 네비게이션 훅 사용
 
   const increaseDays = () => {
@@ -44,18 +44,19 @@ const SelectDayTab = ({ onBack }) => {
   };
 
   // 다음 버튼 클릭 핸들러 추가⭐️⭐️⭐️
-  const handleNext = () => {
-    setShowPreferTab(true);
-  };
+  const handleNext = async () => {
+    setIsLoading(true);
+    try {
+      // 여기에 필요한 데이터 처리 로직 추가
+       // 예시: 2초 대기
 
-  // SelectpreferTab에서 뒤로가기⭐️⭐️⭐️
-  const handlePreferBack = () => {
-    setShowPreferTab(false);
+      // 로딩이 끝나면 다음 페이지로 이동
+      navigate("/loading", { state: { days: days } });
+    } catch (error) {
+      console.error("Error:", error);
+      setIsLoading(false);
+    }
   };
-
-  if (showPreferTab) {
-    return <SelectpreferTab onBack={handlePreferBack} />;
-  }
 
   return (
     <div className="WS-SelectDayTab">

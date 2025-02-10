@@ -16,15 +16,15 @@
 
 .WS-Modal {
     background: white;
-    padding: 20px;
-    border-radius: 10px;
+    padding: 30px;
+    border-radius: 22px;
     width: 80%;
     max-width: 300px;
     text-align: center;
 }
 
 .WS-Modal-Message {
-    margin: 0 0 20px 0;
+    margin: 10px 20px 17px 20px;
     font-size: 16px;
     color: #3E3E3E;
 }
@@ -38,7 +38,7 @@
     width: 40%;
     height: 50px;
     border: none;
-    border-radius: 10px;
+    border-radius: 22px;
     background-color: #C92B2A;
    
 
