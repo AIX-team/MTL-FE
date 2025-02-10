@@ -1,5 +1,12 @@
 .WS-LinkList {
-    width: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#WS-Link-Input {
+    padding-right: 60px;
 }
 
 .WS-LinkList-AddButton {
@@ -33,6 +40,8 @@
 /* 링크 아이템 스타일 */
 .WS-LinkList-Items {
 
+    height: 500px;
+
     display: flex;
     flex-direction: column;
     margin-top: 20px;
@@ -42,8 +51,6 @@
     max-height: calc(100vh - 200px);
     /* 화면 높이에서 헤더, 푸터, 분석버튼 영역을 뺀 높이 */
     overflow-y: auto;
-
-    transition: all 0.3s ease;
 }
 
 .WS-LinkList-Item {
@@ -74,7 +81,7 @@
     padding-bottom: 2px;
     padding-left: 8px;
     padding-right: 8px;
-    
+
     border-radius: var(--border-radius-full);
     font-size: 12px;
     font-weight: bold;

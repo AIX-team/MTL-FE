@@ -113,6 +113,7 @@ const LinkList = ({ linkData, setLinkData }) => {
             <div className="WS-Link-Input-Container">
                 <input
                     type="text"
+                    id="WS-Link-Input"
                     placeholder="유튜브 또는 블로그 링크 붙여넣기"
                     className="WS-Link-Input"
                     value={inputLink}

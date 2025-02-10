@@ -76,7 +76,12 @@
 
 }
 
-
+/* 핸드폰 확인 */
 .WS-Link-Page-Content {
     margin-top: 20%;
+    width: 100vw;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

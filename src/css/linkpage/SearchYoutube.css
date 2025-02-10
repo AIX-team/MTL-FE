@@ -1,7 +1,8 @@
-/* 검색 컨테이너 ============================================= */
-.WS-SearchYoutube-Search {
-    padding-bottom: 10px;
-    width: 400px;    
+.WS-SearchYoutube-Tab {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 /* 검색 결과 ============================================= */
@@ -10,12 +11,11 @@
     overflow-y: auto;
     overflow-x: hidden;
     height: 500px;
-    transition: all 0.3s ease;
-}
+ }
 
 /* 검색 입력창 ============================================= */
 .WS-Link-Input-Container {
-    width: 100%;
+    width: 400px;
     position: relative;
     flex: 1;
     display: flex;
@@ -26,9 +26,9 @@
     width: 100%;
     padding: 12px 20px;
 
-    padding-right:60px;
+    padding-right: 60px;
 
-    border: 2px solid #E3E3E3;
+    border: 2px solid var(--color-light-gray);
 
     border-radius: 25px;
     font-size: 14px;
@@ -42,18 +42,15 @@
 /* 검색 버튼 ============================================= */
 .WS-Link-Button-Container {
     position: absolute;
-    right: 2px;
+    right: 10px;
     display: flex;
 }
 
-.WS-SearchYoutube-SearchButton,
-.WS-SearchYoutube-ClearButton {
-
+.WS-SearchYoutube-SearchButton {
     color: var(--color-dark-gray);
 
-    right: 40px;
+    right: 45px;
     top: 50%;
-    transition: all 0.3s ease;
 
     background: none;
     border: none;
@@ -61,8 +58,21 @@
     display: flex;
     align-items: center;
     justify-content: center;
+}
 
-    margin-right: 5px;
+.WS-SearchYoutube-ClearButton {
+
+    position: absolute;
+    color: var(--color-dark-gray);
+
+    right: 20px;
+
+    background: none;
+    border: none;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .WS-SearchYoutube-SearchButton:hover,

@@ -1,20 +1,143 @@
 /* 메인 레이아웃 (헤더와 푸터 사이의 컨테이너) */
 .YC-GuideBookList-Container {
   overflow-y: auto;
-  /* 세로 스크롤 가능 */
-  margin-top: 30px;
-  /* 상단 여백 */
-  height: 82vh;
-  /* 화면 높이의 82% 사용 */
-  margin-left: 10px;
-  /* 좌측 여백 */
-  margin-right: 10px;
-  /* 우측 여백 */
-  scrollbar-width: none;
-  /* Firefox에서 스크롤바 숨기기 */
-  -ms-overflow-style: none;
-  /* IE와 Edge에서 스크롤바 숨기기 */
+  height: 100vh;
+  background-color: white;
+  position: relative;
 }
+
+.HG-GuideBookList-Header {
+  padding: 10px 20px;
+  flex-shrink: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.WS-GuideBookList-menus {
+  height: 70vh;
+}
+
+/* 코스 메뉴 지도 컨테이너 */
+.YC-GuideBookList-map {
+  width: 98%;
+  height: 230px;
+  position: relative;
+  left: 1%;
+}
+
+/* 코스 메뉴 버튼 컨테이너 */
+.YC-GuideBookList-menus-menu {
+  margin-top: 5px;
+  margin-left: 10px;
+  margin-right: 10px;
+
+  height: 40px;
+
+  display: flex;
+  align-items: center;
+
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  gap: 20px;
+}
+
+/* 코스 메뉴 버튼 */
+.WS-GuideBookList-menus-menu-button {
+  padding: 6px 15px;
+  width: 70px;
+
+  background-color: white;
+  color: var(--color-guide);
+
+  border: 2px solid var(--color-guide);
+  border-radius: 22px;
+
+  font-size: var(--font-size-sm);
+
+  cursor: pointer;
+}
+
+/* 코스 메뉴 버튼 호버 스타일 */
+.WS-button-clicked {
+  padding: 6px 15px;
+  width: 70px;
+
+  background-color: var(--color-main);
+  color: white;
+
+  border: none;
+  border-radius: 22px;
+
+  font-size: var(--font-size-sm);
+  font-weight: bold;
+
+  cursor: pointer;
+}
+
+/* 코스 메뉴 편집 버튼 컨테이너 */
+.WS-GuideBookList-menus-editBtn-Container {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* 코스 메뉴 편집 버튼 */
+.YC-GuideBookList-menus-editBtn-edit {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-guide);
+  font-weight: 900;
+}
+
+/* 코스 메뉴 컨테이너 */
+.YC-GuideBookList-content {
+  margin: 0px auto;
+  overflow-y: auto;
+  height: 60vh;
+}
+
+/* ------------------------------------------------------------------------- */
+
+.HG-GuideBookList-Header-contents {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  align-self: center;
+  margin-left: 25px;
+
+}
+
+/* 추천 링크 스타일 */
+#YC-GuideBook-Header-contents-recommandations {
+  text-decoration: none;
+  /* 밑줄 제거 */
+  color: #D65E5D;
+  /* 텍스트 색상 */
+  font-weight: bold;
+  /* 굵은 글씨 */
+  font-size: 12px;
+  /* 글씨 크기 */
+
+  background-color: var(--color-light-gray);
+}
+
+.HG-GuideBookList-Header-contents-title {
+  font-size: var(--font-size-lg);
+  color: var(--color-black);
+  font-weight: bold;
+}
+
+.HG-GuideBookList-Header-contents-course {
+  font-size: var(--font-size-xs);
+  color: var(--color-main);
+  font-weight: bold;
+}
+
+
 
 .YC-GuideBookList-Container::-webkit-scrollbar {
   display: none;
@@ -29,124 +152,9 @@
   /* 세로 정렬 */
   gap: 5px;
   /* 요소 간 간격 */
+
 }
 
-/* 추천 링크 스타일 */
-#YC-GuideBook-Header-contents-recommandations {
-  text-decoration: none;
-  /* 밑줄 제거 */
-  color: #D65E5D;
-  /* 텍스트 색상 */
-  font-weight: bold;
-  /* 굵은 글씨 */
-  font-size: 12px;
-  /* 글씨 크기 */
-}
-
-/* 코스 메뉴 버튼 컨테이너 */
-.YC-GuideBookList-menus-menu {
-  margin: 10px 5px;
-  display: flex;
-  /* 플렉스 박스 사용 */
-  align-items: center;
-  /* 수직 중앙 정렬 */
-  margin-bottom: 20px;
-  /* 하단 여백 */
-  overflow-x: auto;
-  /* 가로 스크롤 가능 */
-  white-space: nowrap;
-  /* 텍스트 줄바꿈 방지 */
-  overflow-x: auto;
-  /* 수평 스크롤 */
-  /* 수평 스크롤 버튼 숨기기 */
-  scrollbar-width: none;
-  /* Firefox에서 스크롤바 숨기기 */
-  -ms-overflow-style: none;
-  /* IE와 Edge에서 스크롤바 숨기기 */
-
-  /* 버튼 간격 */
-  gap: 10px;
-}
-
-/* 코스 메뉴 버튼 */
-.YC-GuideBookList-menus-menu-button {
-  margin-right: 10px;
-  /* 우측 여백 */
-  padding: 6px 15px;
-  /* 내부 여백 */
-  background-color: #fafafa;
-  /* 배경색 */
-  color: rgb(0, 0, 0);
-  /* 텍스트 색상 */
-  border: 1px solid #8f8f8f;
-  /* 테두리 */
-  border-radius: 20px;
-  /* 둥근 모서리 */
-  cursor: pointer;
-  /* 커서 모양 변경 */
-  font-size: 12px;
-  /* 글씨 크기 */
-  flex-shrink: 0;
-  /* 버튼 크기 고정 */
-  white-space: nowrap;
-  /* 텍스트 줄바꿈 방지 */
-  
-}
-
-
-/* 코스 메뉴 버튼 호버 스타일 */
-.HG-button-clicked {
-  margin-right: 10px;
-  /* 우측 여백 */
-  padding: 6px 15px;
-  /* 내부 여백 */
-  background-color: #D65E5D;
-  /* 호버 시 배경색 */
-  border: 1px solid #D65E5D;
-  /* 호버 시 테두리 */
-  color: white;
-  /* 호버 시 텍스트 색상 */
-  border-radius: 20px;
-  /* 둥근 모서리 */
-  cursor: pointer;
-  /* 커서 모양 변경 */
-  font-size: 12px;
-  /* 글씨 크기 */
-  flex-shrink: 0;
-  /* 버튼 크기 고정 */
-  white-space: nowrap;
-  /* 텍스트 줄바꿈 방지 */
-}
-
-/* 코스 메뉴 스크롤바 숨기기 (모바일 환경 / 웹 브라우저) */
-.YC-GuideBookList-menus-menu::-webkit-scrollbar {
-  display: none;
-  /* 스크롤바 숨기기 */
-}
-
-/* 코스 메뉴 편집 버튼 컨테이너 */
-.YC-GuideBookList-menus-editBtn {
-  display: flex;
-  /* 플렉스 박스 사용 */
-  justify-content: flex-end;
-  /* 오른쪽 정렬 */
-}
-
-/* 코스 메뉴 편집 버튼 */
-#YC-GuideBookList-menus-editBtn-edit {
-  background-color: transparent;
-  /* 투명 배경 */
-  color: #D65E5D;
-  /* 텍스트 색상 */
-  border: none;
-  /* 테두리 없음 */
-  border-radius: 5px;
-  /* 둥근 모서리 */
-  cursor: pointer;
-  /* 커서 모양 변경 */
-  font-weight: 900;
-  /* 굵은 글씨 */
-}
 
 /* 코스 메뉴 편집 옵션 컨테이너 */
 .YC-GuideBookList-editOptions {
@@ -167,11 +175,11 @@
 
 @keyframes slideUpEdit {
   from {
-      transform: translateY(100%);
+    transform: translateY(100%);
   }
 
   to {
-      transform: translateY(0);
+    transform: translateY(0);
   }
 }
 
@@ -641,40 +649,9 @@
   /* 하단 여백 */
 }
 
-/* 코스 메뉴 컨테이너 */
-.YC-GuideBookList-content {
-  overflow-y: auto;
-  /* 세로 스크롤 가능 */
-  max-height: 70vh;
-  /* 최대 높이 */
-  
-  height: calc(100% - 100px);
-  /* 헤더 높이를 제외한 높이 */
-  margin: 0px auto;
-  /* 중앙 정렬 */
-  position: relative;
-  /* 상대 위치 */
-}
 
-/* 코스 메뉴 지도 컨테이너 */
-.YC-GuideBookList-map {
-  width: 100%;
-  height: 400px;  /* 또는 원하는 높이 값 */
-  position: relative;
-  margin: 20px 0;  /* 선택적: 상하 여백 */
-}
 
-/* 코스 메뉴 지도 스타일 */
-.YC-GuideBookList-map-iframe {
-  width: 100%;
-  /* 너비 */
-  height: 250px;
-  /* 높이 */
-  border: 0;
-  /* 테두리 없음 */
-  border-radius: 5px;
-  /* 둥근 모서리 */
-}
+
 
 /* 장소 번호와 체크박스 위치 고정 */
 .YC-GuideBook-place-fixed {
@@ -781,13 +758,13 @@
 
 @keyframes slideUp {
   from {
-      transform: translateY(100%);
-      /* 시작 위치 */
+    transform: translateY(100%);
+    /* 시작 위치 */
   }
 
   to {
-      transform: translateY(0);
-      /* 끝 위치 */
+    transform: translateY(0);
+    /* 끝 위치 */
   }
 }
 
@@ -981,13 +958,7 @@
   border: 0;
 }
 
-.HG-GuideBookList-Header {
-  margin-left: 25px;
-  
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
+
 
 
 .HG-GuideBook-detail-modal-header {
@@ -997,75 +968,57 @@
   border-bottom: 1px solid #eee;
 }
 
-.HG-GuideBookList-Header-contents{
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  height: 100%;
-  padding-left: 25px;
-  align-self: center;
-}
-.HG-GuideBookList-Header-contents-title{
-  font-size: var(--font-size-lg);
-  color: var(--color-black);
-  font-weight: bold;
-}
-.HG-GuideBookList-Header-contents-course{
-  font-size: var(--font-size-xs);
-  color: var(--color-main);
-  font-weight: bold;
-}
 
 .pdf-container {
-    position: fixed;
-    left: 0;
-    top: 0;
-    visibility: hidden;
-    width: 210mm;
-    background: white;
-    z-index: -1;
+  position: fixed;
+  left: 0;
+  top: 0;
+  visibility: hidden;
+  width: 210mm;
+  background: white;
+  z-index: -1;
 }
 
 .pdf-course-section {
-    break-inside: avoid;
-    margin-bottom: 30px;
+  break-inside: avoid;
+  margin-bottom: 30px;
 }
 
 .course-content {
-    margin-top: 20px;
+  margin-top: 20px;
 }
 
 .place-item {
-    margin-bottom: 15px;
-    padding: 10px;
-    border: 1px solid #ddd;
-    break-inside: avoid;
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  break-inside: avoid;
 }
 
 .place-item img {
-    max-width: 100%;
-    height: auto;
-    margin-top: 10px;
-    display: block;
+  max-width: 100%;
+  height: auto;
+  margin-top: 10px;
+  display: block;
 }
 
 .map-image-container {
-    margin: 20px 0;
-    width: 100%;
+  margin: 20px 0;
+  width: 100%;
 }
 
 .captured-map-image {
-    width: 100%;
-    height: auto;
-    border: 1px solid #ddd;
+  width: 100%;
+  height: auto;
+  border: 1px solid #ddd;
 }
 
 .HG-GuideBookList-map {
-    position: fixed;
-    left: 0;
-    top: 0;
-    visibility: hidden;
-    height: 400px;
-    width: 600px;
-    z-index: -1;
+  position: fixed;
+  left: 0;
+  top: 0;
+  visibility: hidden;
+  height: 400px;
+  width: 600px;
+  z-index: -1;
 }

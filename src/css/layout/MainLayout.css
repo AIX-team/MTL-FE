@@ -2,19 +2,17 @@
     -webkit-tap-highlight-color: transparent;
     font-family: 'Noto Sans KR', sans-serif;
     transition: all 0.3s;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
 }
 
 /* 메인 컨텐츠 영역 */
 .WS-Main-Container {
     position: fixed;
-    top: 1%;
+    top: 0;
     bottom: calc(var(--footer-height) + env(safe-area-inset-bottom, 0px));
 
     width: 96%;
     -webkit-overflow-scrolling: touch;
+
 }
 
 .WS-Main-Footer {

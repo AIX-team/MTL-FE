@@ -273,7 +273,7 @@ const TravelInfo = () => {
   const handleAISelected = () => {
     setIsAISelected(!isAISelected);
     getAISelect();
-    if(!isAISelected){
+    if (!isAISelected) {
       setSelectedPlaces([]);
     }
   };
@@ -312,25 +312,30 @@ const TravelInfo = () => {
     <main className='HG-TravelInfo-Container'>
 
       <div className='HG-TravelInfo-Header'>
-        <span className='HG-TravelInfo-Back-Btn'>
-          <img src={backArrowIcon} alt="backArrowIcon" />
+        <div className='WS-TravelInfo-Header-Left'>
+          <div className='WS-TravelInfo-Header-Left-Back-Btn'>
+            <img className='WS-TravelInfo-Header-Left-Back-Btn-Icon' src={backArrowIcon} alt="backArrowIcon" />
+          </div>
 
-          <div>
-            <div className='HG-TravelInfo-Travel-Days-Input'>{travelDays}일</div>
-            <div className='HG-TravelInfo-Title-Edit-Frame'>
+          <div className='WS-TravelInfo-Header-Left-Contents'>
+            <div className='WS-TravelInfo-Travel-Days'>{travelDays}일</div>
+
+            <div className='HG-TravelInfo-Title-Edit-Container'>
               <div className='HG-TravelInfo-Title'>{travelInfoTitle}</div>
               <span className='HG-TravelInfo-Title-Edit-text'
                 onClick={handleTitleEdit}
               >편집</span>
             </div>
+
           </div>
-        </span>
-        <span className='HG-TravelInfo-Btn'>
+        </div>
+
+        <div className='WS-TravelInfo-Header-Right'>
           <span className='HG-TravelInfo-Select-Btn'
             onClick={handleSelectBtn}
           >선택 </span><img src={planeIcon} alt="selectIcon" /> {/* FEAT: 선택 버튼 선택 여행지 모달 팝업 */}
           <span className='HG-TravelInfo-Select-Cnt'>{selectedPlaces.length}</span> {/* DATA: 선택 여행지 갯수 카운트 */}
-        </span>
+        </div>
       </div>
 
       <div className='HG-TravelInfo-Body'>
