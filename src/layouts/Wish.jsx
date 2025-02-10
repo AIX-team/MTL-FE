@@ -4,6 +4,7 @@ import '../css/layout/Wish.css';
 import OpenAI from 'openai';
 import { v4 as uuidv4 } from 'uuid';
 import ReactDOM from 'react-dom';
+import SendIcon from '@mui/icons-material/Send';
 
 import { searchContent } from '../apis/Apis';
 
@@ -414,13 +415,13 @@ const Wish = () => {
                                 onClick={handleWeatherButton}
                                 className="WS-Wish-Weather-Button"
                             >
-                                현재 날씨
+                                날씨 ☀
                             </button>
                             <button
                                 className="WS-Wish-Exchange-Button"
                                 onClick={handleExchangeButton}
                             >
-                                환율
+                                환율 💴
                             </button>
                         </div>
                         <div className="WS-Wish-Input-Container">
@@ -438,7 +439,7 @@ const Wish = () => {
                                 onClick={handleSendMessage}
                                 disabled={isLoading}
                             >
-                                전송
+                                 <SendIcon />
                             </button>
                         </div>
                     </div>

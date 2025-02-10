@@ -55,6 +55,8 @@
     display: flex;
     align-items: flex-start;
     margin-bottom: 20px;
+
+
 }
 
 .WS-Wish-Message.user {
@@ -76,14 +78,14 @@
 .WS-Wish-Message-Content {
     max-width: 70%;
     padding: 12px 16px;
-    border-radius: 12px;
+    border-radius: 22px;
     background: var(--color-light-gray);
     white-space: pre-line;
     word-wrap: break-word;
 }
 
 .WS-Wish-Message.user .WS-Wish-Message-Content {
-    background: #C92B2A;
+    background: var(--color-main);
     color: white;
     transition: all 0.2s;
 }
@@ -99,10 +101,10 @@
 /* 날씨 정보 버튼 */
 .WS-Wish-Exchange-Button,
 .WS-Wish-Weather-Button {
-    width: 100px;
+    width: 80px;
     height: 40px;
     border-radius: 22px;
-    background-color: var(--color-guide);
+    background-color: var(--color-dark-gray);
     color: white;
     border: none;
     cursor: pointer;
@@ -133,18 +135,27 @@
     border: 1px solid var(--color-light-gray);
     font-size: var(--font-size-base);
 
-    width: 220px;
+    width: 300px;
 
     outline: none;
 }
 
 .WS-Wish-Send-Button {
-    padding: 12px 24px;
+    padding-right: 15px;
+    padding-left: 15px;
+    padding-top: 5px;
+    width: 50px;
+    height: 45px;
+
+    justify-content: center;
+    align-items: center;
+
     background: var(--color-main);
     color: white;
     border: none;
     border-radius: 22px;
     cursor: pointer;
+
 }
 
 .WS-Wish-Send-Button:hover {
