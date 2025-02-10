@@ -25,7 +25,7 @@
   transition: all 0.3s ease;
 }
 
-.guide-container {
+.WS-guide-container {
   display: grid;
   align-content: start;
   gap: 8px;
@@ -38,6 +38,31 @@
 
   overflow-x: hidden;
   overflow-y: auto;
+}
+
+.WS-guide-container::-webkit-scrollbar {
+  width: 4px;
+}
+
+.WS-guide-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.WS-guide-container::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  border: transparent;
+}
+
+/* 스크롤바 호버 시 */
+.WS-guide-container::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+}
+
+/* 스크롤바 드래그 시 */
+.WS-guide-container::-webkit-scrollbar-thumb:active {
+  background-color: rgba(0, 0, 0, 0.4);
 }
 
 .SJ-guide-card {
@@ -81,7 +106,7 @@
 
 .SJ-guide-score {
   position: absolute;
-  right: 15px;
+  right: 18px;
   top: 45px;
   color: var(--color-dark-gray);
   font-size: 10px;
