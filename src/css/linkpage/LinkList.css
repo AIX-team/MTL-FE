@@ -1,168 +1,186 @@
 .WS-LinkList {
-    width: 400px;
+  width: 370px;
+  margin-left: 20px;
 }
-
+#WS-Link-Input {
+  padding-right: 40px; /* 커서 여유 */
+}
 .WS-LinkList-AddButton {
-    position: absolute;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    right: 0px;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  right: 0px; /* 오른쪽 여백 추가 */
+  top: 47%; /* SJ +버튼 위치 */
+  transform: translateY(-50%);
 
-    width: 40px;
-    height: 40px;
+  width: 40px;
+  height: 40px;
 
-    border: none;
-    border-radius: 50%;
+  border: none;
+  border-radius: 50%;
 
-    font-size: 20px;
+  font-size: 28px; /* SJ 폰트 크기 증가 */
+  line-height: 0; /* SJ 라인 하이트 0으로 설정 */
 
-    background-color: var(--color-light-gray);
-    color: var(--color-dark-gray);
+  background-color: transparent; /* 배경색을 투명하게 변경 */
+  /* background-color: var(--color-light-gray);*/
+  color: var(--color-dark-gray);
 
-    transition: all 0.3s ease;
+  transition: all 0.3s ease;
+  text-align: center; /* SJ 텍스트 중앙 정렬 */
+  vertical-align: middle; /* 수직 정렬 */
 }
-
+/* 링크 추가 버튼 호버 효과 */
 .WS-LinkList-AddButton:hover {
-    cursor: pointer;
-    color: var(--color-dark-gray);
-    background-color: var(--color-main);
-    scale: 1.05;
+  cursor: pointer;
+  color: var(--color-main); /* hover 시 배경색 대신 글자색만 변경 */
+  /* color: var(--color-dark-gray); */
+  /* background-color: var(--color-main); */
+  scale: 1.05;
 }
 
 /* 링크 아이템 스타일 */
 .WS-LinkList-Items {
+  display: flex;
+  flex-direction: column;
+  margin-top: 56px; /* SJ수정 위치 조정 */
+  padding: 1px; /* 모든 아이템에 동일한 패딩 적용 */
+  gap: 5px;
+  margin-bottom: 80px;
+  /* 분석하기 버튼 영역만큼 여백 추가 */
+  max-height: calc(100vh - 200px);
+  /* 화면 높이에서 헤더, 푸터, 분석버튼 영역을 뺀 높이 */
+  overflow-y: auto;
 
-    display: flex;
-    flex-direction: column;
-    margin-top: 20px;
-    gap: 10px;
-    margin-bottom: 80px;
-    /* 분석하기 버튼 영역만큼 여백 추가 */
-    max-height: calc(100vh - 200px);
-    /* 화면 높이에서 헤더, 푸터, 분석버튼 영역을 뺀 높이 */
-    overflow-y: auto;
-
-    transition: all 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .WS-LinkList-Item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 5px;
-    margin-bottom: 8px;
-    border-radius: 20px;
-    background-color: var(--color-light-gray);
-    transition: all 0.3s ease;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 7px;
+  margin-bottom: 8px;
+  border-radius: 22px;
+  background-color: var(--color-light-gray);
+  transition: all 0.3s ease;
 }
 
 .WS-LinkList-Item:hover {
-    background-color: var(--color-light-gray);
+  background-color: var(--color-light-gray);
 }
 
 .WS-LinkList-Content {
-    display: flex;
-    align-items: center;
-    flex: 1;
-    min-width: 0;
-    /* 텍스트 오버플로우 방지 */
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 10;
+  /* 텍스트 오버플로우 방지 */
 }
 
 .WS-LinkList-Badge {
-    padding-top: 4px;
-    padding-bottom: 2px;
-    padding-left: 8px;
-    padding-right: 8px;
-    
-    border-radius: var(--border-radius-full);
-    font-size: 12px;
-    font-weight: bold;
-    margin-right: 10px;
-    width: 70px;
-    text-align: center;
+  /* SJ 사이즈 수정 */
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+
+  border-radius: var(--border-radius-full);
+  font-size: 12px;
+  font-weight: bold;
+  margin-right: 10px;
+  width: 80px;
+  text-align: center;
 }
 
 .WS-LinkList-Item.youtube .WS-LinkList-Badge {
-    background-color: var(--color-main);
-    color: white;
+  background-color: var(--color-main);
+  color: white;
 }
 
 .WS-LinkList-Item.blog .WS-LinkList-Badge {
-    background-color: var(--color-success);
-    color: white;
+  background-color: var(--color-success);
+  color: white;
 }
 
 .WS-LinkList-Text {
-    flex: 1;
-    font-size: 14px;
-    color: var(--color-dark-gray);
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    text-align: left;
+  flex: 1;
+  font-size: 14px;
+  color: var(--color-dark-gray);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+  max-width: 210px; /* 링크 텍스트 최대 너비 제한 */
 }
 
 .WS-LinkList-DeleteButton {
-    background-color: white;
-    color: var(--color-dark-gray);
-    font-size: 16px;
-    border-radius: 50%;
-    border: none;
-    width: 24px;
-    height: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    margin-left: 10px;
-    transition: background-color 0.2s;
+  background-color: white;
+  color: var(--color-dark-gray);
+  font-size: 16px;
+  border-radius: 50%;
+  border: none;
+  width: 24px;
+  height: 24px;
+  min-width: 24px; /* 추가 */
+  min-height: 24px; /* 추가 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin-left: 1px; /* SJ 링크 왼편 여백 조정 */
+  transition: background-color 0.2s;
+  padding: 0; /* SJ 추가 패딩 제거 */
+  flex-shrink: 0; /* 추가: 버튼 크기가 줄어들지 않도록 */
+  position: relative; /* 추가 */
+  right: 2px; /* 추가: 오른쪽에서 2px 여백 */
 }
 
 .WS-LinkList-DeleteButton:hover {
-    background-color: var(--color-main);
-    color: white;
+  background-color: var(--color-main);
+  color: white;
 }
 
 .WS-LinkList-Next-Container {
-    position: absolute;
-    bottom: 4px;
-    left: 50%;
-    transform: translateX(-50%);
+  position: absolute;
+  bottom: -3px; /* 다음 하단 여유; */
+  left: 50%;
+  transform: translateX(-50%);
+  color: #C92B2A ;
 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .WS-LinkList-Counter {
-    color: var(--color-dark-gray);
-    font-size: 14px;
-    margin-bottom: 10px;
+  color: var(--color-dark-gray);
+  font-size: 14px;
+  margin-bottom: 10px;
 }
 
 .WS-LinkList-NextButton {
-    padding: 12px 40px;
+  /* 다음 버튼; */
+  padding: 20px; /* 12px 40px에서 20px로 변경하여 SelectDayTab과 동일하게 */
+  /* padding: 12px 40px; */
 
-    width: 350px;
-    border: none;
-    border-radius: 25px;
-    background-color: var(--color-main);
+  width: 370px; /* SJ 다음 버튼 가로 길이; */
+  border: none;
+  border-radius: 25px;
+  background-color: var(--color-main);
 
-    color: white;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
 
-    transition: all 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .WS-LinkList-NextButton:disabled {
-    background-color: var(--color-light-gray);
-    cursor: not-allowed;
+  background-color: var(--color-light-gray);
+  cursor: not-allowed;
 }
 
-.WS-LinkList-NextButton:not(:disabled):hover {
-    transform: scale(1.02);
-    background-color: var(--color-main-hover);
-}
