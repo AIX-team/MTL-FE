@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from "react-redux";
 import { callLoginAPI } from "../../apis/UserAPICalls";
-import '../../css/LoginSuccess.css';
+import '../../css/login/LoginSuccess.css';
 
 function LoginSuccess() {
     const location = useLocation();

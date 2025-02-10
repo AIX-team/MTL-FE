@@ -2,15 +2,19 @@
     -webkit-tap-highlight-color: transparent;
     font-family: 'Noto Sans KR', sans-serif;
     transition: all 0.3s;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
 }
 
 /* 메인 컨텐츠 영역 */
 .WS-Main-Container {
     position: fixed;
-    top: 2%;
-    bottom: var(--footer-height);
+    top: 1%;
+    bottom: calc(var(--footer-height) + env(safe-area-inset-bottom, 0px));
 
     width: 96%;
+    -webkit-overflow-scrolling: touch;
 }
 
 .WS-Main-Footer {
@@ -19,7 +23,8 @@
 
     left: 0;
     width: 100%;
-    height: var(--footer-height);
+    height: calc(var(--footer-height) + env(safe-area-inset-bottom, 0px));
+    padding-bottom: env(safe-area-inset-bottom, 0px);
 
     display: flex;
     justify-content: space-around;
@@ -27,13 +32,15 @@
 
     background-color: white;
     transition: all 0.3s;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
 }
 
 /* 플로팅 버튼 스타일 */
 .WS-Wish-Floating-Button {
     position: fixed;
 
-    bottom: 15%;
+    bottom: calc(15% + env(safe-area-inset-bottom, 0px));
     right: 30px;
 
     width: 50px;
@@ -52,7 +59,8 @@
     justify-content: center;
 
     transition: all 0.3s ease;
-    z-index: 1020;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
 }
 
 .WS-Wish-Floating-Button:hover {

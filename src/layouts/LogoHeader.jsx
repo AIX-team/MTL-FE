@@ -10,7 +10,7 @@ import LOGO from '../images/LOGO.png';
 const LogoHeaderComponent = () => {
     return (
         <header className="WS-main-header">
-            <Link to="/">
+            <Link to="/link">
                 {/* 로고 이미지 - 클릭하면 메인 페이지로 이동 */}
                 <img src={LOGO} alt="My Travel Link" className="WS-Header-Logo" />
             </Link>

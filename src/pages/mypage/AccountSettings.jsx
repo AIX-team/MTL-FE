@@ -1,5 +1,5 @@
 import React from "react";
-import "./AccountSettings.css";
+import "../../css/mypage/AccountSettings.css";
 import GoogleLogo from "../../images/google_logo.png";
 
 function AccountSettings({ onBack }) {

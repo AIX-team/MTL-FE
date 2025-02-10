@@ -3,6 +3,8 @@ import { FaComments, FaTimes } from 'react-icons/fa';
 import '../css/layout/Wish.css';
 import OpenAI from 'openai';
 import { v4 as uuidv4 } from 'uuid';
+import ReactDOM from 'react-dom';
+import SendIcon from '@mui/icons-material/Send';
 
 import { searchContent } from '../apis/Apis';
 
@@ -256,7 +258,6 @@ const Wish = () => {
         }
     };
 
-
     // Enter 키 처리
     const handleKeyPress = (e) => {
         if (e.key === 'Enter' && !e.shiftKey) {
@@ -330,11 +331,10 @@ const Wish = () => {
                 const exchangeMessage = {
                     id: messages.length + 1,
                     type: 'bot',
-                    content: `현재 엔화/원화 환율 정보
+                    content: `엔화/원화 환율 정보
 
-1엔 = ${exchangeInfo.rate.toFixed(2)}원
-
-1000엔 = ${exchangeInfo.krwAmount}원`
+🇯🇵 100엔 
+🇰🇷 ${exchangeInfo.rate.toFixed(2) * 100}원`
                 };
                 setMessages(prev => [...prev, exchangeMessage]);
                 scrollToBottom();
@@ -359,7 +359,7 @@ const Wish = () => {
         }
     };
 
-    return (
+    return ReactDOM.createPortal(
         <>
             {/* 플로팅 버튼 */}
             <button
@@ -371,10 +371,10 @@ const Wish = () => {
 
             {/* 챗봇 모달 */}
             {isOpen && (
-                <div className="WS-Modal-Overlay">
-                    <div className="WS-Wish-Modal" ref={modalRef}>
+                <div className="WS-AlertModal-Overlay">
+                    <div className="WS-Wish" ref={modalRef}>
 
-                        <div className="WS-Wish-Modal-Header">
+                        <div className="WS-Wish-Header">
                             <h3>AI 여행 도우미</h3>
                             <button
                                 className="WS-Wish-Close-Button"
@@ -391,7 +391,7 @@ const Wish = () => {
                                     className={`WS-Wish-Message ${message.type}`}
                                 >
                                     {message.type === 'bot' && (
-                                        <div className="WS-Wish-Bot-Avatar">A</div>
+                                        <div className="WS-Wish-Bot-Avatar">AI</div>
                                     )}
                                     <div className="WS-Wish-Message-Content">
                                         {message.content}
@@ -408,23 +408,25 @@ const Wish = () => {
                             )}
                             <div ref={messagesEndRef} />
                         </div>
+
                         <div className="WS-Wish-Weather-Button-Container">
                             {/* 날씨 정보 버튼 추가 */}
                             <button
                                 onClick={handleWeatherButton}
                                 className="WS-Wish-Weather-Button"
                             >
-                                현재 날씨
+                                날씨 ☀
                             </button>
                             <button
                                 className="WS-Wish-Exchange-Button"
                                 onClick={handleExchangeButton}
                             >
-                                환율
+                                환율 💴
                             </button>
                         </div>
                         <div className="WS-Wish-Input-Container">
                             <input
+                                className="WS-Wish-Input"
                                 type="text"
                                 value={inputMessage}
                                 onChange={(e) => setInputMessage(e.target.value)}
@@ -437,13 +439,14 @@ const Wish = () => {
                                 onClick={handleSendMessage}
                                 disabled={isLoading}
                             >
-                                전송
+                                 <SendIcon />
                             </button>
                         </div>
                     </div>
                 </div>
             )}
-        </>
+        </>,
+        document.body
     );
 };
 
