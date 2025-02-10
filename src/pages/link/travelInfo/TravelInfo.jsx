@@ -91,6 +91,7 @@ const TravelInfo = () => {
   });
 
   const [selectedPlaces, setSelectedPlaces] = useState([]);
+  const [selectedAIPlaces, setSelectedAIPlaces] = useState([]);
 
 
 
@@ -176,6 +177,26 @@ const TravelInfo = () => {
   }, [travelInfoId, travelInfoTitle, travelDays]); // 의존성 배열에 필요한 값들 추가
 
 
+  const getAISelect = useCallback(async () => {
+    try {
+      console.log(selectedAIPlaces.length, selectedPlaces.length);
+      if (selectedAIPlaces.length === 0 || selectedAIPlaces.length !== selectedPlaces.length) {
+        setLoading(true);
+        setError(null);
+        const response = await axiosInstance.get(`/api/v1/travels/travelInfos/${travelInfoId}/aiSelect`);
+        console.log(response.data);
+        setSelectedPlaces(response.data);
+        setSelectedAIPlaces(response.data);
+      } else {
+        setSelectedPlaces(selectedAIPlaces);
+      }
+    } catch (error) {
+      console.error('API Error:', error);
+    } finally {
+      setLoading(false);
+    }
+  }, [travelInfoId]);
+
   useEffect(() => {
     if (travelInfoId) {
       getTravelInfo();
@@ -251,7 +272,10 @@ const TravelInfo = () => {
 
   const handleAISelected = () => {
     setIsAISelected(!isAISelected);
-    setSelectedPlaces([]);
+    getAISelect();
+    if(!isAISelected){
+      setSelectedPlaces([]);
+    }
   };
 
   const handleTitleEdit = () => {
