@@ -38,62 +38,62 @@ const LinkPage = () => {
         setLinkCount(linkData.length);
     }, [linkData]);
 
-    return (
-        <div className="WS-Link-Page">
-
-            {/* 탭 영역 */}
-            <nav className="WS-Link-Tab-Container">
-                {/* 유튜브검색 탭 */}
-                <div className="WS-Link-Tabs">
-                    <div
-                        id="WS-Link-youtube-tab"
-                        className={`WS-Link-Tab ${activeTab === 'youtube' ? 'active' : ''}`}
-                        onClick={() => setActiveTab('youtube')}
-                    >
-
-                        <div className="WS-Link-Tab-Content">
-                            <img src={youtubeIcon} alt="YouTube" className="WS-youtube-icon" />
-                            <span className="WS-Link-Tab-text">유튜브 검색</span>
-                        </div>
-
-                    </div>
-
-                    {/* 링크 탭 */}
-                    <div
-                        id="WS-Link-links-tab"
-                        onClick={() => setActiveTab('links')}
-                        className={`WS-Link-Tab ${activeTab === 'links' ? 'active' : ''}`}
-                    >
-                        <div className="WS-Link-Tab-Content">
-                            <span className="WS-Link-Tab-text">링크</span>
-
-                            {linkCount >= 5 ? (
-                                <span className="WS-check-icon">
-                                    <FaCheck />
-                                </span>
-                            ) : (
-                                <span className="WS-Count">{linkCount}</span>
-                            )}
-
-                        </div>
-                    </div>
-                </div>
-
-                <div className="SJ-Tab-Indicator-Container">
-                    <div
-                        className="SJ-Tab-Indicator"
-                        style={{
-                            transform: `translateX(${activeTab === 'youtube' ? '0' : '100%'})`,
-                        }}
-                    ></div>
-                </div>
-            </nav>
-
-            <div className="WS-Link-Page-Content">
-                {renderContent()}
+  return (
+    <div className="WS-Link-Page">
+      {/* 탭 영역 */}
+      <nav className="WS-Link-Tab-Container">
+        {/* 유튜브검색 탭 */}
+        <div className="WS-Link-Tabs">
+          <div
+            id="WS-Link-youtube-tab"
+            className={`WS-Link-Tab ${activeTab === "youtube" ? "active" : ""}`}
+            onClick={() => setActiveTab("youtube")}
+          >
+            <div className="WS-Link-Tab-Content">
+              <img
+                src={youtubeIcon}
+                alt="YouTube"
+                className="WS-youtube-icon"
+              />
+              <span className="WS-Link-Tab-text">유튜브 검색</span>
             </div>
+          </div>
+
+          {/* 링크 탭 */}
+          <div
+            id="WS-Link-links-tab"
+            onClick={() => setActiveTab("links")}
+            className={`WS-Link-Tab ${activeTab === "links" ? "active" : ""}`}
+          >
+            <div className="WS-Link-Tab-Content">
+              <span className="WS-Link-Tab-text">링크</span>
+
+              {linkCount >= 5 ? (
+                <span className="WS-check-icon">
+                  <FaCheck />
+                </span>
+              ) : (
+                <span className="WS-Count">{linkCount}</span>
+              )}
+            </div>
+          </div>
         </div>
-    );
+
+        <div className="SJ-Tab-Indicator-Container">
+          <div
+            className="SJ-Tab-Indicator"
+            style={{
+              transform: `translateX(${
+                activeTab === "youtube" ? "0" : "100%"
+              })`,
+            }}
+          ></div>
+        </div>
+      </nav>
+
+      <div className="WS-Link-Page-Content">{renderContent()}</div>
+    </div>
+  );
 };
 
 export default LinkPage;
