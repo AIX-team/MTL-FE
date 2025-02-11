@@ -144,7 +144,7 @@
 
 .WS-LinkList-Next-Container {
   position: absolute;
-  bottom: -3px; /* 다음 하단 여유; */
+  bottom: 50; /* 다음 하단 여유; */
   left: 50%;
   transform: translateX(-50%);
   color: #C92B2A ;

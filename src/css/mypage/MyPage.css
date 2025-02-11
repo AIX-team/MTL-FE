@@ -1,30 +1,28 @@
-
 /* 전체 페이지 컨테이너 */
 .SJ_my_page {
   display: flex;
   flex-direction: column;
   min-height: calc(100vh - 60px); /* 푸터 높이만큼 제외 */
   position: relative; /* 추가 */
-  padding-bottom: 20px; /* 푸터와의 간격 */
+  padding-bottom: 4%; /* 푸터와의 간격 */
   overflow-x: hidden; /* 가로 스크롤 방지 */
 }
 
 /* 로고 */
 .SJ_logo {
-  padding: 20px;
+  padding: 4%;
   text-align: center;
 }
-
 
 .SJ_profile_section {
   display: flex;
   align-items: flex-start;
-  padding: 30px;
+  padding: 6%;
 }
 
 .SJ_profile_image {
-  width: 80px;
-  height: 80px;
+  width: 18vw;
+  height: 18vw;
 }
 
 .SJ_profile_img {
@@ -33,62 +31,61 @@
 }
 
 .SJ_profile_info {
-  margin-left: 20px;
-  margin-top: 10px;
+  margin-left: 5%;
+  margin-top: 2%;
 }
 
 /* 닉네임 */
 .SJ_user_name {
-  font-size: 20px;
-  margin-bottom: 3px;
+  font-size: 120%;
+  margin-bottom: 2%;
 }
 
 .SJ_travel_message {
-  font-size: 16px;
-  margin-bottom: 10px;
+  font-size: 100%;
+  margin-bottom: 7%;
 }
 
 .SJ_settings_button {
   border: none; /* 테두리 제거 */
-  background: none;  /* 배경 제거 */
+  background: none; /* 배경 제거 */
   cursor: pointer; /* 마우스 커서를 포인터로 변경 (클릭 가능한 요소임을 나타냄) */
-  font-size: 14px;
-  margin-left: 0;  /* -10px에서 0으로 수정 */
-  padding-left: 0;  /* 패딩도 0으로 설정 */
-  color: #3E3E3E;  /* 색상 추가 */
-  text-align: left;  /* 텍스트 왼쪽 정렬 */
-  display: block;  /* 블록 레벨 요소로 변경 */
-  width: 100%;  /* 전체 너비 사용 */
+  font-size: 90%;
+  margin-left: 0; /* -10px에서 0으로 수정 */
+  padding-left: 0; /* 패딩도 0으로 설정 */
+  color: #3e3e3e; /* 색상 추가 */
+  text-align: left; /* 텍스트 왼쪽 정렬 */
+  display: block; /* 블록 레벨 요소로 변경 */
+  width: 100%; /* 전체 너비 사용 */
 }
 
 /* 메인 버튼 */
 .SJ_main_button {
-  padding: 20px;
-  margin-top: 180px;
+  padding: 4%;
+  margin-top: 30%;
 }
 
 .SJ_create_link_btn {
   width: 100%;
-  padding: 20px;
+  padding: 6%;
   background: #dc3545;
   color: white;
   border: none;
-  border-radius: 20px;
-  font-size: 14px;
+  border-radius: 25px;
+  font-size: 120%;
   text-align: center;
   cursor: pointer;
 }
 
 .SJ_button_subtitle {
-  font-size: 12px;
-  margin: 5px 0 0 0;
-  opacity: 0.8;
+  font-size: 70%;
+  margin: 1% 0 0 0;
 }
 
 .SJ_bottom_nav {
   display: flex;
   justify-content: space-around;
-  padding: 13px 0;
+  padding: 10% 0;
   background: white;
-  border-top: 1px solid #eee;
+  border-top: 4% solid #eee;
 }

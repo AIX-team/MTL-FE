@@ -1,42 +1,41 @@
-import React, { useState, useEffect } from 'react';
-import LinkList from './LinkList';          // 링크 목록 컴포넌트
-import SearchYoutube from './SearchYoutube';// 유튜브 검색 컴포넌트
-import '../../css/linkpage/LinkPage.css';
-import { FaCheck } from 'react-icons/fa'; // 체크 아이콘 import
-import youtubeIcon from '../../images/youtube.png'; // YouTube 로고 이미지 import
-import { useNavigate } from 'react-router-dom'; // 추가
-
+import React, { useState, useEffect } from "react";
+import LinkList from "./LinkList"; // 링크 목록 컴포넌트
+import SearchYoutube from "./SearchYoutube"; // 유튜브 검색 컴포넌트
+import "../../css/linkpage/LinkPage.css";
+import { FaCheck } from "react-icons/fa"; // 체크 아이콘 import
+import youtubeIcon from "../../images/youtube.png"; // YouTube 로고 이미지 import
+import { useNavigate } from "react-router-dom"; // 추가
 
 const LinkPage = () => {
-    const navigate = useNavigate(); // 추가
-    const [activeTab, setActiveTab] = useState('youtube');
-    const [linkData, setLinkData] = useState([]); // 빈 배열로 초기화
-    const [linkCount, setLinkCount] = useState(0); // 0으로 초기화
+  const navigate = useNavigate(); // 추가
+  const [activeTab, setActiveTab] = useState("youtube");
+  const [linkData, setLinkData] = useState([]); // 빈 배열로 초기화
+  const [linkCount, setLinkCount] = useState(0); // 0으로 초기화
 
-    const renderContent = () => {
-        switch (activeTab) {
-            case 'links':
-                return <LinkList linkData={linkData} setLinkData={setLinkData} />;
-            case 'youtube':
-                return <SearchYoutube linkData={linkData} setLinkData={setLinkData} />;
-            default:
-                return null;
-        }
-    };
+  const renderContent = () => {
+    switch (activeTab) {
+      case "links":
+        return <LinkList linkData={linkData} setLinkData={setLinkData} />;
+      case "youtube":
+        return <SearchYoutube linkData={linkData} setLinkData={setLinkData} />;
+      default:
+        return null;
+    }
+  };
 
-    // 토큰 검사 useEffect
-    useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (!token) {
-            navigate('/login');
-            return;
-        }
-    }, [navigate]);
+  // // 토큰 검사 useEffect
+  // useEffect(() => {
+  //     const token = localStorage.getItem('token');
+  //     if (!token) {
+  //         navigate('/login');
+  //         return;
+  //     }
+  // }, [navigate]);
 
-    // linkCount 업데이트
-    useEffect(() => {
-        setLinkCount(linkData.length);
-    }, [linkData]);
+  // linkCount 업데이트
+  useEffect(() => {
+    setLinkCount(linkData.length);
+  }, [linkData]);
 
   return (
     <div className="WS-Link-Page">
