@@ -23,6 +23,7 @@ const SelectModal = ({ isOpen, onClose, selectedPlaces, onPlaceSelect, travelDay
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [showTasteModal, setShowTasteModal] = useState(false);
+  const [filteredPlaces, setFilteredPlaces] = useState(selectedPlaces);
   // 필터 타입을 매핑하는 객체 추가
   const filterTypeMap = {
     '전체보기': ['all', 'landmark', 'restaurant', 'etc'],
@@ -60,15 +61,27 @@ const SelectModal = ({ isOpen, onClose, selectedPlaces, onPlaceSelect, travelDay
 
   const handleFilterSelect = (filter) => {
     setSelectedFilters(prev => {
-      if (filter === '전체보기') {
-        return ['전체보기'];
-      }
-      
-      const newFilters = prev.filter(f => f !== '전체보기');
-      if (prev.includes(filter)) {
-        return newFilters.filter(f => f !== filter);
-      }
-      return [...newFilters, filter];
+        let newFilters;
+        if (filter === '전체보기') {
+            newFilters = ['전체보기'];
+        } else {
+            // 전체보기 제거
+            newFilters = prev.filter(f => f !== '전체보기');
+            
+            if (prev.includes(filter)) {
+                // 선택된 필터 제거
+                newFilters = newFilters.filter(f => f !== filter);
+            } else {
+                // 새 필터 추가
+                newFilters = [...newFilters, filter];
+            }
+            
+            // 필터가 없으면 전체보기로 설정
+            if (newFilters.length === 0) {
+                newFilters = ['전체보기'];
+            }
+        }
+        return newFilters;
     });
   };
 
@@ -135,6 +148,25 @@ const SelectModal = ({ isOpen, onClose, selectedPlaces, onPlaceSelect, travelDay
     setIsSelected(selectedPlaces);
   }, [selectedPlaces]);
 
+  useEffect(() => {
+    if (selectedFilters.includes('전체보기')) {
+        setFilteredPlaces(selectedPlaces);
+        return;
+    }
+
+    const filtered = selectedPlaces.filter(place => {
+        return selectedFilters.some(filter => {
+            const placeType = filterTypeMap[filter];
+            if (filter === '그 외') {
+                return !['landmark', 'restaurant'].includes(place.placeType);
+            }
+            return place.placeType === placeType;
+        });
+    });
+
+    setFilteredPlaces(filtered);
+  }, [selectedFilters, selectedPlaces]);
+
     return (
       <div className={` ${isOpen ? 'HG-select-modal-container' : 'none'}`}>
         <div className='HG-select-modal-header'>
@@ -180,7 +212,7 @@ const SelectModal = ({ isOpen, onClose, selectedPlaces, onPlaceSelect, travelDay
             'restaurant': '음식/카페',
             'etc': '그 외'
           }).map(([type, koreanType]) => {
-            const placesOfType = selectedPlaces.filter(place => {
+            const placesOfType = filteredPlaces.filter(place => {
               if (type === 'etc') {
                 // etc 타입일 경우 landmark와 restaurant가 아닌 모든 항목 필터링
                 return !['landmark', 'restaurant'].includes(place.placeType);
