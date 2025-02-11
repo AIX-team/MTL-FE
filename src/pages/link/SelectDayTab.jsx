@@ -48,7 +48,7 @@ const SelectDayTab = ({ onBack }) => {
     setIsLoading(true);
     try {
       // 여기에 필요한 데이터 처리 로직 추가
-       // 예시: 2초 대기
+      // 예시: 2초 대기
 
       // 로딩이 끝나면 다음 페이지로 이동
       navigate("/loading", { state: { days: days } });
@@ -60,9 +60,11 @@ const SelectDayTab = ({ onBack }) => {
 
   return (
     <div className="WS-SelectDayTab">
-      <div className="WS-SelectDayTab-Title">총 여행 기간은?</div>
-      <div className="WS-SelectDayTab-SubTitle">여행 일정을 알려주세요!</div>
-      <div className="WS-SelectDayTab-SubTitle">( 최대 7일 )</div>
+      <div className="WS-SelectDayTab-Title-Container">
+        <div className="WS-SelectDayTab-Title">총 여행 기간은?</div>
+        <div className="WS-SelectDayTab-SubTitle">여행 일정을 알려주세요!</div>
+        <div className="WS-SelectDayTab-SubTitle">( 최대 7일 )</div>
+      </div>
       <div className="WS-SelectDayTab-Counter">
         <button
           className="WS-Counter-Button"

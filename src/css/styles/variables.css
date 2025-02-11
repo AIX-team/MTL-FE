@@ -9,7 +9,7 @@
   --color-light-gray: #E3E3E3;
   --color-guide: #919191;
   --color-success: #48B669;
-  --color-black: #000000; 
+  --color-black: #000000;
   --color-white: #FFFFFF;
 
   /* 자주 사용하는 폰트 크기 */
@@ -31,31 +31,54 @@
   --border-radius-sm: 4px;
   --border-radius-base: 8px;
   --border-radius-lg: 16px;
-  --border-radius-xl: 25px;
+  --border-radius-xl: 22px;
   --border-radius-full: 9999px;
 
 
 
   /* 푸터 높이 */
-  --footer-height: 12.5%;
-}
+  --footer-height: 9vh;
 
-/* 전역 스타일 */
-body {
-  font-family: var(--font-primary);
+  /* 화면 사이즈 */
+  --screen-max-width: 400px;
 }
 
 /* 유틸리티 클래스 */
-.text-main { color: var(--color-main); }
-.text-dark { color: var(--color-dark-gray); }
-.text-light { color: var(--color-light-gray); }
-.text-guide { color: var(--color-guide); }
-.text-success { color: var(--color-success); }
+.text-main {
+  color: var(--color-main);
+}
 
-.bg-main { background-color: var(--color-main); }
-.bg-dark { background-color: var(--color-dark-gray); }
-.bg-light { background-color: var(--color-light-gray); }
-.bg-success { background-color: var(--color-success); }
+.text-dark {
+  color: var(--color-dark-gray);
+}
+
+.text-light {
+  color: var(--color-light-gray);
+}
+
+.text-guide {
+  color: var(--color-guide);
+}
+
+.text-success {
+  color: var(--color-success);
+}
+
+.bg-main {
+  background-color: var(--color-main);
+}
+
+.bg-dark {
+  background-color: var(--color-dark-gray);
+}
+
+.bg-light {
+  background-color: var(--color-light-gray);
+}
+
+.bg-success {
+  background-color: var(--color-success);
+}
 
 /* 버튼 스타일 */
 .btn {
@@ -82,4 +105,4 @@ body {
 .circle-filled {
   border-radius: var(--border-radius-full);
   background-color: var(--color-light-gray);
-} 
+}
