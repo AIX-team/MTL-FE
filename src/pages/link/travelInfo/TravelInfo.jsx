@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, forwardRef, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import '../../../css/linkpage/TravelInfo/TravelInfo.css';
@@ -12,6 +12,7 @@ import backArrowIcon from '../../../images/backArrow.svg';
 import TitleEditModal from './TitleEditModal';
 import SelectModal from './SelectModal';
 import aiIcon from '../../../images/chatbot.gif';
+import { GoogleMap, Polyline } from '@react-google-maps/api';
 
 
 const axiosInstance = axios.create({
@@ -20,6 +21,141 @@ const axiosInstance = axios.create({
     'Content-Type': 'application/json',
   },
 });
+
+
+// 구글 맵 컴포넌트(경로)
+const MapComponent = React.memo(({ places }) => {
+  if (!places) return null;
+
+  const mapContainerStyle = {
+      width: '100%',
+      height: '100%'
+  };
+
+  // places가 배열인 경우와 단일 객체인 경우 처리
+  const isArray = Array.isArray(places);
+  
+  const center = isArray ? {
+      lat: parseFloat(places[0].latitude),
+      lng: parseFloat(places[0].longitude)
+  } : {
+      lat: parseFloat(places.latitude),
+      lng: parseFloat(places.longitude)
+  };
+
+  // places 배열을 num 순서대로 정렬하여 path 생성
+  const path = isArray ? [...places]
+      .map(place => ({
+          lat: parseFloat(place.latitude),
+          lng: parseFloat(place.longitude)
+      })) : null;
+
+  const onLoad = (map) => {
+      if (!window.google) {
+          console.error('Google Maps API not loaded');
+          return;
+      }
+
+      try {
+          // bounds 객체 생성            
+          const bounds = new window.google.maps.LatLngBounds();
+
+
+              // 마커 생성 전에 좌표 유효성 로깅
+              places.forEach((place, index) => {
+                  const lat = parseFloat(place.latitude);
+                  const lng = parseFloat(place.longitude);
+
+                  // 좌표 유효성 검사
+                  if (isNaN(lat) || isNaN(lng)) {
+                      console.error(`Invalid coordinates for place ${place.name}:`, {
+                          lat: place.latitude,
+                          lng: place.longitude
+                      });
+                      return;
+                  }
+
+                  const position = {
+                      lat: lat,
+                      lng: lng
+                  };
+
+                  try {
+                      // bounds에 위치 추가 전에 로깅
+                      bounds.extend(position);
+
+                      // 마커 생성
+                      const markerView = new window.google.maps.marker.AdvancedMarkerElement({
+                          position,
+                          map,
+                          title: place.name,
+                          content: new window.google.maps.marker.PinElement({
+                              // glyph: `${index + 1}`,  // place.num 대신 index + 1 사용
+                              glyphColor: '#FFFFFF',
+                              background: '#4285f4',
+                              borderColor: '#4285f4'
+                          }).element
+                      });
+
+                      // InfoWindow 설정
+                      markerView.addListener('click', () => {
+                          const infoWindow = new window.google.maps.InfoWindow({
+                              content: `
+                                  <div style="padding: 10px;">
+                                      <img src="${place.placeImage}" alt="장소 이미지" style="width: 100%; height: 100px; object-fit: cover;">
+                                      <p>${place.placeAddress || ''}</p>
+                                      <p>${place.intro || ''}</p>
+                                  </div>
+                              `
+                          });
+                          infoWindow.open(map, markerView);
+                      });
+                  } catch (markerError) {
+                      console.error(`Error creating marker for ${place.name}:`, markerError);
+                  }
+              });
+
+              // 지도 범위 조정
+              map.fitBounds(bounds);
+
+              // 줌 레벨 조정
+              const listener = map.addListener('idle', () => {
+                  const currentZoom = map.getZoom();
+                  if (currentZoom > 16) map.setZoom(16);
+                  window.google.maps.event.removeListener(listener);
+              });
+          
+      } catch (error) {
+          console.error('Error in onLoad:', error);
+      }
+  };
+
+  return (
+          <GoogleMap
+              mapContainerStyle={mapContainerStyle}
+              center={center}
+              zoom={13}
+              onLoad={onLoad}
+              options={{
+                  disableDefaultUI: false,
+                  zoomControl: true,
+                  mapTypeControl: true,
+                  scaleControl: true,
+                  streetViewControl: true,
+                  rotateControl: true,
+                  fullscreenControl: true,
+                  mapId: process.env.REACT_APP_GOOGLE_MAPS_ID
+              }}
+          >
+          </GoogleMap>
+  );
+}, (prevProps, nextProps) => {
+  // places 배열의 실제 내용이 변경되었을 때만 리렌더링
+  return JSON.stringify(prevProps.places) === JSON.stringify(nextProps.places);
+});
+
+
+
 
 const TravelInfo = () => {
 
@@ -124,7 +260,6 @@ const TravelInfo = () => {
       const response = await axiosInstance.get(`/api/v1/travels/travelInfos/${travelInfoId}/places`);
       setPlaceList(response.data);
       setAllPlaceList(response.data);
-      console.log(response.data);
     } catch (error) {
       console.error('API Error:', error);
       setError(error.message || '데이터를 불러오는데 실패했습니다.');
@@ -139,7 +274,6 @@ const TravelInfo = () => {
       setError(null);
       const response = await axiosInstance.get(`/api/v1/travels/travelInfos/urls/${urlId}`);
       setPlaceList(response.data);
-      console.log(response.data);
     } catch (error) {
       console.error('API Error:', error);
       setError(error.message || '데이터를 불러오는데 실패했습니다.');
@@ -156,7 +290,6 @@ const TravelInfo = () => {
         return;
       }
 
-      console.log('요청 데이터:', { travelInfoTitle, travelDays }); // 요청 데이터 로깅
 
       const response = await axiosInstance.put(
         `/api/v1/travels/travelInfos/${travelInfoId}`,
@@ -166,7 +299,6 @@ const TravelInfo = () => {
         }
       );
 
-      console.log('응답 데이터:', response.data); // 응답 데이터 로깅
 
     } catch (error) {
       console.error('API Error:', error);
@@ -179,12 +311,10 @@ const TravelInfo = () => {
 
   const getAISelect = useCallback(async () => {
     try {
-      console.log(selectedAIPlaces.length, selectedPlaces.length);
       if (selectedAIPlaces.length === 0 || selectedAIPlaces.length !== selectedPlaces.length) {
         setLoading(true);
         setError(null);
         const response = await axiosInstance.get(`/api/v1/travels/travelInfos/${travelInfoId}/aiSelect`);
-        console.log(response.data);
         setSelectedPlaces(response.data);
         setSelectedAIPlaces(response.data);
       } else {
@@ -205,11 +335,14 @@ const TravelInfo = () => {
   }, [travelInfoId, getTravelInfo, getPlaceList]);
 
   useEffect(() => {
-    console.log('현재 placeList:', placeList);
-    console.log('현재 선택된 placeType:', placeType);
-  }, [placeList, placeType]);
-
-  useEffect(() => {
+    const timers = [];
+    
+    if (loading) {
+      timers.push(setTimeout(() => setShowLoading(true), 2000));
+    } else {
+      setShowLoading(false);
+    }
+    
     if (error) {
       if (timer) {
         clearTimeout(timer);
@@ -433,32 +566,27 @@ const TravelInfo = () => {
                         e.target.src = 'https://picsum.photos/600/300';
                       }}
                       alt="placeImage" />
-                  </div>
-
-                  {/* 두 번째 슬라이드 */}
-                  <div className="slide-content">
-                    <span className='WS-TravelInfo-Description'>{item.placeDescription}</span>
-                    <p className='WS-TravelInfo-Address'>{item.placeAddress}</p>
-                  </div>
-
-                  {/* 세 번째 슬라이드 */}
-                  <div className="slide-content" key={`map-${index}`}>
-                    {console.log('세 번째 슬라이드 시도')}
-                    {item?.latitude && item?.longitude && (
-                      <iframe
-                        className="HG-TravelInfo-map-iframe"
-                        title={`${item.placeName} 위치 지도`}
-                        src={`https://maps.google.com/maps?q=${encodeURIComponent(item.placeName)}+(${item.latitude},${item.longitude})&t=&z=17&ie=UTF8&iwloc=&output=embed`}
-                        allowFullScreen
-                        loading="lazy"
-                        referrerPolicy="no-referrer-when-downgrade"
-                      />
-                    )}
-                  </div>
-                </Slider>
-              </div>
-            ) : null;
-          })}
+                    </div>
+                    
+                    {/* 두 번째 슬라이드 */}
+                    <div className="slide-content">
+                      <span>{item.placeDescription}</span>
+                      <p>{item.placeAddress}</p>
+                    </div>
+                    
+                    {/* 세 번째 슬라이드 */}
+                    <div className="slide-content" key={`map-${index}`}>
+                      <div>테스트 텍스트</div>
+                      {item?.latitude && item?.longitude && (
+                        <MapComponent 
+                        key={`map-${index}`}
+                        places={[item]} />
+                      )}
+                    </div>
+                  </Slider>
+                </div>
+              ) : null;
+            })}
         </div>
       </div>
       <TitleEditModal
