@@ -17,7 +17,7 @@ const axiosInstance = axios.create({
 
 const SelectModal = ({ isOpen, onClose, selectedPlaces, onPlaceSelect, travelDays }) => {
 
-  
+
   const [isSelected, setIsSelected] = useState([]);
   const [selectedFilters, setSelectedFilters] = useState(['전체보기']);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -110,12 +110,12 @@ const SelectModal = ({ isOpen, onClose, selectedPlaces, onPlaceSelect, travelDay
   const handleGuidebookCreate = () => {
     const minPlaces = travelDays * 2;
     const maxPlaces = travelDays * 5;
-    
+
     if (isSelected.length < minPlaces) {
       alert(`최소 ${minPlaces}개의 장소를 선택해주세요.`);
       return;
     }
-    
+
     if (isSelected.length > maxPlaces) {
       alert(`최대 ${maxPlaces}개까지만 선택 가능합니다.`);
       return;
@@ -221,21 +221,21 @@ const SelectModal = ({ isOpen, onClose, selectedPlaces, onPlaceSelect, travelDay
               return place.placeType === type;
             });
 
-            return placesOfType.length > 0 && (
-              <div className='HG-select-modal-select-list-type' key={type}>
-                <div className="HG-select-modal-type-header">{koreanType}</div>
-                {placesOfType.map((place, index) => (
-                  <div key={index} className='HG-select-modal-select-list-item'>
-                    <div className='HG-select-modal-select-list-item-content'>
-                      <span>
-                        <img 
-                          className='HG-trevelinfo-content-frame-select' 
-                          onClick={() => handlePlaceSelect(place.placeId)}
-                          src={isSelected.some(item => item.placeId === place.placeId) ? isSelectedIcon : selectIcon} 
-                          alt="selectIcon" />
-                      </span>
-                      <span onClick={() => handlePlaceSelect(place.placeId)}>
-                        <img className="HG-select-modal-select-list-item-place-img" src={place.placeImage}
+          return placesOfType.length > 0 && (
+            <div className='HG-select-modal-select-list-type' key={type}>
+              <div className="HG-select-modal-type-header">{koreanType}</div>
+              {placesOfType.map((place, index) => (
+                <div key={index} className='HG-select-modal-select-list-item'>
+                  <div className='HG-select-modal-select-list-item-content'>
+                    <span>
+                      <img
+                        className='HG-trevelinfo-content-frame-select'
+                        onClick={() => handlePlaceSelect(place.placeId)}
+                        src={isSelected.some(item => item.placeId === place.placeId) ? isSelectedIcon : selectIcon}
+                        alt="selectIcon" />
+                    </span>
+                    <span onClick={() => handlePlaceSelect(place.placeId)}>
+                      <img className='HG-select-modal-select-list-item-place-img' src={place.placeImage}
                         onError={(e) => {
                           e.target.src = 'https://picsum.photos/600/300';
                         }}
@@ -271,20 +271,20 @@ const SelectModal = ({ isOpen, onClose, selectedPlaces, onPlaceSelect, travelDay
         onClose={() => setShowTasteModal(false)} 
         onSave={(e) => handleTasteSave(e)} />
 
-        {/* 삭제 확인 모달 추가 */}
-        {showDeleteModal && (
-          <div className="HG-delete-confirm-modal">
-            <div className="HG-delete-confirm-content">
-              <p>정말 삭제하시겠습니까?</p>
-              <div className="HG-delete-confirm-buttons">
-                <button onClick={() => setShowDeleteModal(false)}>취소</button>
-                <button onClick={handleDelete}>확인</button>
-              </div>
+      {/* 삭제 확인 모달 추가 */}
+      {showDeleteModal && (
+        <div className="HG-delete-confirm-modal">
+          <div className="HG-delete-confirm-content">
+            <p className='WS-delete-confirm-message'>정말 삭제하시겠습니까?</p>
+            <div className="HG-delete-confirm-buttons">
+              <button className='HG-Modal-Button' onClick={() => setShowDeleteModal(false)}>취소</button>
+              <button className='HG-Modal-Button' onClick={handleDelete}>확인</button>
             </div>
           </div>
-        )}
-      </div>
-    );
+        </div>
+      )}
+    </div>
+  );
 };
 
 export default SelectModal;

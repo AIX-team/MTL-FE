@@ -29,16 +29,21 @@ export const { user: {login, logOut,getAllProfileImage,loadUser,showSignUp,hideS
 //리듀서 함수
 const userReducer = handleActions(
     {
-        [LOGIN] : (state, {payload: { token, userInfo }}) => {
-
-            // localStorage에 로그인 상태 저장
-            localStorage.setItem("token", "Bearer" + token); // 토큰 저장
+        [LOGIN]: (state, { payload: { token, userInfo } }) => {
+            if (!token) {
+                console.error('No token received');
+                return state;
+            }
+            
+            // 토큰 저장 시 공백 추가 확인
+            localStorage.setItem("token", "Bearer " + token);
+            localStorage.setItem("userEmail", userInfo.email);
             
             return {
                 ...state,
-                userInfo: userInfo,
-                token: token,
-            }
+                userInfo,
+                token,
+            };
         },
         [LOG_OUT] : () => {
             localStorage.removeItem('token'); // 로그인 토큰 삭제
