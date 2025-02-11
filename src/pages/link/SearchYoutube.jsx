@@ -185,70 +185,68 @@ const SearchYoutube = ({ linkData, setLinkData }) => {
 
     return (
         <div className="WS-SearchYoutube-Tab">
-            <div className="WS-SearchYoutube-Search">
-                <div className="WS-Link-Input-Container">
-                    <input
-                        type="text"
-                        value={searchQuery || ''}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        onKeyPress={(e) => e.key === 'Enter' && searchYoutube()}
-                        placeholder="YouTube 검색어를 입력하세요"
-                        className="WS-Link-Input"
-                    />
+            <div className="WS-Link-Input-Container">
+                <input
+                    type="text"
+                    value={searchQuery || ''}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onKeyPress={(e) => e.key === 'Enter' && searchYoutube()}
+                    placeholder="YouTube 검색어를 입력하세요"
+                    className="WS-Link-Input"
+                />
 
-                    <div className="WS-Link-Button-Container" id="WS-SearchYoutube-Button-Container">
-                        {searchQuery && (
-                            <button
-                                className="WS-SearchYoutube-ClearButton"
-                                onClick={clearSearch}
-                                type="button"
-                                aria-label="검색어 지우기"
-                            >
-                                <FaTimes />
-                            </button>
-                        )}
-
+                <div className="WS-Link-Button-Container" id="WS-SearchYoutube-Button-Container">
+                    {searchQuery && (
                         <button
-                            onClick={searchYoutube}
-                            className="WS-SearchYoutube-SearchButton"
-                            disabled={isLoading}
-                            aria-label="검색"
+                            className="WS-SearchYoutube-ClearButton"
+                            onClick={clearSearch}
+                            type="button"
+                            aria-label="검색어 지우기"
                         >
-                            <FaSearch />
+                            <FaTimes />
                         </button>
-                    </div>
-                </div>
-
-                <div className="WS-SearchYoutube-RecentSearches">
-                    {isLoggedIn ? (
-                        recentSearches.length > 0 ? (
-                            <>
-                                <h4>최근 검색어</h4>
-                                <div className="WS-SearchYoutube-RecentSearches-List">
-                                    {recentSearches.map((term, index) => (
-                                        <div
-                                            key={index}
-                                            className="WS-SearchYoutube-RecentSearch-Item"
-                                            onClick={() => {
-                                                setSearchQuery(term.word);
-                                                searchYoutube();
-                                            }}
-                                        >
-                                            {term.word}
-                                        </div>
-                                    ))}
-                                </div>
-                            </>
-                        ) : (
-                            <p className="WS-SearchYoutube-NoSearches">최근 검색 기록이 없습니다.</p>
-                        )
-                    ) : (
-                        <p className="WS-SearchYoutube-LoginRequired">
-                            검색어 저장을 위해 로그인이 필요합니다.
-                        </p>
                     )}
+
+                    <button
+                        onClick={searchYoutube}
+                        className="WS-SearchYoutube-SearchButton"
+                        disabled={isLoading}
+                        aria-label="검색"
+                    >
+                        <FaSearch />
+                    </button>
                 </div>
             </div>
+
+            {/* <div className="WS-SearchYoutube-RecentSearches">
+                {isLoggedIn ? (
+                    recentSearches.length > 0 ? (
+                        <>
+                            <h4>최근 검색어</h4>
+                            <div className="WS-SearchYoutube-RecentSearches-List">
+                                {recentSearches.map((term, index) => (
+                                    <div
+                                        key={index}
+                                        className="WS-SearchYoutube-RecentSearch-Item"
+                                        onClick={() => {
+                                            setSearchQuery(term.word);
+                                            searchYoutube();
+                                        }}
+                                    >
+                                        {term.word}
+                                    </div>
+                                ))}
+                            </div>
+                        </>
+                    ) : (
+                        <p className="WS-SearchYoutube-NoSearches">최근 검색 기록이 없습니다.</p>
+                    )
+                ) : (
+                    <p className="WS-SearchYoutube-LoginRequired">
+                        검색어 저장을 위해 로그인이 필요합니다.
+                    </p>
+                )}
+            </div> */}
 
             <div className={`WS-SearchYoutube-Results ${selectedVideos.length > 0 ? 'has-selected' : ''}`}>
                 {isLoading ? (
@@ -281,11 +279,7 @@ const SearchYoutube = ({ linkData, setLinkData }) => {
                                             className="WS-youtube-icon"
                                         />
                                     </button>
-                                    <div className="WS-SearchYoutube-Checkbox">
-                                        <FaCheck id="WS-SearchYoutube-Checkbox-Check" />
-                                    </div>
                                 </div>
-
                                 <div className="WS-SearchYoutube-Info-Container">
                                     <h3 className="WS-SearchYoutube-Title" title={video.fullTitle}>{video.title}</h3>
                                     <div className="WS-SearchYoutube-ChannelInfo">
@@ -299,14 +293,6 @@ const SearchYoutube = ({ linkData, setLinkData }) => {
                                 </div>
                             </div>
                         ))}
-                        {selectedVideos.length > 0 && (
-                            <button
-                                className={`WS-SearchYoutube-SaveButton ${selectedVideos.length > 0 ? 'active' : ''}`}
-                                onClick={handleSaveSelected}
-                            >
-                                링크 저장 ({selectedVideos.length} / 5)
-                            </button>
-                        )}
                     </>
                 ) : (
                     <div className="WS-SearchYoutube-NoResults">

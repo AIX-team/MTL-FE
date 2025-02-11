@@ -95,10 +95,12 @@
   padding-right: 5px;
 
   width: 94vw;
-  height: 420px;
+  height: 55vh;
 
   overflow-x: hidden;
   overflow-y: auto;
+
+  background-color: white;
 }
 
 .SJ-travel-grid::-webkit-scrollbar {

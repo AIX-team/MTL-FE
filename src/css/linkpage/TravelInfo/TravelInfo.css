@@ -26,14 +26,30 @@ a,
   border-bottom: 1px solid #e0e0e0;
 }
 
-.HG-TravelInfo-Back-Btn {
+.WS-TravelInfo-Header-Left {
   display: flex;
   align-items: center;
   gap: 20px;
   cursor: pointer;
 }
 
-.HG-TravelInfo-Travel-Days-Input {
+.WS-TravelInfo-Header-Left-Contents{
+  margin-left: 40px;
+
+  cursor: pointer;
+}
+
+.WS-TravelInfo-Header-Left-Back-Btn{
+  position: absolute;
+  left: 10px;
+}
+
+.WS-TravelInfo-Header-Left-Back-Btn-Icon{
+  width: 40px;
+  height: 25px;
+}
+
+.WS-TravelInfo-Travel-Days {
   height: 20px;
   border: none;
   background: none;
@@ -41,7 +57,7 @@ a,
   font-weight: bold;
 }
 
-.HG-TravelInfo-Title-Edit-Frame {
+.HG-TravelInfo-Title-Edit-Container {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -59,11 +75,12 @@ a,
   cursor: pointer;
 }
 
-.HG-TravelInfo-Btn {
+.WS-TravelInfo-Header-Right {
   display: inline-flex;
   align-items: center;
   height: 40px;
-  transform: translateX(10px);
+  margin-left: 10px;
+  
   cursor: pointer;
 }
 
