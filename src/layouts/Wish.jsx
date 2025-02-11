@@ -9,8 +9,7 @@ import SendIcon from '@mui/icons-material/Send';
 import { searchContent } from '../apis/Apis';
 
 
-const Wish = () => {
-    const [isOpen, setIsOpen] = useState(false);
+const Wish = ({ onClose }) => {
     const [messages, setMessages] = useState([
         {
             id: uuidv4(),
@@ -42,7 +41,7 @@ const Wish = () => {
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (modalRef.current && !modalRef.current.contains(event.target)) {
-                setIsOpen(false);
+                onClose();
             }
         };
 
@@ -50,7 +49,7 @@ const Wish = () => {
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
-    }, []);
+    }, [onClose]);
 
     // 날씨 상태 한글 매핑
     const weatherTranslation = {
@@ -360,92 +359,77 @@ const Wish = () => {
     };
 
     return ReactDOM.createPortal(
-        <>
-            {/* 플로팅 버튼 */}
-            <button
-                className={`WS-Wish-Floating-Button ${isOpen ? 'active' : ''}`}
-                onClick={() => setIsOpen(true)}
-            >
-                <FaComments />
-            </button>
-
-            {/* 챗봇 모달 */}
-            {isOpen && (
-                <div className="WS-AlertModal-Overlay">
-                    <div className="WS-Wish" ref={modalRef}>
-
-                        <div className="WS-Wish-Header">
-                            <h3>AI 여행 도우미</h3>
-                            <button
-                                className="WS-Wish-Close-Button"
-                                onClick={() => setIsOpen(false)}
-                            >
-                                <FaTimes />
-                            </button>
-                        </div>
-
-                        <div className="WS-Wish-Messages">
-                            {messages.map(message => (
-                                <div
-                                    key={message.id}
-                                    className={`WS-Wish-Message ${message.type}`}
-                                >
-                                    {message.type === 'bot' && (
-                                        <div className="WS-Wish-Bot-Avatar">AI</div>
-                                    )}
-                                    <div className="WS-Wish-Message-Content">
-                                        {message.content}
-                                    </div>
-                                </div>
-                            ))}
-                            {isLoading && (
-                                <div className="WS-Wish-Message bot">
-                                    <div className="WS-Wish-Bot-Avatar">A</div>
-                                    <div className="WS-Wish-Message-Content">
-                                        답변을 생성하고 있습니다...
-                                    </div>
-                                </div>
-                            )}
-                            <div ref={messagesEndRef} />
-                        </div>
-
-                        <div className="WS-Wish-Weather-Button-Container">
-                            {/* 날씨 정보 버튼 추가 */}
-                            <button
-                                onClick={handleWeatherButton}
-                                className="WS-Wish-Weather-Button"
-                            >
-                                날씨 ☀
-                            </button>
-                            <button
-                                className="WS-Wish-Exchange-Button"
-                                onClick={handleExchangeButton}
-                            >
-                                환율 💴
-                            </button>
-                        </div>
-                        <div className="WS-Wish-Input-Container">
-                            <input
-                                className="WS-Wish-Input"
-                                type="text"
-                                value={inputMessage}
-                                onChange={(e) => setInputMessage(e.target.value)}
-                                onKeyPress={handleKeyPress}
-                                placeholder="메시지를 입력하세요."
-                                disabled={isLoading}
-                            />
-                            <button
-                                className="WS-Wish-Send-Button"
-                                onClick={handleSendMessage}
-                                disabled={isLoading}
-                            >
-                                 <SendIcon />
-                            </button>
-                        </div>
-                    </div>
+        <div className="WS-Modal-Overlay">
+            <div className="WS-Wish" ref={modalRef}>
+                <div className="WS-Wish-Header">
+                    <h3>AI 여행 도우미</h3>
+                    <button
+                        className="WS-Wish-Close-Button"
+                        onClick={onClose}
+                    >
+                        <FaTimes />
+                    </button>
                 </div>
-            )}
-        </>,
+
+                <div className="WS-Wish-Messages">
+                    {messages.map(message => (
+                        <div
+                            key={message.id}
+                            className={`WS-Wish-Message ${message.type}`}
+                        >
+                            {message.type === 'bot' && (
+                                <div className="WS-Wish-Bot-Avatar">AI</div>
+                            )}
+                            <div className="WS-Wish-Message-Content">
+                                {message.content}
+                            </div>
+                        </div>
+                    ))}
+                    {isLoading && (
+                        <div className="WS-Wish-Message bot">
+                            <div className="WS-Wish-Bot-Avatar">A</div>
+                            <div className="WS-Wish-Message-Content">
+                                답변을 생성하고 있습니다...
+                            </div>
+                        </div>
+                    )}
+                    <div ref={messagesEndRef} />
+                </div>
+
+                <div className="WS-Wish-Weather-Button-Container">
+                    <button
+                        onClick={handleWeatherButton}
+                        className="WS-Wish-Weather-Button"
+                    >
+                        날씨 ☀
+                    </button>
+                    <button
+                        className="WS-Wish-Exchange-Button"
+                        onClick={handleExchangeButton}
+                    >
+                        환율 💴
+                    </button>
+                </div>
+                <div className="WS-Wish-Input-Container">
+                    <input
+                        className="WS-Wish-Input"
+                        type="text"
+                        value={inputMessage}
+                        onChange={(e) => setInputMessage(e.target.value)}
+                        onKeyPress={handleKeyPress}
+                        placeholder="메시지를 입력하세요."
+                        disabled={isLoading}
+                    />
+                    <button
+                        className="WS-Wish-Send-Button"
+                        onClick={handleSendMessage}
+                        disabled={isLoading}
+                    >
+                        <SendIcon />
+                    </button>
+                </div>
+            </div>
+        </div>,
         document.body
     );
 };

@@ -485,7 +485,6 @@ const GuideBook = () => {
                                         <div
                                             ref={provided.innerRef}
                                             {...provided.draggableProps}
-                                            {...provided.dragHandleProps}
                                             className={`YC-GuideBook-place-Container ${isEditMode ? 'edit-mode' : ''}`}
                                         >
                                             {isEditMode ? (
@@ -517,6 +516,7 @@ const GuideBook = () => {
                                                         e.target.src = "https://placehold.co/90x70?text=No+Image";
                                                     }}
                                                 />
+                                                
                                                 <div className="YC-GuideBook-place-info">
                                                     <span id="YC-GuideBook-place-name">{place.name}</span>
                                                     <span id="YC-GuideBook-place-type">{place.type}</span>

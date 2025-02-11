@@ -1,23 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { FaComments } from 'react-icons/fa';
 import '../css/layout/Footer.css';
 import LINK from '../images/Link.png';
-import TRAVEL from '../images/Travel.png'; 
+import TRAVEL from '../images/Travel.png';
 import MYPAGE from '../images/MyPage.png';
+import Wish from './Wish';
 
 const FooterComponent = () => {
+    const [isWishOpen, setIsWishOpen] = useState(false);
     const location = useLocation();
     const currentPath = location.pathname.toLowerCase();
-    
+
     // 모달이 열려있을 때는 Footer를 숨김
     const isModalPath = currentPath.includes('/select-modal');
-    
+
     if (isModalPath) return null;
-    
+
     const getClassName = (path) => {
-        switch(path) {
+        switch (path) {
             case '/link':
-                // /link로 시작하는 모든 경로에서 Link 메뉴 활성화
                 return `WS-Footer-Item${currentPath.startsWith('/link') ? ' active' : ''}`;
             case '/travel':
                 return `WS-Footer-Item${currentPath.startsWith('/travel') ? ' active' : ''}`;
@@ -29,25 +31,39 @@ const FooterComponent = () => {
     };
 
     return (
-        <footer className="WS-Main-Footer">
-            {/* Link 메뉴 아이템 */}
-            <Link to="/link" className={getClassName('/link')}>
-                <img src={LINK} alt="Link" className="WS-Footer-Link" />
-                <div>Link</div>
-            </Link>
+        <>
+            <footer className="WS-Main-Footer">
+                {/* Link 메뉴 아이템 */}
+                <Link to="/link" className={getClassName('/link')}>
+                    <img src={LINK} alt="Link" className="WS-Footer-Link" />
+                    <div className="WS-Footer-Text">Link</div>
+                </Link>
 
-            {/* Travel 메뉴 아이템 */}
-            <Link to="/travel" className={getClassName('/travel')}>
-                <img src={TRAVEL} alt="Travel" className="WS-Footer-Travel" />
-                <div>Travel</div>
-            </Link>
+                {/* Travel 메뉴 아이템 */}
+                <Link to="/travel" className={getClassName('/travel')}>
+                    <img src={TRAVEL} alt="Travel" className="WS-Footer-Travel" />
+                    <div className="WS-Footer-Text">Travel</div>
+                </Link>
 
-            {/* MyPage 메뉴 아이템 */}
-            <Link to="/mypage" className={getClassName('/mypage')}>
-                <img src={MYPAGE} alt="MyPage" className="WS-Footer-MyPage" />
-                <div>MyPage</div>
-            </Link>
-        </footer>
+                {/* MyPage 메뉴 아이템 */}
+                <Link to="/mypage" className={getClassName('/mypage')}>
+                    <img src={MYPAGE} alt="MyPage" className="WS-Footer-MyPage" />
+                    <div className="WS-Footer-Text">MyPage</div>
+                </Link>
+
+                {/* Wish 버튼 */}
+                {/* 위시 이미지로 변경 보류 */}
+                <div
+                    className="WS-Footer-Item"
+                    id="WS-Footer-Wish"
+                    onClick={() => setIsWishOpen(true)}
+                >
+                    <FaComments className="WS-Footer-Wish" />
+                    <div className="WS-Footer-Item-Text">Wish</div>
+                </div>
+            </footer>
+            {isWishOpen && <Wish onClose={() => setIsWishOpen(false)} />}
+        </>
     );
 };
 

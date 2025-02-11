@@ -8,35 +8,35 @@ import { useNavigate } from 'react-router-dom'; // 추가
 
 
 const LinkPage = () => {
-    const navigate = useNavigate(); // 추가
-    const [activeTab, setActiveTab] = useState('youtube');
-    const [linkData, setLinkData] = useState([]); // 빈 배열로 초기화
-    const [linkCount, setLinkCount] = useState(0); // 0으로 초기화
+  const navigate = useNavigate(); // 추가
+  const [activeTab, setActiveTab] = useState('youtube');
+  const [linkData, setLinkData] = useState([]); // 빈 배열로 초기화
+  const [linkCount, setLinkCount] = useState(0); // 0으로 초기화
 
-    const renderContent = () => {
-        switch (activeTab) {
-            case 'links':
-                return <LinkList linkData={linkData} setLinkData={setLinkData} />;
-            case 'youtube':
-                return <SearchYoutube linkData={linkData} setLinkData={setLinkData} />;
-            default:
-                return null;
-        }
-    };
+  const renderContent = () => {
+    switch (activeTab) {
+      case 'links':
+        return <LinkList linkData={linkData} setLinkData={setLinkData} />;
+      case 'youtube':
+        return <SearchYoutube linkData={linkData} setLinkData={setLinkData} />;
+      default:
+        return null;
+    }
+  };
 
-    // 토큰 검사 useEffect
-    useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (!token) {
-            navigate('/login');
-            return;
-        }
-    }, [navigate]);
+  // 토큰 검사 useEffect
+  // useEffect(() => {
+  //     const token = localStorage.getItem('token');
+  //     if (!token) {
+  //         navigate('/login');
+  //         return;
+  //     }
+  // }, [navigate]);
 
-    // linkCount 업데이트
-    useEffect(() => {
-        setLinkCount(linkData.length);
-    }, [linkData]);
+  // linkCount 업데이트
+  useEffect(() => {
+    setLinkCount(linkData.length);
+  }, [linkData]);
 
   return (
     <div className="WS-Link-Page">
@@ -55,7 +55,7 @@ const LinkPage = () => {
                 alt="YouTube"
                 className="WS-youtube-icon"
               />
-              <span className="WS-Link-Tab-text">유튜브 검색</span>
+              <span>유튜브 검색</span>
             </div>
           </div>
 
@@ -66,7 +66,7 @@ const LinkPage = () => {
             className={`WS-Link-Tab ${activeTab === "links" ? "active" : ""}`}
           >
             <div className="WS-Link-Tab-Content">
-              <span className="WS-Link-Tab-text">링크</span>
+              <span>링크</span>
 
               {linkCount >= 5 ? (
                 <span className="WS-check-icon">
@@ -83,9 +83,8 @@ const LinkPage = () => {
           <div
             className="SJ-Tab-Indicator"
             style={{
-              transform: `translateX(${
-                activeTab === "youtube" ? "0" : "100%"
-              })`,
+              transform: `translateX(${activeTab === "youtube" ? "0" : "100%"
+                })`,
             }}
           ></div>
         </div>

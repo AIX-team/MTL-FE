@@ -218,7 +218,7 @@ const SearchYoutube = ({ linkData, setLinkData }) => {
                 </div>
             </div>
 
-            <div className="WS-SearchYoutube-RecentSearches">
+            {/* <div className="WS-SearchYoutube-RecentSearches">
                 {isLoggedIn ? (
                     recentSearches.length > 0 ? (
                         <>
@@ -246,8 +246,7 @@ const SearchYoutube = ({ linkData, setLinkData }) => {
                         검색어 저장을 위해 로그인이 필요합니다.
                     </p>
                 )}
-            </div>
-
+            </div> */}
 
             <div className={`WS-SearchYoutube-Results ${selectedVideos.length > 0 ? 'has-selected' : ''}`}>
                 {isLoading ? (
@@ -280,11 +279,7 @@ const SearchYoutube = ({ linkData, setLinkData }) => {
                                             className="WS-youtube-icon"
                                         />
                                     </button>
-                                    <div className="WS-SearchYoutube-Checkbox">
-                                        <FaCheck id="WS-SearchYoutube-Checkbox-Check" />
-                                    </div>
                                 </div>
-
                                 <div className="WS-SearchYoutube-Info-Container">
                                     <h3 className="WS-SearchYoutube-Title" title={video.fullTitle}>{video.title}</h3>
                                     <div className="WS-SearchYoutube-ChannelInfo">
@@ -298,14 +293,6 @@ const SearchYoutube = ({ linkData, setLinkData }) => {
                                 </div>
                             </div>
                         ))}
-                        {selectedVideos.length > 0 && (
-                            <button
-                                className={`WS-SearchYoutube-SaveButton ${selectedVideos.length > 0 ? 'active' : ''}`}
-                                onClick={handleSaveSelected}
-                            >
-                                링크 저장 ({selectedVideos.length} / 5)
-                            </button>
-                        )}
                     </>
                 ) : (
                     <div className="WS-SearchYoutube-NoResults">

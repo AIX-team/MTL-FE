@@ -1,9 +1,13 @@
 /* 메인 레이아웃 (헤더와 푸터 사이의 컨테이너) */
 .YC-GuideBookList-Container {
-  overflow-y: auto;
-  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow-y: hidden;
+  overflow-x: hidden;
   background-color: white;
-  position: relative;
 }
 
 .HG-GuideBookList-Header {
@@ -25,6 +29,7 @@
   height: 230px;
   position: relative;
   left: 1%;
+
 }
 
 /* 코스 메뉴 버튼 컨테이너 */
@@ -96,10 +101,44 @@
 .YC-GuideBookList-content {
   margin: 0px auto;
   overflow-y: auto;
-  height: 60vh;
+  height: 45vh;
 }
 
 /* ------------------------------------------------------------------------- */
+/* 코스 메뉴 장소 컨테이너 */
+.YC-GuideBook-place {
+  position: relative;
+  padding-left: 50px;
+  min-height: 95px;
+}
+
+/* 코스 메뉴 장소 컨테이너 */
+.YC-GuideBook-place-Container {
+  position: relative;
+  display: flex;
+
+  align-items: flex-start;
+  margin-bottom: 15px;
+  margin-right: 10px;
+
+  padding: 10px 15px;
+
+  border-radius: 22px;
+  border: none;
+  background-color: var(--color-light-gray);
+}
+
+
+
+/* 장소 정보 컨테이너 */
+.YC-GuideBook-place-info {
+  display: flex;
+  /* 플렉스 박스 사용 */
+  flex-direction: column;
+  /* 세로 정렬 */
+  gap: 5px;
+
+}
 
 .HG-GuideBookList-Header-contents {
   display: flex;
@@ -144,16 +183,7 @@
   /* Chrome, Safari, Opera에서 스크롤바 숨기기 */
 }
 
-/* 장소 정보 컨테이너 */
-.YC-GuideBook-place-info {
-  display: flex;
-  /* 플렉스 박스 사용 */
-  flex-direction: column;
-  /* 세로 정렬 */
-  gap: 5px;
-  /* 요소 간 간격 */
 
-}
 
 
 /* 코스 메뉴 편집 옵션 컨테이너 */
@@ -198,39 +228,8 @@
   cursor: pointer;
 }
 
-/* 코스 메뉴 장소 컨테이너 */
-.YC-GuideBook-place {
-  position: relative;
-  /* 상대 위치 */
-  padding-left: 50px;
-  /* 왼쪽 여백 */
-  overflow: visible;
-  /* 스크롤 비활성화 */
-  height: 100%;
-  min-height: 100px;
-}
 
-/* 코스 메뉴 장소 컨테이너 */
-.YC-GuideBook-place-Container {
-  margin-bottom: 15px;
-  /* 하단 여백 */
-  border: none;
-  /* 테두리 없음 */
-  padding: 10px 15px;
-  /* 내부 여백 */
-  border-radius: 10px;
-  /* 둥근 모서리 */
-  background-color: #f8f8f8;
-  /* 배경색 */
-  position: relative;
-  /* 상대 위치 */
-  display: flex;
-  /* 플렉스 박스 사용 */
-  align-items: flex-start;
-  /* 상단 정렬 */
-  margin-right: 0;
-  /* 기본 상태에서는 오른쪽 여백 없음 */
-}
+
 
 /* 코스 메뉴 장소 컨테이너 편집 모드일 때 크기 조정 */
 .YC-GuideBook-place-Container.edit-mode {
@@ -402,7 +401,7 @@
   /* 높이 */
   object-fit: cover;
   /* 이미지 비율 유지 */
-  border-radius: 5px;
+  border-radius: 22px;
   /* 둥근 모서리 */
 }
 

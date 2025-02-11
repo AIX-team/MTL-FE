@@ -109,12 +109,11 @@ const LinkList = ({ linkData, setLinkData }) => {
     }
 
     return (
-        <div className="WS-LinkList">
+        <div className="WS-LinkList-Tab">
             <div className="WS-Link-Input-Container">
                 <input
                     id="WS-Link-Input"
                     type="text"
-                    id="WS-Link-Input"
                     placeholder="유튜브 또는 블로그 링크 붙여넣기"
                     className="WS-Link-Input"
                     value={inputLink}
@@ -140,14 +139,15 @@ const LinkList = ({ linkData, setLinkData }) => {
                             >
                                 {link.url.length > 25 ? `${link.url.substring(0, 25)}...` : link.url}
                             </span>
+
+                            <button
+                                className="WS-LinkList-DeleteButton"
+                                onClick={() => handleDeleteLink(link.id)}
+                                title="삭제"
+                            >
+                                <FaMinus />
+                            </button>
                         </div>
-                        <button
-                            className="WS-LinkList-DeleteButton"
-                            onClick={() => handleDeleteLink(link.id)}
-                            title="삭제"
-                        >
-                            <FaMinus />
-                        </button>
                     </div>
                 ))}
 

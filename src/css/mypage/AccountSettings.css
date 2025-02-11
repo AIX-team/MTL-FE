@@ -74,6 +74,8 @@
   padding: 15px;
   border-radius: 20px;
   font-weight: bold;
+
+  height: 50px;
 }
 
 .SJ_login_info {
@@ -107,6 +109,8 @@
 .SJ_google_icon {
   margin-right: 15px;
   /* 아이콘과 텍스트 간의 간격 */
+  width: 24px;
+  height: 24px;
 }
 
 /* 로그아웃 버튼 */
