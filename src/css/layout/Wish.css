@@ -1,164 +1,161 @@
 /* 모달 스타일 */
 .WS-Wish {
-    display: flex;
-    flex-direction: column;
-    z-index: 1015;
+  display: flex;
+  flex-direction: column;
+  z-index: 11;
 
-    width: 90%;
-    max-width: 402px;
-    height: 700px;
-    background-color: white;
-    border-radius: 20px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  width: 96vw;
+  max-width: var(--screen-max-width);
+  height: 85vh;
+  max-height: 850px;
 
-    overflow: hidden;
+  background-color: white;
+  border-radius: var(--border-radius-lg);
+
+  overflow: hidden;
 }
 
 /* 모달 헤더 */
 .WS-Wish-Header {
-    padding: 16px;
-    background-color: white;
-    color: var(--color-dark-gray);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
-    border-bottom: 1px solid var(--color-light-gray);
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+  padding: 3% 4% 1% 4%;
+  background-color: white;
+  color: var(--color-dark-gray);
+
+  border-bottom: 2px solid var(--color-guide);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .WS-Wish-Header h3 {
-    margin: 0;
-    font-size: var(--font-size-base);
+  font-size: var(--font-size-base);
+  font-weight: bold;
 }
 
 .WS-Wish-Close-Button {
-    background: none;
-    border: none;
-    color: var(--color-dark-gray);
-    cursor: pointer;
-    font-size: var(--font-size-base);
-    padding: 4px;
+  background: none;
+  border: none;
+  color: var(--color-dark-gray);
+  cursor: pointer;
+  font-size: var(--font-size-base);
 }
 
 /* 챗봇 메시지 */
 .WS-Wish-Messages {
-    flex: 1;
-    overflow-y: auto;
-    overflow-x: hidden;
-    padding: 20px;
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 20px;
 
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 .WS-Wish-Message {
-    display: flex;
-    align-items: flex-start;
-    margin-bottom: 20px;
-
-
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 20px;
 }
 
 .WS-Wish-Message.user {
-    flex-direction: row-reverse;
+  flex-direction: row-reverse;
 }
 
 .WS-Wish-Bot-Avatar {
-    width: 40px;
-    height: 40px;
-    background-color: var(--color-main);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    margin-right: 10px;
+  width: 40px;
+  height: 40px;
+  background-color: var(--color-main);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  margin-right: 10px;
 }
 
 .WS-Wish-Message-Content {
-    max-width: 70%;
-    padding: 12px 16px;
-    border-radius: 22px;
-    background: var(--color-light-gray);
-    white-space: pre-line;
-    word-wrap: break-word;
+  max-width: 70%;
+  padding: 12px 16px;
+  border-radius: 22px;
+  background: var(--color-light-gray);
+  white-space: pre-line;
+  word-wrap: break-word;
 }
 
 .WS-Wish-Message.user .WS-Wish-Message-Content {
-    background: var(--color-main);
-    color: white;
-    transition: all 0.2s;
+  background: var(--color-main);
+  color: white;
+  transition: all 0.2s;
 }
 
 .WS-Wish-Weather-Button-Container {
-    display: flex;
-    align-items: left;
-    gap: 10px;
+  display: flex;
+  align-items: left;
+  gap: 10px;
 
-    margin-left: 20px;
+  margin-left: 20px;
 }
 
 /* 날씨 정보 버튼 */
 .WS-Wish-Exchange-Button,
 .WS-Wish-Weather-Button {
-    width: 80px;
-    height: 40px;
-    border-radius: 22px;
-    background-color: var(--color-dark-gray);
-    color: white;
-    border: none;
-    cursor: pointer;
+  width: 80px;
+  height: 40px;
+  border-radius: 22px;
+  background-color: var(--color-dark-gray);
+  color: white;
+  border: none;
+  cursor: pointer;
 
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 .WS-Wish-Weather-Button:hover,
 .WS-Wish-Exchange-Button:hover {
-    background-color: var(--color-main-hover);
-    scale: 1.05;
+  background-color: var(--color-main-hover);
+  scale: 1.05;
 }
-
 
 /* 챗봇 입력창 */
 .WS-Wish-Input-Container {
-    padding: 20px;
-    border-top: 1px solid var(--color-light-gray);
-    display: flex;
-    gap: 20px;
+  padding: 20px;
+  border-top: 1px solid var(--color-light-gray);
+  display: flex;
+  gap: 20px;
 }
 
 .WS-Wish-Input {
-    padding-bottom: 10px;
-    padding-top: 12px;
-    padding-left: 15px;
-    border-radius: 22px;
-    border: 1px solid var(--color-light-gray);
-    font-size: var(--font-size-base);
+  padding-bottom: 10px;
+  padding-top: 12px;
+  padding-left: 15px;
+  border-radius: 22px;
+  border: 1px solid var(--color-light-gray);
+  font-size: var(--font-size-base);
 
-    width: 300px;
+  width: 300px;
 
-    outline: none;
+  outline: none;
 }
 
 .WS-Wish-Send-Button {
-    padding-right: 15px;
-    padding-left: 15px;
-    padding-top: 5px;
-    width: 50px;
-    height: 45px;
+  padding-right: 15px;
+  padding-left: 15px;
+  padding-top: 5px;
+  width: 50px;
+  height: 45px;
 
-    justify-content: center;
-    align-items: center;
+  justify-content: center;
+  align-items: center;
 
-    background: var(--color-main);
-    color: white;
-    border: none;
-    border-radius: 22px;
-    cursor: pointer;
-
+  background: var(--color-main);
+  color: white;
+  border: none;
+  border-radius: 22px;
+  cursor: pointer;
 }
 
 .WS-Wish-Send-Button:hover {
-    background: var(--color-main-hover);
-    scale: 1.05;
+  background: var(--color-main-hover);
+  scale: 1.05;
 }
