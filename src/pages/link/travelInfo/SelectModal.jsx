@@ -5,7 +5,7 @@ import selectIcon from '../../../images/select.svg';
 import isSelectedIcon from '../../../images/isselect.svg';
 import allSelectIcon from '../../../images/select_check_deactive.svg';
 import xIcon from '../../../images/x-btn.svg';
-import '../../../css/SelectModal.css';
+import '../../../css/linkpage/TravelInfo/SelectModal.css';
 import TasteModal from './TasteModal';
 
 const axiosInstance = axios.create({
