@@ -982,8 +982,6 @@
 }
 
 .HG-GuideBookList-Header {
-  margin-left: 25px;
-  
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -1068,4 +1066,15 @@
     height: 400px;
     width: 600px;
     z-index: -1;
+}
+.HG-GuideBookList-Header-contents-title{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.HG-GuideBookList-Header-contents-title-edit{
+  font-size: var(--font-size-xs);
+  color: var(--color-guide);
+  font-weight: bold;
+  cursor: pointer;
 }
