@@ -83,8 +83,10 @@ function Loading({ type = "default" }) {
     };
   }, []);
 
-  // 비행기와 프로그레스 바의 진행을 동일하게 맞춤
-  const airplanePosition = progress;
+  // 비행기의 투명도 계산
+  const airplaneOpacity = progress >= 98 ? 0 : 1;
+  // 프로그레스바 너비 계산
+  const progressWidth = progress >= 100 ? 0 : progress;
 
   return (
     <div className="SJ_loading_container">
@@ -108,15 +110,17 @@ function Loading({ type = "default" }) {
             alt="Loading Airplane"
             className="SJ_loading_airplane"
             style={{
-              left: `calc(${airplanePosition}%)`,
+              left: `calc(${progress}%)`,
               willChange: "left",
+              opacity: airplaneOpacity,
             }}
           />
           <div className="SJ_progress_container">
             <div
               className="SJ_progress_bar_main"
               style={{
-                width: `${Math.max(0, progress)}%`,
+                width: `${Math.max(0, progressWidth)}%`,
+                opacity: 1,
                 willChange: "width",
               }}
             />

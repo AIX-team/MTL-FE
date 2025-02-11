@@ -53,7 +53,8 @@
   transform: translateX(-100%) translateZ(0) rotate(95deg);
   -webkit-transform: translateX(-50%) translateZ(0) rotate(95deg);
   z-index: 2;
-  will-change: left;
+  will-change: left, opacity;
+  transition: opacity 0.2s ease;
 }
 
 .SJ_progress_container {
