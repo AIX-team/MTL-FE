@@ -9,7 +9,19 @@
 
 }
 
+.WS-Footer-Wish {
+    width: 25px;
+    height: 25px;
+    object-fit: contain;
+    filter: grayscale(100%);
+    position: relative;
 
+    z-index: 2;
+}
+
+#WS-Footer-Wish {
+    cursor: pointer;
+}
 
 /* 위시 이미지로 보류 */
 

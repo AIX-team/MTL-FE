@@ -107,6 +107,8 @@
 
   overflow-x: hidden;
   overflow-y: auto;
+
+  background-color: white;
 }
 
 .SJ-travel-grid::-webkit-scrollbar {
