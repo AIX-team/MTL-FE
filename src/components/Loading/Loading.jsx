@@ -12,7 +12,6 @@ function Loading({ type = "default" }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const animationFrameRef = useRef();
   const lastUpdateTimeRef = useRef(Date.now());
-  const speedFactor = useRef(1);
   const loadingImages = [loadingEarth, loadingSunglass, loadingBag, loadingMap];
 
   // 메시지 설정
@@ -35,7 +34,7 @@ function Loading({ type = "default" }) {
       setCurrentImageIndex(
         (prevIndex) => (prevIndex + 1) % loadingImages.length
       );
-    }, 1500);
+    }, 2000);
 
     // cleanup 함수에 interval 정리 추가
     return () => {
@@ -48,32 +47,28 @@ function Loading({ type = "default" }) {
 
   // 별도의 useEffect로 분리하여 성능 체크와 애니메이션 처리
   useEffect(() => {
-    const performanceCheck = () => {
-      const start = performance.now();
-      setTimeout(() => {
-        const end = performance.now();
-        const diff = end - start;
-        speedFactor.current = 1.2;
-      }, 16);
-    };
-
-    performanceCheck();
-
     const animate = () => {
       const currentTime = Date.now();
       const deltaTime = currentTime - lastUpdateTimeRef.current;
 
       setProgress((prevProgress) => {
-        if (prevProgress >= 100) {
-          return 0;
+        const newProgress = prevProgress + (deltaTime / 3700) * 100;
+
+        if (newProgress >= 100) {
+          setTimeout(() => {
+            setProgress(0);
+          }, 15);
+          return 100;
         }
-        return prevProgress + (deltaTime / 2000) * 100 * speedFactor.current;
+
+        return newProgress;
       });
 
       lastUpdateTimeRef.current = currentTime;
       animationFrameRef.current = requestAnimationFrame(animate);
     };
 
+    lastUpdateTimeRef.current = Date.now();
     animationFrameRef.current = requestAnimationFrame(animate);
 
     return () => {
@@ -83,10 +78,7 @@ function Loading({ type = "default" }) {
     };
   }, []);
 
-  // 비행기의 투명도 계산
-  const airplaneOpacity = progress >= 98 ? 0 : 1;
-  // 프로그레스바 너비 계산
-  const progressWidth = progress >= 100 ? 0 : progress;
+  const position = progress;
 
   return (
     <div className="SJ_loading_container">
@@ -110,18 +102,16 @@ function Loading({ type = "default" }) {
             alt="Loading Airplane"
             className="SJ_loading_airplane"
             style={{
-              left: `calc(${progress}%)`,
-              willChange: "left",
-              opacity: airplaneOpacity,
+              left: `${progress}%`,
+              transition: progress === 0 ? "none" : "left 0.05s linear",
             }}
           />
           <div className="SJ_progress_container">
             <div
               className="SJ_progress_bar_main"
               style={{
-                width: `${Math.max(0, progressWidth)}%`,
-                opacity: 1,
-                willChange: "width",
+                width: `${progress}%`,
+                transition: progress === 0 ? "none" : "width 0.05s linear",
               }}
             />
             <div className="SJ_progress_bar_background" />
