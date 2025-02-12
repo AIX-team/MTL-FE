@@ -17,7 +17,7 @@ const TitleEditModal = ({ isOpen, onClose, travelDays, travelInfoTitle, onSave }
 
 
   return ReactDOM.createPortal(
-    <div className="WS-AlertModal-Overlay">
+    <div className="WS-Modal-Overlay">
       <div className="WS-TitleEditModal-Content">
 
         <div className="WS-TitleEditModal-header-Container">

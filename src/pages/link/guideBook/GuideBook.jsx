@@ -12,16 +12,10 @@ import backArrowIcon from '../../../images/backArrow.svg';
 import ReactDOM from 'react-dom';
 import html2canvas from 'html2canvas';  // html2canvas 라이브러리 추가 필요
 import TitleEditModal from './GuideBookTitleEditModal';
+import axiosInstance from '../../../components/AxiosInstance';
 // CSS 파일 import
 
 import '../../../css/guide/GuideBook.css';
-
-const axiosInstance = axios.create({
-    baseURL: process.env.REACT_APP_API_URL,
-    headers: {
-        'Content-Type': 'application/json',
-    },
-});
 
 // 구글 맵 컴포넌트(경로)
 const MapComponent = React.memo(({ places }) => {
