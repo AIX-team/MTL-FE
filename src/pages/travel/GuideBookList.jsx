@@ -1,7 +1,8 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import "../../css/travel/GuidebookList.css";
 import TravelPageModal from "./TravelPageModal";
 import { FaSearch, FaTimes } from "react-icons/fa";
+import axiosInstance from '../../components/AxiosInstance';
 
 function GuidebookList() {
   const [activeFilter, setActiveFilter] = useState("latest");
@@ -59,6 +60,21 @@ function GuidebookList() {
       score: 3,
     },
   ]);
+
+  useEffect(() => {
+    getGuideBookList();
+  }, []);
+
+  // 가이드북 목록 가져오기
+  const getGuideBookList = async () => {
+    try {
+      const response = await axiosInstance.get('/api/v1/travels/guidebooks/list');
+      setGuideBookData(response.data.guidebookList);
+    } catch (error) { 
+      console.error('가이드북 목록을 가져오는 중 오류가 발생했습니다:', error);
+    }
+  };
+
 
   // 정렬된 가이드북 데이터 계산
   const sortedGuideBooks = useMemo(() => {

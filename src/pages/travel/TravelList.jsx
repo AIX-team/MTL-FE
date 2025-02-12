@@ -17,25 +17,49 @@ const TravelList = () => {
 
 
   const getTravelList = async () => {
-    const response = await axiosInstance.get('/api/v1/travels/travelInfos/list');
-    setTravelItems(response.data.travelInfoList);
+    try { 
+      const response = await axiosInstance.get('/api/v1/travels/travelInfos/list');
+      setTravelItems(response.data.travelInfoList);
+    } catch (error) {
+      console.error('여행 목록을 가져오는 중 오류가 발생했습니다:', error);
+    }
   };
   
   const putFavorite = async (travelId, isFavorite) => {
-    await axiosInstance.put(`/api/v1/travels/travelInfos/${travelId}/favorite`, { isTrue: isFavorite });
+    try {
+      await axiosInstance.put(`/api/v1/travels/travelInfos/${travelId}/favorite`, { isTrue: isFavorite });
+    } catch (error) {
+      console.error('즐겨찾기 상태를 업데이트하는 중 오류가 발생했습니다:', error);
+    }
   };
 
   const putPin = async (travelId, isFixed) => {
-    await axiosInstance.put(`/api/v1/travels/travelInfos/${travelId}/fixed`, { isTrue: isFixed });
+    try {
+      await axiosInstance.put(`/api/v1/travels/travelInfos/${travelId}/fixed`, { isTrue: isFixed });
+    } catch (error) {
+      console.error('고정 상태를 업데이트하는 중 오류가 발생했습니다:', error);
+    }
   };
 
   const putUpdateTitle = async (item, newTitle) => {
-    await axiosInstance.put(`/api/v1/travels/travelInfos/${item.travelId}`, 
-      {
-        travelInfoTitle: newTitle,
+    try {
+      await axiosInstance.put(`/api/v1/travels/travelInfos/${item.travelId}`, 
+        {
+          travelInfoTitle: newTitle,
         travelDays: parseInt(item.travelDays) // 숫자로 변환
       }
     );
+    } catch (error) {
+      console.error('여행 제목을 업데이트하는 중 오류가 발생했습니다:', error);
+    }
+  };
+  
+  const deleteTravel = async (travelId) => {
+    try {
+      await axiosInstance.delete(`/api/v1/travels/travelInfos/${travelId}`);
+    } catch (error) {
+      console.error('여행을 삭제하는 중 오류가 발생했습니다:', error);
+    }
   };
 
   const handleFilterClick = (filter) => {
@@ -169,6 +193,7 @@ const TravelList = () => {
   // 아이템 삭제 함수
   const handleDeleteItem = (item) => {
     setTravelItems(travelItems.filter((travelItem) => travelItem.travelId !== item.travelId));
+    deleteTravel(item.travelId)
   };
 
   return (
@@ -213,7 +238,7 @@ const TravelList = () => {
         <div className="SJ-travel-grid">
           {sortedAndFilteredData.map((item) => (
             <div key={item.id} className="SJ-travel-card">
-                  <Link className="SJ-travel-card" to={`/travelInfos/${item.travelId}`}>
+                  <Link to={`/travelInfos/${item.travelId}`} className="SJ-travel-card">
               
                 {pinnedItems.includes(item.id) && (
                   <div className="SJ-pin-icon">📌</div>
