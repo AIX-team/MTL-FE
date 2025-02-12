@@ -28,126 +28,126 @@ const MapComponent = React.memo(({ places }) => {
   if (!places) return null;
 
   const mapContainerStyle = {
-      width: '100%',
-      height: '100%'
+    width: '100%',
+    height: '100%'
   };
 
   // places가 배열인 경우와 단일 객체인 경우 처리
   const isArray = Array.isArray(places);
-  
+
   const center = isArray ? {
-      lat: parseFloat(places[0].latitude),
-      lng: parseFloat(places[0].longitude)
+    lat: parseFloat(places[0].latitude),
+    lng: parseFloat(places[0].longitude)
   } : {
-      lat: parseFloat(places.latitude),
-      lng: parseFloat(places.longitude)
+    lat: parseFloat(places.latitude),
+    lng: parseFloat(places.longitude)
   };
 
   // places 배열을 num 순서대로 정렬하여 path 생성
   const path = isArray ? [...places]
-      .map(place => ({
-          lat: parseFloat(place.latitude),
-          lng: parseFloat(place.longitude)
-      })) : null;
+    .map(place => ({
+      lat: parseFloat(place.latitude),
+      lng: parseFloat(place.longitude)
+    })) : null;
 
   const onLoad = (map) => {
-      if (!window.google) {
-          console.error('Google Maps API not loaded');
+    if (!window.google) {
+      console.error('Google Maps API not loaded');
+      return;
+    }
+
+    try {
+      // bounds 객체 생성            
+      const bounds = new window.google.maps.LatLngBounds();
+
+
+      // 마커 생성 전에 좌표 유효성 로깅
+      places.forEach((place, index) => {
+        const lat = parseFloat(place.latitude);
+        const lng = parseFloat(place.longitude);
+
+        // 좌표 유효성 검사
+        if (isNaN(lat) || isNaN(lng)) {
+          console.error(`Invalid coordinates for place ${place.name}:`, {
+            lat: place.latitude,
+            lng: place.longitude
+          });
           return;
-      }
+        }
 
-      try {
-          // bounds 객체 생성            
-          const bounds = new window.google.maps.LatLngBounds();
+        const position = {
+          lat: lat,
+          lng: lng
+        };
 
+        try {
+          // bounds에 위치 추가 전에 로깅
+          bounds.extend(position);
 
-              // 마커 생성 전에 좌표 유효성 로깅
-              places.forEach((place, index) => {
-                  const lat = parseFloat(place.latitude);
-                  const lng = parseFloat(place.longitude);
+          // 마커 생성
+          const markerView = new window.google.maps.marker.AdvancedMarkerElement({
+            position,
+            map,
+            title: place.name,
+            content: new window.google.maps.marker.PinElement({
+              // glyph: `${index + 1}`,  // place.num 대신 index + 1 사용
+              glyphColor: '#FFFFFF',
+              background: '#4285f4',
+              borderColor: '#4285f4'
+            }).element
+          });
 
-                  // 좌표 유효성 검사
-                  if (isNaN(lat) || isNaN(lng)) {
-                      console.error(`Invalid coordinates for place ${place.name}:`, {
-                          lat: place.latitude,
-                          lng: place.longitude
-                      });
-                      return;
-                  }
-
-                  const position = {
-                      lat: lat,
-                      lng: lng
-                  };
-
-                  try {
-                      // bounds에 위치 추가 전에 로깅
-                      bounds.extend(position);
-
-                      // 마커 생성
-                      const markerView = new window.google.maps.marker.AdvancedMarkerElement({
-                          position,
-                          map,
-                          title: place.name,
-                          content: new window.google.maps.marker.PinElement({
-                              // glyph: `${index + 1}`,  // place.num 대신 index + 1 사용
-                              glyphColor: '#FFFFFF',
-                              background: '#4285f4',
-                              borderColor: '#4285f4'
-                          }).element
-                      });
-
-                      // InfoWindow 설정
-                      markerView.addListener('click', () => {
-                          const infoWindow = new window.google.maps.InfoWindow({
-                              content: `
+          // InfoWindow 설정
+          markerView.addListener('click', () => {
+            const infoWindow = new window.google.maps.InfoWindow({
+              content: `
                                   <div style="padding: 10px;">
                                       <img src="${place.placeImage}" alt="장소 이미지" style="width: 100%; height: 100px; object-fit: cover;">
                                       <p>${place.placeAddress || ''}</p>
                                       <p>${place.intro || ''}</p>
                                   </div>
                               `
-                          });
-                          infoWindow.open(map, markerView);
-                      });
-                  } catch (markerError) {
-                      console.error(`Error creating marker for ${place.name}:`, markerError);
-                  }
-              });
+            });
+            infoWindow.open(map, markerView);
+          });
+        } catch (markerError) {
+          console.error(`Error creating marker for ${place.name}:`, markerError);
+        }
+      });
 
-              // 지도 범위 조정
-              map.fitBounds(bounds);
+      // 지도 범위 조정
+      map.fitBounds(bounds);
 
-              // 줌 레벨 조정
-              const listener = map.addListener('idle', () => {
-                  const currentZoom = map.getZoom();
-                  if (currentZoom > 16) map.setZoom(16);
-                  window.google.maps.event.removeListener(listener);
-              });
-          
-      } catch (error) {
-          console.error('Error in onLoad:', error);
-      }
+      // 줌 레벨 조정
+      const listener = map.addListener('idle', () => {
+        const currentZoom = map.getZoom();
+        if (currentZoom > 16) map.setZoom(16);
+        window.google.maps.event.removeListener(listener);
+      });
+
+    } catch (error) {
+      console.error('Error in onLoad:', error);
+    }
   };
 
   return (
-          <GoogleMap
-              mapContainerStyle={mapContainerStyle}
-              center={center}
-              zoom={13}
-              onLoad={onLoad}
-              options={{
-                  disableDefaultUI: false,
-                  zoomControl: true,
-                  mapTypeControl: true,
-                  scaleControl: true,
-                  streetViewControl: true,
-                  rotateControl: true,
-                  fullscreenControl: true,
-                  mapId: process.env.REACT_APP_GOOGLE_MAPS_ID
-              }}
-          >
-          </GoogleMap>
+    <GoogleMap
+      mapContainerStyle={mapContainerStyle}
+      center={center}
+      zoom={13}
+      onLoad={onLoad}
+      options={{
+        disableDefaultUI: false,
+        zoomControl: true,
+        mapTypeControl: true,
+        scaleControl: true,
+        streetViewControl: true,
+        rotateControl: true,
+        fullscreenControl: true,
+        mapId: process.env.REACT_APP_GOOGLE_MAPS_ID
+      }}
+    >
+    </GoogleMap>
   );
 }, (prevProps, nextProps) => {
   // places 배열의 실제 내용이 변경되었을 때만 리렌더링
@@ -336,13 +336,13 @@ const TravelInfo = () => {
 
   useEffect(() => {
     const timers = [];
-    
+
     if (loading) {
       timers.push(setTimeout(() => setShowLoading(true), 2000));
     } else {
       setShowLoading(false);
     }
-    
+
     if (error) {
       if (timer) {
         clearTimeout(timer);
@@ -375,10 +375,10 @@ const TravelInfo = () => {
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
-    arrows: true,
+    arrows: false,
     lazyLoad: false,
     swipeToSlide: true,
-    adaptiveHeight: true
+    adaptiveHeight: false
   };
 
   const handleSpanClick = (num) => {
@@ -463,10 +463,9 @@ const TravelInfo = () => {
           </div>
         </div>
 
-        <div className='WS-TravelInfo-Header-Right'>
-          <span className='HG-TravelInfo-Select-Btn'
-            onClick={handleSelectBtn}
-          >선택 </span><img src={planeIcon} alt="selectIcon" /> {/* FEAT: 선택 버튼 선택 여행지 모달 팝업 */}
+        <div className='WS-TravelInfo-Header-Right' onClick={handleSelectBtn}>
+          <span className='HG-TravelInfo-Select-Btn'>선택 </span>
+          <img src={planeIcon} alt="selectIcon" /> {/* FEAT: 선택 버튼 선택 여행지 모달 팝업 */}
           <span className='HG-TravelInfo-Select-Cnt'>{selectedPlaces.length}</span> {/* DATA: 선택 여행지 갯수 카운트 */}
         </div>
       </div>
@@ -543,6 +542,7 @@ const TravelInfo = () => {
             AI 추천선택</span>
         </div>
 
+
         <div className='HG-TravelInfo-Content-Frame-Place-Slider'>
           {placeList.content.map((item, index) => {
             // placeType이 'etc'일 때는 landmark와 restaurant가 아닌 항목만 표시
@@ -571,27 +571,26 @@ const TravelInfo = () => {
                         e.target.src = 'https://picsum.photos/600/300';
                       }}
                       alt="placeImage" />
-                    </div>
-                    
-                    {/* 두 번째 슬라이드 */}
-                    <div className="slide-content">
-                      <span>{item.placeDescription}</span>
-                      <p>{item.placeAddress}</p>
-                    </div>
-                    
-                    {/* 세 번째 슬라이드 */}
-                    <div className="slide-content" key={`map-${index}`}>
-                      <div>테스트 텍스트</div>
-                      {item?.latitude && item?.longitude && (
-                        <MapComponent 
+                  </div>
+
+                  {/* 두 번째 슬라이드 */}
+                  <div className="slide-content">
+                    <div className='WS-TravelInfo-Description'>{item.placeDescription}</div>
+                    <div className='WS-TravelInfo-Address'>{item.placeAddress}</div>
+                  </div>
+
+                  {/* 세 번째 슬라이드 */}
+                  <div className="slide-content" key={`map-${index}`}>
+                    {item?.latitude && item?.longitude && (
+                      <MapComponent
                         key={`map-${index}`}
                         places={[item]} />
-                      )}
-                    </div>
-                  </Slider>
-                </div>
-              ) : null;
-            })}
+                    )}
+                  </div>
+                </Slider>
+              </div>
+            ) : null;
+          })}
         </div>
       </div>
       <TitleEditModal

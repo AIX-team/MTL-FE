@@ -31,12 +31,13 @@
     width: 100%;
     height: var(--footer-height);
 
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
 
-    background-color: white;
+    background-color: skyblue;
 
     z-index: 9;
 }
+
 /* 완료 ================================================================== */

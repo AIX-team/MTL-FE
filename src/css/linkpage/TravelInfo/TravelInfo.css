@@ -17,40 +17,47 @@ a,
   cursor: pointer;
 }
 
+.HG-TravelInfo-Container {
+  background-color: yellow;
+  height: 100%;
+}
+
 .HG-TravelInfo-Header {
-  padding: 10px 20px;
-  flex-shrink: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #e0e0e0;
+
+  padding: 2% 0% 2% 0%;
+
+  border-bottom: 1px solid var(--color-light-gray);
 }
 
 .WS-TravelInfo-Header-Left {
   display: flex;
   align-items: center;
-  gap: 20px;
-  cursor: pointer;
-}
-
-.WS-TravelInfo-Header-Left-Contents{
-  margin-left: 40px;
 
   cursor: pointer;
 }
 
-.WS-TravelInfo-Header-Left-Back-Btn{
+.WS-TravelInfo-Header-Left-Contents {
+  margin-left: 50px;
+
+  cursor: pointer;
+}
+
+.WS-TravelInfo-Header-Left-Back-Btn {
   position: absolute;
-  left: 10px;
+  left: 2%;
+
+  cursor: pointer;
 }
 
-.WS-TravelInfo-Header-Left-Back-Btn-Icon{
+.WS-TravelInfo-Header-Left-Back-Btn-Icon {
   width: 40px;
   height: 25px;
 }
 
 .WS-TravelInfo-Travel-Days {
-  height: 20px;
   border: none;
   background: none;
   font-size: var(--font-size-sm);
@@ -78,42 +85,43 @@ a,
 .WS-TravelInfo-Header-Right {
   display: inline-flex;
   align-items: center;
+  justify-content: right;
+  width: 21%;
   height: 40px;
-  margin-left: 10px;
-  
   cursor: pointer;
 }
 
 .HG-TravelInfo-Select-Btn {
   display: flex;
   align-items: center;
+
   color: var(--color-guide);
   font-size: var(--font-size-base);
   font-weight: bold;
+
   cursor: pointer;
 }
 
 .HG-TravelInfo-Select-Cnt {
-  font-size: var(--font-size-sm);
-  background-color: var(--color-main);
-  color: white;
-  border-radius: var(--border-radius-full);
-  padding: 4px 8px;
   margin-bottom: auto;
   transform: translateX(-10px);
+
+  padding: 6% 10% 5% 10%;
+
+  border-radius: var(--border-radius-full);
+  background-color: var(--color-main);
+  font-size: var(--font-size-sm);
+  color: white;
 }
-
-
-
-
 
 .HG-TravelInfo-Body {
   align-content: start;
 }
 
 .HG-travelinfo-Title-list {
-  margin-left: 20px;
-  margin-top: 10px;
+  margin-left: 5%;
+  margin-right: 5%;
+  margin-top: 2%;
   display: flex;
 
   gap: 10px;
@@ -126,36 +134,40 @@ a,
 
 .HG-underline {
   border-bottom: 1px solid var(--color-main);
+  cursor: pointer;
 }
 
 .HG-TravelInfo-Content-Blank {
   height: 44px;
+  transition: none;
 }
 
 .HG-TravelInfo-Content-Title {
   margin: 10px 20px;
+
   padding: 5px;
+
   border-radius: var(--border-radius-base);
   background-color: var(--color-light-gray);
   font-size: var(--font-size-xs);
   font-weight: bold;
+
   white-space: nowrap;
-  /* 텍스트를 한 줄로 유지 */
   overflow: hidden;
-  /* 넘치는 텍스트 숨기기 */
   text-overflow: ellipsis;
-  /* 넘치는 텍스트를 ...으로 표시 */
+
+  transition: none;
+
 }
 
 .HG-TravelInfo-Type-List {
   display: flex;
 
-  margin-left: 20px;
-  margin-bottom: 15px;
+  margin-left: 5%;
+  margin-right: 5%;
+  margin-bottom: 1%;
 
   gap: 10px;
-
-  transition: all 0.3s ease;
 }
 
 .HG-TravelInfo-Selected-Type {
@@ -163,45 +175,42 @@ a,
 
   border-radius: var(--border-radius-full);
   background-color: var(--color-main-hover);
+  border: 2px solid var(--color-main-hover);
 
   color: white;
   font-weight: bold;
 
   cursor: pointer;
-  transition: all 0.3s ease;
 }
 
 .HG-TravelInfo-Unselected-Type {
 
   padding: 8px 16px;
 
-
   border-radius: var(--border-radius-full);
-  border: 1px solid var(--color-guide);
-  background: none;
+  background: white;
+  border: 2px solid var(--color-light-gray);
 
-  color: var(--color-guide);
+  color: var(--color-dark-gray);
 
   cursor: pointer;
-  transition: all 0.3s ease;
 }
 
 .HG-TravelInfo-aiselect-btn {
-  margin-left: 5px;
-  margin-right: 5px;
-  padding-bottom: 10px;
   display: flex;
   align-items: center;
-  gap: 10px;
+
+  margin-left: 5%;
+  margin-right: 5%;
+
+  height: 50px;
 
   border-bottom: 1px solid var(--color-main);
-  width: 98%;
 
   cursor: pointer;
 }
 
 .HG-TravelInfo-aiselect-btn-ai-icon-selected {
-  margin-left: 15px;
   padding: 3px 10px;
   display: flex;
   align-items: center;
@@ -212,11 +221,10 @@ a,
 }
 
 .HG-TravelInfo-aiselect-btn-text {
-  margin-left: 15px;
   padding: 3px 10px;
   display: flex;
   align-items: center;
-  border: 1px solid var(--color-light-gray);
+  border: 2px solid var(--color-light-gray);
   border-radius: var(--border-radius-full);
 }
 
@@ -226,11 +234,9 @@ a,
 }
 
 .HG-TravelInfo-Content-Frame-Place-Slider {
-  margin-left: 5px;
-  margin-right: 5px;
+  margin-top: 2%;
 
-  width: 98%;
-  height: 350px;
+  height: 425px;
 
   overflow-y: auto;
   overflow-x: hidden;
@@ -262,13 +268,13 @@ a,
 }
 
 .WS-carousel-item {
-  margin-bottom: 10px;
+
+  margin-bottom: 2%;
+
   height: 300px;
   border-radius: var(--border-radius-base);
-  padding-top: 5px;
-  padding-bottom: 30px;
-  padding-left: 15px;
-  padding-right: 15px;
+
+  padding: 1% 3% 6% 3%;
 }
 
 .HG-select-place {
@@ -278,7 +284,6 @@ a,
 .HG-trevelinfo-select-Container {
   display: flex;
   align-items: center;
-  margin-top: 5px;
 
   gap: 10px;
 }
@@ -300,41 +305,13 @@ a,
 
 .slide-content {
   position: relative;
-  width: 100%;
   height: 250px;
-}
 
-.slick-prev,
-.slick-next {
-  z-index: 100;
-  width: 30px;
-  height: 30px;
-  background-color: var(--color-main);
-
-  transform: translateY(-50%) !important;
-  /* 수직 중앙 정렬 강제 */
-  /* 상단에서 50% 위치로 고정 */
-  position: absolute !important;
-}
-
-.slick-prev {
-  left: 5px !important;
-}
-
-.slick-next {
-  right: 5px !important;
-}
-
-.slick-prev:before,
-.slick-next:before {
-  color: var(--color-dark-gray) !important;
-  opacity: 1 !important;
 }
 
 .slick-slider {
   margin-top: 10px;
 }
-
 
 .HG-slide-content-image {
   display: block;
@@ -359,21 +336,30 @@ a,
   justify-content: center;
   padding-bottom: 5px;
 
-  font-weight: bold;
-  font-size: var(--font-size-lg);
+  font-size: var(--font-size-sm);
+
 }
 
 .WS-TravelInfo-Address {
   font-size: var(--font-size-sm);
 }
 
-/* ------------------------------------------------------------------------------------- */
-
-.HG-TravelInfo-Select-Modal {
-  position: absolute;
- 
-  width: 100%;
-  height: 100%;
- 
-  z-index: 1000;
+/* 각 도트 버튼 스타일링 */
+.slick-dots li button:before {
+  font-size: var(--font-size-sm) !important;
+  /* 도트 크기 조정 */
+  color: var(--color-dark-gray) !important;
+  /* 도트 색상 */
+  opacity: 0.2 !important;
+  /* 비활성 도트의 투명도 */
 }
+
+/* 활성화된 도트 스타일링 */
+.slick-dots li.slick-active button:before {
+  opacity: 1 !important;
+  /* 활성 도트의 투명도 */
+  color: var(--color-main-hover) !important;
+  /* 활성 도트 색상 */
+}
+
+/* ------------------------------------------------------------------------------------- */
