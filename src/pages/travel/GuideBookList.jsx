@@ -1,8 +1,7 @@
 import React, { useState, useMemo } from "react";
 import "../../css/travel/GuidebookList.css";
 import TravelPageModal from "./TravelPageModal";
-import { FaSearch, FaTimes } from 'react-icons/fa';
-
+import { FaSearch, FaTimes } from "react-icons/fa";
 
 function GuidebookList() {
   const [activeFilter, setActiveFilter] = useState("latest");
@@ -139,9 +138,11 @@ function GuidebookList() {
 
   // 제목 업데이트 함수 추가
   const handleUpdateTitle = (itemId, newTitle) => {
-    setGuideBookData(guideBookData.map(guide =>
-      guide.id === itemId ? { ...guide, title: newTitle } : guide
-    ));
+    setGuideBookData(
+      guideBookData.map((guide) =>
+        guide.id === itemId ? { ...guide, title: newTitle } : guide
+      )
+    );
   };
 
   return (
@@ -149,22 +150,25 @@ function GuidebookList() {
       {/* 필터 버튼 */}
       <div className="SJ-filter-buttons">
         <button
-          className={`SJ-filter-btn ${activeFilter === "latest" ? "active" : ""
-            }`}
+          className={`SJ-filter-btn ${
+            activeFilter === "latest" ? "active" : ""
+          }`}
           onClick={() => setActiveFilter("latest")}
         >
           최신순
         </button>
         <button
-          className={`SJ-filter-btn ${activeFilter === "created" ? "active" : ""
-            }`}
+          className={`SJ-filter-btn ${
+            activeFilter === "created" ? "active" : ""
+          }`}
           onClick={() => setActiveFilter("created")}
         >
           생성일
         </button>
         <button
-          className={`SJ-filter-btn ${activeFilter === "favorite" ? "active" : ""
-            }`}
+          className={`SJ-filter-btn ${
+            activeFilter === "favorite" ? "active" : ""
+          }`}
           onClick={() => setActiveFilter("favorite")}
         >
           즐겨찾기
@@ -181,21 +185,23 @@ function GuidebookList() {
         />
         <div className="SJ-search-button-container">
           {searchText && (
-            <button className="WS-SearchYoutube-ClearButton" onClick={() => setSearchText("")}>
+            <button
+              className="WS-SearchYoutube-ClearButton"
+              onClick={() => setSearchText("")}
+            >
               <FaTimes />
             </button>
           )}
-          <button className="SJ-search-icon"><FaSearch /></button>
+          <button className="SJ-search-icon">
+            <FaSearch />
+          </button>
         </div>
       </div>
 
       <div className="WS-guide-container">
         {sortedGuideBooks.map((guide) => (
-
           <div key={guide.id} className="SJ-guide-card">
-
             <div className="SJ-guide-content">
-
               {pinnedGuides.has(guide.id) && (
                 <div className="SJ-pin-icon">📌</div>
               )}
@@ -203,8 +209,9 @@ function GuidebookList() {
               <div className="SJ-guide-category">{guide.category}</div>
 
               <div
-                className={`WS-favorite-button  ${favorites.has(guide.id) ? "filled" : "outlined"
-                  }`}
+                className={`WS-favorite-button  ${
+                  favorites.has(guide.id) ? "filled" : "outlined"
+                }`}
                 onClick={() => toggleFavorite(guide.id)}
               >
                 {favorites.has(guide.id) ? "♥" : "♡"}
@@ -231,7 +238,6 @@ function GuidebookList() {
                 ⋮
               </button>
             </div>
-
           </div>
         ))}
       </div>
@@ -241,7 +247,6 @@ function GuidebookList() {
         showModal={showModal}
         setShowModal={setShowModal}
         selectedItemId={selectedGuideId}
-
         handlePinToggle={handlePinClick}
         pinnedItems={Array.from(pinnedGuides)}
         onUpdateTitle={handleUpdateTitle}

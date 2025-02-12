@@ -6,12 +6,10 @@ import { FaTimes } from 'react-icons/fa';
 const TravelPageModal = ({
     showModal,
     setShowModal,
-    selectedItemId,
+    selectedItem,
     handlePinToggle,
-    pinnedItems,
     onUpdateTitle,
-    onDeleteItem,
-    items = []
+    onDeleteItem
 }) => {
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -19,9 +17,8 @@ const TravelPageModal = ({
 
     // 수정 클릭 핸들러 함수
     const openEditModal = (itemId) => {
-        if (!items || !itemId) return;
+        if (!selectedItem || !itemId) return;
 
-        const selectedItem = items.find(item => item.id === itemId);
         if (selectedItem) {
             setNewTitle(selectedItem.title);
             setIsEditModalOpen(true);
@@ -30,7 +27,7 @@ const TravelPageModal = ({
 
     // 제목 수정 저장 함수
     const handleSaveTitle = () => {
-        onUpdateTitle(selectedItemId, newTitle);
+        onUpdateTitle(selectedItem, newTitle);
         setIsEditModalOpen(false);
         setShowModal(false);
     };
@@ -49,15 +46,15 @@ const TravelPageModal = ({
                         <div className="SJ-modal-content">
                             <button
                                 className="SJ-modal-option"
-                                onClick={() => handlePinToggle(selectedItemId)}
+                                onClick={() => handlePinToggle(selectedItem)}
                             >
                                 <span className="SJ-modal-icon">📌</span>
-                                {pinnedItems.includes(selectedItemId) ? "고정 해제" : "고정 하기"}
+                                {selectedItem.fixed ? "고정 해제" : "고정 하기"}
                             </button>
 
                             <button
                                 className="SJ-modal-option"
-                                onClick={() => openEditModal(selectedItemId)}
+                                onClick={() => openEditModal(selectedItem)}
                             >
                                 <span className="SJ-modal-icon">✏️</span>
                                 이름 수정
@@ -143,7 +140,7 @@ const TravelPageModal = ({
                             <button
                                 className="WS-second-Modal-Button"
                                 onClick={() => {
-                                    onDeleteItem(selectedItemId);
+                                    onDeleteItem(selectedItem);
                                     setShowDeleteModal(false);
                                 }}
                             >
