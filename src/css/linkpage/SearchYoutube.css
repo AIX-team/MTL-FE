@@ -1,24 +1,6 @@
-/* 검색 컨테이너 ============================================= */
-.WS-SearchYoutube-Search {
-  padding-bottom: 10px;
-  width: 370px; /* SJ 가로 길이 수정 */
-  margin-left: 20px; /* SJ 왼쪽 여백 추가 */
-  overflow-x: hidden; /* SJ 가로 스크롤 방지 */
-  position: relative; /* 추가: 버튼의 기준점 */
-  height: 100%; /* 추가: 전체 높이 설정 */
-}
-
-/* 검색 결과 ============================================= */
-.WS-SearchYoutube-Results {
-  display: grid;
-  overflow-y: auto;
-  overflow-x: hidden;
-  height: 500px;
-  transition: all 0.3s ease;
-  padding-top: 5px;
-  position: relative; /* 추가: 내부 요소 포지셔닝 기준점 */
-  width: 415px; /* 명확한 너비 지정 */
-  padding-right: 5px; /* 오른쪽 여유 공간 */
+.WS-SearchYoutube-Tab {
+  width: 100%;
+  height: 100%;
 }
 
 /* 검색 입력창 ============================================= */
@@ -31,7 +13,7 @@
 
 .WS-Link-Input {
   width: 70%;
-  padding: 3% 13% 2.5% 5%;
+  padding: 3% 70px 2.5% 4%;
   /* 커서 여유 */
   border: 2px solid var(--color-light-gray);
 
@@ -44,123 +26,127 @@
   outline: none;
 }
 
-/* 검색 버튼 ============================================= */
 .WS-Link-Button-Container {
   position: absolute;
-  right: 3px; /* x와 돋보기 같이 움직임 */
-  display: flex;
+  right: 7%;
+  top: 30%;
 }
 
 .WS-SearchYoutube-SearchButton {
-  color: var(--color-dark-gray);
-
-  right: 45px;
-  top: 50%;
-  font-size: 16px;
-
+  font-size: var(--font-size-base);
   background: none;
   border: none;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  color: var(--color-guide);
 }
 
 .WS-SearchYoutube-ClearButton {
   position: absolute;
-  color: var(--color-dark-gray);
-
   right: 25px;
 
   background: none;
   border: none;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
+  color: var(--color-guide);
+  font-size: var(--font-size-base);
 }
 
 .WS-SearchYoutube-SearchButton:hover,
 .WS-SearchYoutube-ClearButton:hover {
   cursor: pointer;
-  color: var(--color-light-gray);
+  color: var(--color-dark-gray);
   scale: 1.05;
 }
 
-/* 검색 결과 아이템 ============================================= */
+/* 검색 결과 ============================================= */
+.WS-SearchYoutube-Results {
+  display: grid;
+  position: relative;
+
+  margin-top: 2%;
+
+  width: 100%;
+  height: 80%;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
 .WS-SearchYoutube-Loading {
   display: flex;
   justify-content: center;
-  margin-top: 20px;
+  margin-top: 35vh;
+
+  transition: none;
 }
 
 .WS-SearchYoutube-Results-Item {
-  width: 100%;
   position: relative;
-  padding: 3px;
-  padding-right: 5px; /* 오른쪽 여유 공간 */
-  box-sizing: border-box; /* 패딩을 너비에 포함 */
-  max-width: 455px; /* 추가: 최대 너비 제한 */
   display: flex;
   flex-direction: column;
-  border-radius: 8px;
-  margin-bottom: 10px;
+
+  margin-bottom: 3%;
+
+  padding: 2% 1% 1% 1%;
+
+  border-radius: var(--border-radius-base);
   border: none;
-  transition: all 0.3s ease;
+
   cursor: pointer;
 }
+
 /* 클릭했을 때 밝기*/
 .WS-SearchYoutube-Results-Item.selected .WS-SearchYoutube-Thumbnail {
   filter: brightness(0.4);
 }
+
 /* SJ 북마크 생성 */
 .WS-SearchYoutube-Results-Item.selected::before {
   content: "";
   position: absolute;
-  margin-left: -4px;
-  margin-top: -6px;
+  left: 2%;
+  top: 0;
+
   width: 35px;
   height: 35px;
-  background-image: url("../../images/choice_bookmark.png"); /* 정확한 경로로 수정 */
+  background-image: url("../../images/choice_bookmark.png");
+  /* 정확한 경로로 수정 */
   background-size: contain;
   background-repeat: no-repeat;
-  z-index: 2;
-}
 
-.WS-SearchYoutube-Checkbox {
-  position: absolute;
-  scale: 10;
-  opacity: 0;
+  z-index: 2;
 }
 
 .WS-SearchYoutube-Thumbnail-Container {
   position: relative;
-  border-radius: 22px;
   display: flex;
   align-items: center;
   justify-content: center;
+
+  border-radius: var(--border-radius-xl);
 }
+
 /* 처음 밝기 */
 .WS-SearchYoutube-Thumbnail {
-  width: 100%;
-  border-radius: 20px;
-  z-index: 1;
   position: relative;
+
+  width: 100%;
+  border-radius: var(--border-radius-xl);
+
   filter: brightness(1);
-  transition: all 0.3s ease;
+  z-index: 1;
 }
 
 .WS-youtube-icon-link {
   position: absolute;
-  scale: 0.015;
-  z-index: 1000;
   margin-left: 80%;
   margin-top: 40%;
-  cursor: pointer;
-  transition: all 0.1s ease;
+  scale: 0.015;
+
   background: none;
   border: none;
+
+  z-index: 2;
+  cursor: pointer;
 }
 
 .WS-youtube-icon-link:hover {
@@ -170,14 +156,14 @@
 .WS-SearchYoutube-Info-Container {
   text-align: left;
   flex-direction: column;
+
   width: 100%;
-  margin: 0 auto;
-  padding: 5px;
+  padding: 1%;
 }
 
 .WS-SearchYoutube-Title {
-  margin: 0;
-  font-size: 14px;
+  margin-top: 1%;
+  font-size: var(--font-size-sm);
   font-weight: 700;
   line-height: 1.4;
   cursor: pointer;
@@ -186,10 +172,10 @@
 
 .WS-SearchYoutube-ChannelInfo {
   display: flex;
-  margin-top: 8px;
-  color: #3e3e3e;
-  font-size: 12px;
-  padding-right: 8px;
+  margin-top: 1.5%;
+  color: var(--color-guide);
+  font-size: var(--font-size-xs);
+  padding-right: 3%;
 }
 
 .WS-SearchYoutube-Date {
@@ -197,7 +183,6 @@
 }
 
 /* 스크롤바 ============================================= */
-/* Chrome, Safari, Edge 스크롤바 스타일링 */
 .WS-SearchYoutube-Results::-webkit-scrollbar {
   width: 4px;
 }
@@ -228,67 +213,40 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
   text-align: center;
+
+  margin-top: 5%;
 }
 
 .WS-SearchYoutube-RecentSearches-Title {
-  font-size: 16px;
-  color: #3e3e3e;
-  margin-bottom: 15px;
+  font-size: var(--font-size-base);
+  color: var(--color-guide);
+  margin-bottom: 5%;
 }
 
 .WS-SearchYoutube-RecentSearches {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
   justify-content: center;
+
+  gap: 10px;
 }
 
 .WS-SearchYoutube-RecentSearch-Tag {
-  background-color: #e3e3e3;
+  padding: 3% 5%;
+
+  background-color: var(--color-light-gray);
   border: none;
-  border-radius: 20px;
-  padding: 8px 16px;
-  font-size: 14px;
-  color: #3e3e3e;
+  border-radius: var(--border-radius-full);
+  font-size: var(--font-size-sm);
+  color: var(--color-guide);
+
   cursor: pointer;
-  transition: all 0.2s ease;
 }
 
 .WS-SearchYoutube-RecentSearch-Tag:hover {
-  background-color: #3e3e3e;
+  background-color: var(--color-dark-gray);
   color: white;
-  transform: translateY(-1px);
-}
-
-/*  저장버튼 ============================================================================ */
-.WS-SearchYoutube-SaveButton {
-  z-index: 1006;
-  position: fixed; /* absolute에서 fixed로 변경 */
-  bottom: 89px; /* 푸터 위 고정 위치 */
-  left: 50%;
-  transform: translateX(-50%);
-  width: 370px;
-  padding: 20px; /* 저장 버튼 세로 길이 */
-  background-color: #c92b2a;
-  color: white;
-  border: none;
-  border-radius: 22px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  opacity: 0;
-  transition: all 0.3s ease;
-}
-
-.WS-SearchYoutube-SaveButton.active {
-  opacity: 1;
-}
-
-.WS-SearchYoutube-SaveButton:hover {
-  background-color: #a52421;
-  opacity: 1;
 }
 
 /*  완료 ============================================================ */

@@ -4,7 +4,7 @@ import osakaImg from "../../images/osaka.png";
 import matsuyamaImg from "../../images/matsuyama.png";
 import tokyoImg from "../../images/tokyo.png";
 import TravelPageModal from "./TravelPageModal";
-import { FaSearch, FaTimes } from 'react-icons/fa';
+import { FaSearch, FaTimes } from "react-icons/fa";
 
 const TravelList = () => {
   const [travelItems, setTravelItems] = useState([
@@ -90,7 +90,6 @@ const TravelList = () => {
     setShowModal(true);
   };
 
-
   // 데이터 구조 확인
   useEffect(() => {
     console.log("데이터 구조 확인:", travelItems);
@@ -133,14 +132,16 @@ const TravelList = () => {
 
   // 아이템 이름 수정 함수
   const handleUpdateTitle = (itemId, newTitle) => {
-    setTravelItems(travelItems.map(item =>
-      item.id === itemId ? { ...item, title: newTitle } : item
-    ));
+    setTravelItems(
+      travelItems.map((item) =>
+        item.id === itemId ? { ...item, title: newTitle } : item
+      )
+    );
   };
 
   // 아이템 삭제 함수
   const handleDeleteItem = (itemId) => {
-    setTravelItems(travelItems.filter(item => item.id !== itemId));
+    setTravelItems(travelItems.filter((item) => item.id !== itemId));
   };
 
   return (
@@ -148,22 +149,25 @@ const TravelList = () => {
       <div className="SJ-travel-container">
         <div className="SJ-filter-buttons">
           <button
-            className={`SJ-filter-btn ${activeFilter === "latest" ? "active" : ""
-              }`}
+            className={`SJ-filter-btn ${
+              activeFilter === "latest" ? "active" : ""
+            }`}
             onClick={() => handleFilterClick("latest")}
           >
             최신순
           </button>
           <button
-            className={`SJ-filter-btn ${activeFilter === "created" ? "active" : ""
-              }`}
+            className={`SJ-filter-btn ${
+              activeFilter === "created" ? "active" : ""
+            }`}
             onClick={() => handleFilterClick("created")}
           >
             생성일
           </button>
           <button
-            className={`SJ-filter-btn ${activeFilter === "favorite" ? "active" : ""
-              }`}
+            className={`SJ-filter-btn ${
+              activeFilter === "favorite" ? "active" : ""
+            }`}
             onClick={() => handleFilterClick("favorite")}
           >
             즐겨찾기
@@ -181,19 +185,22 @@ const TravelList = () => {
 
           <div className="SJ-search-button-container">
             {searchText && (
-              <button className="SJ-search-clear" onClick={() => setSearchText("")}>
+              <button
+                className="SJ-search-clear"
+                onClick={() => setSearchText("")}
+              >
                 <FaTimes />
               </button>
             )}
-            <button className="SJ-search-icon"><FaSearch /></button>
+            <button className="SJ-search-icon">
+              <FaSearch />
+            </button>
           </div>
         </div>
 
         <div className="SJ-travel-grid">
           {sortedAndFilteredData.map((item) => (
-
             <div key={item.id} className="SJ-travel-card">
-
               {pinnedItems.includes(item.id) && (
                 <div className="SJ-pin-icon">📌</div>
               )}
@@ -203,10 +210,10 @@ const TravelList = () => {
               </div>
 
               <div className="SJ-card-content">
-
                 <div
-                  className={`WS-favorite-button ${item.isFavorite ? "filled" : "outlined"
-                    }`}
+                  className={`WS-favorite-button ${
+                    item.isFavorite ? "filled" : "outlined"
+                  }`}
                   onClick={() => toggleFavorite(item.id)}
                 >
                   {item.isFavorite ? "♥" : "♡"}

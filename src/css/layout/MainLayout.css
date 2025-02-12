@@ -1,7 +1,7 @@
 * {
   -webkit-tap-highlight-color: transparent;
   font-family: var(--font-primary);
-  transition: all 0.3s;
+  transition: none;
 }
 
 .WS-Main-Layout {
@@ -35,7 +35,7 @@
   justify-content: space-around;
   align-items: center;
 
-  background-color: white;
+  background-color: rgb(255, 255, 255);
 }
 
 /* 완료 ================================================================== */
