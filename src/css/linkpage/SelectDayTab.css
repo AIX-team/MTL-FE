@@ -3,20 +3,29 @@
   flex-direction: column;
   position: absolute;
   align-items: center;
-  justify-content: center;
-  
+
   top: 0;
   left: 0;
 
   width: 100%;
   height: 100%;
 
-  background-color: var(--color-light-gray);
-  z-index: 10;
+  background-color: white;
+  z-index: 8;
+}
+
+.WS-SelectDayTab-Title-Container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  margin-top: 40%;
+  margin-bottom: 15%;
+
 }
 
 .WS-SelectDayTab-Title {
-  /* 수진,전체 내용 위아래위치 수정 */
   font-size: var(--font-size-2xl);
   font-weight: bold;
 
@@ -25,80 +34,85 @@
 
 .WS-SelectDayTab-SubTitle {
   font-size: var(--font-size-base);
-  margin-bottom: 1%;
+  margin-bottom: 5%;
+}
+
+.WS-SelectDayTab-SubTitle-date {
+  font-size: var(--font-size-base);
 }
 
 .WS-SelectDayTab-Counter {
-  
   display: flex;
   align-items: center;
   justify-content: center;
+
+  margin-bottom: 42%;
+
   gap: 100px;
 
-  height: 60px;
-  /* SJ, 카운터 높이 수정 */
-  width: 85%;
+  padding: 2%;
 
-  background-color: #c92b2a;
-  border-radius: 30px;
+  width: 330px;
+
+  background-color: var(--color-main);
+  border-radius: var(--border-radius-full);
 }
 
 .WS-Counter-Button {
-  background: transparent;
-  /* 배경 투명하게 */
-  border: none;
-  /* 테두리 제거 */
-  color: #ffffff;
-  /* 아이콘 색상 */
-  cursor: pointer;
-  padding: 10px;
-  font-size: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
+
+  padding: 5%;
+
+  background: none;
+  border: none;
+  color: white;
+  font-size: var(--font-size-base);
+
+  cursor: pointer;
 }
 
-.WS-Counter-Value {
+.WS-Counter-Input {
   background: transparent;
-  /* input 배경도 투명하게 */
   border: none;
-  /* input 테두리 제거 */
   text-align: center;
-  font-size: 24px;
+  font-size: var(--font-size-xl);
   width: 40px;
-  color: #ffffff;
+  color: white;
+}
+
+.WS-Counter-Input:focus {
+  outline: none;
 }
 
 .WS-SelectDayTab-Button-Container {
   display: flex;
-
-  margin-top: 137px;
-  /* SJ, 이전,다음 버튼 위치 수정 */
-  padding: 16px;
-  gap: 0px;
-  background-color: white;
   justify-content: center;
-  z-index: 1000;
+
+  gap: 10px;
+
+  width: 85%;
 }
 
 .WS-SelectDayTab-BackButton,
 .WS-SelectDayTab-NextButton {
-  padding: 20px;
-  border-radius: 25px;
-  /* SJ,수정 */
+  padding: 6%;
+
+  width: 180px;
+
+  border-radius: var(--border-radius-full);
   border: none;
-  color: #3e3e3e;
-  font-size: 16px;
-  font-weight: 500;
+
+  font-size: var(--font-size-base);
+  color: var(--color-dark-gray);
+  font-weight: bold;
+
+  background-color: var(--color-light-gray);
   cursor: pointer;
-  transition: all 0.2s ease;
-  min-width: 185px;
-  flex: 1;
-  max-width: 100px;
-  font-family: "NanumBarunGothic", sans-serif;
 }
 
 .WS-SelectDayTab-NextButton.active {
-  background-color: #c92b2a;
+  background-color: var(--color-main-hover);
   color: white;
 }

@@ -63,7 +63,7 @@ const SelectDayTab = ({ onBack }) => {
       <div className="WS-SelectDayTab-Title-Container">
         <div className="WS-SelectDayTab-Title">총 여행 기간은?</div>
         <div className="WS-SelectDayTab-SubTitle">여행 일정을 알려주세요!</div>
-        <div className="WS-SelectDayTab-SubTitle">( 최대 7일 )</div>
+        <div className="WS-SelectDayTab-SubTitle-date">( 최대 7일 )</div>
       </div>
       <div className="WS-SelectDayTab-Counter">
         <button
@@ -73,16 +73,16 @@ const SelectDayTab = ({ onBack }) => {
         >
           <FaMinus />
         </button>
-        <div className="WS-Counter-Input-Container">
-          <input
-            type="text"
-            className="WS-Counter-Value"
-            value={days}
-            onChange={handleInputChange}
-            onBlur={handleBlur}
-            maxLength={1}
-          />
-        </div>
+
+        <input
+          type="text"
+          className="WS-Counter-Input"
+          value={days}
+          onChange={handleInputChange}
+          onBlur={handleBlur}
+          maxLength={1}
+        />
+
         <button
           className="WS-Counter-Button"
           onClick={increaseDays}

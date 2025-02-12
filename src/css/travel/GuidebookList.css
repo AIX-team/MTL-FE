@@ -9,28 +9,6 @@
   display: flex;
 }
 
-.WS-SearchYoutube-ClearButton {
-  position: absolute;
-  color: var(--color-dark-gray);
-  top: 1vh;
-  right: 3vh;
-
-  background: none;
-  border: none;
-  color: var(--color-guide);
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 105%;
-}
-
-.WS-SearchYoutube-SearchButton:hover,
-.WS-SearchYoutube-ClearButton:hover {
-  cursor: pointer;
-  color: var(--color-light-gray);
-  scale: 1.05;
-}
 
 .WS-guide-container {
   display: grid;

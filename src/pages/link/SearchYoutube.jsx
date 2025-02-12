@@ -195,7 +195,7 @@ const SearchYoutube = ({ linkData, setLinkData }) => {
                     className="WS-Link-Input"
                 />
 
-                <div className="WS-Link-Button-Container" id="WS-SearchYoutube-Button-Container">
+                <div className="WS-Link-Button-Container">
                     {searchQuery && (
                         <button
                             className="WS-SearchYoutube-ClearButton"
