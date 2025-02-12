@@ -1,5 +1,5 @@
 // React 및 필요한 라이브러리 import
-import React, { useState, useEffect, forwardRef, useCallback } from 'react';
+import React, { useState, useEffect, forwardRef, useCallback, useRef } from 'react';
 import { usePDF } from 'react-to-pdf';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
@@ -8,7 +8,10 @@ import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import downloadbtn from '../../../images/download.png';
 import backArrow from '../../../images/backArrow.svg';
 import { useParams } from 'react-router-dom';
+import backArrowIcon from '../../../images/backArrow.svg';
+import ReactDOM from 'react-dom';
 import html2canvas from 'html2canvas';  // html2canvas 라이브러리 추가 필요
+import TitleEditModal from './GuideBookTitleEditModal';
 // CSS 파일 import
 
 import '../../../css/guide/GuideBook.css';
@@ -16,12 +19,12 @@ import '../../../css/guide/GuideBook.css';
 const axiosInstance = axios.create({
     baseURL: process.env.REACT_APP_API_URL,
     headers: {
-      'Content-Type': 'application/json',
+        'Content-Type': 'application/json',
     },
 });
 
 // 구글 맵 컴포넌트(경로)
-const MapComponent = ({ places }) => {
+const MapComponent = React.memo(({ places }) => {
     if (!places) return null;
 
     const mapContainerStyle = {
@@ -31,7 +34,7 @@ const MapComponent = ({ places }) => {
 
     // places가 배열인 경우와 단일 객체인 경우 처리
     const isArray = Array.isArray(places);
-    
+
     const center = isArray ? {
         lat: parseFloat(places[0].latitude),
         lng: parseFloat(places[0].longitude)
@@ -40,11 +43,13 @@ const MapComponent = ({ places }) => {
         lng: parseFloat(places.longitude)
     };
 
-    // 배열인 경우에만 path 생성
-    const path = isArray ? places.map(place => ({
-        lat: parseFloat(place.latitude),
-        lng: parseFloat(place.longitude)
-    })) : null;
+    // places 배열을 num 순서대로 정렬하여 path 생성
+    const path = isArray ? [...places]
+        .map(place => ({
+            lat: parseFloat(place.latitude),
+            lng: parseFloat(place.longitude)
+        })) : null;
+
 
     const onLoad = (map) => {
         if (!window.google) {
@@ -56,126 +61,138 @@ const MapComponent = ({ places }) => {
             // bounds 객체 생성            
             const bounds = new window.google.maps.LatLngBounds();
 
-            if (isArray) {
-                // 여러 장소에 대한 마커 처리
+
+                // 마커 생성 전에 좌표 유효성 로깅
                 places.forEach((place, index) => {
-                    const position = {
-                        lat: parseFloat(place.latitude),
-                        lng: parseFloat(place.longitude)
-                    };
-                    
-                    // bounds에 위치 추가
-                    bounds.extend(position);
+                    const lat = parseFloat(place.latitude);
+                    const lng = parseFloat(place.longitude);
 
-                    const markerView = new window.google.maps.marker.AdvancedMarkerElement({
-                        position,
-                        map,
-                        title: place.name,
-                        content: new window.google.maps.marker.PinElement({
-                            glyph: `${place.num}`,
-                            glyphColor: '#FFFFFF',
-                            background: '#4285f4',
-                            borderColor: '#4285f4'
-                        }).element
-                    });
-
-                    markerView.addListener('click', () => {
-                        const infoWindow = new window.google.maps.InfoWindow({
-                            content: `
-                                <div style="padding: 10px;">
-                                    <h3>${place.num}. ${place.name}</h3>
-                                    <p>${place.address || ''}</p>
-                                </div>
-                            `
+                    // 좌표 유효성 검사
+                    if (isNaN(lat) || isNaN(lng)) {
+                        console.error(`Invalid coordinates for place ${place.name}:`, {
+                            lat: place.latitude,
+                            lng: place.longitude
                         });
-                        infoWindow.open(map, markerView);
-                    });
-                });
+                        return;
+                    }
 
-                // 모든 마커가 보이도록 맵 조정
+                    const position = {
+                        lat: lat,
+                        lng: lng
+                    };
+
+                    try {
+                        bounds.extend(position);
+
+                        // 마커 생성
+                        const markerView = new window.google.maps.marker.AdvancedMarkerElement({
+                            position,
+                            map,
+                            title: place.name,
+                            content: new window.google.maps.marker.PinElement({
+                                glyph: `${index + 1}`,  // place.num 대신 index + 1 사용
+                                glyphColor: '#FFFFFF',
+                                background: '#4285f4',
+                                borderColor: '#4285f4'
+                            }).element
+                        });
+
+                        // InfoWindow 설정
+                        markerView.addListener('click', () => {
+                            const infoWindow = new window.google.maps.InfoWindow({
+                                content: `
+                                    <div style="padding: 10px;">
+                                        <img src="${place.image}" alt="장소 이미지" style="width: 100%; height: 100px; object-fit: cover;">
+                                        <h3>${index + 1}. ${place.name}</h3>
+                                        <p>${place.address || ''}</p>
+                                        <p>${place.intro || ''}</p>
+                                    </div>
+                                `
+                            });
+                            infoWindow.open(map, markerView);
+                        });
+                    } catch (markerError) {
+                        console.error(`Error creating marker for ${place.name}:`, markerError);
+                    }
+                });
+                // 지도 범위 조정
                 map.fitBounds(bounds);
 
-                // 선택적: 최소/최대 줌 레벨 설정
+                // 줌 레벨 조정
                 const listener = map.addListener('idle', () => {
-                    if (map.getZoom() > 16) map.setZoom(16);
+                    const currentZoom = map.getZoom();
+                    if (currentZoom > 16) map.setZoom(16);
                     window.google.maps.event.removeListener(listener);
                 });
-            } else {
-                // 단일 장소에 대한 마커 처리
-                const position = {
-                    lat: parseFloat(places.latitude),
-                    lng: parseFloat(places.longitude)
-                };
-                
-                bounds.extend(position);
-
-                map.fitBounds(bounds);
-                
-                // 단일 마커의 경우 적절한 줌 레벨 설정
-                map.setZoom(15);
-            }
+            
         } catch (error) {
-            console.error('Error creating markers:', error);
+            console.error('Error in onLoad:', error);
         }
     };
 
     return (
-            <GoogleMap
-                mapContainerStyle={mapContainerStyle}
-                center={center}
-                zoom={13}
-                onLoad={onLoad}
-                options={{
-                    disableDefaultUI: false,
-                    zoomControl: true,
-                    mapTypeControl: true,
-                    scaleControl: true,
-                    streetViewControl: true,
-                    rotateControl: true,
-                    fullscreenControl: true,
-                    mapId: process.env.REACT_APP_GOOGLE_MAPS_ID
-                }}
-            >
-                {isArray && path && (
-                    <Polyline
-                        path={path}
-                        options={{
-                            strokeColor: '#FF0000',
-                            strokeOpacity: 1,
-                            strokeWeight: 2,
-                            geodesic: true
-                        }}
-                    />
-                )}
-            </GoogleMap>
+        <GoogleMap
+            mapContainerStyle={mapContainerStyle}
+            center={center}
+            zoom={13}
+            onLoad={onLoad}
+            options={{
+                disableDefaultUI: false,
+                zoomControl: true,
+                mapTypeControl: true,
+                scaleControl: true,
+                streetViewControl: true,
+                rotateControl: true,
+                fullscreenControl: true,
+                mapId: process.env.REACT_APP_GOOGLE_MAPS_ID
+            }}
+        >
+            {isArray && path && (
+                <Polyline
+                    path={path}
+                    options={{
+                        strokeColor: '#FF0000',
+                        strokeOpacity: 1,
+                        strokeWeight: 2,
+                        geodesic: true
+                    }}
+                />
+            )}
+        </GoogleMap>
     );
-};
+}, (prevProps, nextProps) => {
+    // places 배열의 실제 내용이 변경되었을 때만 리렌더링
+    return JSON.stringify(prevProps.places) === JSON.stringify(nextProps.places);
+});
+
+
 
 // GuideBookList 컴포넌트 정의
 const GuideBook = () => {
     // 상태 변수 정의
     const [activeTab, setActiveTab] = useState(1); // 현재 활성화된 코스 탭
     const [isEditMode, setIsEditMode] = useState(false); // 편집 모드 활성화 여부
-    const [showMoveModal, setShowMoveModal] = useState(false); // 이동 모달 표시 여부
+    const [showCopyModal, setShowCopyModal] = useState(false); // 이동 모달 표시 여부
     const [showDeleteModal, setShowDeleteModal] = useState(false); // 삭제 모달 표시 여부
     const [selectedItems, setSelectedItems] = useState([]); // 선택된 장소들
     const [targetCourse, setTargetCourse] = useState([]); // 이동할 대상 코스
     const [places, setPlaces] = useState([]); // 현재 코스의 장소들
+    const [originalPlaces, setOriginalPlaces] = useState([]); // 장소 이동 기능 원래 장소들
     const [showDetailModal, setShowDetailModal] = useState(false);
     const [selectedPlace, setSelectedPlace] = useState(null);
     const { guidebookId } = useParams();
     const isPlaceNumChanged = (oldPlaces, newPlaces) => {
-        if(oldPlaces.length !== newPlaces.length) {
+        if (oldPlaces.length !== newPlaces.length) {
             return true;
         }
-        for(let i = 0; i < oldPlaces.length; i++) {
-            if(oldPlaces[i] !== newPlaces[i]) {
+        for (let i = 0; i < oldPlaces.length; i++) {
+            if (oldPlaces[i] !== newPlaces[i]) {
                 return true;
             }
         }
         return false;
-    }
-    
+    }    
+    const [isTitleEditModalOpen, setIsTitleEditModalOpen] = useState(false);
     const [mapKey, setMapKey] = useState(0);
 
     const [guideBook, setGuideBook] = useState({
@@ -183,10 +200,12 @@ const GuideBook = () => {
         message: '',
         guideBookTitle: '',
         travelInfoTitle: '',
-        travelInfoId: '',   
+        travelInfoId: '',
         courseCnt: '',
         courses: {}
     });
+
+
 
     const CoursePlaceRequest = {
         id: 0,
@@ -202,7 +221,7 @@ const GuideBook = () => {
         } catch (error) {
             console.error('Error fetching guidebook:', error);
         }
-    }   
+    }
 
     useEffect(() => {
         getGuideBook();
@@ -210,9 +229,6 @@ const GuideBook = () => {
 
     const putCoursePlacesNum = async (coursePlaceRequest) => {
         try {
-            console.log('CoursePlaceRequest :', coursePlaceRequest);
-            console.log('Stringified CoursePlaceRequest :', JSON.stringify(coursePlaceRequest));
-
             await axiosInstance.put(`/api/v1/courses/`, coursePlaceRequest);
         } catch (error) {
             //자세한 에러 정보 출력
@@ -228,25 +244,20 @@ const GuideBook = () => {
         setTargetCourse([]);
     };
 
+
     // 편집 버튼 클릭 핸들러
     const handleEditClick = () => {
         if(isEditMode) {
-            
             // 맵 컴포넌트 강제 리렌더링을 위한 키 업데이트
             setMapKey(prev => prev + 1);  // 새로운 상태 추가 필요
 
             const coursesArray = Object.values(guideBook.courses);
             const currentCourse = coursesArray.find(course => course.courseNum === activeTab);
             if (currentCourse?.coursePlaces) {
-                const guideBookPlaces = currentCourse.coursePlaces.map((place) => ({
-                    ...place
-                }));
-
-                const oldPlaceRespList = guideBookPlaces.map(place => 
+                const oldPlaceRespList = originalPlaces.map(place => 
                     place.id.toString().replace(/\u0000/g, '').trim());
-                const newPlaceRespList = places.map(place => 
+                const newPlaceRespList = places.map(place =>
                     place.id.toString().replace(/\u0000/g, '').trim());
-
                 if(isPlaceNumChanged(oldPlaceRespList, newPlaceRespList)) {
                     //updatedPlaces 순서대로 리스트 형태로 변환
                     CoursePlaceRequest.id = currentCourse.courseId;
@@ -256,18 +267,42 @@ const GuideBook = () => {
                     }
                 }
             }
+            else{
+                setOriginalPlaces(places);
+            }
         setIsEditMode(!isEditMode); // 편집 모드 토글
         setSelectedItems([]);
     };
 
+    const putGuideBookTitle = async (title) => {
+        try {
+            await axiosInstance.put(`/api/v1/travels/guidebooks/${guidebookId}/title`, {
+                title: title
+            });
+            setGuideBook(prevGuideBook => ({
+                ...prevGuideBook,
+                guideBookTitle: title
+            }));
+        } catch (error) {
+            console.error('Error posting guidebook title:', error);
+        }
+    }
+
+    // 제목 편집 모달 클릭 핸들러
+    const handleTitleSave = (newTitle) => {
+        putGuideBookTitle(newTitle);
+        setIsTitleEditModalOpen(false);
+    }
+
+
     // 이동 버튼 클릭 핸들러
     const handleMoveClick = () => {
-        setShowMoveModal(true); // 이동 모달 표시
+        setShowCopyModal(true); // 이동 모달 표시
     };
 
     // 대상 코스 선택 핸들러
     const handleTargetCourseSelect = (courseNumber) => {
-        if(targetCourse.includes(courseNumber)) {
+        if (targetCourse.includes(courseNumber)) {
             setTargetCourse(prevCourse => {
                 const newCourse = prevCourse.filter(course => course !== courseNumber);
                 return newCourse;
@@ -280,7 +315,7 @@ const GuideBook = () => {
         }
     };
 
-    // 코스 변경 시 장소 데이터 가져오기
+    // 코스 탭 변경 시 장소 데이터 가져오기
     useEffect(() => {
         const coursesArray = Object.values(guideBook.courses);
         const currentCourse = coursesArray.find(course => course.courseNum === activeTab);
@@ -289,11 +324,12 @@ const GuideBook = () => {
                 ...place,
                 num: index + 1
             }));
-            if(places !== updatedPlaces) {
+            if (places !== updatedPlaces) {
                 setPlaces(updatedPlaces);
+                
             }
         }
-    }, [activeTab, guideBook.courses]);
+    }, [activeTab]);
 
     // 장소 추가 핸들러
     const handlePlaceAdd = async () => {
@@ -305,7 +341,7 @@ const GuideBook = () => {
                     courseIds: targetCourse,
                     placeIds: selectedItems,
                 });
-                setShowMoveModal(false); // 이동 모달 닫기
+                setShowCopyModal(false); // 이동 모달 닫기
                 setIsEditMode(false); // 편집 모드 해제
             } catch (error) {
                 console.error('Error moving places:', error);
@@ -318,14 +354,14 @@ const GuideBook = () => {
 
                     // 선택된 모든 코스에 대해 처리
                     targetCourse.forEach(courseId => {
-                        const courseIndex = Object.keys(updatedCourses).find(key => 
+                        const courseIndex = Object.keys(updatedCourses).find(key =>
                             updatedCourses[key].courseId === courseId
                         );
 
                         if (courseIndex !== undefined) {
                             // 추가할 새로운 장소들 필터링
                             const updateCoursePlaces = selectedItems
-                                .filter(selectedId => 
+                                .filter(selectedId =>
                                     !updatedCourses[courseIndex].coursePlaces
                                         .some(place => place.id === selectedId)
                                 )
@@ -351,10 +387,10 @@ const GuideBook = () => {
                     };
                 });
                 
-                setShowMoveModal(false);
+                setShowCopyModal(false);
                 setIsEditMode(false);
                 setSelectedItems([]);
-                
+
             } catch (error) {
                 console.error('Error updating courses:', error);
             }
@@ -381,6 +417,9 @@ const GuideBook = () => {
         }
 
         try {
+            setPlaces(prevPlaces => {
+                return prevPlaces.filter(place => !selectedItems.includes(place.id));
+            });
             setGuideBook(prevGuideBook => {
                 const updatedCourses = { ...prevGuideBook.courses };
 
@@ -391,12 +430,12 @@ const GuideBook = () => {
                 setShowDeleteModal(false);
                 setIsEditMode(false);
                 setSelectedItems([]);
-                
+
                 return {
                     ...prevGuideBook,
                     courses: updatedCourses
                 };
-                
+
             });
         } catch (error) {
             console.error('Error deleting places:', error);
@@ -405,7 +444,7 @@ const GuideBook = () => {
 
     // 모달 닫기 핸들러
     const handleModalClose = () => {
-        setShowMoveModal(false); // 이동 모달 닫기
+        setShowCopyModal(false); // 이동 모달 닫기
         setShowDeleteModal(false); // 삭제 모달 닫기
     };
 
@@ -420,23 +459,33 @@ const GuideBook = () => {
 
     // 드래그 앤 드롭 핸들러
     const handleOnDragEnd = (result) => {
+        document.body.style.touchAction = 'pan-y';
+        
         if (!result.destination) return;
-        const items = Array.from(places);
-        const [reorderedItem] = items.splice(result.source.index, 1);
-        items.splice(result.destination.index, 0, reorderedItem);
-        setPlaces(items);
-        setGuideBook(prevGuideBook => {
-            const updatedCourses = { ...prevGuideBook.courses };
-            updatedCourses[activeTab - 1] = {
-                ...updatedCourses[activeTab - 1],
-                coursePlaces: items
-            };
-            return {
-                ...prevGuideBook,
-                courses: updatedCourses
-            };
-        });
+        
+        const newPlaces = Array.from(places);
+        const [removed] = newPlaces.splice(result.source.index, 1);
+        newPlaces.splice(result.destination.index, 0, removed);
+        
+        // 상태 업데이트를 즉시 수행
+        setPlaces(newPlaces);
+        
+        // 나머지 업데이트는 약간의 지연 후 수행
+        setTimeout(() => {
+            setGuideBook(prevGuideBook => {
+                const updatedCourses = { ...prevGuideBook.courses };
+                updatedCourses[activeTab - 1] = {
+                    ...updatedCourses[activeTab - 1],
+                    coursePlaces: newPlaces
+                };
+                return {
+                    ...prevGuideBook,
+                    courses: updatedCourses
+                };
+            });
+        }, 0);
     };
+
 
     // 장소 클릭 핸들러
     const handlePlaceClick = (place) => {
@@ -466,29 +515,29 @@ const GuideBook = () => {
     // 콘텐츠 렌더링
     const renderContent = () => {
         return (
-            <DragDropContext 
+            <DragDropContext
                 onDragStart={handleDragStart}
                 onDragEnd={handleDragEnd}
             >
                 <Droppable droppableId="places">
                     {(provided) => (
-                        <div 
-                            className="YC-GuideBook-place" 
-                            {...provided.droppableProps} 
+                        <div
+                            className="YC-GuideBook-place"
+                            {...provided.droppableProps}
                             ref={provided.innerRef}
                             style={{ 
                                 height: '100%',
                                 minHeight: '100px',
-                                overflow: 'visible' // 스크롤을 비활성화
+                                overflow: 'auto' // 스크롤을 비활성화
                             }}
+                            
                         >
                             {places.map((place, index) => (
                                 <Draggable key={place.id} draggableId={place.id} index={index}>
-                                    {(provided) => (
+                                    {(provided, snapshot) => (
                                         <div
                                             ref={provided.innerRef}
                                             {...provided.draggableProps}
-                                            {...provided.dragHandleProps}
                                             className={`YC-GuideBook-place-Container ${isEditMode ? 'edit-mode' : ''}`}
                                         >
                                             {isEditMode ? (
@@ -500,13 +549,13 @@ const GuideBook = () => {
                                             ) : (
                                                 <div id="YC-GuideBook-place-number">{index + 1}</div>
                                             )}
-                                            <div 
+                                            <div
                                                 className="YC-GuideBook-place-draggable"
                                                 onClick={() => handlePlaceClick(place)}
                                             >
                                                 {isEditMode && (
                                                     <div className="drag-handle"
-                                                    {...provided.dragHandleProps}
+                                                        {...provided.dragHandleProps}
                                                     >
                                                         <span></span>
                                                     </div>
@@ -516,10 +565,12 @@ const GuideBook = () => {
                                                     id="YC-GuideBook-place-image"
                                                     src={place.image || "https://placehold.co/90x70?text=No+Image"}
                                                     alt="관광지 이미지"
+                                                    crossOrigin="anonymous"
                                                     onError={(e) => {
                                                         e.target.src = "https://placehold.co/90x70?text=No+Image";
                                                     }}
                                                 />
+                                                
                                                 <div className="YC-GuideBook-place-info">
                                                     <span id="YC-GuideBook-place-name">{place.name}</span>
                                                     <span id="YC-GuideBook-place-type">{place.type}</span>
@@ -539,32 +590,52 @@ const GuideBook = () => {
     };
 
     // 컴포넌트 렌더링
-    return (
+    return ReactDOM.createPortal(
         <div className="YC-GuideBookList-Container">
             <div className="HG-GuideBookList-Header">
             <div className="HG-GuideBookList-Header-contents">
                 {/* 이곳에는 상위 여행 정보 경로 추가 해야함*/}
                 <Link to={`/travelInfos/${guideBook.travelInfoId}`} id="YC-GuideBook-Header-contents-recommandations">{guideBook.travelInfoTitle}</Link>
+                <div className="HG-GuideBookList-Header-contents-title">
                 <h3 id="YC-GuideBook-Tittle">{guideBook.guideBookTitle}</h3>
+                <span className="HG-GuideBookList-Header-contents-title-edit" onClick={() => setIsTitleEditModalOpen(true)}>편집</span>
                 </div>
-                <div>
-                    <img src={downloadbtn} alt="여행 정보 이미지" />
+                </div>
+
+                <div className='WS-TravelInfo-Header-Right'>
+                    <div>
+                        <img src={downloadbtn} alt="여행 정보 이미지" />
+                    </div>
                 </div>
             </div>
-            <div className="YC-GuideBookList-menus">
+
+
+
+            <div className="WS-GuideBookList-menus">
+                {/* 구글 맵 예시로 띄워 놓은 것이니, 장소에 대한 좌표를 받은후 맵을 띄워주는 것으로 변경 필요, 마커 + 마커끼리 연결 필요 */}
+                <div className="YC-GuideBookList-map">
+                    {places && places.length > 0 && (
+                        <MapComponent
+                            key={`map-${activeTab}-${places.length}-${mapKey}`}
+                            places={places}
+                        />
+                    )}
+                </div>
+
                 <div className="YC-GuideBookList-menus-menu">
                     {Object.keys(guideBook.courses).map((courseNumber) => (
                         <button
                             key={courseNumber}
-                            className={activeTab === Number(courseNumber) + 1 ? 'HG-button-clicked' : 'YC-GuideBookList-menus-menu-button'}
+                            className={activeTab === Number(courseNumber) + 1 ? 'WS-button-clicked' : 'WS-GuideBookList-menus-menu-button'}
                             onClick={() => handleTabClick(courseNumber)}
                         >
                             코스 {Number(courseNumber) + 1}
                         </button>
                     ))}
                 </div>
-                <div className="YC-GuideBookList-menus-editBtn">
-                    <button id="YC-GuideBookList-menus-editBtn-edit" onClick={handleEditClick}>
+
+                <div className="WS-GuideBookList-menus-editBtn-Container">
+                    <button className="YC-GuideBookList-menus-editBtn-edit" onClick={handleEditClick}>
                         {isEditMode ? '완료' : '편집'}
                     </button>
                 </div>
@@ -574,53 +645,55 @@ const GuideBook = () => {
                 </div>
                 {isEditMode && selectedItems.length > 0 && (
                     <div className="YC-GuideBookList-editOptions">
-                        <div onClick={handleMoveClick}>코스 이동</div>
+                        <div onClick={handleMoveClick}>장소 복사</div>
                         <div onClick={handleDeleteClick}>삭제</div>
                     </div>
                 )}
-                {/* 구글 맵 예시로 띄워 놓은 것이니, 장소에 대한 좌표를 받은후 맵을 띄워주는 것으로 변경 필요, 마커 + 마커끼리 연결 필요 */}
-                <div className="YC-GuideBookList-map">
-                    {places && places.length > 0 && (
-                        <MapComponent 
-                            key={`map-${activeTab}-${places.length}-${mapKey}`}
-                            places={places} 
-                        />                    
-                    )}
-                </div>
+
             </div>
 
 
-
-            {/* 이동 모달 */}
-            {showMoveModal && (
+            {/* 장소 복사 모달 */}
+            {showCopyModal && (
                 <div className="YC-GuideBookList-moveModal">
                     <p id="YC-GuideBookList-moveModal-title">다른 코스로 복사하시겠습니까?</p>
 
-                    {Object.keys(guideBook.courses).filter(courseNum => Number(courseNum) + 1 !== activeTab).map((courseNumber) => (
-                        <div className='HG-Select-Course' key={courseNumber}>
-                            <input type="checkbox" className='HG-Select-Course-checkbox' onChange={() => handleTargetCourseSelect(guideBook.courses[courseNumber].courseId)} />
+                        {Object.keys(guideBook.courses).filter(courseNum => Number(courseNum) + 1 !== activeTab).map((courseNumber) => (
+                            <div className='HG-Select-Course' key={courseNumber}>
+                                <input type="checkbox" className='HG-Select-Course-checkbox' onChange={() => handleTargetCourseSelect(guideBook.courses[courseNumber].courseId)} />
                                 코스 {Number(courseNumber) + 1}
-                        </div>
-                    ))}
+                            </div>
+                        ))}
 
                     <button id="YC-GuideBookList-moveModal-confirm" onClick={handlePlaceAdd} disabled={!targetCourse}>예</button>
                     <button id="YC-GuideBookList-moveModal-cancel" onClick={handleModalClose}>아니오</button>
                 </div>
             )}
+            {/* 제목 편집 모달 */}
+            {isTitleEditModalOpen && (
+                <TitleEditModal
+                    isOpen={isTitleEditModalOpen}
+                    onClose={() => setIsTitleEditModalOpen(false)}
+                    title={guideBook.guideBookTitle}
+                    onSave={(e) => handleTitleSave(e)}
+                />
+            )}
 
             {/* 삭제 모달 */}
-            {showDeleteModal && (
-                <div className="YC-GuideBookList-deleteModal">
-                    <div className="YC-GuideBookList-deleteModal-content">
-                        <p id="YC-GuideBookList-deleteModal-title">삭제하시겠습니까?</p>
-                        <p id="YC-GuideBookList-deleteModal-description">삭제된 장소는 복구할 수 없습니다.</p>
+            {
+                showDeleteModal && (
+                    <div className="YC-GuideBookList-deleteModal">
+                        <div className="YC-GuideBookList-deleteModal-content">
+                            <p id="YC-GuideBookList-deleteModal-title">삭제하시겠습니까?</p>
+                            <p id="YC-GuideBookList-deleteModal-description">삭제된 장소는 복구할 수 없습니다.</p>
+                        </div>
+                        <div className="YC-GuideBookList-deleteModal-buttons">
+                            <button id="YC-GuideBookList-deleteModal-cancel" onClick={handleModalClose}>취소</button>
+                            <button id="YC-GuideBookList-deleteModal-confirm" onClick={handleDeleteConfirm}>확인</button>
+                        </div>
                     </div>
-                    <div className="YC-GuideBookList-deleteModal-buttons">
-                        <button id="YC-GuideBookList-deleteModal-cancel" onClick={handleModalClose}>취소</button>
-                        <button id="YC-GuideBookList-deleteModal-confirm" onClick={handleDeleteConfirm}>확인</button>
-                    </div>
-                </div>
-            )}
+                )
+            }
 
             {/* 장소 상세 모달 */}
             {showDetailModal && selectedPlace && (
@@ -640,7 +713,7 @@ const GuideBook = () => {
                                 <h3 className="YC-GuideBook-detail-modal-title">{selectedPlace.name}</h3>                                
                                 <img
                                     className="YC-GuideBook-detail-modal-image"
-                                    src={selectedPlace.image || "https://placehold.co/400x300?text=No+Image"}
+                                    src={selectedPlace.image}
                                     alt={selectedPlace.name}
                                     onError={(e) => {
                                         e.target.src = "https://placehold.co/400x300?text=No+Image";
@@ -663,7 +736,11 @@ const GuideBook = () => {
                                 </p>
                             </div>
                             <div className="YC-GuideBook-detail-modal-map">      
-                                {selectedPlace && <MapComponent places={selectedPlace} />}
+                                {selectedPlace && 
+                                <MapComponent
+                                    key={`map-${activeTab}-${places.length}-${mapKey}`} 
+                                    places={[selectedPlace]} 
+                                />}
                             </div>
                         </div>
                     </div>

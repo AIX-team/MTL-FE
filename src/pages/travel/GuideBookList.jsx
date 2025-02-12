@@ -171,17 +171,17 @@ function GuidebookList() {
         </button>
       </div>
 
-      <div className="SJ-search-Container">
+      <div className="WS-Link-Input-Container">
         <input
           type="text"
           placeholder="검색어를 입력하세요"
-          className="SJ-search-input"
+          className="WS-Link-Input"
           value={searchText}
           onChange={(e) => setSearchText(e.target.value)}
         />
         <div className="SJ-search-button-container">
           {searchText && (
-            <button className="SJ-search-clear" onClick={() => setSearchText("")}>
+            <button className="WS-SearchYoutube-ClearButton" onClick={() => setSearchText("")}>
               <FaTimes />
             </button>
           )}

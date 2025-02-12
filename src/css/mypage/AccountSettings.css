@@ -6,18 +6,18 @@
 .SJ_settings_header {
   display: flex;
   align-items: center;
-  padding: 25px;
+  padding: 5%;
 }
 
 .SJ_back_button {
   border: none;
   background: none;
-  font-size: 16px;
-  margin-right: 10px;
-  padding: 0;
+  font-size: 100%;
+  margin-right: 2%;
+  padding: 1%;
   /* 패딩 제거 */
   cursor: pointer;
-  color: #3E3E3E;
+  color: #3e3e3e;
   display: flex;
   /* flexbox 사용 */
   align-items: center;
@@ -32,17 +32,15 @@
 
 /* 내 정보 관리 */
 .SJ_settings_header h1 {
-  font-size: 22px;
-  padding-top: 2px;
-  /* 텍스트를 2px 아래로 이동 */
+  font-size: 140%;
 }
 
 .SJ_settings_content {
   border: 2px solid var(--color-light-gray);
-  border-radius: 20px;
+  border-radius: 22px;
 
-   margin: 20px;
-  padding: 20px;
+  margin: 5%;
+  padding: 5%;
 }
 
 .SJ_settings_section {
@@ -51,13 +49,13 @@
 
 .SJ_section_label {
   color: #919191;
-  font-size: 12px;
-  margin-bottom: 8px;
+  font-size: 90%;
+  margin-bottom: 3%;
 }
 
 /* 컨테이너 세로 길이 */
 .SJ_section_content p {
-  font-size: 16px;
+  font-size: 100%;
 }
 
 /* 로그인 옵션 */
@@ -65,15 +63,17 @@
   border: 2px solid var(--color-light-gray);
   border-radius: 20px;
 
-  margin: 20px;
+  margin: 5%;
   display: flex;
   justify-content: space-between;
   /* 아이템 사이의 간격 조정 */
   align-items: center;
   /* 수직 중앙 정렬 */
-  padding: 15px;
+  padding: 4%;
   border-radius: 20px;
   font-weight: bold;
+
+  height: 50px;
 }
 
 .SJ_login_info {
@@ -84,12 +84,12 @@
 }
 
 .SJ_google_logo {
-  width: 24px;
-  height: 24px;
+  width: 4%;
+  height: 4%;
 }
 
 .SJ_login_text {
-  font-size: 16px;
+  font-size: 100%;
   color: #333;
   writing-mode: horizontal-tb;
   text-orientation: mixed;
@@ -105,8 +105,10 @@
 }
 
 .SJ_google_icon {
-  margin-right: 15px;
+  margin-right: 3%;
   /* 아이콘과 텍스트 간의 간격 */
+  width: 10%;
+  height: 10%;
 }
 
 /* 로그아웃 버튼 */
@@ -114,11 +116,12 @@
   background: none;
   border: none;
   color: #3e3e3e;
-  font-size: 16px;
+  font-size: 100%;
   cursor: pointer;
   text-decoration: underline;
-  padding: 10px;
+  padding: 4%;
   font-weight: bold;
+  white-space: nowrap; /* 텍스트 줄바꿈 방지 */
 }
 
 .SJ_withdrawal {
@@ -130,7 +133,7 @@
   color: #919191;
   background: none;
   border: none;
-  font-size: 14px;
+  font-size: 80%;
   cursor: pointer;
-  padding-left: 290px;
+  padding-left: 78%;
 }

@@ -6,7 +6,7 @@ const AlertModal = ({ isOpen, message, onClose }) => {
     if (!isOpen) return null;
 
     return ReactDOM.createPortal(
-        <div className="WS-AlertModal-Overlay">
+        <div className="WS-Modal-Overlay">
             <div className="WS-AlertModal-Content">
                 <div className="WS-AlertModal-Message-Container">
                     <div className="WS-AlertModal-Title">알림</div>

@@ -51,6 +51,7 @@ const LinkPage = () => {
         return null;
     }
   };
+  
 
   return (
     <div className="WS-Link-Page">
@@ -69,7 +70,7 @@ const LinkPage = () => {
                 alt="YouTube"
                 className="WS-youtube-icon"
               />
-              <span className="WS-Link-Tab-text">유튜브 검색</span>
+              <span>유튜브 검색</span>
             </div>
           </div>
 
@@ -80,7 +81,7 @@ const LinkPage = () => {
             className={`WS-Link-Tab ${activeTab === "links" ? "active" : ""}`}
           >
             <div className="WS-Link-Tab-Content">
-              <span className="WS-Link-Tab-text">링크</span>
+              <span>링크</span>
 
               {linkCount >= 5 ? (
                 <span className="WS-check-icon">
