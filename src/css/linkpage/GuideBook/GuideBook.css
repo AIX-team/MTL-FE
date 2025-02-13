@@ -165,6 +165,7 @@
   background-color: white;
   color: var(--color-guide);
   font-size: var(--font-size-sm);
+  font-weight: bold;
 
   cursor: pointer;
 }

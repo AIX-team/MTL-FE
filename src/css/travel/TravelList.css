@@ -27,7 +27,7 @@
   padding: 13px 15px; /* 퍼센트 대신 고정값 사용 */
   border: 1px solid var(--color-light-gray);
 
-  background: none;
+  background: white;
   cursor: pointer;
 
   color: var(--color-guide);
