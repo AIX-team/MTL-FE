@@ -27,7 +27,7 @@
   padding: 3% 5%;
   border: 1px solid var(--color-light-gray);
 
-  background: none;
+  background: yellow;
   cursor: pointer;
 
   color: var(--color-guide);

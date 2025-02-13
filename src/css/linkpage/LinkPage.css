@@ -10,7 +10,7 @@
 }
 
 .WS-Link-Tab-Container {
-  position: absolute;
+    position: absolute;
 
   width: 96%;
 }
@@ -37,7 +37,6 @@
 .WS-Link-Tab.active {
     color: var(--color-main-hover);
     font-weight: 900;
-    scale: 1.05;
 }
 
 .WS-Link-Tab-Content {

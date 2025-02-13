@@ -17,57 +17,58 @@ const TitleEditModal = ({ isOpen, onClose, travelDays, travelInfoTitle, onSave }
 
 
   return ReactDOM.createPortal(
-    <div className="WS-AlertModal-Overlay">
+    <div className="WS-Modal-Overlay">
       <div className="WS-TitleEditModal-Content">
+        <div className="WS-TitleEditModal-Text-Container">
+          <div className="WS-TitleEditModal-header-Container">
+            <div className='HG-modal-title'>여행일, 제목 수정</div>
+          </div>
 
-        <div className="WS-TitleEditModal-header-Container">
-          <div className='HG-modal-title'>여행일, 제목 수정</div>
-        </div>
+          <div className="WS-TitleEditModal-Body-Container">
+            <div className="WS-TitleEditModal-date-Container">
+              <div className="WS-TitleEditModal-title">여행일</div>
+              <div className="WS-TitleEditModal-Date-input-Container">
+                <input
+                  className="WS-TitleEditModal-Date-input"
+                  type="number"
+                  value={daysValue}
+                  onChange={(e) => setDaysValue(e.target.value)}
+                />
 
-        <div className="WS-TitleEditModal-Body-Container">
-          <div className="WS-TitleEditModal-date-Container">
-            <div className="WS-TitleEditModal-title">여행일</div>
-            <div className="WS-TitleEditModal-Date-input-Container">
+                {daysValue && (
+                  <button
+                    className="WS-TitleEditModal-Date-Reset-Button"
+                    onClick={() => setDaysValue('')}
+                    type="button"
+                  >
+                    <FaTimes />
+                  </button>
+                )}
+              </div>
+            </div>
+
+
+            <div className="WS-TitleEditModal-Edit-Container">
+              <div className="WS-TitleEditModal-title">제목</div>
+
               <input
-                className="WS-TitleEditModal-Date-input"
-                type="number"
-                value={daysValue}
-                onChange={(e) => setDaysValue(e.target.value)}
+                className="WS-TitleEditModal-input"
+                type="text"
+                value={titleValue}
+                onChange={(e) => setTitleValue(e.target.value)}
               />
 
-              {daysValue && (
+              {titleValue && (
                 <button
                   className="WS-TitleEditModal-Date-Reset-Button"
-                  onClick={() => setDaysValue('')}
+                  onClick={() => setTitleValue('')}
                   type="button"
                 >
                   <FaTimes />
                 </button>
               )}
+
             </div>
-          </div>
-
-
-          <div className="WS-TitleEditModal-Edit-Container">
-            <div className="WS-TitleEditModal-title">제목</div>
-
-            <input
-              className="WS-TitleEditModal-input"
-              type="text"
-              value={titleValue}
-              onChange={(e) => setTitleValue(e.target.value)}
-            />
-
-            {titleValue && (
-              <button
-                className="WS-TitleEditModal-Date-Reset-Button"
-                onClick={() => setTitleValue('')}
-                type="button"
-              >
-                <FaTimes />
-              </button>
-            )}
-
           </div>
         </div>
 
