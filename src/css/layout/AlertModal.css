@@ -12,6 +12,8 @@
     z-index: 10;
 
     background-color: rgba(0, 0, 0, 0.7);
+
+    overflow: hidden;
 }
 
 .WS-AlertModal-Content {
@@ -37,7 +39,7 @@
 .WS-AlertModal-Message-Container {
     text-align: center;
 
-    margin-bottom: 17%;
+    margin-bottom: 13%;
 }
 
 .WS-AlertModal-Title {
@@ -45,7 +47,7 @@
     font-weight: bold;
     color: var(--color-main);
 
-    margin-bottom: 15%;
+    margin-bottom: 9%;
 }
 
 .WS-AlertModal-Message {
