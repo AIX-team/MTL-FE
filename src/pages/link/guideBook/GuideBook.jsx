@@ -439,6 +439,7 @@ const GuideBook = () => {
     const handleModalClose = () => {
         setShowCopyModal(false); // 이동 모달 닫기
         setShowDeleteModal(false); // 삭제 모달 닫기
+        setIsEditMode(false); // 편집 모드 해제
     };
 
     // 체크박스 변경 핸들러
@@ -587,11 +588,9 @@ const GuideBook = () => {
         <div className="WS-GuideBook-Container">
             <div className="WS-GuideBook-Header">
                 <div className="WS-GuideBook-Header-Left-Container">
-                    <div className="WS-GuideBook-Header-Back-Btn-Container">
-                        <Link to={`/travelInfos/${guideBook.travelInfoId}`}>
-                            <img className="WS-GuideBook-Header-Back-Btn" src={backArrow} alt="뒤로가기" />
-                        </Link>
-                    </div>
+                    <Link to={`/travelInfos/${guideBook.travelInfoId}`} className="WS-GuideBook-Header-Back-Btn-Container">
+                        <img className="WS-GuideBook-Header-Back-Btn" src={backArrow} alt="뒤로가기" />
+                    </Link>
 
                     <div className="WS-GuideBook-Header-Left-Text-Container">
                         <div className="WS-GuideBook-Header-Left-Text-Container-Title">{guideBook.travelInfoTitle}</div>
@@ -608,11 +607,9 @@ const GuideBook = () => {
 
             </div>
 
-
-
-            <div className="WS-GuideBookList-menus">
+            <div className="WS-GuideBook-Body">
                 {/* 구글 맵 예시로 띄워 놓은 것이니, 장소에 대한 좌표를 받은후 맵을 띄워주는 것으로 변경 필요, 마커 + 마커끼리 연결 필요 */}
-                <div className="YC-GuideBookList-map">
+                <div className="WS-GuideBook-Map">
                     {places && places.length > 0 && (
                         <MapComponent
                             key={`map-${activeTab}-${places.length}-${mapKey}`}
@@ -621,53 +618,68 @@ const GuideBook = () => {
                     )}
                 </div>
 
-                <div className="YC-GuideBookList-menus-menu">
-                    {Object.keys(guideBook.courses).map((courseNumber) => (
-                        <button
-                            key={courseNumber}
-                            className={activeTab === Number(courseNumber) + 1 ? 'WS-button-clicked' : 'WS-GuideBookList-menus-menu-button'}
-                            onClick={() => handleTabClick(courseNumber)}
-                        >
-                            코스 {Number(courseNumber) + 1}
+                <div className="WS-GuideBook-Button-Container">
+                    <div className="WS-GuideBook-Buttons-On-Container">
+                        {Object.keys(guideBook.courses).map((courseNumber) => (
+                            <button
+                                key={courseNumber}
+                                className={activeTab === Number(courseNumber) + 1 ? 'WS-GuideBook-Button-Clicked' : 'WS-GuideBook-Button-Not-Clicked'}
+                                onClick={() => handleTabClick(courseNumber)}
+                            >
+                                코스 {Number(courseNumber) + 1}
+                            </button>
+                        ))}
+                    </div>
+
+                    <div className="WS-GuideBook-Buttons-Under-Container">
+                        <button className="WS-GuideBook-Button-EditBtn" onClick={handleEditClick}>
+                            {isEditMode ? '완료' : '편집'}
                         </button>
-                    ))}
+                    </div>
                 </div>
 
-                <div className="WS-GuideBookList-menus-editBtn-Container">
-                    <button className="YC-GuideBookList-menus-editBtn-edit" onClick={handleEditClick}>
-                        {isEditMode ? '완료' : '편집'}
-                    </button>
-                </div>
-
-                <div className="YC-GuideBookList-content">
+                <div className="WS-GuideBook-Contents-List">
                     {renderContent()}
                 </div>
                 {isEditMode && selectedItems.length > 0 && (
-                    <div className="YC-GuideBookList-editOptions">
-                        <div onClick={handleMoveClick}>장소 복사</div>
-                        <div onClick={handleDeleteClick}>삭제</div>
+                    <div className="WS-Modal-Overlay" onClick={handleModalClose}>
+                        <div className='WS-Modal-Bottom' onClick={e => e.stopPropagation()}>
+                            <div className="WS-Modal-Option">
+                                <span className="SJ-modal-icon">📌</span>
+                                이동
+                            </div>
+                            <div className="WS-Modal-Option" onClick={handleMoveClick}>
+                                <span className="SJ-modal-icon">📌</span>
+                                장소 복사</div>
+                            <div className="WS-Modal-Option" onClick={handleDeleteClick}>
+                                <span className="SJ-modal-icon">🗑️</span>
+                                삭제</div>
+                        </div>
                     </div>
                 )}
-
             </div>
 
 
             {/* 장소 복사 모달 */}
             {showCopyModal && (
-                <div className="YC-GuideBookList-moveModal">
-                    <p id="YC-GuideBookList-moveModal-title">다른 코스로 복사하시겠습니까?</p>
+                <div className="WS-second-Modal-Overlay">
+                    <div className="WS-second-Modal-Content">
+                        <p id="YC-GuideBookList-moveModal-title">다른 코스로 복사하시겠습니까?</p>
 
-                    {Object.keys(guideBook.courses).filter(courseNum => Number(courseNum) + 1 !== activeTab).map((courseNumber) => (
-                        <div className='HG-Select-Course' key={courseNumber}>
-                            <input type="checkbox" className='HG-Select-Course-checkbox' onChange={() => handleTargetCourseSelect(guideBook.courses[courseNumber].courseId)} />
-                            코스 {Number(courseNumber) + 1}
-                        </div>
-                    ))}
+                        {Object.keys(guideBook.courses).filter(courseNum => Number(courseNum) + 1 !== activeTab).map((courseNumber) => (
+                            <div className='HG-Select-Course' key={courseNumber}>
+                                <input type="checkbox" className='HG-Select-Course-checkbox' onChange={() => handleTargetCourseSelect(guideBook.courses[courseNumber].courseId)} />
+                                코스 {Number(courseNumber) + 1}
+                            </div>
+                        ))}
 
-                    <button id="YC-GuideBookList-moveModal-confirm" onClick={handlePlaceAdd} disabled={!targetCourse}>예</button>
-                    <button id="YC-GuideBookList-moveModal-cancel" onClick={handleModalClose}>아니오</button>
+                        <button id="YC-GuideBookList-moveModal-confirm" onClick={handlePlaceAdd} disabled={!targetCourse}>예</button>
+                        <button id="YC-GuideBookList-moveModal-cancel" onClick={handleModalClose}>아니오</button>
+                    </div>
                 </div>
             )}
+
+
             {/* 제목 편집 모달 */}
             {isTitleEditModalOpen && (
                 <TitleEditModal
