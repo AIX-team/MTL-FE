@@ -292,37 +292,46 @@ const GuideBook = () => {
     setSelectedItems([]);
   };
 
-  const putGuideBookTitle = async (title) => {
-    try {
-      await axiosInstance.put(
-        `/api/v1/travels/guidebooks/${guidebookId}/title`,
-        {
-          title: title,
+    const putGuideBookTitle = async (title) => {
+        try {
+            await axiosInstance.put(`/api/v1/travels/guidebooks/${guidebookId}/title`, {
+                title: title
+            });
+            setGuideBook(prevGuideBook => ({
+                ...prevGuideBook,
+                guideBookTitle: title
+            }));
+        } catch (error) {
+            console.error('Error posting guidebook title:', error);
         }
-      );
-      setGuideBook((prevGuideBook) => ({
-        ...prevGuideBook,
-        guideBookTitle: title,
-      }));
-    } catch (error) {
-      console.error("Error posting guidebook title:", error);
     }
-  };
+    
+    const putTravelInfoMove = async (travelInfoMoveRequest) => {
+        try {
+            await axiosInstance.put(`/api/v1/courses/place/move`, travelInfoMoveRequest);
+        } catch (error) {
+            console.error('Error posting travel info move:', error);
+        }
+    }
 
-  // 제목 편집 모달 클릭 핸들러
-  const handleTitleSave = (newTitle) => {
-    putGuideBookTitle(newTitle);
-    setIsTitleEditModalOpen(false);
-  };
+    // 제목 편집 모달 클릭 핸들러
+    const handleTitleSave = (newTitle) => {
+        putGuideBookTitle(newTitle);
+        setIsTitleEditModalOpen(false);
+    }
 
-  // 이동 버튼 클릭 핸들러
-  const handleMoveClick = () => {
-    setShowMoveModal(true); // 이동 모달 표시
-  };
 
-  const handleCopyClick = () => {
-    setShowCopyModal(true); // 복사 모달 표시
-  };
+    // 이동 버튼 클릭 핸들러
+    const handleMoveClick = () => {
+        setTargetCourse([]);
+        setShowMoveModal(true); // 이동 모달 표시
+    };
+
+    const handleCopyClick = () => {
+        setTargetCourse([]);
+        setShowCopyModal(true); // 복사 모달 표시
+    };
+
 
   // 대상 코스 선택 핸들러
   const handleTargetCourseSelect = (courseNumber) => {
@@ -358,22 +367,94 @@ const GuideBook = () => {
     }
   }, [activeTab]);
 
-  // 장소 추가 핸들러
-  const handlePlaceAdd = async () => {
-    // 이동할 코스와 선택된 장소가 선택 된 경우
-    if (targetCourse.length > 0 && selectedItems.length > 0) {
-      try {
-        // DB 코스 장소 추가 요청
-        await axiosInstance.put(`/api/v1/courses/places/add`, {
-          courseIds: targetCourse,
-          placeIds: selectedItems,
-        });
-        setShowMoveModal(false); // 이동 모달 닫기
-        setShowCopyModal(false); // 복사 모달 닫기
-        setIsEditMode(false); // 편집 모드 해제
-      } catch (error) {
-        console.error("Error moving places:", error);
-      }
+
+    const handlePlaceMove = () => {
+        if(selectedItems.length > 1){
+            alert("이동할 장소를 1개만 선택해주세요.");
+            return;
+        }
+        
+        // 이동할 코스 정보 가져오기
+        const coursesArray = Object.values(guideBook.courses);
+        const targetCourseInfo = coursesArray.find(course => course.courseId === targetCourse[0]);   
+        if(targetCourseInfo.coursePlaces.some(place => place.id === selectedItems[0])){
+            alert("이미 코스에 추가된 장소입니다.");
+            return;
+        }
+    
+        try {
+            // 1. API 요청
+            const travelInfoMoveRequest = {
+                beforeCourseId: guideBook.courses[activeTab - 1].courseId,
+                afterCourseId: targetCourse[0],
+                placeId: selectedItems[0]
+            }
+            putTravelInfoMove(travelInfoMoveRequest);
+    
+            // 2. 프론트엔드 상태 업데이트
+            if(targetCourse.length > 0) {
+
+                setGuideBook(prevGuideBook => {
+                    // 업데이트 할 전체 코스 정보 가져오기
+                    const updatedCourses = { ...prevGuideBook.courses };
+ 
+                    
+                    // 이동할 장소 정보 저장
+                    const placeToMove = updatedCourses[activeTab - 1].coursePlaces.find(
+                        place => selectedItems.includes(place.id)
+                    );
+    
+                    // 기존 코스에서 장소 제거
+                    updatedCourses[activeTab - 1].coursePlaces = updatedCourses[activeTab - 1].coursePlaces
+                        .filter(place => !selectedItems.includes(place.id));
+    
+                    // 기존 코스 장소 순서 재정렬
+                    updatedCourses[activeTab - 1].coursePlaces.sort((a, b) => a.num - b.num);
+    
+                    // 대상 코스에 장소 추가
+                    if (placeToMove) {
+                        // targetCourseInfo의 인덱스 찾기
+                        const targetCourseIndex = Object.keys(updatedCourses).find(
+                            key => updatedCourses[key].courseId === targetCourse[0]
+                        );
+                        const targetCoursePlacesCnt = targetCourseInfo.coursePlaces.length;
+                        placeToMove.num = targetCoursePlacesCnt + 1;
+                        targetCourseInfo.coursePlaces.push(placeToMove);
+                        updatedCourses[targetCourseIndex] = targetCourseInfo;
+                    }
+    
+                    return {
+                        ...prevGuideBook,
+                        courses: updatedCourses
+                    };
+                });
+            }
+    
+            setShowMoveModal(false);
+            setIsEditMode(false);
+            setTargetCourse([]);
+            setSelectedItems([]);
+        } catch (error) {
+            console.error('Error moving places:', error);
+        }
+    }
+
+    // 장소 추가 핸들러
+    const handlePlaceAdd = async () => {
+        // 이동할 코스와 선택된 장소가 선택 된 경우
+        if (targetCourse.length > 0 && selectedItems.length > 0) {
+            try {
+                // DB 코스 장소 추가 요청
+                await axiosInstance.put(`/api/v1/courses/places/add`, {
+                    courseIds: targetCourse,
+                    placeIds: selectedItems,
+                });
+                setShowMoveModal(false); // 이동 모달 닫기
+                setShowCopyModal(false); // 복사 모달 닫기
+                setIsEditMode(false); // 편집 모드 해제
+            } catch (error) {
+                console.error('Error moving places:', error);
+            }
 
       try {
         // 모든 업데이트를 한 번에 처리하도록 수정
@@ -473,13 +554,12 @@ const GuideBook = () => {
     }
   };
 
-  // 모달 닫기 핸들러
-  const handleModalClose = () => {
-    setShowMoveModal(false); // 이동 모달 닫기
-    setShowCopyModal(false); // 복사 모달 닫기
-    setShowDeleteModal(false); // 삭제 모달 닫기
-    setIsEditMode(false); // 편집 모드 해제
-  };
+    // 모달 닫기 핸들러
+    const handleModalClose = () => {
+        setShowMoveModal(false); // 이동 모달 닫기
+        setShowCopyModal(false); // 복사 모달 닫기
+        setShowDeleteModal(false); // 삭제 모달 닫기
+    };
 
   // 체크박스 변경 핸들러
   const handleCheckboxChange = (id) => {
@@ -722,111 +802,46 @@ const GuideBook = () => {
         )}
       </div>
 
-      {/* 장소 이동 모달 */}
-      {showMoveModal && (
-        <div className="WS-second-Modal-Overlay" onClick={handleModalClose}>
-          <div
-            className="WS-GuideBook-Modal-Bottom"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="WS-Modal-Option">
-              <div>이동할 코스 아이코스</div>
-            </div>
-          </div>
-        </div>
-      )}
+            {/* 장소 이동 모달 */}
+            {showMoveModal && (
+                <div className="WS-second-Modal-Overlay" onClick={handleModalClose}>
+                    <div className='WS-Modal-Bottom' onClick={e => e.stopPropagation()}>
+                        <div className="WS-Modal-Option">
+                            {Object.keys(guideBook.courses).filter(courseNum => Number(courseNum) + 1 !== activeTab).map((courseNumber) => (
+                                <div className='HG-Select-Course' key={courseNumber}>
+                                    <input type="checkbox" className='HG-Select-Course-checkbox' onChange={() => handleTargetCourseSelect(guideBook.courses[courseNumber].courseId)} />
+                                    코스 {Number(courseNumber) + 1}
+                                </div>
+                            ))}
+                        </div>
+                        <div className="WS-second-Modal-Button-Container">
+                            <button className="WS-Copy-Modal-Button" onClick={handleModalClose}>취소</button>
+                            <button className="WS-Copy-Modal-Button" onClick={handlePlaceMove} disabled={!targetCourse}>이동</button>
+                        </div>
+                    </div>
+                </div>
+            )}
 
-      {/* 장소 복사 모달 */}
-      {showCopyModal && (
-        <div className="WS-second-Modal-Overlay" onClick={handleModalClose}>
-          <div
-            className="WS-GuideBook-Modal-Bottom"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="WS-Copy-Modal-Option">
-              {Object.keys(guideBook.courses)
-                .filter((courseNum) => Number(courseNum) + 1 !== activeTab)
-                .map((courseNumber) => (
-                  <div className="WS-Modal-Option2" key={courseNumber}>
-                    <label className="WS-Select-Option-checkbox-Container">
-                      <input
-                        type="checkbox"
-                        onChange={() =>
-                          handleTargetCourseSelect(
-                            guideBook.courses[courseNumber].courseId
-                          )
-                        }
-                      />
-                      <div className="WS-Select-Option-checkbox-text">
-                        코스 {Number(courseNumber) + 1}
-                      </div>
-                    </label>
-                  </div>
-                ))}
-            </div>
+            {/* 장소 복사 모달 */}
+            {showCopyModal && (
+                <div className="WS-second-Modal-Overlay" onClick={handleModalClose}>
+                    <div className='WS-Modal-Bottom' onClick={e => e.stopPropagation()}>
+                        <div className="WS-Modal-Option">
+                            {Object.keys(guideBook.courses).filter(courseNum => Number(courseNum) + 1 !== activeTab).map((courseNumber) => (
+                                <div className='HG-Select-Course' key={courseNumber}>
+                                    <input type="checkbox" className='HG-Select-Course-checkbox' onChange={() => handleTargetCourseSelect(guideBook.courses[courseNumber].courseId)} />
+                                    코스 {Number(courseNumber) + 1}
+                                </div>
+                            ))}
+                        </div>
+                        <div className="WS-second-Modal-Button-Container">
+                            <button className="WS-Copy-Modal-Button" onClick={handleModalClose}>취소</button>
+                            <button className="WS-Copy-Modal-Button" onClick={handlePlaceAdd} disabled={!targetCourse}>복사</button>
+                        </div>
+                    </div>
+                </div>
+            )}
 
-            <div className="WS-Copy-Modal-Option">
-              {Object.keys(guideBook.courses)
-                .filter((courseNum) => Number(courseNum) + 1 !== activeTab)
-                .map((courseNumber) => (
-                  <div className="WS-Modal-Option2" key={courseNumber}>
-                    <label className="WS-Select-Option-checkbox-Container">
-                      <input
-                        type="checkbox"
-                        onChange={() =>
-                          handleTargetCourseSelect(
-                            guideBook.courses[courseNumber].courseId
-                          )
-                        }
-                      />
-                      <div className="WS-Select-Option-checkbox-text">
-                        코스 {Number(courseNumber) + 1}
-                      </div>
-                    </label>
-                  </div>
-                ))}
-            </div>
-
-            <div className="WS-Copy-Modal-Option">
-              {Object.keys(guideBook.courses)
-                .filter((courseNum) => Number(courseNum) + 1 !== activeTab)
-                .map((courseNumber) => (
-                  <div className="WS-Modal-Option2" key={courseNumber}>
-                    <label className="WS-Select-Option-checkbox-Container">
-                      <input
-                        type="checkbox"
-                        onChange={() =>
-                          handleTargetCourseSelect(
-                            guideBook.courses[courseNumber].courseId
-                          )
-                        }
-                      />
-                      <div className="WS-Select-Option-checkbox-text">
-                        코스 {Number(courseNumber) + 1}
-                      </div>
-                    </label>
-                  </div>
-                ))}
-            </div>
-
-            <div className="WS-Copy-Modal-Button-Container">
-              <button
-                className="WS-Copy-Modal-Button"
-                onClick={handleModalClose}
-              >
-                취소
-              </button>
-              <button
-                className="WS-Copy-Modal-Button"
-                onClick={handlePlaceAdd}
-                disabled={!targetCourse}
-              >
-                복사
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* 제목 편집 모달 */}
       {isTitleEditModalOpen && (
