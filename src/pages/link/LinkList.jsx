@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import Modal from "../../layouts/AlertModal";
 import "../../css/linkpage/LinkList.css";
@@ -22,7 +21,7 @@ const LinkList = ({ linkData, setLinkData }) => {
     try {
       new URL(url);
       return true;
-    } catch (error) {
+    } catch {
       return false;
     }
   };
@@ -78,7 +77,7 @@ const LinkList = ({ linkData, setLinkData }) => {
       setInputLink("");
       return;
     }
-    
+
     const type = getLinkType(inputLink);
     if (!type) {
       showModal("지원하지 않는 URL입니다.");
@@ -100,6 +99,7 @@ const LinkList = ({ linkData, setLinkData }) => {
     setLinkData(linkData.filter((link) => link.id !== idToDelete));
   };
 
+  // 다음 버튼 클릭 시 등록된 링크의 URL만 추출하여 SelectDayTab으로 전달하면서 화면 전환
   const handleNextClick = () => {
     setShowDayTab(true);
   };
@@ -109,7 +109,10 @@ const LinkList = ({ linkData, setLinkData }) => {
   };
 
   if (showDayTab) {
-    return <SelectDayTab onBack={handleBack} />;
+    // linkData는 { url, type, id } 객체 배열입니다.
+    // URL 문자열만 추출하여 linkData prop으로 전달합니다.
+    const linkUrls = linkData.map((link) => link.url);
+    return <SelectDayTab onBack={handleBack} linkData={linkUrls} />;
   }
 
   return (
@@ -125,8 +128,7 @@ const LinkList = ({ linkData, setLinkData }) => {
           onKeyPress={(e) => e.key === "Enter" && handleAddLink()}
         />
         <button className="WS-LinkList-AddButton" onClick={handleAddLink}>
-          {" "}
-          +{" "}
+          {" "}+{" "}
         </button>
       </div>
 

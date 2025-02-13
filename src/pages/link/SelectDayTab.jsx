@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { FaPlus, FaMinus, FaArrowLeft } from "react-icons/fa"; // 아이콘 사용을 위한 import
 import { useNavigate } from "react-router-dom"; // 네비게이션 훅 추가
 import "../../css/linkpage/SelectDayTab.css";
+import axios from "axios";
 
-const SelectDayTab = ({ onBack }) => {
+const SelectDayTab = ({ onBack, linkData }) => {
   const [days, setDays] = useState(1); // 기본값 1일
   const [showPreferTab, setShowPreferTab] = useState(false); // 추가⭐️⭐️⭐️
   const [isLoading, setIsLoading] = useState(false); // 로딩페이지로 전환⭐️⭐️⭐️
@@ -45,15 +46,29 @@ const SelectDayTab = ({ onBack }) => {
 
   // 다음 버튼 클릭 핸들러 추가⭐️⭐️⭐️
   const handleNext = async () => {
+    console.log("현재 linkData:", linkData);
     setIsLoading(true);
     try {
-      // 여기에 필요한 데이터 처리 로직 추가
-      // 예시: 2초 대기
+      // 문자열 배열을 각 객체의 { url } 형태로 변환하여 백엔드에 전달합니다.
+      const payload = linkData.map(url => ({ url }));
+      console.log("payload:", payload);
 
-      // 로딩이 끝나면 다음 페이지로 이동
+      const response = await axios.post(
+        "http://localhost:8080/url/user/process",
+        payload, // 수정된 payload: 배열 형태의 객체들을 전달
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      console.log("API 응답:", response.data);
       navigate("/loading", { state: { days: days } });
     } catch (error) {
-      console.error("Error:", error);
+      // 백엔드에서 보내는 상세 오류 메시지를 확인해보세요.
+      console.error("API 요청 에러:", error.response.data);
       setIsLoading(false);
     }
   };
