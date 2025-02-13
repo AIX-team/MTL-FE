@@ -1,175 +1,235 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import "../../css/travel/GuidebookList.css";
 import TravelPageModal from "./TravelPageModal";
-import { FaSearch, FaTimes } from 'react-icons/fa';
-
+import { FaSearch, FaTimes } from "react-icons/fa";
+import { HiChevronDown, HiChevronUp  } from "react-icons/hi2";
+import axiosInstance from '../../components/AxiosInstance';
 
 function GuidebookList() {
   const [activeFilter, setActiveFilter] = useState("latest");
-  const [favorites, setFavorites] = useState(() => {
-    const saved = localStorage.getItem("guidebookFavorites");
-    return new Set(saved ? JSON.parse(saved) : []);
-  });
   const [showModal, setShowModal] = useState(false);
-  const [selectedGuideId, setSelectedGuideId] = useState(null);
-  const [isEditing, setIsEditing] = useState(false);
-  const [editingTitle, setEditingTitle] = useState("");
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [pinnedGuides, setPinnedGuides] = useState(() => {
-    try {
-      const saved = localStorage.getItem("guidebookPinned");
-      return new Set(saved ? JSON.parse(saved) : []);
-    } catch (error) {
-      console.error("Error initializing pinnedGuides:", error);
-      return new Set(); // 에러 발생 시 빈 Set 반환
-    }
-  });
+  const [selectedGuide, setSelectedGuide] = useState(null);
+  const [sortAsc, setSortAsc] = useState(true);
   const [searchText, setSearchText] = useState("");
-  const [guideBookData, setGuideBookData] = useState([
-    {
-      id: 1,
-      category: "오사카 여행",
-      title: "오사카! 진돌이랑 유니버셜스튜디오",
-      date: "2025-05-18",
-      isPin: true,
-      tags: ["꾸준", "산본노트", "인생유튜버의세계여행", "내일뭐하지"],
-      score: 6,
-    },
-    {
-      id: 2,
-      category: "마쓰야마 여행",
-      title: "마쓰야마 여행 4일|혼자|먹방",
-      date: "2025-03-27",
-      tags: ["에이엘A-EL", "빠니보틀", "원지의하루", "꾸준", "산본노트"],
-      score: 4,
-    },
-    {
-      id: 3,
-      category: "마쓰야마 여행",
-      title: "마쓰야마 여행 5일|혼자|먹방|온천",
-      date: "2025-03-25",
-      tags: ["에이엘A-EL", "빠니보틀", "원지의하루", "꾸준", "산본노트"],
-      score: 5,
-    },
-    {
-      id: 4,
-      category: "마쓰야마 여행",
-      title: "센과치히로의,온천여행⭐️",
-      date: "2025-03-19",
-      tags: ["에이엘A-EL", "빠니보틀", "원지의하루", "꾸준", "산본노트"],
-      score: 3,
-    },
-  ]);
+  const [guideBookData, setGuideBookData] = useState([]);
+
+  useEffect(() => {
+    getGuideBookList();
+  }, []);
+
+  // 가이드북 목록 조회 api
+  const getGuideBookList = async () => {
+    try {
+      const response = await axiosInstance.get('/api/v1/travels/guidebooks/list');
+      setGuideBookData(response.data.guideBooks || []);
+      console.log(response.data.guideBooks);
+    } catch (error) { 
+      console.error('가이드북 목록을 가져오는 중 오류가 발생했습니다:', error);
+    }
+  };
+
+  // 즐겨찾기 업데이트 api
+  const putFavorite = async (id, favorite) => {
+    try {
+      const response = await axiosInstance.put(`/api/v1/travels/guidebooks/${id}/favorite`, {
+        isTrue: favorite
+      });
+      console.log(response.data);
+    } catch (error) {
+      console.error('즐겨찾기 업데이트 중 오류가 발생했습니다:', error);
+    }
+  };
+
+  // 고정 업데이트 api
+  const putPin = async (id, pin) => {
+    try {
+      const response = await axiosInstance.put(`/api/v1/travels/guidebooks/${id}/fixed`, {
+        isTrue: pin
+      });
+      console.log(response.data);
+    } catch (error) {
+      console.error('고정 업데이트 중 오류가 발생했습니다:', error);
+    }
+  };
+
+  // 제목 업데이트 api
+  const putUpdateTitle = async (id, title) => {
+    try {
+      const response = await axiosInstance.put(`/api/v1/travels/guidebooks/${id}/title`, {
+        value: title
+      });
+      console.log(response.data);
+    } catch (error) {
+      console.error('제목 업데이트 중 오류가 발생했습니다:', error);
+    }
+  };
+
+  // 가이드북 삭제 api
+  const deleteGuideBook = async (id) => {
+    try {
+      const response = await axiosInstance.delete(`/api/v1/travels/guidebooks/${id}`);
+      console.log(response.data);
+    } catch (error) {
+      console.error('가이드북 삭제 중 오류가 발생했습니다:', error);
+    }
+  };
+
+  // 필터링된 데이터 계산
+  const filteredData = useMemo(() => {
+    // travelItems가 없거나 배열이 아닐 경우 빈 배열 반환
+    if (!guideBookData || !Array.isArray(guideBookData)) {
+      return [];
+    }
+    console.log("searchText:", searchText);
+    // 검색어로 먼저 필터링
+    let filtered = guideBookData;
+    if (searchText.trim()) {
+        filtered = guideBookData.filter(item => 
+            item.title.toLowerCase().includes(searchText.toLowerCase())
+        );
+    }
+
+    console.log("filtered:", filtered);
+
+    // activeFilter가 'favorite'일 때만 즐겨찾기 필터링 적용
+    if (activeFilter === "favorite") {
+      return filtered.filter((item) => item.isFavorite === true);
+    }
+    if(activeFilter === true){
+      // 최신순 정렬
+      return filtered.sort((a, b) => {
+        const dateA = new Date(a.createAt);
+        const dateB = new Date(b.createAt);
+        return dateB - dateA;
+      });
+    }else if(activeFilter === false){
+      // 오래된 순 정렬
+      return filtered.sort((a, b) => {
+        const dateA = new Date(a.createAt);
+        const dateB = new Date(b.createAt);
+        return dateA - dateB;
+      });
+    }
+    return filtered;
+  }, [guideBookData, activeFilter, searchText]);
+
 
   // 정렬된 가이드북 데이터 계산
   const sortedGuideBooks = useMemo(() => {
-    let sorted = [...guideBookData];
+    let sorted = [...filteredData];
 
     // 먼저 고정된 항목을 최상단으로 정렬
     sorted.sort((a, b) => {
-      const isPinnedA = pinnedGuides.has(a.id);
-      const isPinnedB = pinnedGuides.has(b.id);
+      const isPinnedA = a.fixed;
+      const isPinnedB = b.fixed;
       if (isPinnedA && !isPinnedB) return -1;
       if (!isPinnedA && isPinnedB) return 1;
 
       // 고정 상태가 같은 경우 날짜순 정렬
       if (isPinnedA === isPinnedB) {
-        return activeFilter === "latest"
-          ? new Date(b.date) - new Date(a.date)
-          : new Date(a.date) - new Date(b.date);
+        if(sortAsc){
+          return new Date(b.createAt) - new Date(a.createAt);
+        }else{
+          return new Date(a.createAt) - new Date(b.createAt);
+        }
       }
       return 0;
     });
 
     // 즐겨찾기 필터 적용
     if (activeFilter === "favorite") {
-      sorted = sorted.filter((guide) => favorites.has(guide.id));
+      sorted = sorted.filter((guide) => guide.isFavorite);
     }
 
     return sorted;
-  }, [guideBookData, activeFilter, favorites, pinnedGuides]);
+  }, [filteredData, activeFilter, sortAsc]);
 
   // 즐겨찾기 토글 함수
   const toggleFavorite = (id) => {
-    setFavorites((prev) => {
-      const newFavorites = new Set(prev);
-      if (newFavorites.has(id)) {
-        newFavorites.delete(id);
-      } else {
-        newFavorites.add(id);
-      }
-      // localStorage에 저장
-      localStorage.setItem(
-        "guidebookFavorites",
-        JSON.stringify([...newFavorites])
-      );
-      return newFavorites;
-    });
+    // 즐겨찾기 상태 변경
+    const favorite = guideBookData.find((guide) => guide.id === id).isFavorite;
+    putFavorite(id, !favorite);
+    setGuideBookData(
+      guideBookData.map((guide) =>
+        guide.id === id ? { ...guide, isFavorite: !guide.isFavorite } : guide
+      )
+    );
   };
 
-  // 고정하기 토글 함수
-  const handlePinClick = (id) => {
-    setPinnedGuides((prev) => {
-      try {
-        const newPinnedGuides = new Set([...prev]);
-        if (newPinnedGuides.has(id)) {
-          newPinnedGuides.delete(id);
-        } else {
-          newPinnedGuides.add(id);
-        }
-        // localStorage에 배열로 변환하여 저장
-        localStorage.setItem(
-          "guidebookPinned",
-          JSON.stringify([...newPinnedGuides])
-        );
-        return newPinnedGuides;
-      } catch (error) {
-        console.error("Error in handlePinClick:", error);
-        return prev; // 에러 발생 시 이전 상태 유지
-      }
-    });
+  // 고정 토글 핸들러
+  const handlePinClick = (item) => {
+    // 고정 상태 변경
+    setGuideBookData(
+      guideBookData.map((guide) =>
+        guide.id === item.id ? { ...guide, fixed: !guide.fixed } : guide
+      )
+    );
+    putPin(item.id, !item.fixed);
     setShowModal(false);
   };
 
   // 더보기 버튼 클릭 핸들러
-  const handleMoreOptionsClick = (id) => {
-    setSelectedGuideId(id);
+  const handleMoreOptionsClick = (item) => {
+    setSelectedGuide(item);
     setShowModal(true);
   };
 
   // 제목 업데이트 함수 추가
-  const handleUpdateTitle = (itemId, newTitle) => {
-    setGuideBookData(guideBookData.map(guide =>
-      guide.id === itemId ? { ...guide, title: newTitle } : guide
-    ));
+  const handleUpdateTitle = (item, newTitle) => {
+    try {
+      console.log(item.id, newTitle);
+        putUpdateTitle(item.id, newTitle);
+        setGuideBookData(guideBookData.map((guide) => 
+          guide.id === item.id ? { ...guide, title: newTitle } : guide
+        ));
+    } catch (error) {
+      console.error('가이드북 제목을 업데이트하는 중 오류가 발생했습니다:', error);
+    }
   };
+  
+  const handleFilterClick = (filter) => {
+    console.log(filter);
+    console.log(sortAsc);
+    if(filter === true){
+      setSortAsc(filter);
+      setActiveFilter(filter);
+    }else if(filter === false){
+      setSortAsc(filter);
+      setActiveFilter(filter);
+    }else{
+      setActiveFilter(filter);
+    }
+  };
+  
+  const handleDeleteItem = (item) => {
+    setGuideBookData(guideBookData.filter((guide) => guide.id !== item.id));
+    deleteGuideBook(item.id);
+    setShowModal(false);
+  };
+
 
   return (
     <div className="SJ-guidebook-list">
       {/* 필터 버튼 */}
-      <div className="SJ-filter-buttons">
-        <button
-          className={`SJ-filter-btn ${activeFilter === "latest" ? "active" : ""
+        <div className="SJ-filter-buttons">
+          <button
+            className={`SJ-filter-btn ${
+              activeFilter === "favorite" ? "" : "active"
             }`}
-          onClick={() => setActiveFilter("latest")}
-        >
-          최신순
-        </button>
-        <button
-          className={`SJ-filter-btn ${activeFilter === "created" ? "active" : ""
+            //activeFilter가 favorite일 때 sortAsc, 아닐 때 !sortAsc
+            onClick={() => handleFilterClick(activeFilter === "favorite" ? sortAsc : !sortAsc)}
+          >
+            생성일 {sortAsc === true ? <HiChevronDown style={{verticalAlign:"middle"}} /> : <HiChevronUp style={{verticalAlign:"middle"}} />}
+          </button>
+          <button
+            className={`SJ-filter-btn ${
+              activeFilter === "favorite" ? "active" : ""
             }`}
-          onClick={() => setActiveFilter("created")}
-        >
-          생성일
-        </button>
-        <button
-          className={`SJ-filter-btn ${activeFilter === "favorite" ? "active" : ""
-            }`}
-          onClick={() => setActiveFilter("favorite")}
-        >
-          즐겨찾기
-        </button>
-      </div>
+            onClick={() => handleFilterClick("favorite")}
+          >
+            즐겨찾기
+          </button>
+        </div>
 
       <div className="WS-Link-Input-Container">
         <input
@@ -181,57 +241,59 @@ function GuidebookList() {
         />
         <div className="SJ-search-button-container">
           {searchText && (
-            <button className="WS-SearchYoutube-ClearButton" onClick={() => setSearchText("")}>
+            <button
+              className="WS-SearchYoutube-ClearButton"
+              onClick={() => setSearchText("")}
+            >
               <FaTimes />
             </button>
           )}
-          <button className="SJ-search-icon"><FaSearch /></button>
+          <button className="SJ-search-icon">
+            <FaSearch />
+          </button>
         </div>
       </div>
 
       <div className="WS-guide-container">
-        {sortedGuideBooks.map((guide) => (
-
+        {Array.isArray(sortedGuideBooks) && sortedGuideBooks.map((guide) => (
           <div key={guide.id} className="SJ-guide-card">
-
             <div className="SJ-guide-content">
-
-              {pinnedGuides.has(guide.id) && (
+              {guide.fixed && (
                 <div className="SJ-pin-icon">📌</div>
               )}
 
-              <div className="SJ-guide-category">{guide.category}</div>
+              <div className="SJ-guide-category">{guide.travelInfoTitle}</div>
 
               <div
-                className={`WS-favorite-button  ${favorites.has(guide.id) ? "filled" : "outlined"
-                  }`}
+                className={`WS-favorite-button  ${
+                  guide.fixed ? "filled" : "outlined"
+                }`}
                 onClick={() => toggleFavorite(guide.id)}
               >
-                {favorites.has(guide.id) ? "♥" : "♡"}
+                {guide.isFavorite ? "♥" : "♡"}
               </div>
 
               <div className="SJ-guide-header">
                 <div className="SJ-guide-title">{guide.title}</div>
-                <div className="SJ-guide-score">코스 {guide.score}</div>
+                <div className="SJ-guide-score">코스 {guide.courseCount}</div>
               </div>
               <div className="SJ-guide-footer">
-                <div className="SJ-guide-date">생성일 {guide.date}</div>
+                <div className="SJ-guide-date">생성일 {guide.createAt}</div>
                 <div className="SJ-guide-tags">
-                  {guide.tags.map((tag, index) => (
+                  {Array.isArray(guide.authors) && guide.authors.map((author, index) => (
                     <span key={index} className="SJ-guide-tag">
-                      #{tag}
+                      #{author}
                     </span>
                   ))}
                 </div>
               </div>
               <button
                 className="SJ-more-button"
-                onClick={() => handleMoreOptionsClick(guide.id)}
+                onClick={() => handleMoreOptionsClick(guide)}
               >
                 ⋮
               </button>
             </div>
-
           </div>
         ))}
       </div>
@@ -240,12 +302,10 @@ function GuidebookList() {
       <TravelPageModal
         showModal={showModal}
         setShowModal={setShowModal}
-        selectedItemId={selectedGuideId}
-
+        selectedItem={selectedGuide}
         handlePinToggle={handlePinClick}
-        pinnedItems={Array.from(pinnedGuides)}
         onUpdateTitle={handleUpdateTitle}
-        items={guideBookData}
+        onDeleteItem={handleDeleteItem}
       />
     </div>
   );

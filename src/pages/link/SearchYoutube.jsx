@@ -6,7 +6,7 @@ import '../../css/linkpage/SearchYoutube.css';
 import youtubeIcon from '../../images/YOUTUBE_LOGO.png';
 import Modal from '../../layouts/AlertModal';
 
-const SearchYoutube = ({ linkData, setLinkData }) => {
+const SearchYoutube = ({ linkData, setLinkData, refreshLinks }) => {
     const [searchResults, setSearchResults] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedVideos, setSelectedVideos] = useState([]);
@@ -15,6 +15,7 @@ const SearchYoutube = ({ linkData, setLinkData }) => {
     const [modalMessage, setModalMessage] = useState('');
     const [recentSearches, setRecentSearches] = useState([]);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [currentTravelInfoId, setCurrentTravelInfoId] = useState(null);
     const navigate = useNavigate();
 
     // 상태가 변경될 때마다 localStorage에 저장
@@ -149,39 +150,84 @@ const SearchYoutube = ({ linkData, setLinkData }) => {
         localStorage.removeItem('youtubeSearchResults');
     };
 
-    const handleVideoSelect = (video) => {
-        // 이미 선택된 비디오인지 확인
-        const isAlreadySelected = selectedVideos.some(v => v.url === `https://www.youtube.com/watch?v=${video.id}`);
+    const handleVideoSelect = async (video) => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            navigate('/login');
+            return;
+        }
 
-        if (isAlreadySelected) {
-            // 이미 선택된 비디오라면 제거
-            setSelectedVideos(prev => prev.filter(v => v.url !== `https://www.youtube.com/watch?v=${video.id}`));
+        const videoUrl = `https://www.youtube.com/watch?v=${video.id}`;
+        const exists = selectedVideos.find(v => v.url === videoUrl);
+        let updatedSelection = [];
+        if (exists) {
+            console.log('삭제 요청 전송, videoUrl:', videoUrl);
+            await axios.delete('http://localhost:8080/user/delete', {
+                params: { url: videoUrl },
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            updatedSelection = selectedVideos.filter(v => v.url !== videoUrl);
+            setSelectedVideos(updatedSelection);
+            setLinkData(prev => prev.filter(v => v.url !== videoUrl));
         } else {
-            // 새로운 비디오 선택 시 최대 개수 체크
-            if (linkData.length + selectedVideos.length >= 5) {
+            if (linkData.length >= 5) {
                 setModalMessage('링크는 최대 5개까지만 추가할 수 있습니다.');
                 setModalOpen(true);
                 return;
             }
 
-            // 새로운 비디오 추가
-            const newVideo = {
-                url: `https://www.youtube.com/watch?v=${video.id}`,
-                type: 'youtube',
-                id: Date.now()
-            };
-            setSelectedVideos(prev => [...prev, newVideo]);
-        }
-    };
+            try {
+                const requestPayload = {
+                    url: videoUrl,
+                    title: video.fullTitle || video.title,
+                    author: video.channelTitle
+                };
+                const response = await axios.post('http://localhost:8080/user/save', requestPayload, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                console.log('저장 응답:', response.data);
 
-    const handleSaveSelected = () => {
-        setLinkData(prev => [...prev, ...selectedVideos]);
-        setSelectedVideos([]); // 선택된 비디오 목록 초기화
+                updatedSelection = [...selectedVideos, { ...requestPayload, selected: true }];
+                setSelectedVideos(updatedSelection);
+                setLinkData(prev => [...prev, requestPayload]);
+            } catch (error) {
+                console.error("저장 실패:", error);
+                let msg = '저장 실패';
+                if (error.response && error.response.data) {
+                    msg = error.response.data.message || JSON.stringify(error.response.data);
+                }
+                setModalMessage(msg);
+                setModalOpen(true);
+            }
+        }
+
+        refreshLinks();
     };
 
     // 렌더링 시 현재 상태 확인
     console.log('현재 검색 결과:', searchResults);
     console.log('로딩 상태:', isLoading);
+
+    useEffect(() => {
+        // 백엔드에 저장된 링크 데이터를 가져오는 예시
+        const fetchLinkData = async () => {
+            const token = localStorage.getItem('token');
+            if (!token) return;
+
+            try {
+                const response = await axios.get('http://localhost:8080/user/url/list', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const savedLinks = response.data;
+                setLinkData(savedLinks);
+                setSelectedVideos(savedLinks);
+            } catch (error) {
+                console.error("링크 데이터 불러오기 실패:", error);
+            }
+        };
+
+        fetchLinkData();
+    }, []);
 
     return (
         <div className="WS-SearchYoutube-Tab">
