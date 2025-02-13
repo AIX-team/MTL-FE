@@ -239,7 +239,7 @@ const TravelList = () => {
         <div className="SJ-travel-grid">
           {sortedAndFilteredData.map((item) => (
             <div key={item.id} className="SJ-travel-card">
-                  <Link to={`/travelInfos/${item.travelId}`} className="SJ-travel-card">
+                  <Link to={`/travelInfos/${item.travelId}`} className="HG-travel-card-link">
               
                 {pinnedItems.includes(item.id) && (
                   <div className="SJ-pin-icon">📌</div>
@@ -250,32 +250,33 @@ const TravelList = () => {
               </div>
 
               <div className="SJ-card-content">
-                <div
-                  className={`WS-favorite-button ${
-                    item.favorite ? "filled" : "outlined"
-                  }`}
-                  onClick={() => toggleFavorite(item)}
-                >
-                  {item.favorite ? "♥" : "♡"}
+                <div className="HG-card-content-container">
+                  <div className="SJ-card-header">
+                    <div className="SJ-card-title">{item.title}</div>
+                  </div>
+                  <div className="SJ-card-footer">
+                    <span className="SJ-card-period">여행 장소: {item.placeCount} 개</span>
+                    <span className="SJ-card-date">{item.createAt}</span>
+                  </div>
                 </div>
-
-                <div className="SJ-card-header">
-                  <div className="SJ-card-title">{item.title}</div>
-                </div>
-
-                <div className="SJ-card-footer">
-                  <span className="SJ-card-period">여행 장소: {item.placeCount} 개</span>
-                  <span className="SJ-card-date">{item.createAt}</span>
-                </div>
-
-                <button
-                  className="SJ-more-button"
-                  onClick={() => handleMoreOptionsClick(item.travelId)}
-                >
-                  ⋮
-                </button>
               </div>
-            </Link>
+              </Link>              
+              <div className="HG-favorite-button-container">
+                  <div
+                    className={`WS-favorite-button ${
+                      item.favorite ? "filled" : "outlined"
+                    }`}
+                    onClick={() => toggleFavorite(item)}
+                  >
+                    {item.favorite ? "♥" : "♡"}
+                  </div>
+                  <button
+                    className="SJ-more-button"
+                    onClick={() => handleMoreOptionsClick(item.travelId)}
+                  >
+                    ⋮
+                  </button>
+                </div>
             </div>
           ))}
         </div>
