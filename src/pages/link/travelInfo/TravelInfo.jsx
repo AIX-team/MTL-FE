@@ -21,119 +21,119 @@ const MapComponent = React.memo(({ places }) => {
   if (!places) return null;
 
   const mapContainerStyle = {
-      width: '100%',
-      height: '100%'
+    width: '100%',
+    height: '100%'
   };
 
   // places가 배열인 경우와 단일 객체인 경우 처리
   const isArray = Array.isArray(places);
-  
+
   const center = isArray ? {
-      lat: parseFloat(places[0].latitude),
-      lng: parseFloat(places[0].longitude)
+    lat: parseFloat(places[0].latitude),
+    lng: parseFloat(places[0].longitude)
   } : {
-      lat: parseFloat(places.latitude),
-      lng: parseFloat(places.longitude)
+    lat: parseFloat(places.latitude),
+    lng: parseFloat(places.longitude)
   };
   
   const onLoad = (map) => {
-      if (!window.google) {
-          console.error('Google Maps API not loaded');
+    if (!window.google) {
+      console.error('Google Maps API not loaded');
+      return;
+    }
+
+    try {
+      // bounds 객체 생성            
+      const bounds = new window.google.maps.LatLngBounds();
+
+
+      // 마커 생성 전에 좌표 유효성 로깅
+      places.forEach((place, index) => {
+        const lat = parseFloat(place.latitude);
+        const lng = parseFloat(place.longitude);
+
+        // 좌표 유효성 검사
+        if (isNaN(lat) || isNaN(lng)) {
+          console.error(`Invalid coordinates for place ${place.name}:`, {
+            lat: place.latitude,
+            lng: place.longitude
+          });
           return;
-      }
+        }
 
-      try {
-          // bounds 객체 생성            
-          const bounds = new window.google.maps.LatLngBounds();
+        const position = {
+          lat: lat,
+          lng: lng
+        };
 
+        try {
+          // bounds에 위치 추가 전에 로깅
+          bounds.extend(position);
 
-              // 마커 생성 전에 좌표 유효성 로깅
-              places.forEach((place, index) => {
-                  const lat = parseFloat(place.latitude);
-                  const lng = parseFloat(place.longitude);
+          // 마커 생성
+          const markerView = new window.google.maps.marker.AdvancedMarkerElement({
+            position,
+            map,
+            title: place.name,
+            content: new window.google.maps.marker.PinElement({
+              // glyph: `${index + 1}`,  // place.num 대신 index + 1 사용
+              glyphColor: '#FFFFFF',
+              background: '#4285f4',
+              borderColor: '#4285f4'
+            }).element
+          });
 
-                  // 좌표 유효성 검사
-                  if (isNaN(lat) || isNaN(lng)) {
-                      console.error(`Invalid coordinates for place ${place.name}:`, {
-                          lat: place.latitude,
-                          lng: place.longitude
-                      });
-                      return;
-                  }
-
-                  const position = {
-                      lat: lat,
-                      lng: lng
-                  };
-
-                  try {
-                      // bounds에 위치 추가 전에 로깅
-                      bounds.extend(position);
-
-                      // 마커 생성
-                      const markerView = new window.google.maps.marker.AdvancedMarkerElement({
-                          position,
-                          map,
-                          title: place.name,
-                          content: new window.google.maps.marker.PinElement({
-                              // glyph: `${index + 1}`,  // place.num 대신 index + 1 사용
-                              glyphColor: '#FFFFFF',
-                              background: '#4285f4',
-                              borderColor: '#4285f4'
-                          }).element
-                      });
-
-                      // InfoWindow 설정
-                      markerView.addListener('click', () => {
-                          const infoWindow = new window.google.maps.InfoWindow({
-                              content: `
+          // InfoWindow 설정
+          markerView.addListener('click', () => {
+            const infoWindow = new window.google.maps.InfoWindow({
+              content: `
                                   <div style="padding: 10px;">
                                       <img src="${place.placeImage}" alt="장소 이미지" style="width: 100%; height: 100px; object-fit: cover;">
                                       <p>${place.placeAddress || ''}</p>
                                       <p>${place.intro || ''}</p>
                                   </div>
                               `
-                          });
-                          infoWindow.open(map, markerView);
-                      });
-                  } catch (markerError) {
-                      console.error(`Error creating marker for ${place.name}:`, markerError);
-                  }
-              });
+            });
+            infoWindow.open(map, markerView);
+          });
+        } catch (markerError) {
+          console.error(`Error creating marker for ${place.name}:`, markerError);
+        }
+      });
 
-              // 지도 범위 조정
-              map.fitBounds(bounds);
+      // 지도 범위 조정
+      map.fitBounds(bounds);
 
-              // 줌 레벨 조정
-              const listener = map.addListener('idle', () => {
-                  const currentZoom = map.getZoom();
-                  if (currentZoom > 16) map.setZoom(16);
-                  window.google.maps.event.removeListener(listener);
-              });
-          
-      } catch (error) {
-          console.error('Error in onLoad:', error);
-      }
+      // 줌 레벨 조정
+      const listener = map.addListener('idle', () => {
+        const currentZoom = map.getZoom();
+        if (currentZoom > 16) map.setZoom(16);
+        window.google.maps.event.removeListener(listener);
+      });
+
+    } catch (error) {
+      console.error('Error in onLoad:', error);
+    }
   };
 
   return (
-          <GoogleMap
-              mapContainerStyle={mapContainerStyle}
-              center={center}
-              zoom={13}
-              onLoad={onLoad}
-              options={{
-                  disableDefaultUI: false,
-                  zoomControl: true,
-                  mapTypeControl: true,
-                  scaleControl: true,
-                  streetViewControl: true,
-                  rotateControl: true,
-                  fullscreenControl: true,
-                  mapId: process.env.REACT_APP_GOOGLE_MAPS_ID
-              }}
-          >
-          </GoogleMap>
+    <GoogleMap
+      mapContainerStyle={mapContainerStyle}
+      center={center}
+      zoom={13}
+      onLoad={onLoad}
+      options={{
+        disableDefaultUI: false,
+        zoomControl: true,
+        mapTypeControl: true,
+        scaleControl: true,
+        streetViewControl: true,
+        rotateControl: true,
+        fullscreenControl: true,
+        mapId: process.env.REACT_APP_GOOGLE_MAPS_ID
+      }}
+    >
+    </GoogleMap>
   );
 }, (prevProps, nextProps) => {
   // places 배열의 실제 내용이 변경되었을 때만 리렌더링
@@ -332,13 +332,13 @@ const TravelInfo = () => {
 
   useEffect(() => {
     const timers = [];
-    
+
     if (loading) {
       timers.push(setTimeout(() => setShowLoading(true), 2000));
     } else {
       setShowLoading(false);
     }
-    
+
     if (error) {
       if (timer) {
         clearTimeout(timer);
@@ -481,13 +481,12 @@ const TravelInfo = () => {
                     </div>
                 </div>
 
-                <div className='WS-TravelInfo-Header-Right'>
-                    <span className='HG-TravelInfo-Select-Btn'
-                        onClick={handleSelectBtn}
-                    >선택 </span><img src={planeIcon} alt="selectIcon" /> {/* FEAT: 선택 버튼 선택 여행지 모달 팝업 */}
-                    <span className='HG-TravelInfo-Select-Cnt'>{selectedPlaces.length}</span> {/* DATA: 선택 여행지 갯수 카운트 */}
-                </div>
-            </div>
+        <div className='WS-TravelInfo-Header-Right' onClick={handleSelectBtn}>
+          <span className='HG-TravelInfo-Select-Btn'>선택 </span>
+          <img src={planeIcon} alt="selectIcon" /> {/* FEAT: 선택 버튼 선택 여행지 모달 팝업 */}
+          <span className='HG-TravelInfo-Select-Cnt'>{selectedPlaces.length}</span> {/* DATA: 선택 여행지 갯수 카운트 */}
+        </div>
+      </div>
 
             <div className='HG-TravelInfo-Body'>
                 <div className='HG-travelinfo-Title-list'>
@@ -534,31 +533,32 @@ const TravelInfo = () => {
                     })()}
                 </div>
 
-                <div className='HG-TravelInfo-Type-List'>
-                    <span
-                        className={`${placeType === "landmark" ? 'HG-TravelInfo-Selected-Type' : 'HG-TravelInfo-Unselected-Type'}`}
-                        onClick={() => setPlaceType("landmark")}
-                    >
-                        관광지
-                    </span>
-                    <span
-                        className={`${placeType === "restaurant" ? 'HG-TravelInfo-Selected-Type' : 'HG-TravelInfo-Unselected-Type'}`}
-                        onClick={() => setPlaceType("restaurant")}
-                    >
-                        맛집
-                    </span>
-                    <span className={`${placeType !== "landmark" && placeType !== "restaurant" ? 'HG-TravelInfo-Selected-Type' : 'HG-TravelInfo-Unselected-Type'}`}
-                        onClick={() => setPlaceType("etc")}>
-                        그 외
-                    </span>
-                </div>
-                <div className='HG-TravelInfo-aiselect-btn'>
-                    <span className={`${isAISelected ? 'HG-TravelInfo-aiselect-btn-ai-icon-selected' : 'HG-TravelInfo-aiselect-btn-text'}`}
-                        onClick={handleAISelected}>
-                        <img className={`HG-TravelInfo-aiselect-btn-ai-icon`}
-                            src={aiIcon} alt="aiIcon" />
-                        AI 추천선택</span>
-                </div>
+        <div className='HG-TravelInfo-Type-List'>
+          <span
+            className={`${placeType === "landmark" ? 'HG-TravelInfo-Selected-Type' : 'HG-TravelInfo-Unselected-Type'}`}
+            onClick={() => setPlaceType("landmark")}
+          >
+            관광지
+          </span>
+          <span
+            className={`${placeType === "restaurant" ? 'HG-TravelInfo-Selected-Type' : 'HG-TravelInfo-Unselected-Type'}`}
+            onClick={() => setPlaceType("restaurant")}
+          >
+            맛집
+          </span>
+          <span className={`${placeType !== "landmark" && placeType !== "restaurant" ? 'HG-TravelInfo-Selected-Type' : 'HG-TravelInfo-Unselected-Type'}`}
+            onClick={() => setPlaceType("etc")}>
+            그 외
+          </span>
+        </div>
+        <div className='HG-TravelInfo-aiselect-btn'>
+          <span className={`${isAISelected ? 'HG-TravelInfo-aiselect-btn-ai-icon-selected' : 'HG-TravelInfo-aiselect-btn-text'}`}
+            onClick={handleAISelected}>
+            <img className={`HG-TravelInfo-aiselect-btn-ai-icon`}
+              src={aiIcon} alt="aiIcon" />
+            AI 추천선택</span>
+        </div>
+
 
                 <div className='HG-TravelInfo-Content-Frame-Place-Slider'>
                     {placeList.content.map((item, index) => {
@@ -577,61 +577,53 @@ const TravelInfo = () => {
                                     <span className='HG-trevelinfo-content-frame-select-intro'>{item.intro}</span>
                                 </div>
 
-                                {isComponentMounted && sliderReady && (
-                                    <Slider ref={sliderRef} {...sliderSettings}>
-                                        {/* 첫 번째 슬라이드 - 이미지 */}
-                                        <div className="slide-content">
-                                            <img 
-                                                className="HG-slide-content-image" 
-                                                src={item.placeImage}
-                                                onError={(e) => {
-                                                    e.target.src = 'https://picsum.photos/600/300';
-                                                }}
-                                                alt="placeImage" 
-                                            />
-                                        </div>
-                                        
-                                        {/* 두 번째 슬라이드 - 설명 */}
-                                        <div className="slide-content">
-                                            <span>{item.placeDescription}</span>
-                                            <p>{item.placeAddress}</p>
-                                        </div>
-                                        
-                                        {/* 세 번째 슬라이드 - 지도 */}
-                                        <div className="slide-content">
-                                            {item?.latitude && item?.longitude && (
-                                                <MapComponent 
-                                                    key={`map-${index}`}
-                                                    places={[item]} 
-                                                />
-                                            )}
-                                        </div>
-                                    </Slider>
-                                )}
-                            </div>
-                        ) : null;
-                    })}
-                </div>
-            </div>
-        </main>
+                <Slider {...sliderSettings}>
+                  {/* 첫 번째 슬라이드 */}
+                  <div className="slide-content">
+                    <img className="HG-slide-content-image" src={item.placeImage}
+                      onError={(e) => {
+                        e.target.src = 'https://picsum.photos/600/300';
+                      }}
+                      alt="placeImage" />
+                  </div>
 
-        <TitleEditModal
-            isOpen={isModalOpen}
-            onClose={handleModalClose}
-            travelDays={travelDays}
-            travelInfoTitle={travelInfoTitle}
-            onSave={handleTitleSave}
-        />
+                  {/* 두 번째 슬라이드 */}
+                  <div className="slide-content">
+                    <div className='WS-TravelInfo-Description'>{item.placeDescription}</div>
+                    <div className='WS-TravelInfo-Address'>{item.placeAddress}</div>
+                  </div>
 
-        <div className={`${isSelectModalOpen ? 'HG-TravelInfo-Select-Modal' : 'none'}`}>
-            <SelectModal
-                isOpen={isSelectModalOpen}
-                onClose={handleSelectModalClose}
-                selectedPlaces={selectedPlaces}
-                onPlaceDelete={handlePlaceDelete}
-            />
+                  {/* 세 번째 슬라이드 */}
+                  <div className="slide-content" key={`map-${index}`}>
+                    {item?.latitude && item?.longitude && (
+                      <MapComponent
+                        key={`map-${index}`}
+                        places={[item]} />
+                    )}
+                  </div>
+                </Slider>
+              </div>
+            ) : null;
+          })}
         </div>
-    </div>
+      </div>
+      <TitleEditModal
+        isOpen={isModalOpen}
+        onClose={handleModalClose}
+        travelDays={travelDays}
+        travelInfoTitle={travelInfoTitle}
+        onSave={handleTitleSave}
+      />
+      <div className={`${isSelectModalOpen ? 'HG-TravelInfo-Select-Modal' : 'none'}`}>
+        <SelectModal
+          isOpen={isSelectModalOpen}
+          onClose={handleSelectModalClose}
+          selectedPlaces={selectedPlaces}
+          onPlaceSelect={handlePlaceDelete}
+          travelDays={travelDays}
+        />
+      </div>
+    </main>
   );
 };
 export default TravelInfo; 

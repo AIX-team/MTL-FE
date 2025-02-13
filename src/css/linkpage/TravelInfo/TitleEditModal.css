@@ -3,41 +3,38 @@
   flex-direction: column;
   align-items: center;
 
-  text-align: center;
+  padding: 30px 20px 0px 20px;
 
-  padding-top: 30px;
-  padding-right: 20px;
-  padding-left: 20px;
+  border-radius: var(--border-radius-xl);
 
-  border-radius: 20px;
-
-  width: 300px;
-  height: 240px;
+  width: 80%;
+  max-width: 380px;
+  height: 35%;
+  max-height: 260px;
 
   background-color: white;
 }
 
-.WS-TitleEditModal-header-Container {
-  margin-bottom: 10px;
-  margin-left: 25px;
+.WS-TitleEditModal-Text-Container {
   text-align: left;
+}
 
+.WS-TitleEditModal-header-Container {
+  margin-bottom: 4%;
   width: 100%;
 }
 
 .HG-modal-title {
+  position: relative;
+  left: -18.5%;
+
   font-size: var(--font-size-xl);
   font-weight: bold;
   color: var(--color-dark-gray);
-
-  margin-bottom: 10px;
 }
 
 .WS-TitleEditModal-Body-Container {
-  margin-bottom: 30px;
-  margin-left: 25px;
-  text-align: left;
-
+  margin-bottom: 10%;
   width: 100%;
 }
 
@@ -58,15 +55,14 @@
 .WS-TitleEditModal-Date-input {
   width: 40px;
 
-  padding: 10px;
-  padding-left: 20px;
+  padding: 10px 10px 10px 15px;
 
   text-align: left;
   font-weight: bold;
   font-size: var(--font-size-base);
   color: var(--color-guide);
 
-  border-radius: 15px;
+  border-radius: var(--border-radius-full);
   border: 2px solid var(--color-guide);
 }
 
@@ -92,11 +88,9 @@
 
 .WS-TitleEditModal-input {
   margin-left: 15px;
-  width: 180px;
+  width: 150px;
 
-  padding-top: 10px;
-  padding-bottom: 5px;
-  padding-left: 10px;
+  padding: 10px 30px 5px 10px;
 
   font-weight: bold;
   font-size: var(--font-size-base);
@@ -114,7 +108,7 @@
   display: flex;
   align-items: center;
 
-  width: 113%;
+  width: 110%;
   height: 100%;
   border-top: 2px solid var(--color-light-gray);
 }

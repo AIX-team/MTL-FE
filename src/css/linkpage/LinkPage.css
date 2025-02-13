@@ -1,25 +1,24 @@
 .WS-Link-Page {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
-    margin-top: 1vh;
-    height: 100%;
+  margin-top: 1vh;
+  height: 100%;
 
-    background-color: white;
+  background-color: white;
 }
 
 .WS-Link-Tab-Container {
     position: absolute;
-    top: 1vh;
 
-    width: 96%;
+  width: 96%;
 }
 
 .WS-Link-Tabs {
-    display: flex;
-    justify-content: space-around;
-    border-bottom: 2px solid var(--color-light-gray);
+  display: flex;
+  justify-content: space-around;
+  border-bottom: 2px solid var(--color-light-gray);
 }
 
 /* 각 탭의 기본 스타일 */
@@ -38,7 +37,6 @@
 .WS-Link-Tab.active {
     color: var(--color-main-hover);
     font-weight: 900;
-    scale: 1.05;
 }
 
 .WS-Link-Tab-Content {

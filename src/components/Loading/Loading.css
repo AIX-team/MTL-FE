@@ -19,7 +19,7 @@
 
 /* 지구 로딩바 사이*/
 .SJ_loading_image_container {
-  height: 175px;
+  height: 180px;
   position: relative;
   display: flex;
   justify-content: center;
@@ -34,7 +34,7 @@
   top: 70%;
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
-  transition: opacity 0.3s ease; /* 이미지 전환 효과 추가 */
+  transition: opacity 0.2s ease; /* 이미지 전환 효과 추가 */
 }
 
 .SJ_progress_wrapper {
