@@ -1,7 +1,7 @@
 // React 및 필요한 라이브러리 import
 import React, { useState, useEffect, forwardRef, useCallback, useRef } from 'react';
 import { usePDF } from 'react-to-pdf';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { GoogleMap, Polyline } from '@react-google-maps/api';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
@@ -174,6 +174,7 @@ const GuideBook = () => {
     const [showDetailModal, setShowDetailModal] = useState(false);
     const [selectedPlace, setSelectedPlace] = useState(null);
     const { guidebookId } = useParams();
+    const navigate = useNavigate();
     const isPlaceNumChanged = (oldPlaces, newPlaces) => {
         if (oldPlaces.length !== newPlaces.length) {
             return true;
@@ -589,7 +590,10 @@ const GuideBook = () => {
                 <div className="WS-GuideBook-Header-Left-Container">
                     <div className="WS-GuideBook-Header-Back-Btn-Container">
                         <Link to={`/travelInfos/${guideBook.travelInfoId}`}>
-                            <img className="WS-GuideBook-Header-Back-Btn" src={backArrow} alt="뒤로가기" />
+                            <img className="WS-GuideBook-Header-Back-Btn" 
+                            src={backArrow} 
+                            alt="뒤로가기" 
+                            onClick={() => navigate(-1)} />
                         </Link>
                     </div>
 
