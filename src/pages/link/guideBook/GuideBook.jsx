@@ -165,7 +165,8 @@ const GuideBook = () => {
     // 상태 변수 정의
     const [activeTab, setActiveTab] = useState(1); // 현재 활성화된 코스 탭
     const [isEditMode, setIsEditMode] = useState(false); // 편집 모드 활성화 여부
-    const [showCopyModal, setShowCopyModal] = useState(false); // 이동 모달 표시 여부
+    const [showMoveModal, setShowMoveModal] = useState(false); // 이동 모달 표시 여부
+    const [showCopyModal, setShowCopyModal] = useState(false); // 복사 모달 표시 여부
     const [showDeleteModal, setShowDeleteModal] = useState(false); // 삭제 모달 표시 여부
     const [selectedItems, setSelectedItems] = useState([]); // 선택된 장소들
     const [targetCourse, setTargetCourse] = useState([]); // 이동할 대상 코스
@@ -291,8 +292,14 @@ const GuideBook = () => {
 
     // 이동 버튼 클릭 핸들러
     const handleMoveClick = () => {
-        setShowCopyModal(true); // 이동 모달 표시
+        setShowMoveModal(true); // 이동 모달 표시
     };
+
+    const handleCopyClick = () => {
+
+        setShowCopyModal(true); // 복사 모달 표시
+    };
+
 
     // 대상 코스 선택 핸들러
     const handleTargetCourseSelect = (courseNumber) => {
@@ -335,7 +342,8 @@ const GuideBook = () => {
                     courseIds: targetCourse,
                     placeIds: selectedItems,
                 });
-                setShowCopyModal(false); // 이동 모달 닫기
+                setShowMoveModal(false); // 이동 모달 닫기
+                setShowCopyModal(false); // 복사 모달 닫기
                 setIsEditMode(false); // 편집 모드 해제
             } catch (error) {
                 console.error('Error moving places:', error);
@@ -381,6 +389,7 @@ const GuideBook = () => {
                     };
                 });
 
+                setShowMoveModal(false); // 이동 모달 닫기
                 setShowCopyModal(false);
                 setIsEditMode(false);
                 setSelectedItems([]);
@@ -438,8 +447,10 @@ const GuideBook = () => {
 
     // 모달 닫기 핸들러
     const handleModalClose = () => {
-        setShowCopyModal(false); // 이동 모달 닫기
+        setShowMoveModal(false); // 이동 모달 닫기
+        setShowCopyModal(false); // 복사 모달 닫기
         setShowDeleteModal(false); // 삭제 모달 닫기
+        setIsEditMode(false); // 편집 모드 해제
     };
 
     // 체크박스 변경 핸들러
@@ -612,11 +623,9 @@ const GuideBook = () => {
 
             </div>
 
-
-
-            <div className="WS-GuideBookList-menus">
+            <div className="WS-GuideBook-Body">
                 {/* 구글 맵 예시로 띄워 놓은 것이니, 장소에 대한 좌표를 받은후 맵을 띄워주는 것으로 변경 필요, 마커 + 마커끼리 연결 필요 */}
-                <div className="YC-GuideBookList-map">
+                <div className="WS-GuideBook-Map">
                     {places && places.length > 0 && (
                         <MapComponent
                             key={`map-${activeTab}-${places.length}-${mapKey}`}
@@ -625,53 +634,91 @@ const GuideBook = () => {
                     )}
                 </div>
 
-                <div className="YC-GuideBookList-menus-menu">
-                    {Object.keys(guideBook.courses).map((courseNumber) => (
-                        <button
-                            key={courseNumber}
-                            className={activeTab === Number(courseNumber) + 1 ? 'WS-button-clicked' : 'WS-GuideBookList-menus-menu-button'}
-                            onClick={() => handleTabClick(courseNumber)}
-                        >
-                            코스 {Number(courseNumber) + 1}
+                <div className="WS-GuideBook-Button-Container">
+                    <div className="WS-GuideBook-Buttons-On-Container">
+                        {Object.keys(guideBook.courses).map((courseNumber) => (
+                            <button
+                                key={courseNumber}
+                                className={activeTab === Number(courseNumber) + 1 ? 'WS-GuideBook-Button-Clicked' : 'WS-GuideBook-Button-Not-Clicked'}
+                                onClick={() => handleTabClick(courseNumber)}
+                            >
+                                코스 {Number(courseNumber) + 1}
+                            </button>
+                        ))}
+                    </div>
+
+                    <div className="WS-GuideBook-Buttons-Under-Container">
+                        <button className="WS-GuideBook-Button-EditBtn" onClick={handleEditClick}>
+                            {isEditMode ? '완료' : '편집'}
                         </button>
-                    ))}
+                    </div>
                 </div>
 
-                <div className="WS-GuideBookList-menus-editBtn-Container">
-                    <button className="YC-GuideBookList-menus-editBtn-edit" onClick={handleEditClick}>
-                        {isEditMode ? '완료' : '편집'}
-                    </button>
-                </div>
-
-                <div className="YC-GuideBookList-content">
+                <div className="WS-GuideBook-Contents-List">
                     {renderContent()}
                 </div>
                 {isEditMode && selectedItems.length > 0 && (
-                    <div className="YC-GuideBookList-editOptions">
-                        <div onClick={handleMoveClick}>장소 복사</div>
-                        <div onClick={handleDeleteClick}>삭제</div>
+                    <div className="WS-Modal-Overlay" onClick={handleModalClose}>
+                        <div className='WS-Modal-Bottom' onClick={e => e.stopPropagation()}>
+                            <div className="WS-Modal-Option" onClick={handleMoveClick}>
+                                <span className="SJ-modal-icon">🔀</span>
+                                이동
+                            </div>
+                            <div className="WS-Modal-Option" onClick={handleCopyClick}>
+                                <span className="SJ-modal-icon">📄</span>
+                                장소 복사</div>
+                            <div className="WS-Modal-Option" onClick={handleDeleteClick}>
+                                <span className="SJ-modal-icon">🗑️</span>
+                                삭제</div>
+                        </div>
                     </div>
                 )}
-
             </div>
 
+            {/* 장소 이동 모달 */}
+            {showMoveModal && (
+                <div className="WS-second-Modal-Overlay" onClick={handleModalClose}>
+                    <div className='WS-Modal-Bottom' onClick={e => e.stopPropagation()}>
+                        <div className="WS-Modal-Option">
+                            <div>
+                                이동할 코스 아이코스
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {/* 장소 복사 모달 */}
             {showCopyModal && (
-                <div className="YC-GuideBookList-moveModal">
-                    <p id="YC-GuideBookList-moveModal-title">다른 코스로 복사하시겠습니까?</p>
-
-                    {Object.keys(guideBook.courses).filter(courseNum => Number(courseNum) + 1 !== activeTab).map((courseNumber) => (
-                        <div className='HG-Select-Course' key={courseNumber}>
-                            <input type="checkbox" className='HG-Select-Course-checkbox' onChange={() => handleTargetCourseSelect(guideBook.courses[courseNumber].courseId)} />
-                            코스 {Number(courseNumber) + 1}
+                <div className="WS-second-Modal-Overlay" onClick={handleModalClose}>
+                    <div className='WS-Modal-Bottom' onClick={e => e.stopPropagation()}>
+                        <div className="WS-Modal-Option">
+                            {Object.keys(guideBook.courses).filter(courseNum => Number(courseNum) + 1 !== activeTab).map((courseNumber) => (
+                                <div className='HG-Select-Course' key={courseNumber}>
+                                    <input type="checkbox" className='HG-Select-Course-checkbox' onChange={() => handleTargetCourseSelect(guideBook.courses[courseNumber].courseId)} />
+                                    코스 {Number(courseNumber) + 1}
+                                </div>
+                            ))}
                         </div>
-                    ))}
 
-                    <button id="YC-GuideBookList-moveModal-confirm" onClick={handlePlaceAdd} disabled={!targetCourse}>예</button>
-                    <button id="YC-GuideBookList-moveModal-cancel" onClick={handleModalClose}>아니오</button>
+                        <div className="WS-Modal-Option">
+                            {Object.keys(guideBook.courses).filter(courseNum => Number(courseNum) + 1 !== activeTab).map((courseNumber) => (
+                                <div className='HG-Select-Course' key={courseNumber}>
+                                    <input type="checkbox" className='HG-Select-Course-checkbox' onChange={() => handleTargetCourseSelect(guideBook.courses[courseNumber].courseId)} />
+                                    복사본 {Number(courseNumber) + 1}
+                                </div>
+                            ))}
+                        </div>
+
+                        <div className="WS-second-Modal-Button-Container">
+                            <button className="WS-Copy-Modal-Button" onClick={handleModalClose}>취소</button>
+                            <button className="WS-Copy-Modal-Button" onClick={handlePlaceAdd} disabled={!targetCourse}>복사</button>
+                        </div>
+                    </div>
                 </div>
             )}
+
+
             {/* 제목 편집 모달 */}
             {isTitleEditModalOpen && (
                 <TitleEditModal
@@ -685,14 +732,17 @@ const GuideBook = () => {
             {/* 삭제 모달 */}
             {
                 showDeleteModal && (
-                    <div className="YC-GuideBookList-deleteModal">
-                        <div className="YC-GuideBookList-deleteModal-content">
-                            <p id="YC-GuideBookList-deleteModal-title">삭제하시겠습니까?</p>
-                            <p id="YC-GuideBookList-deleteModal-description">삭제된 장소는 복구할 수 없습니다.</p>
-                        </div>
-                        <div className="YC-GuideBookList-deleteModal-buttons">
-                            <button id="YC-GuideBookList-deleteModal-cancel" onClick={handleModalClose}>취소</button>
-                            <button id="YC-GuideBookList-deleteModal-confirm" onClick={handleDeleteConfirm}>확인</button>
+                    <div className="WS-second-Modal-Overlay">
+                        <div id="WS-Delete-Modal-Content">
+                            <div className="WS-Delete-Modal-Message-Container">
+                                <div className="WS-Delete-Modal-Title">삭제하시겠습니까?</div>
+                                <div className="WS-Delete-Modal-Message">삭제된 장소는 복구할 수 없습니다.</div>
+                            </div>
+
+                            <div className="WS-second-Modal-Button-Container">
+                                <button className="WS-second-Modal-Button" onClick={handleModalClose}>취소</button>
+                                <button className="WS-second-Modal-Button" onClick={handleDeleteConfirm}>확인</button>
+                            </div>
                         </div>
                     </div>
                 )

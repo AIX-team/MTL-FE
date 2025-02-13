@@ -35,7 +35,7 @@ const MapComponent = React.memo(({ places }) => {
     lat: parseFloat(places.latitude),
     lng: parseFloat(places.longitude)
   };
-  
+
   const onLoad = (map) => {
     if (!window.google) {
       console.error('Google Maps API not loaded');
@@ -364,11 +364,11 @@ const TravelInfo = () => {
 
   useEffect(() => {
     if (isComponentMounted) {
-        const timer = setTimeout(() => {
-            setSliderReady(true);
-        }, 100);
-        
-        return () => clearTimeout(timer);
+      const timer = setTimeout(() => {
+        setSliderReady(true);
+      }, 100);
+
+      return () => clearTimeout(timer);
     }
   }, [isComponentMounted]);
 
@@ -390,15 +390,15 @@ const TravelInfo = () => {
     initialSlide: 0,
     waitForAnimate: false,
     beforeChange: (current, next) => {
-        setCurrentSlide(next);
-        if (Math.abs(current - next) === 2) {
-            if (sliderRef.current) {
-                sliderRef.current.slickGoTo(next);
-            }
+      setCurrentSlide(next);
+      if (Math.abs(current - next) === 2) {
+        if (sliderRef.current) {
+          sliderRef.current.slickGoTo(next);
         }
+      }
     },
     swipe: currentSlide !== 2  // 세 번째 슬라이드에서 스와이프 비활성화
-};
+  };
 
   const handleSpanClick = (num) => {
     if (num === 1) {
@@ -472,130 +472,130 @@ const TravelInfo = () => {
                         onClick={() => navigate(-1)} />
                     </div>
 
-                    <div className='WS-TravelInfo-Header-Left-Contents'>
-                        <div className='WS-TravelInfo-Travel-Days'>{travelDays}일</div>
+            <div className='WS-TravelInfo-Header-Left-Contents'>
+              <div className='WS-TravelInfo-Travel-Days'>{travelDays}일</div>
 
-                        <div className='HG-TravelInfo-Title-Edit-Container'>
-                            <div className='HG-TravelInfo-Title'>{travelInfoTitle}</div>
-                            <span className='HG-TravelInfo-Title-Edit-text'
-                                onClick={handleTitleEdit}
-                            >편집</span>
-                        </div>
+              <div className='HG-TravelInfo-Title-Edit-Container'>
+                <div className='HG-TravelInfo-Title'>{travelInfoTitle}</div>
+                <span className='HG-TravelInfo-Title-Edit-text'
+                  onClick={handleTitleEdit}
+                >편집</span>
+              </div>
 
+            </div>
+          </div>
+
+          <div className='WS-TravelInfo-Header-Right' onClick={handleSelectBtn}>
+            <span className='HG-TravelInfo-Select-Btn'>선택 </span>
+            <img src={planeIcon} alt="selectIcon" /> {/* FEAT: 선택 버튼 선택 여행지 모달 팝업 */}
+            <span className='HG-TravelInfo-Select-Cnt'>{selectedPlaces.length}</span> {/* DATA: 선택 여행지 갯수 카운트 */}
+          </div>
+        </div>
+
+        <div className='HG-TravelInfo-Body'>
+          <div className='HG-travelinfo-Title-list'>
+            <span className={`HG-travelinfo-content-frame-url ${activeSpan === 1 ? 'HG-underline' : ''}`} onClick={() => handleSpanClick(1)}>
+              전체보기
+            </span>
+            {travelInfo.urlList.map((item, index) => (
+              item.urlAddress.includes("youtube") ?
+                <span
+                  className={`HG-travelinfo-content-frame-url ${activeSpan === `${index + 2}` ? 'HG-underline' : ''}`}
+                  key={index}
+                  onClick={() => handleSpanClick(`${index + 2}`)}
+                >
+                  영상{index + 1}
+                </span>
+                :
+                <span
+                  className={`HG-travelinfo-content-frame-url ${activeSpan === `${index + 2}` ? 'HG-underline' : ''}`}
+                  key={index}
+                  onClick={() => handleSpanClick(`${index + 2}`)}
+                >
+                  블로그{index + 1}
+                </span>
+            ))}
+          </div>
+
+          <div className={` ${activeSpan === 1 ? 'HG-TravelInfo-Content-Blank' : 'HG-TravelInfo-Content-Title'}`}>
+            {(() => {
+              try {
+                if (activeSpan === 1) {
+                  return '';
+                }
+
+                const index = activeSpan - 2;
+                if (index < 0 || index >= travelInfo.urlList.length) {
+                  return '제목을 찾을 수 없습니다'; // 기본값 설정
+                }
+
+                return travelInfo.urlList[index].title;
+              } catch (error) {
+                console.error('제목 표시 중 오류 발생:', error);
+                return '제목을 불러오는 중 오류가 발생했습니다';
+              }
+            })()}
+          </div>
+
+          <div className='HG-TravelInfo-Type-List'>
+            <span
+              className={`${placeType === "landmark" ? 'HG-TravelInfo-Selected-Type' : 'HG-TravelInfo-Unselected-Type'}`}
+              onClick={() => setPlaceType("landmark")}
+            >
+              관광지
+            </span>
+            <span
+              className={`${placeType === "restaurant" ? 'HG-TravelInfo-Selected-Type' : 'HG-TravelInfo-Unselected-Type'}`}
+              onClick={() => setPlaceType("restaurant")}
+            >
+              맛집
+            </span>
+            <span className={`${placeType !== "landmark" && placeType !== "restaurant" ? 'HG-TravelInfo-Selected-Type' : 'HG-TravelInfo-Unselected-Type'}`}
+              onClick={() => setPlaceType("etc")}>
+              그 외
+            </span>
+          </div>
+          <div className='HG-TravelInfo-aiselect-btn'>
+            <span className={`${isAISelected ? 'HG-TravelInfo-aiselect-btn-ai-icon-selected' : 'HG-TravelInfo-aiselect-btn-text'}`}
+              onClick={handleAISelected}>
+              <img className={`HG-TravelInfo-aiselect-btn-ai-icon`}
+                src={aiIcon} alt="aiIcon" />
+              AI 추천선택</span>
+          </div>
+
+
+          <div className='HG-TravelInfo-Content-Frame-Place-Slider'>
+            {placeList.content.map((item, index) => {
+              const isEtcType = placeType === 'etc' && item.placeType !== 'landmark' && item.placeType !== 'restaurant';
+              const isMatchingType = item.placeType === placeType;
+
+              return (isMatchingType || isEtcType) ? (
+                <div key={index} className={`WS-carousel-item ${selectedPlaces.some(selected => selected.placeId === item.placeId) ? 'HG-select-place' : ''}`}>
+                  <div className='HG-trevelinfo-select-Container' onClick={() => handlePlaceClick(item)}>
+                    <img
+                      className='HG-trevelinfo-content-frame-select'
+                      src={`${selectedPlaces.some(selected => selected.placeId === item.placeId) ? isSelectedIcon : selectIcon}`}
+                      alt="selectIcon"
+                    />
+                    <span className='HG-trevelinfo-content-frame-select-name'>{item.placeName}</span>
+                    <span className='HG-trevelinfo-content-frame-select-intro'>{item.intro}</span>
+                  </div>
+
+                  <Slider {...sliderSettings}>
+                    {/* 첫 번째 슬라이드 */}
+                    <div className="slide-content">
+                      <img className="HG-slide-content-image" src={item.placeImage}
+                        onError={(e) => {
+                          e.target.src = 'https://picsum.photos/600/300';
+                        }}
+                        alt="placeImage" />
                     </div>
-                </div>
 
-        <div className='WS-TravelInfo-Header-Right' onClick={handleSelectBtn}>
-          <span className='HG-TravelInfo-Select-Btn'>선택 </span>
-          <img src={planeIcon} alt="selectIcon" /> {/* FEAT: 선택 버튼 선택 여행지 모달 팝업 */}
-          <span className='HG-TravelInfo-Select-Cnt'>{selectedPlaces.length}</span> {/* DATA: 선택 여행지 갯수 카운트 */}
-        </div>
-      </div>
-
-            <div className='HG-TravelInfo-Body'>
-                <div className='HG-travelinfo-Title-list'>
-                    <span className={`HG-travelinfo-content-frame-url ${activeSpan === 1 ? 'HG-underline' : ''}`} onClick={() => handleSpanClick(1)}>
-                        전체보기
-                    </span>
-                    {travelInfo.urlList.map((item, index) => (
-                        item.urlAddress.includes("youtube") ?
-                            <span
-                                className={`HG-travelinfo-content-frame-url ${activeSpan === `${index + 2}` ? 'HG-underline' : ''}`}
-                                key={index}
-                                onClick={() => handleSpanClick(`${index + 2}`)}
-                            >
-                                영상{index + 1}
-                            </span>
-                            :
-                            <span
-                                className={`HG-travelinfo-content-frame-url ${activeSpan === `${index + 2}` ? 'HG-underline' : ''}`}
-                                key={index}
-                                onClick={() => handleSpanClick(`${index + 2}`)}
-                            >
-                                블로그{index + 1}
-                            </span>
-                    ))}
-                </div>
-
-                <div className={` ${activeSpan === 1 ? 'HG-TravelInfo-Content-Blank' : 'HG-TravelInfo-Content-Title'}`}>
-                    {(() => {
-                        try {
-                            if (activeSpan === 1) {
-                                return '';
-                            }
-
-                            const index = activeSpan - 2;
-                            if (index < 0 || index >= travelInfo.urlList.length) {
-                                return '제목을 찾을 수 없습니다'; // 기본값 설정
-                            }
-
-                            return travelInfo.urlList[index].title;
-                        } catch (error) {
-                            console.error('제목 표시 중 오류 발생:', error);
-                            return '제목을 불러오는 중 오류가 발생했습니다';
-                        }
-                    })()}
-                </div>
-
-        <div className='HG-TravelInfo-Type-List'>
-          <span
-            className={`${placeType === "landmark" ? 'HG-TravelInfo-Selected-Type' : 'HG-TravelInfo-Unselected-Type'}`}
-            onClick={() => setPlaceType("landmark")}
-          >
-            관광지
-          </span>
-          <span
-            className={`${placeType === "restaurant" ? 'HG-TravelInfo-Selected-Type' : 'HG-TravelInfo-Unselected-Type'}`}
-            onClick={() => setPlaceType("restaurant")}
-          >
-            맛집
-          </span>
-          <span className={`${placeType !== "landmark" && placeType !== "restaurant" ? 'HG-TravelInfo-Selected-Type' : 'HG-TravelInfo-Unselected-Type'}`}
-            onClick={() => setPlaceType("etc")}>
-            그 외
-          </span>
-        </div>
-        <div className='HG-TravelInfo-aiselect-btn'>
-          <span className={`${isAISelected ? 'HG-TravelInfo-aiselect-btn-ai-icon-selected' : 'HG-TravelInfo-aiselect-btn-text'}`}
-            onClick={handleAISelected}>
-            <img className={`HG-TravelInfo-aiselect-btn-ai-icon`}
-              src={aiIcon} alt="aiIcon" />
-            AI 추천선택</span>
-        </div>
-
-
-                <div className='HG-TravelInfo-Content-Frame-Place-Slider'>
-                    {placeList.content.map((item, index) => {
-                        const isEtcType = placeType === 'etc' && item.placeType !== 'landmark' && item.placeType !== 'restaurant';
-                        const isMatchingType = item.placeType === placeType;
-
-                        return (isMatchingType || isEtcType) ? (
-                            <div key={index} className={`WS-carousel-item ${selectedPlaces.some(selected => selected.placeId === item.placeId) ? 'HG-select-place' : ''}`}>
-                                <div className='HG-trevelinfo-select-Container' onClick={() => handlePlaceClick(item)}>
-                                    <img 
-                                        className='HG-trevelinfo-content-frame-select' 
-                                        src={`${selectedPlaces.some(selected => selected.placeId === item.placeId) ? isSelectedIcon : selectIcon}`} 
-                                        alt="selectIcon" 
-                                    />
-                                    <span className='HG-trevelinfo-content-frame-select-name'>{item.placeName}</span>
-                                    <span className='HG-trevelinfo-content-frame-select-intro'>{item.intro}</span>
-                                </div>
-
-                <Slider {...sliderSettings}>
-                  {/* 첫 번째 슬라이드 */}
-                  <div className="slide-content">
-                    <img className="HG-slide-content-image" src={item.placeImage}
-                      onError={(e) => {
-                        e.target.src = 'https://picsum.photos/600/300';
-                      }}
-                      alt="placeImage" />
-                  </div>
-
-                  {/* 두 번째 슬라이드 */}
-                  <div className="slide-content">
-                    <div className='WS-TravelInfo-Description'>{item.placeDescription}</div>
-                    <div className='WS-TravelInfo-Address'>{item.placeAddress}</div>
-                  </div>
+                    {/* 두 번째 슬라이드 */}
+                    <div className="slide-content">
+                      <div className='WS-TravelInfo-Description'>{item.placeDescription}</div>
+                      <div className='WS-TravelInfo-Address'>{item.placeAddress}</div>
+                    </div>
 
                   {/* 세 번째 슬라이드 */}
                   <div className="slide-content" key={`map-${index}`}>
