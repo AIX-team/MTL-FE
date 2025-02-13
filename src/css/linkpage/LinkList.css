@@ -33,9 +33,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-
   margin: 15% auto 30% auto;
-
   gap: 10px;
 }
 
@@ -61,9 +59,7 @@
 
 .WS-LinkList-Badge {
   margin-right: 3%;
-
   padding: 4% 4% 3.5% 4%;
-
   width: 20%;
   text-align: center;
   border-radius: var(--border-radius-full);
@@ -103,26 +99,11 @@
 
   background-color: white;
   color: var(--color-dark-gray);
-  font-size: 16px;
-  border-radius: 50%;
-
+  font-size: var(--font-size-sm);
+  border-radius: var(--border-radius-full);
   border: none;
-  width: 24px;
-  height: 24px;
-  min-width: 24px; /* 추가 */
-  min-height: 24px; /* 추가 */
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
   cursor: pointer;
-  margin-left: 1px; /* SJ 링크 왼편 여백 조정 */
-  transition: background-color 0.2s;
-  
-  padding: 0; /* SJ 추가 패딩 제거 */
-  flex-shrink: 0; /* 추가: 버튼 크기가 줄어들지 않도록 */
-  position: relative; /* 추가 */
-  right: 2px; /* 추가: 오른쪽에서 2px 여백 */
 }
 
 .WS-LinkList-DeleteButton:hover {

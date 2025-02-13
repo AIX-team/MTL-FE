@@ -11,7 +11,6 @@ const axiosInstance = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
   headers: {
     "Content-Type": "application/json",
-    "Content-Type": "application/json",
   },
 });
 
@@ -22,15 +21,7 @@ const SelectModal = ({
   onPlaceSelect,
   travelDays,
 }) => {
-const SelectModal = ({
-  isOpen,
-  onClose,
-  selectedPlaces,
-  onPlaceSelect,
-  travelDays,
-}) => {
   const [isSelected, setIsSelected] = useState([]);
-  const [selectedFilters, setSelectedFilters] = useState(["전체보기"]);
   const [selectedFilters, setSelectedFilters] = useState(["전체보기"]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState(null);
@@ -42,25 +33,17 @@ const SelectModal = ({
     관광지: "landmark",
     "음식/카페": "restaurant",
     "그 외": "etc",
-    전체보기: ["all", "landmark", "restaurant", "etc"],
-    관광지: "landmark",
-    "음식/카페": "restaurant",
-    "그 외": "etc",
   };
 
   const postGuidebook = async (travelTaste) => {
     try {
       const response = await axiosInstance.post("/api/v1/travels/guidebook", {
         placeIds: isSelected.map((place) => place.placeId),
-      const response = await axiosInstance.post("/api/v1/travels/guidebook", {
-        placeIds: isSelected.map((place) => place.placeId),
         travelDays: travelDays,
-        travelTaste: travelTaste,
         travelTaste: travelTaste,
       });
       console.log(response);
     } catch (error) {
-      console.error("API Error:", error);
       console.error("API Error:", error);
     }
   };
@@ -68,15 +51,9 @@ const SelectModal = ({
   const handlePlaceSelect = (placeId) => {
     setIsSelected((prev) => {
       const isExist = prev.some((item) => item.placeId === placeId);
-    setIsSelected((prev) => {
-      const isExist = prev.some((item) => item.placeId === placeId);
       if (isExist) {
         return prev.filter((item) => item.placeId !== placeId);
-        return prev.filter((item) => item.placeId !== placeId);
       }
-      const selectedPlace = selectedPlaces.find(
-        (place) => place.placeId === placeId
-      );
       const selectedPlace = selectedPlaces.find(
         (place) => place.placeId === placeId
       );
@@ -112,15 +89,11 @@ const SelectModal = ({
 
   const handleDelete = () => {
     if (deleteTarget === "all") {
-    if (deleteTarget === "all") {
       setIsSelected([]);
       onPlaceSelect([]); // 전체 삭제 시 빈 배열 전달
     } else if (deleteTarget) {
       handlePlaceSelect(deleteTarget);
       // selectedPlaces에서 해당 항목을 제외한 새 배열을 생성하여 전달
-      const updatedPlaces = selectedPlaces.filter(
-        (place) => place.placeId !== deleteTarget
-      );
       const updatedPlaces = selectedPlaces.filter(
         (place) => place.placeId !== deleteTarget
       );
@@ -132,7 +105,6 @@ const SelectModal = ({
 
   // 삭제 버튼 클릭 핸들러
   const handleDeleteClick = (placeId) => {
-    setDeleteTarget(placeId || "all");
     setDeleteTarget(placeId || "all");
     setShowDeleteModal(true);
   };
@@ -164,15 +136,12 @@ const SelectModal = ({
   useEffect(() => {
     if (isOpen) {
       document.body.classList.add("modal-open");
-      document.body.classList.add("modal-open");
     } else {
-      document.body.classList.remove("modal-open");
       document.body.classList.remove("modal-open");
     }
 
     // 컴포넌트 언마운트 시 클래스 제거
     return () => {
-      document.body.classList.remove("modal-open");
       document.body.classList.remove("modal-open");
     };
   }, [isOpen]);
@@ -211,53 +180,6 @@ const SelectModal = ({
         <div className="HG-select-modal-title-sub">
           평점/리뷰가 좋고 동선이 가까운 순으로 추천됩니다.
         </div>
-      </div>
-      <div className="HG-select-modal-filter">
-        <div className="HG-select-modal-filter-btns">
-          {["전체보기", "관광지", "음식/카페", "그 외"].map((filter) => (
-            <span
-              key={filter}
-              className={`HG-select-modal-filter-btn ${
-                selectedFilters.includes(filter) ? "active" : ""
-              }`}
-              onClick={() => handleFilterSelect(filter)}
-            >
-              <input
-                value={filterTypeMap[filter]}
-                type="checkbox"
-                checked={selectedFilters.includes(filter)}
-                onChange={() => {}}
-              />
-              {filter}
-            </span>
-          ))}
-        </div>
-        <div className="HG-select-modal-select-frame">
-          <span
-            className="HG-select-modal-select-btn"
-            onClick={() =>
-              setIsSelected((prev) =>
-                prev.length === selectedPlaces.length ? [] : selectedPlaces
-              )
-            }
-          >
-            <img
-              src={
-                selectedPlaces.length > 0 &&
-                isSelected.length === selectedPlaces.length
-                  ? isSelectedIcon
-                  : allSelectIcon
-              }
-              alt="selectIcon"
-            />
-            전체 선택
-          </span>
-          <span
-            className="HG-select-modal-select-delete"
-            onClick={() => handleDeleteClick()}
-          >
-            선택 삭제
-          </span>
       </div>
       <div className="HG-select-modal-filter">
         <div className="HG-select-modal-filter-btns">
@@ -352,36 +274,6 @@ const SelectModal = ({
                           }}
                           alt="placeImage"
                         />
-          return (
-            placesOfType.length > 0 && (
-              <div className="HG-select-modal-select-list-type" key={type}>
-                <div className="HG-select-modal-type-header">{koreanType}</div>
-                {placesOfType.map((place, index) => (
-                  <div key={index} className="HG-select-modal-select-list-item">
-                    <div className="HG-select-modal-select-list-item-content">
-                      <span>
-                        <img
-                          className="HG-trevelinfo-content-frame-select"
-                          onClick={() => handlePlaceSelect(place.placeId)}
-                          src={
-                            isSelected.some(
-                              (item) => item.placeId === place.placeId
-                            )
-                              ? isSelectedIcon
-                              : selectIcon
-                          }
-                          alt="selectIcon"
-                        />
-                      </span>
-                      <span onClick={() => handlePlaceSelect(place.placeId)}>
-                        <img
-                          className="HG-select-modal-select-list-item-place-img"
-                          src={place.placeImage}
-                          onError={(e) => {
-                            e.target.src = "https://picsum.photos/600/300";
-                          }}
-                          alt="placeImage"
-                        />
                       </span>
                       <div onClick={() => handlePlaceSelect(place.placeId)}>
                         <div className="HG-select-modal-select-list-item-place-info-name">
@@ -390,19 +282,7 @@ const SelectModal = ({
                         <div className="HG-select-modal-select-list-item-place-info-intro">
                           {place.intro}
                         </div>
-                        <div className="HG-select-modal-select-list-item-place-info-name">
-                          {place.placeName}
-                        </div>
-                        <div className="HG-select-modal-select-list-item-place-info-intro">
-                          {place.intro}
-                        </div>
                       </div>
-                      <div className="HG-select-modal-select-list-item-place-delete">
-                        <img
-                          src={xIcon}
-                          alt="xIcon"
-                          onClick={() => handleDeleteClick(place.placeId)}
-                        />
                       <div className="HG-select-modal-select-list-item-place-delete">
                         <img
                           src={xIcon}
@@ -434,35 +314,10 @@ const SelectModal = ({
           가이드북 생성 {isSelected.length}
         </div>
       </div>
-            )
-          );
-        })}
-      </div>
-      <div className="HG-select-modal-footer">
-        <div className="HG-select-modal-footer-text-frame">
-          <span className="HG-select-modal-footer-text-bold">
-            !{travelDays}일 기준:
-          </span>
-          <span className="HG-select-modal-footer-text">
-            최소 {travelDays * 2}개 - 최대 {travelDays * 5}개까지 선택가능합니다
-          </span>
-        </div>
-        <div
-          className="HG-select-modal-footer-btn"
-          onClick={handleGuidebookCreate}
-        >
-          가이드북 생성 {isSelected.length}
-        </div>
-      </div>
 
       {/* 가이드북 생성 일정 취향 모달 추가 */}
       <TasteModal
-      {/* 가이드북 생성 일정 취향 모달 추가 */}
-      <TasteModal
         isOpen={showTasteModal}
-        onClose={() => setShowTasteModal(false)}
-        onSave={(e) => handleTasteSave(e)}
-      />
         onClose={() => setShowTasteModal(false)}
         onSave={(e) => handleTasteSave(e)}
       />
@@ -472,17 +327,7 @@ const SelectModal = ({
         <div className="HG-delete-confirm-modal">
           <div className="HG-delete-confirm-content">
             <p className="WS-delete-confirm-message">정말 삭제하시겠습니까?</p>
-            <p className="WS-delete-confirm-message">정말 삭제하시겠습니까?</p>
             <div className="HG-delete-confirm-buttons">
-              <button
-                className="HG-Modal-Button"
-                onClick={() => setShowDeleteModal(false)}
-              >
-                취소
-              </button>
-              <button className="HG-Modal-Button" onClick={handleDelete}>
-                확인
-              </button>
               <button
                 className="HG-Modal-Button"
                 onClick={() => setShowDeleteModal(false)}
@@ -501,4 +346,3 @@ const SelectModal = ({
 };
 
 export default SelectModal;
-

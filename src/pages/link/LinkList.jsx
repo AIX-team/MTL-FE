@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import Modal from "../../layouts/AlertModal";
 import "../../css/linkpage/LinkList.css";
@@ -77,7 +78,7 @@ const LinkList = ({ linkData, setLinkData }) => {
       setInputLink("");
       return;
     }
-
+    
     const type = getLinkType(inputLink);
     if (!type) {
       showModal("지원하지 않는 URL입니다.");
