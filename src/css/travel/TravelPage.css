@@ -28,12 +28,12 @@
   text-align: center;
   padding: 4%;
   cursor: pointer;
-  color: var(--color-dark-gray);
-  font-size: var(--font-size-md);
+  color: var(—color-dark-gray);
+  font-size: var(—font-size-md);
 }
 
 .SJ-Travel-Tab.active {
-  color: var(--color-main-hover);
+  color: var(—color-main-hover);
   font-weight: bold;
 }
 
@@ -47,7 +47,7 @@
 .SJ-Tab-Indicator {
   width: 50%;
   height: 2px;
-  background-color: var(--color-main);
+  background-color: var(—color-main);
   transition: all 0.3s;
 }
 

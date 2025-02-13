@@ -624,6 +624,7 @@ const TravelInfo = () => {
         />
       </div>
     </main>
+    </div>
   );
 };
 export default TravelInfo; 
