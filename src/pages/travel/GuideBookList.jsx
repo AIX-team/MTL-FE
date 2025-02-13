@@ -2,8 +2,9 @@ import React, { useState, useMemo, useEffect } from "react";
 import "../../css/travel/GuidebookList.css";
 import TravelPageModal from "./TravelPageModal";
 import { FaSearch, FaTimes } from "react-icons/fa";
-import { HiChevronDown, HiChevronUp } from "react-icons/hi2";
-import axiosInstance from "../../components/AxiosInstance";
+import { HiChevronDown, HiChevronUp  } from "react-icons/hi2";
+import { Link } from "react-router-dom";
+import axiosInstance from '../../components/AxiosInstance';
 
 function GuidebookList() {
   const [activeFilter, setActiveFilter] = useState("latest");
@@ -12,6 +13,7 @@ function GuidebookList() {
   const [sortAsc, setSortAsc] = useState(true);
   const [searchText, setSearchText] = useState("");
   const [guideBookData, setGuideBookData] = useState([]);
+  const [searchAuthor, setSearchAuthor] = useState([]);
 
   useEffect(() => {
     getGuideBookList();
@@ -93,12 +95,17 @@ function GuidebookList() {
     if (!guideBookData || !Array.isArray(guideBookData)) {
       return [];
     }
-    console.log("searchText:", searchText);
     // 검색어로 먼저 필터링
     let filtered = guideBookData;
     if (searchText.trim()) {
-      filtered = guideBookData.filter((item) =>
-        item.title.toLowerCase().includes(searchText.toLowerCase())
+        filtered = guideBookData.filter(item => 
+            item.title.toLowerCase().includes(searchText.toLowerCase())
+        );
+    }
+    //작성자로 필터링
+    if(Array.isArray(searchAuthor) && searchAuthor.length > 0){
+      filtered = filtered.filter(item => 
+        item.authors.some(author => searchAuthor.includes(author))
       );
     }
 
@@ -124,7 +131,8 @@ function GuidebookList() {
       });
     }
     return filtered;
-  }, [guideBookData, activeFilter, searchText]);
+  }, [guideBookData, activeFilter, searchText, searchAuthor]);
+
 
   // 정렬된 가이드북 데이터 계산
   const sortedGuideBooks = useMemo(() => {
@@ -224,6 +232,13 @@ function GuidebookList() {
     setShowModal(false);
   };
 
+  const handleAuthorClick = (author) => {
+    if(!searchAuthor.includes(author)) setSearchAuthor([...searchAuthor, author]);
+    console.log(author);
+  };
+
+
+
   return (
     <div className="SJ-guidebook-list">
       {/* 필터 버튼 */}
@@ -263,58 +278,69 @@ function GuidebookList() {
           onChange={(e) => setSearchText(e.target.value)}
         />
         <div className="SJ-search-button-container">
+          {searchText && (
           <button className="SJ-search-icon">
-            {!searchText ? (
-              <FaSearch />
-            ) : (
-              <FaTimes onClick={() => setSearchText("")} />
-            )}
+            {!searchText ? <FaSearch /> : <FaTimes onClick={() => setSearchText("")} />}
           </button>
+          )}
         </div>
       </div>
+      {Array.isArray(searchAuthor) && searchAuthor.length > 0 && <div className='HG-search-author-container'>
+        {searchAuthor.map((author, index) => (
+          <div key={index} className='HG-search-author-item'>
+            #{author} <FaTimes onClick={() => setSearchAuthor(searchAuthor.filter((item) => item !== author))} />
+          </div>
+        ))}
+      </div>
+      }
 
       <div className="WS-guide-container">
-        {Array.isArray(sortedGuideBooks) &&
-          sortedGuideBooks.map((guide) => (
-            <div key={guide.id} className="SJ-guide-card">
-              <div className="SJ-guide-content">
-                {guide.fixed && <div className="SJ-pin-icon">📌</div>}
+        {Array.isArray(sortedGuideBooks) && sortedGuideBooks.map((guide) => (
+          <div key={guide.id} className="SJ-guide-card">
+            <div className="SJ-guide-content">
+            <Link to={`/guidebooks/${guide.id}`}>
+              {guide.fixed && (
+                  <div className="SJ-pin-icon">📌</div>
+              )}
 
                 <div className="SJ-guide-category">{guide.travelInfoTitle}</div>
 
-                <div
-  className="WS-favorite-button"
-  onClick={() => toggleFavorite(guide.id)}
->
-  <span className={guide.isFavorite ? "filled-heart" : "empty-heart"}>
-    {guide.isFavorite ? "♥" : "♡"}
-  </span>
-</div>
 
-                <div className="SJ-guide-header">
-                  <div className="SJ-guide-title">{guide.title}</div>
-                  <div className="SJ-guide-score">코스 {guide.courseCount}</div>
-                </div>
-                <div className="SJ-guide-footer">
-                  <div className="SJ-guide-date">생성일 {guide.createAt}</div>
-                  <div className="SJ-guide-tags">
-                    {Array.isArray(guide.authors) &&
-                      guide.authors.map((author, index) => (
-                        <span key={index} className="SJ-guide-tag">
-                          #{author}
-                        </span>
-                      ))}
-                  </div>
-                </div>
-                <button
-                  className="SJ-more-button"
-                  onClick={() => handleMoreOptionsClick(guide)}
-                >
-                  ⋮
-                </button>
+              <div className="SJ-guide-header">
+                <div className="SJ-guide-title">{guide.title}</div>
+                <div className="SJ-guide-score">코스 {guide.courseCount}</div>
               </div>
+              </Link>
+              <div className="SJ-guide-footer">
+                <div className="SJ-guide-date">생성일 {guide.createAt}</div>
+                <div className="SJ-guide-tags">
+                  {Array.isArray(guide.authors) && guide.authors.map((author, index) => (
+                    <span key={index} className="SJ-guide-tag"
+                    onClick={() => handleAuthorClick(author)}
+                    >
+                      #{author}
+                    </span>
+                  ))}
+                </div>
+              </div>
+              
+              <div
+                className={`WS-favorite-button  ${
+                  guide.fixed ? "filled" : "outlined"
+                }`}
+                onClick={() => toggleFavorite(guide.id)}
+              >
+                {guide.isFavorite ? "♥" : "♡"}
+              </div>
+              <button
+                className="SJ-more-button"
+                onClick={() => handleMoreOptionsClick(guide)}
+              >
+                ⋮
+              </button>
             </div>
-          ))}
+          </div>
+        ))}
       </div>
 
       {/* 모달 컴포넌트 추가 */}
