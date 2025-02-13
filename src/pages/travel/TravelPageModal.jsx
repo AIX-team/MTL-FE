@@ -36,6 +36,7 @@ const TravelPageModal = ({
     const handleEditCancel = () => {
         setIsEditModalOpen(false);
     };
+    console.log(selectedItem);
 
     return ReactDOM.createPortal(
         <div className="SJ-Travel-Modal">

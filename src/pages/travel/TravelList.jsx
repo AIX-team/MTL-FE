@@ -193,7 +193,8 @@ const TravelList = () => {
   // 아이템 삭제 함수
   const handleDeleteItem = (item) => {
     setTravelItems(travelItems.filter((travelItem) => travelItem.travelId !== item.travelId));
-    deleteTravel(item.travelId)
+    deleteTravel(item.travelId);
+    setShowModal(false);
   };
 
   return (
