@@ -593,37 +593,37 @@ const TravelInfo = () => {
                       <div className='WS-TravelInfo-Address'>{item.placeAddress}</div>
                     </div>
 
-                    {/* 세 번째 슬라이드 */}
-                    <div className="slide-content" key={`map-${index}`}>
-                      {item?.latitude && item?.longitude && (
-                        <MapComponent
-                          key={`map-${index}`}
-                          places={[item]} />
-                      )}
-                    </div>
-                  </Slider>
-                </div>
-              ) : null;
-            })}
-          </div>
+                  {/* 세 번째 슬라이드 */}
+                  <div className="slide-content" key={`map-${index}`}>
+                    {item?.latitude && item?.longitude && (
+                      <MapComponent
+                        key={`map-${index}`}
+                        places={[item]} />
+                    )}
+                  </div>
+                </Slider>
+              </div>
+            ) : null;
+          })}
         </div>
-        <TitleEditModal
-          isOpen={isModalOpen}
-          onClose={handleModalClose}
+      </div>
+      <TitleEditModal
+        isOpen={isModalOpen}
+        onClose={handleModalClose}
+        travelDays={travelDays}
+        travelInfoTitle={travelInfoTitle}
+        onSave={handleTitleSave}
+      />
+      <div className={`${isSelectModalOpen ? 'HG-TravelInfo-Select-Modal' : 'none'}`}>
+        <SelectModal
+          isOpen={isSelectModalOpen}
+          onClose={handleSelectModalClose}
+          selectedPlaces={selectedPlaces}
+          onPlaceSelect={handlePlaceDelete}
           travelDays={travelDays}
-          travelInfoTitle={travelInfoTitle}
-          onSave={handleTitleSave}
         />
-        <div className={`${isSelectModalOpen ? 'HG-TravelInfo-Select-Modal' : 'none'}`}>
-          <SelectModal
-            isOpen={isSelectModalOpen}
-            onClose={handleSelectModalClose}
-            selectedPlaces={selectedPlaces}
-            onPlaceSelect={handlePlaceDelete}
-            travelDays={travelDays}
-          />
-        </div>
-      </main>
+      </div>
+    </main>
     </div>
   );
 };
