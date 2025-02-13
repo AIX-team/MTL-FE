@@ -43,6 +43,10 @@
   justify-content: center;
 
   width: 15%;
+
+  padding-top: 20px;
+
+  cursor: pointer;
 }
 
 .WS-GuideBook-Header-Back-Btn-Container {
@@ -92,6 +96,8 @@
 
   margin-top: 5px;
   margin-left: 10px;
+
+  cursor: pointer;
 }
 
 .WS-GuideBook-Body {
@@ -190,8 +196,8 @@
 
   background-color: white;
 }
-
-.WS-Modal-Bottom{
+/* ---------------------------------------------------------------------- */
+.WS-Modal-Bottom {
   display: flex;
   flex-direction: column;
   position: absolute;
@@ -212,7 +218,7 @@
   z-index: 12;
 }
 
-.WS-Modal-Option{
+.WS-Modal-Option {
   display: flex;
   align-items: center;
 
@@ -227,6 +233,14 @@
   cursor: pointer;
 }
 
+.WS-Copy-Modal-Button {
+  padding: 10px 20px 8px 20px;
+
+  border: 2px solid var(--color-guide);
+  background-color: white;
+  color: var(--color-guide);
+  font-size: var(--font-size-sm);
+}
 /* =========================================================================================== */
 
 .YC-GuideBook-place {
