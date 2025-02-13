@@ -238,6 +238,17 @@ function GuidebookList() {
   };
 
 
+  // 날짜 형식 변환 함수
+  // 2025-02-03T00:39:43 형식을 2025년 2월 3일 00시 39분 형식으로 변환
+  const convertDate = (date) => {
+    const year = date.getFullYear();
+    let month = date.getMonth() + 1;
+    let day = date.getDate();
+
+    if(month < 10) month = `0${month}`;
+    if(day < 10) day = `0${day}`;
+    return `${year}-${month}-${day}`;
+  };
 
   return (
     <div className="SJ-guidebook-list">
@@ -298,7 +309,7 @@ function GuidebookList() {
         {Array.isArray(sortedGuideBooks) && sortedGuideBooks.map((guide) => (
           <div key={guide.id} className="SJ-guide-card">
             <div className="SJ-guide-content">
-            <Link to={`/guidebooks/${guide.id}`}>
+            <Link to={`/guidebooks/${guide.id}`} style={{textDecoration: "none", color: "black"}}>
               {guide.fixed && (
                   <div className="SJ-pin-icon">📌</div>
               )}
@@ -312,7 +323,7 @@ function GuidebookList() {
               </div>
               </Link>
               <div className="SJ-guide-footer">
-                <div className="SJ-guide-date">생성일 {guide.createAt}</div>
+                <div className="SJ-guide-date">생성일 : {convertDate(new Date(guide.createAt))}</div>
                 <div className="SJ-guide-tags">
                   {Array.isArray(guide.authors) && guide.authors.map((author, index) => (
                     <span key={index} className="SJ-guide-tag"
