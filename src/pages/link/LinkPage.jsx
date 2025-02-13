@@ -51,7 +51,6 @@ const LinkPage = () => {
         return null;
     }
   };
-  
 
   return (
     <div className="WS-Link-Page">
