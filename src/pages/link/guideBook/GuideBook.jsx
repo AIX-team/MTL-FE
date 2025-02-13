@@ -593,21 +593,25 @@ const GuideBook = () => {
         <div className="WS-GuideBook-Container">
             <div className="WS-GuideBook-Header">
                 <div className="WS-GuideBook-Header-Left-Container">
-                    <div>{guideBook.travelInfoTitle}</div>
-                    <Link to={`/travelInfos/${guideBook.travelInfoId}`}>
-                        <img src={backArrow} alt="뒤로가기" />
-                    </Link>
+                    <div className="WS-GuideBook-Header-Back-Btn-Container">
+                        <Link to={`/travelInfos/${guideBook.travelInfoId}`}>
+                            <img className="WS-GuideBook-Header-Back-Btn" src={backArrow} alt="뒤로가기" />
+                        </Link>
+                    </div>
 
-                    <div className="HG-GuideBookList-Header-contents-title">
-                        <h3 id="YC-GuideBook-Tittle">{guideBook.guideBookTitle}</h3>
-                        <span className="HG-GuideBookList-Header-contents-title-edit" onClick={() => setIsTitleEditModalOpen(true)}>편집</span>
+                    <div className="WS-GuideBook-Header-Left-Text-Container">
+                        <div className="WS-GuideBook-Header-Left-Text-Container-Title">{guideBook.travelInfoTitle}</div>
+
+                        <div className="WS-GuideBook-Header-Left-Text-Contents-Title-Container">
+                            <div className="WS-GuideBook-Header-Left-Text-Contents-Title">{guideBook.guideBookTitle}</div>
+                            <div className="WS-GuideBook-Header-Left-Text-Contents-Title-Edit" onClick={() => setIsTitleEditModalOpen(true)}>편집</div>
+                        </div>
                     </div>
                 </div>
-                <div className='WS-GuideBook-Header-Left-Container'>
-                    <div>
-                        <img src={downloadbtn} alt="여행 정보 이미지" />
-                    </div>
+                <div className='WS-GuideBook-Header-Right-Container'>
+                    <img src={downloadbtn} alt="여행 정보 이미지" />
                 </div>
+
             </div>
 
 
