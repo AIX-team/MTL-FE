@@ -1,147 +1,200 @@
 import React, { useState, useEffect, useMemo } from "react";
 import "../../css/travel/TravelList.css";
-import osakaImg from "../../images/osaka.png";
-import matsuyamaImg from "../../images/matsuyama.png";
-import tokyoImg from "../../images/tokyo.png";
 import TravelPageModal from "./TravelPageModal";
+import { Link } from "react-router-dom";
 import { FaSearch, FaTimes } from "react-icons/fa";
+import axiosInstance from '../../components/AxiosInstance';
+import { HiChevronDown, HiChevronUp  } from "react-icons/hi2";
 
 const TravelList = () => {
-  const [travelItems, setTravelItems] = useState([
-    {
-      id: 1,
-      title: "오사카 여행",
-      date: "2025-05-18",
-      period: "일정 3일",
-      image: osakaImg, // import한 이미지 사용
-      isFavorite: true,
-      isPinned: false,
-    },
-    {
-      id: 2,
-      title: "마쓰야마 여행",
-      date: "2025-03-27",
-      period: "일정 5일",
-      image: matsuyamaImg, // import한 이미지 사용
-      isFavorite: true,
-      isPinned: false,
-    },
-
-    {
-      id: 3,
-      title: "도쿄 여행",
-      date: "2025-02-21",
-      period: "일정 4일",
-      image: tokyoImg, // import한 이미지 사용
-      isFavorite: false,
-      isPinned: false,
-    },
-    {
-      id: 4,
-      title: "교토 여행",
-      date: "2025-02-21",
-      period: "일정 4일",
-      image: tokyoImg, // import한 이미지 사용
-      isFavorite: false,
-      isPinned: false,
-    },
-    {
-      id: 5,
-      title: "교토 여행",
-      date: "2025-02-21",
-      period: "일정 4일",
-      image: tokyoImg, // import한 이미지 사용
-      isFavorite: false,
-      isPinned: false,
-    },
-  ]);
-
+  const [travelItems, setTravelItems] = useState([]);
   const [activeFilter, setActiveFilter] = useState("latest");
   const [showModal, setShowModal] = useState(false);
-  const [selectedItemId, setSelectedItemId] = useState(null);
+  const [selectedItem, setSelectedItem] = useState(null);
   const [pinnedItems, setPinnedItems] = useState([]);
   const [searchText, setSearchText] = useState("");
+  const [sortAsc, setSortAsc] = useState(true);
+
+
+  const getTravelList = async () => {
+    try { 
+      const response = await axiosInstance.get('/api/v1/travels/travelInfos/list');
+      setTravelItems(response.data.travelInfoList);
+    } catch (error) {
+      console.error('여행 목록을 가져오는 중 오류가 발생했습니다:', error);
+    }
+  };
+  
+  const putFavorite = async (travelId, isFavorite) => {
+    try {
+      await axiosInstance.put(`/api/v1/travels/travelInfos/${travelId}/favorite`, { isTrue: isFavorite });
+    } catch (error) {
+      console.error('즐겨찾기 상태를 업데이트하는 중 오류가 발생했습니다:', error);
+    }
+  };
+
+  const putPin = async (travelId, isFixed) => {
+    try {
+      await axiosInstance.put(`/api/v1/travels/travelInfos/${travelId}/fixed`, { isTrue: isFixed });
+    } catch (error) {
+      console.error('고정 상태를 업데이트하는 중 오류가 발생했습니다:', error);
+    }
+  };
+
+  const putUpdateTitle = async (item, newTitle) => {
+    try {
+      await axiosInstance.put(`/api/v1/travels/travelInfos/${item.travelId}`, 
+        {
+          travelInfoTitle: newTitle,
+        travelDays: parseInt(item.travelDays) // 숫자로 변환
+      }
+    );
+    } catch (error) {
+      console.error('여행 제목을 업데이트하는 중 오류가 발생했습니다:', error);
+    }
+  };
+  
+  const deleteTravel = async (travelId) => {
+    try {
+      await axiosInstance.delete(`/api/v1/travels/travelInfos/${travelId}`);
+    } catch (error) {
+      console.error('여행을 삭제하는 중 오류가 발생했습니다:', error);
+    }
+  };
 
   const handleFilterClick = (filter) => {
-    setActiveFilter(filter);
+    console.log(filter);
+    console.log(sortAsc);
+    if(filter === true){
+      setSortAsc(filter);
+      setActiveFilter(filter);
+    }else if(filter === false){
+      setSortAsc(filter);
+      setActiveFilter(filter);
+    }else{
+      setActiveFilter(filter);
+    }
   };
 
   // 고정 토글 핸들러
-  const handlePinClick = (itemId) => {
-    if (pinnedItems.includes(itemId)) {
-      setPinnedItems((prev) => prev.filter((id) => id !== itemId));
+  const handlePinClick = (item) => {
+    if (pinnedItems.includes(item.travelId)) {
+      setPinnedItems((prev) => prev.filter((id) => id !== item.travelId));
     } else {
-      setPinnedItems((prev) => [...prev, itemId]);
+      setPinnedItems((prev) => [...prev, item.travelId]);
     }
+    // 고정 상태 변경
+    setTravelItems(
+      travelItems.map((travelItem) =>
+        travelItem.travelId === item.travelId ? { ...travelItem, fixed: !travelItem.fixed } : travelItem
+      )
+    );
+    putPin(item.travelId, !item.fixed);
     setShowModal(false);
   };
 
   // 즐겨찾기 토글 함수
-  const toggleFavorite = (id) => {
+  const toggleFavorite = (item) => {
     setTravelItems(
-      travelItems.map((item) =>
-        item.id === id ? { ...item, isFavorite: !item.isFavorite } : item
+      travelItems.map((travelItem) =>
+        travelItem.travelId === item.travelId ? { ...travelItem, favorite: !travelItem.favorite } : travelItem
       )
     );
+    putFavorite(item.travelId, !item.favorite);
   };
 
   const handleMoreOptionsClick = (id) => {
-    setSelectedItemId(id);
+    setSelectedItem(travelItems.find((item) => item.travelId === id));
     setShowModal(true);
   };
 
   // 데이터 구조 확인
   useEffect(() => {
-    console.log("데이터 구조 확인:", travelItems);
-    console.log("첫 번째 아이템:", travelItems[0]);
-  }, [travelItems]);
+    getTravelList();
+  }, []);
 
   // 필터링된 데이터 계산
   const filteredData = useMemo(() => {
+    // travelItems가 없거나 배열이 아닐 경우 빈 배열 반환
+    if (!travelItems || !Array.isArray(travelItems)) {
+      return [];
+    }
+    console.log("searchText:", searchText);
+    // 검색어로 먼저 필터링
+    let filtered = travelItems;
+    if (searchText.trim()) {
+        filtered = travelItems.filter(item => 
+            item.title.toLowerCase().includes(searchText.toLowerCase())
+        );
+    }
+
+    console.log("filtered:", filtered);
+
     // activeFilter가 'favorite'일 때만 즐겨찾기 필터링 적용
     if (activeFilter === "favorite") {
-      return travelItems.filter((item) => item.isFavorite === true);
+      return filtered.filter((item) => item.favorite === true);
     }
-    return travelItems;
-  }, [travelItems, activeFilter]);
+    if(activeFilter === true){
+      // 최신순 정렬
+      return filtered.sort((a, b) => {
+        const dateA = new Date(a.createAt);
+        const dateB = new Date(b.createAt);
+        return dateB - dateA;
+      });
+    }else if(activeFilter === false){
+      // 오래된 순 정렬
+      return filtered.sort((a, b) => {
+        const dateA = new Date(a.createAt);
+        const dateB = new Date(b.createAt);
+        return dateA - dateB;
+      });
+    }
+    return filtered;
+  }, [travelItems, activeFilter, searchText]);
 
   // 필터링 및 정렬된 데이터 계산
   const sortedAndFilteredData = useMemo(() => {
     let filtered = [...filteredData];
 
     // 고정된 항목을 최상단으로 정렬
-    return filtered.sort((a, b) => {
+    return filtered.sort((a, b) => {     
       // 둘 다 고정되었거나 둘 다 고정되지 않은 경우 기존 정렬 유지
-      const isPinnedA = pinnedItems.includes(a.id);
-      const isPinnedB = pinnedItems.includes(b.id);
+      const isPinnedA = a.fixed;
+      const isPinnedB = b.fixed;
 
-      if (isPinnedA === isPinnedB) {
+      if (activeFilter === true && isPinnedA === isPinnedB) {
         // 날짜 기준 정렬
-        const dateA = new Date(a.date);
-        const dateB = new Date(b.date);
+        const dateA = new Date(a.createAt);
+        const dateB = new Date(b.createAt);
         return activeFilter === "latest" ? dateB - dateA : dateA - dateB;
+      }else if(activeFilter === false && isPinnedA === isPinnedB){
+        // 날짜 기준 정렬
+        const dateA = new Date(a.createAt);
+        const dateB = new Date(b.createAt);
+        return activeFilter === "latest" ? dateA - dateB : dateB - dateA;
       }
       // 고정된 항목을 위로
       return isPinnedB ? 1 : -1;
     });
   }, [filteredData, activeFilter, pinnedItems]);
 
-  // 데이터 확인용 콘솔 로그
-  console.log("전체 데이터:", travelItems);
-  console.log("필터링된 데이터:", filteredData);
 
   // 아이템 이름 수정 함수
-  const handleUpdateTitle = (itemId, newTitle) => {
+  const handleUpdateTitle = (item, newTitle) => {
+    console.log("아이템 이름 수정:", newTitle);
     setTravelItems(
-      travelItems.map((item) =>
-        item.id === itemId ? { ...item, title: newTitle } : item
+      travelItems.map((travelItem) =>
+        travelItem.travelId === item.travelId ? { ...travelItem, title: newTitle } : travelItem
       )
     );
+    putUpdateTitle(item, newTitle);
   };
 
   // 아이템 삭제 함수
-  const handleDeleteItem = (itemId) => {
-    setTravelItems(travelItems.filter((item) => item.id !== itemId));
+  const handleDeleteItem = (item) => {
+    setTravelItems(travelItems.filter((travelItem) => travelItem.travelId !== item.travelId));
+    deleteTravel(item.travelId);
+    setShowModal(false);
   };
 
   return (
@@ -150,19 +203,12 @@ const TravelList = () => {
         <div className="SJ-filter-buttons">
           <button
             className={`SJ-filter-btn ${
-              activeFilter === "latest" ? "active" : ""
+              activeFilter === "favorite" ? "" : "active"
             }`}
-            onClick={() => handleFilterClick("latest")}
+            //activeFilter가 favorite일 때 sortAsc, 아닐 때 !sortAsc
+            onClick={() => handleFilterClick(activeFilter === "favorite" ? sortAsc : !sortAsc)}
           >
-            최신순
-          </button>
-          <button
-            className={`SJ-filter-btn ${
-              activeFilter === "created" ? "active" : ""
-            }`}
-            onClick={() => handleFilterClick("created")}
-          >
-            생성일
+            생성일 {sortAsc === true ? <HiChevronDown style={{verticalAlign:"middle"}} /> : <HiChevronUp style={{verticalAlign:"middle"}} />}
           </button>
           <button
             className={`SJ-filter-btn ${
@@ -184,16 +230,8 @@ const TravelList = () => {
           />
 
           <div className="SJ-search-button-container">
-            {searchText && (
-              <button
-                className="SJ-search-clear"
-                onClick={() => setSearchText("")}
-              >
-                <FaTimes />
-              </button>
-            )}
             <button className="SJ-search-icon">
-              <FaSearch />
+              {!searchText ? <FaSearch /> : <FaTimes onClick={() => setSearchText("")} />}
             </button>
           </div>
         </div>
@@ -201,22 +239,24 @@ const TravelList = () => {
         <div className="SJ-travel-grid">
           {sortedAndFilteredData.map((item) => (
             <div key={item.id} className="SJ-travel-card">
-              {pinnedItems.includes(item.id) && (
-                <div className="SJ-pin-icon">📌</div>
-              )}
+                  <Link to={`/travelInfos/${item.travelId}`} className="SJ-travel-card">
+              
+                {pinnedItems.includes(item.id) && (
+                  <div className="SJ-pin-icon">📌</div>
+                )}
 
               <div className="SJ-travel-img">
-                <img src={item.image} alt={item.title} />
+                <img src={item.imgUrl} alt={item.title} />
               </div>
 
               <div className="SJ-card-content">
                 <div
                   className={`WS-favorite-button ${
-                    item.isFavorite ? "filled" : "outlined"
+                    item.favorite ? "filled" : "outlined"
                   }`}
-                  onClick={() => toggleFavorite(item.id)}
+                  onClick={() => toggleFavorite(item)}
                 >
-                  {item.isFavorite ? "♥" : "♡"}
+                  {item.favorite ? "♥" : "♡"}
                 </div>
 
                 <div className="SJ-card-header">
@@ -224,30 +264,32 @@ const TravelList = () => {
                 </div>
 
                 <div className="SJ-card-footer">
-                  <span className="SJ-card-period">{item.period}</span>
-                  <span className="SJ-card-date">{item.date}</span>
+                  <span className="SJ-card-period">여행 장소: {item.placeCount} 개</span>
+                  <span className="SJ-card-date">{item.createAt}</span>
                 </div>
 
                 <button
                   className="SJ-more-button"
-                  onClick={() => handleMoreOptionsClick(item.id)}
+                  onClick={() => handleMoreOptionsClick(item.travelId)}
                 >
                   ⋮
                 </button>
               </div>
+            </Link>
             </div>
           ))}
         </div>
+        {showModal && (
         <TravelPageModal
           showModal={showModal}
           setShowModal={setShowModal}
-          selectedItemId={selectedItemId}
+          selectedItem={selectedItem}
           handlePinToggle={handlePinClick}
-          pinnedItems={pinnedItems}
           onUpdateTitle={handleUpdateTitle}
           onDeleteItem={handleDeleteItem}
           items={travelItems}
-        />
+          />
+        )}
       </div>
     </div>
   );
