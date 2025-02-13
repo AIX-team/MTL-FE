@@ -56,8 +56,8 @@ const SearchYoutube = ({ linkData, setLinkData, refreshLinks }) => {
         fetchRecentSearches();
     }, []);
 
-    // .env 파일에서 API 키 가져오기
-    const YOUTUBE_API_KEY = process.env.REACT_APP_YOUTUBE_API_KEY;
+    // API 키를 사용할 때, 하드코딩된 값을 제거하고 환경변수에서 받아옵니다.
+    const YOUTUBE_API_KEY = process.env.REACT_APP_YOUTUBE_API_KEY.trim();
 
     // 날짜 포맷팅 함수 추가
     const formatDate = (publishedAt) => {
@@ -105,20 +105,16 @@ const SearchYoutube = ({ linkData, setLinkData, refreshLinks }) => {
                 }
             }
 
-            // 유튜브 검색 API 호출
-            console.log('Searching for:', searchQuery);
-            const response = await axios.get(
-                `https://www.googleapis.com/youtube/v3/search`,
-                {
-                    params: {
-                        part: 'snippet',
-                        maxResults: 20,
-                        key: YOUTUBE_API_KEY,
-                        q: searchQuery,
-                        type: 'video'
-                    }
+            // YouTube 검색 API 호출
+            const response = await axios.get('https://www.googleapis.com/youtube/v3/search', {
+                params: {
+                    part: 'snippet',
+                    maxResults: 20,
+                    key: YOUTUBE_API_KEY, // 환경변수에서 받아온 API 키 사용
+                    q: searchQuery.trim(),
+                    type: 'video'
                 }
-            );
+            });
 
             if (response.data.items) {
                 const videos = response.data.items.map(item => ({
@@ -135,8 +131,8 @@ const SearchYoutube = ({ linkData, setLinkData, refreshLinks }) => {
                 setSearchResults(videos);
             }
         } catch (error) {
-            console.error('YouTube 검색 중 오류 발생:', error);
-            setSearchResults([]); // 에러 발생 시 빈 배열
+            console.error(error);
+            setModalOpen(true);
         } finally {
             setIsLoading(false);
         }
@@ -150,6 +146,21 @@ const SearchYoutube = ({ linkData, setLinkData, refreshLinks }) => {
         localStorage.removeItem('youtubeSearchResults');
     };
 
+    const checkVideoSubtitles = async (videoId) => {
+        try {
+            const videoUrl = `https://www.youtube.com/watch?v=${videoId}`;
+            const response = await axios.post(
+                'http://localhost:8000/api/v1/youtube/check_subtitles',
+                { video_url: videoUrl }
+            );
+            console.log("자막 체크 응답:", response.data);
+            return response.data.has_subtitles;
+        } catch (error) {
+            console.error("자막 확인 실패:", error);
+            return false;
+        }
+    };
+
     const handleVideoSelect = async (video) => {
         const token = localStorage.getItem('token');
         if (!token) {
@@ -160,6 +171,7 @@ const SearchYoutube = ({ linkData, setLinkData, refreshLinks }) => {
         const videoUrl = `https://www.youtube.com/watch?v=${video.id}`;
         const exists = selectedVideos.find(v => v.url === videoUrl);
         let updatedSelection = [];
+
         if (exists) {
             console.log('삭제 요청 전송, videoUrl:', videoUrl);
             await axios.delete('http://localhost:8080/user/delete', {
@@ -176,12 +188,21 @@ const SearchYoutube = ({ linkData, setLinkData, refreshLinks }) => {
                 return;
             }
 
+            // 클라이언트에서 바로 자막 여부 체크
+            const hasSubtitles = await checkVideoSubtitles(video.id);
+            if (!hasSubtitles) {
+                setModalMessage('죄송합니다. 해당 영상은 자막이 포함되어 있지 않아요. 다른 영상을 선택해 주세요.');
+                setModalOpen(true);
+                return;
+            }
+
             try {
                 const requestPayload = {
                     url: videoUrl,
                     title: video.fullTitle || video.title,
-                    author: video.channelTitle
+                    author: video.channelTitle,
                 };
+
                 const response = await axios.post('http://localhost:8080/user/save', requestPayload, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
