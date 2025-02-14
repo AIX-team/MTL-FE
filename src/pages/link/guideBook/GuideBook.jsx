@@ -431,7 +431,6 @@ const GuideBook = () => {
             }
     
             setShowMoveModal(false);
-            setIsEditMode(false);
             setTargetCourse([]);
             setSelectedItems([]);
         } catch (error) {
@@ -451,7 +450,6 @@ const GuideBook = () => {
                 });
                 setShowMoveModal(false); // 이동 모달 닫기
                 setShowCopyModal(false); // 복사 모달 닫기
-                setIsEditMode(false); // 편집 모드 해제
             } catch (error) {
                 console.error('Error moving places:', error);
             }
