@@ -529,12 +529,6 @@ const GuideBook = () => {
                             className="YC-GuideBook-place"
                             {...provided.droppableProps}
                             ref={provided.innerRef}
-                            style={{
-                                height: '100%',
-                                minHeight: '100px',
-                                overflow: 'auto' // 스크롤을 비활성화
-                            }}
-
                         >
                             {places.map((place, index) => (
                                 <Draggable key={place.id} draggableId={place.id} index={index}>
@@ -652,8 +646,8 @@ const GuideBook = () => {
                     {renderContent()}
                 </div>
                 {isEditMode && selectedItems.length > 0 && (
-                    <div className="WS-Modal-Overlay" onClick={handleModalClose}>
-                        <div className='WS-Modal-Bottom' onClick={e => e.stopPropagation()}>
+                    <div className="WS-GuideBook-Modal">
+                        <div className='WS-GuideBook-Modal-Bottom' onClick={e => e.stopPropagation()}>
                             <div className="WS-Modal-Option" onClick={handleMoveClick}>
                                 <span className="SJ-modal-icon">🔀</span>
                                 이동
@@ -672,7 +666,7 @@ const GuideBook = () => {
             {/* 장소 이동 모달 */}
             {showMoveModal && (
                 <div className="WS-second-Modal-Overlay" onClick={handleModalClose}>
-                    <div className='WS-Modal-Bottom' onClick={e => e.stopPropagation()}>
+                    <div className='WS-GuideBook-Modal-Bottom' onClick={e => e.stopPropagation()}>
                         <div className="WS-Modal-Option">
                             <div>
                                 이동할 코스 아이코스
@@ -685,7 +679,7 @@ const GuideBook = () => {
             {/* 장소 복사 모달 */}
             {showCopyModal && (
                 <div className="WS-second-Modal-Overlay" onClick={handleModalClose}>
-                    <div className='WS-Modal-Bottom' onClick={e => e.stopPropagation()}>
+                    <div className='WS-GuideBook-Modal-Bottom' onClick={e => e.stopPropagation()}>
                         <div className="WS-Copy-Modal-Option">
                             {Object.keys(guideBook.courses).filter(courseNum => Number(courseNum) + 1 !== activeTab).map((courseNumber) => (
                                 <div className='WS-Modal-Option2' key={courseNumber}>
