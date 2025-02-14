@@ -3,8 +3,8 @@ import "../../css/travel/TravelList.css";
 import TravelPageModal from "./TravelPageModal";
 import { Link } from "react-router-dom";
 import { FaSearch, FaTimes } from "react-icons/fa";
-import axiosInstance from '../../components/AxiosInstance';
-import { HiChevronDown, HiChevronUp  } from "react-icons/hi2";
+import axiosInstance from "../../components/AxiosInstance";
+import { HiChevronDown, HiChevronUp } from "react-icons/hi2";
 
 const TravelList = () => {
   const [travelItems, setTravelItems] = useState([]);
@@ -15,63 +15,70 @@ const TravelList = () => {
   const [searchText, setSearchText] = useState("");
   const [sortAsc, setSortAsc] = useState(true);
 
-
   const getTravelList = async () => {
-    try { 
-      const response = await axiosInstance.get('/api/v1/travels/travelInfos/list');
+    try {
+      const response = await axiosInstance.get(
+        "/api/v1/travels/travelInfos/list"
+      );
       setTravelItems(response.data.travelInfoList);
     } catch (error) {
-      console.error('여행 목록을 가져오는 중 오류가 발생했습니다:', error);
+      console.error("여행 목록을 가져오는 중 오류가 발생했습니다:", error);
     }
   };
-  
+
   const putFavorite = async (travelId, isFavorite) => {
     try {
-      await axiosInstance.put(`/api/v1/travels/travelInfos/${travelId}/favorite`, { isTrue: isFavorite });
+      await axiosInstance.put(
+        `/api/v1/travels/travelInfos/${travelId}/favorite`,
+        { isTrue: isFavorite }
+      );
     } catch (error) {
-      console.error('즐겨찾기 상태를 업데이트하는 중 오류가 발생했습니다:', error);
+      console.error(
+        "즐겨찾기 상태를 업데이트하는 중 오류가 발생했습니다:",
+        error
+      );
     }
   };
 
   const putPin = async (travelId, isFixed) => {
     try {
-      await axiosInstance.put(`/api/v1/travels/travelInfos/${travelId}/fixed`, { isTrue: isFixed });
+      await axiosInstance.put(`/api/v1/travels/travelInfos/${travelId}/fixed`, {
+        isTrue: isFixed,
+      });
     } catch (error) {
-      console.error('고정 상태를 업데이트하는 중 오류가 발생했습니다:', error);
+      console.error("고정 상태를 업데이트하는 중 오류가 발생했습니다:", error);
     }
   };
 
   const putUpdateTitle = async (item, newTitle) => {
     try {
-      await axiosInstance.put(`/api/v1/travels/travelInfos/${item.travelId}`, 
-        {
-          travelInfoTitle: newTitle,
-        travelDays: parseInt(item.travelDays) // 숫자로 변환
-      }
-    );
+      await axiosInstance.put(`/api/v1/travels/travelInfos/${item.travelId}`, {
+        travelInfoTitle: newTitle,
+        travelDays: parseInt(item.travelDays), // 숫자로 변환
+      });
     } catch (error) {
-      console.error('여행 제목을 업데이트하는 중 오류가 발생했습니다:', error);
+      console.error("여행 제목을 업데이트하는 중 오류가 발생했습니다:", error);
     }
   };
-  
+
   const deleteTravel = async (travelId) => {
     try {
       await axiosInstance.delete(`/api/v1/travels/travelInfos/${travelId}`);
     } catch (error) {
-      console.error('여행을 삭제하는 중 오류가 발생했습니다:', error);
+      console.error("여행을 삭제하는 중 오류가 발생했습니다:", error);
     }
   };
 
   const handleFilterClick = (filter) => {
     console.log(filter);
     console.log(sortAsc);
-    if(filter === true){
+    if (filter === true) {
       setSortAsc(filter);
       setActiveFilter(filter);
-    }else if(filter === false){
+    } else if (filter === false) {
       setSortAsc(filter);
       setActiveFilter(filter);
-    }else{
+    } else {
       setActiveFilter(filter);
     }
   };
@@ -86,7 +93,9 @@ const TravelList = () => {
     // 고정 상태 변경
     setTravelItems(
       travelItems.map((travelItem) =>
-        travelItem.travelId === item.travelId ? { ...travelItem, fixed: !travelItem.fixed } : travelItem
+        travelItem.travelId === item.travelId
+          ? { ...travelItem, fixed: !travelItem.fixed }
+          : travelItem
       )
     );
     putPin(item.travelId, !item.fixed);
@@ -97,7 +106,9 @@ const TravelList = () => {
   const toggleFavorite = (item) => {
     setTravelItems(
       travelItems.map((travelItem) =>
-        travelItem.travelId === item.travelId ? { ...travelItem, favorite: !travelItem.favorite } : travelItem
+        travelItem.travelId === item.travelId
+          ? { ...travelItem, favorite: !travelItem.favorite }
+          : travelItem
       )
     );
     putFavorite(item.travelId, !item.favorite);
@@ -123,9 +134,9 @@ const TravelList = () => {
     // 검색어로 먼저 필터링
     let filtered = travelItems;
     if (searchText.trim()) {
-        filtered = travelItems.filter(item => 
-            item.title.toLowerCase().includes(searchText.toLowerCase())
-        );
+      filtered = travelItems.filter((item) =>
+        item.title.toLowerCase().includes(searchText.toLowerCase())
+      );
     }
 
     console.log("filtered:", filtered);
@@ -134,14 +145,14 @@ const TravelList = () => {
     if (activeFilter === "favorite") {
       return filtered.filter((item) => item.favorite === true);
     }
-    if(activeFilter === true){
+    if (activeFilter === true) {
       // 최신순 정렬
       return filtered.sort((a, b) => {
         const dateA = new Date(a.createAt);
         const dateB = new Date(b.createAt);
         return dateB - dateA;
       });
-    }else if(activeFilter === false){
+    } else if (activeFilter === false) {
       // 오래된 순 정렬
       return filtered.sort((a, b) => {
         const dateA = new Date(a.createAt);
@@ -157,7 +168,7 @@ const TravelList = () => {
     let filtered = [...filteredData];
 
     // 고정된 항목을 최상단으로 정렬
-    return filtered.sort((a, b) => {     
+    return filtered.sort((a, b) => {
       // 둘 다 고정되었거나 둘 다 고정되지 않은 경우 기존 정렬 유지
       const isPinnedA = a.fixed;
       const isPinnedB = b.fixed;
@@ -167,7 +178,7 @@ const TravelList = () => {
         const dateA = new Date(a.createAt);
         const dateB = new Date(b.createAt);
         return activeFilter === "latest" ? dateB - dateA : dateA - dateB;
-      }else if(activeFilter === false && isPinnedA === isPinnedB){
+      } else if (activeFilter === false && isPinnedA === isPinnedB) {
         // 날짜 기준 정렬
         const dateA = new Date(a.createAt);
         const dateB = new Date(b.createAt);
@@ -178,13 +189,14 @@ const TravelList = () => {
     });
   }, [filteredData, activeFilter, pinnedItems]);
 
-
   // 아이템 이름 수정 함수
   const handleUpdateTitle = (item, newTitle) => {
     console.log("아이템 이름 수정:", newTitle);
     setTravelItems(
       travelItems.map((travelItem) =>
-        travelItem.travelId === item.travelId ? { ...travelItem, title: newTitle } : travelItem
+        travelItem.travelId === item.travelId
+          ? { ...travelItem, title: newTitle }
+          : travelItem
       )
     );
     putUpdateTitle(item, newTitle);
@@ -192,7 +204,9 @@ const TravelList = () => {
 
   // 아이템 삭제 함수
   const handleDeleteItem = (item) => {
-    setTravelItems(travelItems.filter((travelItem) => travelItem.travelId !== item.travelId));
+    setTravelItems(
+      travelItems.filter((travelItem) => travelItem.travelId !== item.travelId)
+    );
     deleteTravel(item.travelId);
     setShowModal(false);
   };
@@ -219,9 +233,18 @@ const TravelList = () => {
               activeFilter === "favorite" ? "" : "active"
             }`}
             //activeFilter가 favorite일 때 sortAsc, 아닐 때 !sortAsc
-            onClick={() => handleFilterClick(activeFilter === "favorite" ? sortAsc : !sortAsc)}
+            onClick={() =>
+              handleFilterClick(
+                activeFilter === "favorite" ? sortAsc : !sortAsc
+              )
+            }
           >
-            생성일 {sortAsc === true ? <HiChevronDown style={{verticalAlign:"middle"}} /> : <HiChevronUp style={{verticalAlign:"middle"}} />}
+            생성일{" "}
+            {sortAsc === true ? (
+              <HiChevronDown style={{ verticalAlign: "middle" }} />
+            ) : (
+              <HiChevronUp style={{ verticalAlign: "middle" }} />
+            )}
           </button>
           <button
             className={`SJ-filter-btn ${
@@ -244,7 +267,11 @@ const TravelList = () => {
 
           <div className="SJ-search-button-container">
             <button className="SJ-search-icon">
-              {!searchText ? <FaSearch /> : <FaTimes onClick={() => setSearchText("")} />}
+              {!searchText ? (
+                <FaSearch />
+              ) : (
+                <FaTimes onClick={() => setSearchText("")} />
+              )}
             </button>
           </div>
         </div>
@@ -258,9 +285,9 @@ const TravelList = () => {
                   <div className="SJ-pin-icon">📌</div>
                 )}
 
-              <div className="SJ-travel-img">
-                <img src={item.imgUrl} alt={item.title} />
-              </div>
+                <div className="SJ-travel-img">
+                  <img src={item.imgUrl} alt={item.title} />
+                </div>
 
               <div className="SJ-card-content">
                 <div className="HG-card-content-container">
@@ -275,33 +302,33 @@ const TravelList = () => {
               </div>
               </Link>              
               <div className="HG-favorite-button-container">
-                  <div
-                    className={`WS-favorite-button ${
-                      item.favorite ? "filled" : "outlined"
-                    }`}
-                    onClick={() => toggleFavorite(item)}
-                  >
-                    {item.favorite ? "♥" : "♡"}
-                  </div>
-                  <button
-                    className="SJ-more-button"
-                    onClick={() => handleMoreOptionsClick(item.travelId)}
-                  >
-                    ⋮
-                  </button>
+                <div
+                  className={`WS-favorite-button ${
+                    item.favorite ? "filled" : "outlined"
+                  }`}
+                  onClick={() => toggleFavorite(item)}
+                >
+                  {item.favorite ? "♥" : "♡"}
                 </div>
+                <button
+                  className="SJ-more-button"
+                  onClick={() => handleMoreOptionsClick(item.travelId)}
+                >
+                  ⋮
+                </button>
+              </div>
             </div>
           ))}
         </div>
         {showModal && (
-        <TravelPageModal
-          showModal={showModal}
-          setShowModal={setShowModal}
-          selectedItem={selectedItem}
-          handlePinToggle={handlePinClick}
-          onUpdateTitle={handleUpdateTitle}
-          onDeleteItem={handleDeleteItem}
-          items={travelItems}
+          <TravelPageModal
+            showModal={showModal}
+            setShowModal={setShowModal}
+            selectedItem={selectedItem}
+            handlePinToggle={handlePinClick}
+            onUpdateTitle={handleUpdateTitle}
+            onDeleteItem={handleDeleteItem}
+            items={travelItems}
           />
         )}
       </div>
