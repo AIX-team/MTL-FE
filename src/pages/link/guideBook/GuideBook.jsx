@@ -686,38 +686,50 @@ const GuideBook = () => {
             {showCopyModal && (
                 <div className="WS-second-Modal-Overlay" onClick={handleModalClose}>
                     <div className='WS-Modal-Bottom' onClick={e => e.stopPropagation()}>
-                        <div className="WS-Modal-Option">
+                        <div className="WS-Copy-Modal-Option">
                             {Object.keys(guideBook.courses).filter(courseNum => Number(courseNum) + 1 !== activeTab).map((courseNumber) => (
-                                <div className='HG-Select-Course' key={courseNumber}>
-                                    <label className='custom-checkbox'>
-                                    <input
-                                            type="checkbox"
-                                            className='HG-Select-Course-checkbox'
-                                            onChange={() => handleTargetCourseSelect(guideBook.courses[courseNumber].courseId)}
-                                        />
-                                        <span className='checkbox-text'>코스 {Number(courseNumber) + 1}</span>
-                                    </label>
-                                </div>
-                            ))}
-                        </div>
-
-                        <div className="WS-Modal-Option">
-                            {Object.keys(guideBook.courses).filter(courseNum => Number(courseNum) + 1 !== activeTab).map((courseNumber) => (
-                                <div className='HG-Select-Course' key={courseNumber}>
-
-                                    <label className='custom-checkbox'>
+                                <div className='WS-Modal-Option2' key={courseNumber}>
+                                    <label className='WS-Select-Option-checkbox-Container'>
                                         <input
                                             type="checkbox"
-                                            className='HG-Select-Course-checkbox'
                                             onChange={() => handleTargetCourseSelect(guideBook.courses[courseNumber].courseId)}
                                         />
-                                        <span className='checkbox-text'>복사본 {Number(courseNumber) + 1}</span>
+                                        <div className='WS-Select-Option-checkbox-text'>코스 {Number(courseNumber) + 1}</div>
                                     </label>
                                 </div>
                             ))}
                         </div>
 
-                        <div className="WS-second-Modal-Button-Container">
+                        <div className="WS-Copy-Modal-Option">
+                            {Object.keys(guideBook.courses).filter(courseNum => Number(courseNum) + 1 !== activeTab).map((courseNumber) => (
+                                <div className='WS-Modal-Option2' key={courseNumber}>
+                                    <label className='WS-Select-Option-checkbox-Container'>
+                                        <input
+                                            type="checkbox"
+                                            onChange={() => handleTargetCourseSelect(guideBook.courses[courseNumber].courseId)}
+                                        />
+                                        <div className='WS-Select-Option-checkbox-text'>코스 {Number(courseNumber) + 1}</div>
+                                    </label>
+                                </div>
+                            ))}
+                        </div>
+
+                        <div className="WS-Copy-Modal-Option">
+                            {Object.keys(guideBook.courses).filter(courseNum => Number(courseNum) + 1 !== activeTab).map((courseNumber) => (
+                                <div className='WS-Modal-Option2' key={courseNumber}>
+                                    <label className='WS-Select-Option-checkbox-Container'>
+                                        <input
+                                            type="checkbox"
+                                            onChange={() => handleTargetCourseSelect(guideBook.courses[courseNumber].courseId)}
+                                        />
+                                        <div className='WS-Select-Option-checkbox-text'>코스 {Number(courseNumber) + 1}</div>
+                                    </label>
+                                </div>
+                            ))}
+                        </div>
+
+
+                        <div className="WS-Copy-Modal-Button-Container">
                             <button className="WS-Copy-Modal-Button" onClick={handleModalClose}>취소</button>
                             <button className="WS-Copy-Modal-Button" onClick={handlePlaceAdd} disabled={!targetCourse}>복사</button>
                         </div>

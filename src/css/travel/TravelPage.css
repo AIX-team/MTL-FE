@@ -30,10 +30,13 @@
   cursor: pointer;
   color: var(—color-dark-gray);
   font-size: var(—font-size-md);
+
+  border-bottom: 2px solid transparent;
 }
 
 .SJ-Travel-Tab.active {
   color: var(—color-main-hover);
+  border-bottom: 2px solid var(--color-main-hover);
   font-weight: bold;
 }
 
@@ -48,7 +51,6 @@
   width: 50%;
   height: 2px;
   background-color: var(—color-main);
-  transition: all 0.3s;
 }
 
 .SJ-Travel-Page-Content {
