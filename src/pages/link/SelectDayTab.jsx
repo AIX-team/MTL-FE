@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import { FaPlus, FaMinus, FaArrowLeft } from "react-icons/fa"; // 아이콘 사용을 위한 import
 import { useNavigate } from "react-router-dom"; // 네비게이션 훅 추가
 import "../../css/linkpage/SelectDayTab.css";
+import axios from "axios";
+import Loading from "../../components/Loading/Loading"; // Loading.jsx 컴포넌트 import
 
-const SelectDayTab = ({ onBack }) => {
+const SelectDayTab = ({ onBack, linkData }) => {
   const [days, setDays] = useState(1); // 기본값 1일
   const [showPreferTab, setShowPreferTab] = useState(false); // 추가⭐️⭐️⭐️
   const [isLoading, setIsLoading] = useState(false); // 로딩페이지로 전환⭐️⭐️⭐️
@@ -43,20 +45,51 @@ const SelectDayTab = ({ onBack }) => {
     }
   };
 
-  // 다음 버튼 클릭 핸들러 추가⭐️⭐️⭐️
+  // "다음" 버튼 클릭 시 분석 API 호출 후, 매핑 API 호출을 진행합니다.
   const handleNext = async () => {
     setIsLoading(true);
+    const payload = { urls: linkData };
     try {
-      // 여기에 필요한 데이터 처리 로직 추가
-      // 예시: 2초 대기
+      // 분석 API 호출
+      const response = await axios.post(
+        "http://localhost:8080/url/analysis",
+        payload,
+        {
+          headers: {
+            "Content-Type": "application/json"
+          },
+        }
+      );
 
-      // 로딩이 끝나면 다음 페이지로 이동
-      navigate("/loading", { state: { days: days } });
+      console.log("API 응답:", response.data);
+      // 분석 응답 내 travelInfoId가 포함되어 있다고 가정합니다.
+      
+      // 매핑 API 호출 (payload의 url정보를 기반으로 매핑 테이블에 데이터 저장)
+      const reponse_mapping =await axios.post(
+        `http://localhost:8080/url/mapping`,
+        payload,
+        {
+          headers: {
+            "Content-Type": "application/json"
+          },
+        }
+      );
+      console.log("API 응답:", reponse_mapping.data);
+      const travelInfoId = reponse_mapping.data.travelInfoId;
+
+
+      // 매핑 작업이 완료되면 travelinfos 페이지로 이동합니다.
+      navigate(`/travelinfos/${travelInfoId}`, { state: { days, analysisResult: response.data } });
     } catch (error) {
-      console.error("Error:", error);
+      console.error("API 요청 에러:", error.response?.data || error);
       setIsLoading(false);
     }
   };
+
+  // axios 호출 중일 경우 Loading.jsx 로딩창을 표시
+  if (isLoading) {
+    return <Loading type="default" />;
+  }
 
   return (
     <div className="WS-SelectDayTab">
@@ -98,7 +131,7 @@ const SelectDayTab = ({ onBack }) => {
         </button>
         <button
           className={`WS-SelectDayTab-NextButton ${days >= 1 ? "active" : ""}`}
-          onClick={handleNext} // 클릭 핸들러 추가⭐️⭐️⭐️
+          onClick={handleNext}
         >
           다음
         </button>

@@ -1,9 +1,9 @@
-
 import React, { useState, useEffect } from "react";
 import Modal from "../../layouts/AlertModal";
 import "../../css/linkpage/LinkList.css";
 import { FaMinus } from "react-icons/fa";
 import SelectDayTab from "./SelectDayTab";
+import axios from "axios";
 
 const LinkList = ({ linkData, setLinkData }) => {
   const [inputLink, setInputLink] = useState("");
@@ -22,7 +22,7 @@ const LinkList = ({ linkData, setLinkData }) => {
     try {
       new URL(url);
       return true;
-    } catch (error) {
+    } catch {
       return false;
     }
   };
@@ -78,7 +78,7 @@ const LinkList = ({ linkData, setLinkData }) => {
       setInputLink("");
       return;
     }
-    
+
     const type = getLinkType(inputLink);
     if (!type) {
       showModal("지원하지 않는 URL입니다.");
@@ -96,10 +96,25 @@ const LinkList = ({ linkData, setLinkData }) => {
   };
 
   // 링크 삭제 함수
-  const handleDeleteLink = (idToDelete) => {
-    setLinkData(linkData.filter((link) => link.id !== idToDelete));
+  const handleDeleteLink = async (link) => {
+    if (!window.confirm(`${link.url}을(를) 삭제하시겠습니까?`)) return;
+    const token = localStorage.getItem('token');
+    try {
+      await axios.delete(`http://localhost:8080/user/delete?url=${encodeURIComponent(link.url)}`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      setLinkData(linkData.filter((l) => l.id !== link.id));
+    } catch (error) {
+      console.error("URL 삭제 실패:", error);
+      let msg = 'URL 삭제 실패';
+      if (error.response && error.response.data) {
+        msg = error.response.data.message || JSON.stringify(error.response.data);
+      }
+      alert(msg);
+    }
   };
 
+  // 다음 버튼 클릭 시 등록된 링크의 URL만 추출하여 SelectDayTab으로 전달하면서 화면 전환
   const handleNextClick = () => {
     setShowDayTab(true);
   };
@@ -109,7 +124,10 @@ const LinkList = ({ linkData, setLinkData }) => {
   };
 
   if (showDayTab) {
-    return <SelectDayTab onBack={handleBack} />;
+    // linkData는 { url, type, id } 객체 배열입니다.
+    // URL 문자열만 추출하여 linkData prop으로 전달합니다.
+    const linkUrls = linkData.map((link) => link.url);
+    return <SelectDayTab onBack={handleBack} linkData={linkUrls} />;
   }
 
   return (
@@ -125,33 +143,36 @@ const LinkList = ({ linkData, setLinkData }) => {
           onKeyPress={(e) => e.key === "Enter" && handleAddLink()}
         />
         <button className="WS-LinkList-AddButton" onClick={handleAddLink}>
-          {" "}
-          +{" "}
+          {" "}+{" "}
         </button>
       </div>
 
       <div className="WS-LinkList-Items">
-        {linkData.map((link, index) => (
-          <div key={index} className={`WS-LinkList-Item ${link.type}`}>
-            <div className="WS-LinkList-Content">
-              <span className="WS-LinkList-Badge">
-                {link.type === "youtube" ? "YOUTUBE" : "Blog"}
-              </span>
-              <span className="WS-LinkList-Text" title={link.url}>
-                {link.url.length > 25
-                  ? `${link.url.substring(0, 25)}...`
-                  : link.url}
-              </span>
+        {linkData.map((link, index) => {
+          const displayTitle = link.url_title || link.url || "제목 없음";
+          const typeValue = getLinkType(link.url);
+          return (
+            <div key={index} className={`WS-LinkList-Item ${typeValue}`}>
+              <div className="WS-LinkList-Content">
+                <span className="WS-LinkList-Badge">
+                  {typeValue === "youtube" ? "YOUTUBE" : "BLOG"}
+                </span>
+                <span className="WS-LinkList-Text" title={displayTitle}>
+                  {displayTitle.length > 25
+                    ? `${displayTitle.substring(0, 25)}...`
+                    : displayTitle}
+                </span>
+              </div>
+              <button
+                className="WS-LinkList-DeleteButton"
+                onClick={() => handleDeleteLink(link)}
+                title="삭제"
+              >
+                <FaMinus />
+              </button>
             </div>
-            <button
-              className="WS-LinkList-DeleteButton"
-              onClick={() => handleDeleteLink(link.id)}
-              title="삭제"
-            >
-              <FaMinus />
-            </button>
-          </div>
-        ))}
+          );
+        })}
 
         <div className="WS-LinkList-Next-Container">
           <div className="WS-LinkList-Counter">{linkData.length}/5</div>
