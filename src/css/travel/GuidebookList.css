@@ -28,9 +28,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;  /* 컨테이너 너비 설정 */
-  margin-left: auto;  /* 중앙 정렬 */
-  margin-right: auto;  /* 중앙 정렬 */
+  width: 100%; /* 컨테이너 너비 설정 */
+  margin-left: auto; /* 중앙 정렬 */
+  margin-right: auto; /* 중앙 정렬 */
 }
 
 /* 검색창 */
