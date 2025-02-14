@@ -196,6 +196,7 @@
 
   background-color: white;
 }
+
 /* ---------------------------------------------------------------------- */
 .WS-Modal-Bottom {
   display: flex;
@@ -241,6 +242,32 @@
   color: var(--color-guide);
   font-size: var(--font-size-sm);
 }
+
+.custom-checkbox {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.custom-checkbox input[type="checkbox"] {
+  display: none;
+}
+
+.checkbox-text {
+  position: relative;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+/* 체크된 상태일 때의 스타일 */
+.custom-checkbox input[type="checkbox"]:checked+.checkbox-text {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+
 /* =========================================================================================== */
 
 .YC-GuideBook-place {

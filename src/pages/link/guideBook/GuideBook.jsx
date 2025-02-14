@@ -689,8 +689,14 @@ const GuideBook = () => {
                         <div className="WS-Modal-Option">
                             {Object.keys(guideBook.courses).filter(courseNum => Number(courseNum) + 1 !== activeTab).map((courseNumber) => (
                                 <div className='HG-Select-Course' key={courseNumber}>
-                                    <input type="checkbox" className='HG-Select-Course-checkbox' onChange={() => handleTargetCourseSelect(guideBook.courses[courseNumber].courseId)} />
-                                    코스 {Number(courseNumber) + 1}
+                                    <label className='custom-checkbox'>
+                                    <input
+                                            type="checkbox"
+                                            className='HG-Select-Course-checkbox'
+                                            onChange={() => handleTargetCourseSelect(guideBook.courses[courseNumber].courseId)}
+                                        />
+                                        <span className='checkbox-text'>코스 {Number(courseNumber) + 1}</span>
+                                    </label>
                                 </div>
                             ))}
                         </div>
@@ -698,8 +704,15 @@ const GuideBook = () => {
                         <div className="WS-Modal-Option">
                             {Object.keys(guideBook.courses).filter(courseNum => Number(courseNum) + 1 !== activeTab).map((courseNumber) => (
                                 <div className='HG-Select-Course' key={courseNumber}>
-                                    <input type="checkbox" className='HG-Select-Course-checkbox' onChange={() => handleTargetCourseSelect(guideBook.courses[courseNumber].courseId)} />
-                                    복사본 {Number(courseNumber) + 1}
+
+                                    <label className='custom-checkbox'>
+                                        <input
+                                            type="checkbox"
+                                            className='HG-Select-Course-checkbox'
+                                            onChange={() => handleTargetCourseSelect(guideBook.courses[courseNumber].courseId)}
+                                        />
+                                        <span className='checkbox-text'>복사본 {Number(courseNumber) + 1}</span>
+                                    </label>
                                 </div>
                             ))}
                         </div>
@@ -714,14 +727,16 @@ const GuideBook = () => {
 
 
             {/* 제목 편집 모달 */}
-            {isTitleEditModalOpen && (
-                <TitleEditModal
-                    isOpen={isTitleEditModalOpen}
-                    onClose={() => setIsTitleEditModalOpen(false)}
-                    title={guideBook.guideBookTitle}
-                    onSave={(e) => handleTitleSave(e)}
-                />
-            )}
+            {
+                isTitleEditModalOpen && (
+                    <TitleEditModal
+                        isOpen={isTitleEditModalOpen}
+                        onClose={() => setIsTitleEditModalOpen(false)}
+                        title={guideBook.guideBookTitle}
+                        onSave={(e) => handleTitleSave(e)}
+                    />
+                )
+            }
 
             {/* 삭제 모달 */}
             {
@@ -743,57 +758,59 @@ const GuideBook = () => {
             }
 
             {/* 장소 상세 모달 */}
-            {showDetailModal && selectedPlace && (
-                <div className="YC-GuideBook-detail-modal-overlay">
-                    <div className="YC-GuideBook-detail-modal">
-                        <div className="HG-GuideBook-detail-modal-header">
-                            <button className="YC-GuideBook-detail-modal-back" onClick={handleDetailModalClose}>
-                                <img src={backArrow} alt="뒤로가기" />
-                            </button>
-                            <div className="HG-GuideBookList-Header-contents">
-                                <div className="HG-GuideBookList-Header-contents-title">{guideBook.guideBookTitle}</div>
-                                <div className="HG-GuideBookList-Header-contents-course">코스 {activeTab}</div>
+            {
+                showDetailModal && selectedPlace && (
+                    <div className="YC-GuideBook-detail-modal-overlay">
+                        <div className="YC-GuideBook-detail-modal">
+                            <div className="HG-GuideBook-detail-modal-header">
+                                <button className="YC-GuideBook-detail-modal-back" onClick={handleDetailModalClose}>
+                                    <img src={backArrow} alt="뒤로가기" />
+                                </button>
+                                <div className="HG-GuideBookList-Header-contents">
+                                    <div className="HG-GuideBookList-Header-contents-title">{guideBook.guideBookTitle}</div>
+                                    <div className="HG-GuideBookList-Header-contents-course">코스 {activeTab}</div>
+                                </div>
                             </div>
-                        </div>
-                        <div className="YC-GuideBook-detail-modal-content">
-                            <div className="YC-GuideBook-detail-modal-info">
-                                <h3 className="YC-GuideBook-detail-modal-title">{selectedPlace.name}</h3>
-                                <img
-                                    className="YC-GuideBook-detail-modal-image"
-                                    src={selectedPlace.image}
-                                    alt={selectedPlace.name}
-                                    onError={(e) => {
-                                        e.target.src = "https://placehold.co/400x300?text=No+Image";
-                                    }}
-                                />
-                                <div className="YC-GuideBook-detail-modal-address">
-                                    주소: {selectedPlace.address}
+                            <div className="YC-GuideBook-detail-modal-content">
+                                <div className="YC-GuideBook-detail-modal-info">
+                                    <h3 className="YC-GuideBook-detail-modal-title">{selectedPlace.name}</h3>
+                                    <img
+                                        className="YC-GuideBook-detail-modal-image"
+                                        src={selectedPlace.image}
+                                        alt={selectedPlace.name}
+                                        onError={(e) => {
+                                            e.target.src = "https://placehold.co/400x300?text=No+Image";
+                                        }}
+                                    />
+                                    <div className="YC-GuideBook-detail-modal-address">
+                                        주소: {selectedPlace.address}
+                                    </div>
+                                    <div className="YC-GuideBook-detail-modal-hours">
+                                        운영시간: {selectedPlace.hours} ⓘ
+                                    </div>
+                                    <div className="YC-GuideBook-detail-modal-recommended-time">
+                                        추천 관광시간: 2-3시간
+                                    </div>
+                                    <div className="YC-GuideBook-detail-modal-description-title">
+                                        {selectedPlace.intro}
+                                    </div>
+                                    <p className="YC-GuideBook-detail-modal-description">
+                                        {selectedPlace.description}
+                                    </p>
                                 </div>
-                                <div className="YC-GuideBook-detail-modal-hours">
-                                    운영시간: {selectedPlace.hours} ⓘ
+                                <div className="YC-GuideBook-detail-modal-map">
+                                    {selectedPlace &&
+                                        <MapComponent
+                                            key={`map-${activeTab}-${places.length}-${mapKey}`}
+                                            places={[selectedPlace]}
+                                        />}
                                 </div>
-                                <div className="YC-GuideBook-detail-modal-recommended-time">
-                                    추천 관광시간: 2-3시간
-                                </div>
-                                <div className="YC-GuideBook-detail-modal-description-title">
-                                    {selectedPlace.intro}
-                                </div>
-                                <p className="YC-GuideBook-detail-modal-description">
-                                    {selectedPlace.description}
-                                </p>
-                            </div>
-                            <div className="YC-GuideBook-detail-modal-map">
-                                {selectedPlace &&
-                                    <MapComponent
-                                        key={`map-${activeTab}-${places.length}-${mapKey}`}
-                                        places={[selectedPlace]}
-                                    />}
                             </div>
                         </div>
                     </div>
-                </div>
-            )}
-        </div>,
+                )
+            }
+        </div >,
         document.body
     );
 };
