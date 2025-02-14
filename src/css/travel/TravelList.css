@@ -236,6 +236,7 @@
   color: var(--color-main);
   right: 4%;
   top: 10%;
+  color: var(--color-main);
 }
 /* 더보기 위치 */
 .SJ-more-button {

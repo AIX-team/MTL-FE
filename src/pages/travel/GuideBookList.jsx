@@ -306,16 +306,22 @@ function GuidebookList() {
       }
 
       <div className="WS-guide-container">
-        {Array.isArray(sortedGuideBooks) && sortedGuideBooks.map((guide) => (
-          <div key={guide.id} className="SJ-guide-card">
-            <div className="SJ-guide-content">
-            <Link to={`/guidebooks/${guide.id}`} style={{textDecoration: "none", color: "black"}}>
-              {guide.fixed && (
-                  <div className="SJ-pin-icon">📌</div>
-              )}
+        {Array.isArray(sortedGuideBooks) &&
+          sortedGuideBooks.map((guide) => (
+            <div key={guide.id} className="SJ-guide-card">
+              <div className="SJ-guide-content">
+                {guide.fixed && <div className="SJ-pin-icon">📌</div>}
 
                 <div className="SJ-guide-category">{guide.travelInfoTitle}</div>
 
+                <div
+                  className={`WS-favorite-button  ${
+                    guide.fixed ? "filled" : "outlined"
+                  }`}
+                  onClick={() => toggleFavorite(guide.id)}
+                >
+                  {guide.isFavorite ? "♥" : "♡"}
+                </div>
 
               <div className="SJ-guide-header">
                 <div className="SJ-guide-title">{guide.title}</div>
