@@ -197,112 +197,13 @@
   background-color: white;
 }
 
-.WS-Modal-Bottom {
-  display: flex;
-  flex-direction: column;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-
-  margin: 0 auto;
-  max-width: 470px;
-
-  padding: 20px;
-
-  background-color: white;
-  border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
-
-  z-index: 12;
-}
-
-.WS-Modal-Option {
-  display: flex;
-  align-items: center;
-
-  padding: 10px 0;
-
-  width: 100%;
-  height: 100%;
-
-  cursor: pointer;
-}
-
-.WS-Copy-Modal-Option {
-  display: flex;
-  align-items: center;
-
-  width: 100%;
-  height: 100%;
-
-  cursor: pointer;
-}
-
-.WS-Modal-Option2 {
-  width: 100%;
-  height: 100%;
-
-}
-
-.WS-Select-Option-checkbox-Container {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-}
-
-.WS-Select-Option-checkbox-Container input[type="checkbox"] {
-  display: none;
-  border: none;
-}
-
-.WS-Select-Option-checkbox-Container input[type="checkbox"]:checked+.WS-Select-Option-checkbox-text {
-  width: 100%;
-  height: 100%;
-
-  background-color: var(--color-main);
-  color: white;
-  border: none;
-}
-
-.WS-Select-Option-checkbox-text {
-  padding: 20px 10px;
-
-  width: 100%;
-  height: 100%;
-
-  border: none;
-  background: none;
-
-  font-size: var(--font-size-base);
-  font-weight: bold;
-}
-
-.WS-Copy-Modal-Button-Container {
-  display: flex;
-  align-items: center;
-
-  width: 100%;
-  height: 100%;
-  background-color: yellow;
-}
-
-
-
 /* ---------------------------------------------------------------------- */
-
-.WS-Copy-Modal-Button {
-  padding: 10px 20px 8px 20px;
-
-  border: 2px solid var(--color-guide);
-  background-color: white;
-  color: var(--color-guide);
-  font-size: var(--font-size-sm);
-}
 
 .YC-GuideBook-place {
   position: relative;
   padding-left: 50px;
   min-height: 95px;
+
 }
 
 /* 코스 메뉴 장소 컨테이너 */
@@ -323,16 +224,6 @@
 
 
 
-/* 장소 정보 컨테이너 */
-.YC-GuideBook-place-info {
-  display: flex;
-  /* 플렉스 박스 사용 */
-  flex-direction: column;
-  /* 세로 정렬 */
-  gap: 5px;
-
-}
-
 .HG-GuideBookList-Header-contents {
   display: flex;
   flex-direction: column;
@@ -343,25 +234,17 @@
 
 }
 
-/* 추천 링크 스타일 */
-#YC-GuideBook-Header-contents-recommandations {
-  text-decoration: none;
-  /* 밑줄 제거 */
-  color: #D65E5D;
-  /* 텍스트 색상 */
-  font-weight: bold;
-  /* 굵은 글씨 */
-  font-size: 12px;
-  /* 글씨 크기 */
-
-  background-color: var(--color-light-gray);
-}
-
 .HG-GuideBookList-Header-contents-title {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
   font-size: var(--font-size-lg);
   color: var(--color-black);
   font-weight: bold;
 }
+
 
 .HG-GuideBookList-Header-contents-course {
   font-size: var(--font-size-xs);
@@ -369,17 +252,10 @@
   font-weight: bold;
 }
 
-
-
 .YC-GuideBookList-Container::-webkit-scrollbar {
   display: none;
   /* Chrome, Safari, Opera에서 스크롤바 숨기기 */
 }
-
-
-
-
-
 
 @keyframes slideUpEdit {
   from {
@@ -390,11 +266,6 @@
     transform: translateY(0);
   }
 }
-
-
-
-
-
 
 /* 코스 메뉴 장소 컨테이너 편집 모드일 때 크기 조정 */
 .YC-GuideBook-place-Container.edit-mode {
@@ -627,8 +498,6 @@
   /* 수평 중앙 정렬 */
   gap: 3px;
   /* 요소 간 간격 */
-  z-index: 1;
-  /* 쌓임 순서 */
 }
 
 /* 드래그 버튼 스타일 */
@@ -649,16 +518,6 @@
   /* 둥근 모서리 */
 }
 
-/* 장소 헤더 컨테이너 */
-.YC-GuideBook-place-header {
-  display: flex;
-  /* 플렉스 박스 사용 */
-  align-items: center;
-  /* 수직 중앙 정렬 */
-  gap: 10px;
-  /* 요소 간 간격 */
-}
-
 /* 장소 정보 컨테이너 */
 .YC-GuideBook-place-info {
   flex: 1;
@@ -667,6 +526,7 @@
   /* 플렉스 박스 사용 */
   flex-direction: column;
   /* 세로 정렬 */
+  gap: 5px;
 }
 
 /* 드래그 중인 아이템의 세로선과 번호 숨기기 */
@@ -688,134 +548,6 @@
   visibility: visible !important;
   /* 항상 보이도록 설정 */
 }
-
-/* 이동 모달 스타일 */
-.YC-GuideBookList-moveModal {
-  position: fixed;
-  /* 화면에 고정 */
-  bottom: 0;
-  /* 상단에서 35% */
-  left: 0;
-  /* 좌측에서 50% */
-  transform: translate(-50%, -50%);
-  /* 중앙 정렬 */
-  background-color: white;
-  /* 배경색 */
-  padding: 20px;
-  /* 내부 여백 */
-  border-radius: 5px;
-  /* 둥근 모서리 */
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  /* 그림자 효과 */
-  z-index: 1000;
-  /* 쌓임 순서 */
-}
-
-/* 삭제 모달 스타일 */
-.YC-GuideBookList-deleteModal {
-  position: fixed;
-  /* 화면에 고정 */
-  width: 350px;
-  /* 너비 */
-  top: 45%;
-  /* 상단에서 45% */
-  left: 50%;
-  /* 좌측에서 50% */
-  transform: translate(-50%, -50%);
-  /* 중앙 정렬 */
-  background-color: white;
-  /* 배경색 */
-  border-radius: 5px;
-  /* 둥근 모서리 */
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  /* 그림자 효과 */
-  z-index: 1000;
-  /* 쌓임 순서 */
-  display: flex;
-  /* 플렉스 박스 사용 */
-  flex-direction: column;
-  /* 세로 정렬 */
-  align-items: center;
-  /* 수직 중앙 정렬 */
-}
-
-.YC-GuideBookList-deleteModal-content {
-  display: flex;
-  /* 플렉스 박스 사용 */
-  flex-direction: column;
-  /* 세로 정렬 */
-  align-items: center;
-  /* 수직 중앙 정렬 */
-  justify-content: center;
-  /* 수평 중앙 정렬 */
-  border-bottom: 1px solid #e0e0e0;
-  /* 하단 테두리 */
-  width: 100%;
-  /* 너비 */
-  height: 100px;
-  /* 높이 */
-}
-
-/* 삭제 모달 설명 스타일 */
-#YC-GuideBookList-deleteModal-description {
-  font-size: 10px;
-  /* 글씨 크기 */
-  color: #888;
-  /* 텍스트 색상 */
-  margin: 5px 0;
-  /* 상하 여백 */
-}
-
-/* 삭제 모달 버튼 컨테이너 */
-.YC-GuideBookList-deleteModal-buttons {
-  display: flex;
-  /* 플렉스 박스 사용 */
-  flex-direction: row;
-  /* 가로 정렬 */
-  width: 100%;
-  /* 너비 */
-}
-
-/* 삭제 모달 버튼 */
-.YC-GuideBookList-deleteModal button {
-  background-color: #ffffff;
-  /* 배경색 */
-  color: rgb(0, 0, 0);
-  /* 텍스트 색상 */
-  border: none;
-  /* 테두리 없음 */
-  cursor: pointer;
-  /* 커서 모양 변경 */
-  font-size: 15px;
-  /* 글씨 크기 */
-  width: 50%;
-  /* 너비 */
-  border: none;
-  /* 테두리 없음 */
-  padding: 10px;
-  /* 내부 여백 */
-}
-
-/* 삭제 모달 확인 버튼 */
-#YC-GuideBookList-deleteModal-confirm {
-  background-color: #ffffff;
-  /* 배경색 */
-  color: #D65E5D;
-  /* 텍스트 색상 */
-  border-left: 1px solid #e0e0e0;
-  /* 좌측 테두리 */
-}
-
-/* 이동 모달 타이틀 스타일 */
-#YC-GuideBookList-moveModal-title,
-#YC-GuideBookList-deleteModal-title {
-  margin-bottom: 15px;
-  /* 하단 여백 */
-}
-
-
-
-
 
 /* 장소 번호와 체크박스 위치 고정 */
 .YC-GuideBook-place-fixed {
@@ -855,8 +587,6 @@
   /* 원형 */
   cursor: pointer;
   /* 커서 모양 변경 */
-  z-index: 2;
-  /* 쌓임 순서 */
 }
 
 /* 편집 모드일 때 번호 숨기기 */
@@ -894,92 +624,6 @@
   /* 글씨 크기 */
 }
 
-/* 이동 모달 스타일 */
-.YC-GuideBookList-moveModal {
-  position: fixed;
-  /* 화면에 고정 */
-  bottom: 0;
-  /* 하단 위치 */
-  left: 0;
-  /* 좌측 위치 */
-  right: 0;
-  /* 우측 위치 */
-  background-color: white;
-  /* 배경색 */
-  padding: 20px;
-  /* 내부 여백 */
-  border-radius: 20px 20px 0 0;
-  /* 둥근 모서리 */
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-  /* 그림자 효과 */
-  z-index: 1001;
-  /* 쌓임 순서 */
-  transform: translateY(100%);
-  /* 초기 위치 */
-  animation: slideUp 0.3s forwards;
-  /* 슬라이드 업 애니메이션 */
-}
-
-@keyframes slideUp {
-  from {
-    transform: translateY(100%);
-    /* 시작 위치 */
-  }
-
-  to {
-    transform: translateY(0);
-    /* 끝 위치 */
-  }
-}
-
-/* 이동 모달 버튼 스타일 */
-.YC-GuideBookList-moveModal button {
-  width: 100%;
-  /* 너비 */
-  padding: 15px;
-  /* 내부 여백 */
-  margin: 5px 0;
-  /* 상하 여백 */
-  border: none;
-  /* 테두리 없음 */
-  background-color: #f8f8f8;
-  /* 배경색 */
-  border-radius: 10px;
-  /* 둥근 모서리 */
-  font-size: 14px;
-  /* 글씨 크기 */
-  cursor: pointer;
-  /* 커서 모양 변경 */
-}
-
-/* 이동 모달 버튼 호버 스타일 */
-.YC-GuideBookList-moveModal button:hover {
-  background-color: #f0f0f0;
-  /* 호버 시 배경색 */
-}
-
-/* 이동 모달 타이틀 스타일 */
-#YC-GuideBookList-moveModal-title {
-  text-align: center;
-  /* 중앙 정렬 */
-  font-size: 16px;
-  /* 글씨 크기 */
-  font-weight: bold;
-  /* 굵은 글씨 */
-  margin-bottom: 20px;
-  /* 하단 여백 */
-}
-
-/* 이동 모달 확인 및 취소 버튼 스타일 */
-#YC-GuideBookList-moveModal-confirm,
-#YC-GuideBookList-moveModal-cancel {
-  background-color: #D65E5D !important;
-  /* 배경색 */
-  color: white;
-  /* 텍스트 색상 */
-  margin-top: 15px;
-  /* 상단 여백 */
-}
 
 /* 장소 상세 모달 오버레이 */
 .YC-GuideBook-detail-modal-overlay {
@@ -991,7 +635,7 @@
   background-color: white;
   display: flex;
   flex-direction: column;
-  z-index: 1002;
+  z-index: 10;
 }
 
 /* 장소 상세 모달 */
@@ -1129,70 +773,134 @@
   border-bottom: 1px solid #eee;
 }
 
-
-.pdf-container {
+/* ---------------------------------------------------------------- */
+.WS-GuideBook-Modal {
   position: fixed;
-  left: 0;
   top: 0;
-  visibility: hidden;
-  width: 210mm;
-  background: white;
-  z-index: -1;
-}
-
-.pdf-course-section {
-  break-inside: avoid;
-  margin-bottom: 30px;
-}
-
-.course-content {
-  margin-top: 20px;
-}
-
-.place-item {
-  margin-bottom: 15px;
-  padding: 10px;
-  border: 1px solid #ddd;
-  break-inside: avoid;
-}
-
-.place-item img {
-  max-width: 100%;
-  height: auto;
-  margin-top: 10px;
-  display: block;
-}
-
-.map-image-container {
-  margin: 20px 0;
-  width: 100%;
-}
-
-.captured-map-image {
-  width: 100%;
-  height: auto;
-  border: 1px solid #ddd;
-}
-
-.HG-GuideBookList-map {
-  position: fixed;
   left: 0;
-  top: 0;
-  visibility: hidden;
-  height: 400px;
-  width: 600px;
-  z-index: -1;
+  right: 0;
+  bottom: 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  overflow: hidden;
 }
 
-.HG-GuideBookList-Header-contents-title {
+.WS-GuideBook-Modal-Bottom {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  margin: 0 auto;
+  max-width: 470px;
+
+  padding: 20px;
+
+  gap: 3px;
+
+  background-color: white;
+  border: 3px solid var(--color-light-gray);
+  border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
+
+  z-index: 12;
+}
+
+.WS-Modal-Option {
   display: flex;
   align-items: center;
-  gap: 10px;
-}
 
-.HG-GuideBookList-Header-contents-title-edit {
-  font-size: var(--font-size-xs);
-  color: var(--color-guide);
-  font-weight: bold;
+  padding: 10px 0;
+
+  width: 100%;
+  height: 100%;
+
   cursor: pointer;
 }
+
+
+.WS-Copy-Modal-Option {
+  display: flex;
+  align-items: center;
+
+  width: 100%;
+  height: 100%;
+
+  cursor: pointer;
+}
+
+.WS-Modal-Option2 {
+  width: 100%;
+  height: 100%;
+
+}
+
+.WS-Select-Option-checkbox-Container {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.WS-Select-Option-checkbox-Container input[type="checkbox"] {
+  display: none;
+  border: none;
+}
+
+.WS-Select-Option-checkbox-Container input[type="checkbox"]:checked+.WS-Select-Option-checkbox-text {
+  width: 100%;
+  height: 100%;
+
+  background-color: var(--color-light-gray);
+  color: var(--color-main);
+  border: none;
+}
+
+.WS-Select-Option-checkbox-text {
+  padding: 20px 10px;
+
+  width: 100%;
+  height: 100%;
+
+  border: none;
+  background: none;
+
+  font-size: var(--font-size-base);
+  font-weight: bold;
+}
+
+.WS-Copy-Modal-Button-Container {
+  display: flex;
+  align-items: center;
+
+  margin-top: 10px;
+
+  gap: 3px;
+
+  width: 100%;
+  height: 100%;
+}
+
+.WS-Copy-Modal-Button {
+
+  width: 100%;
+  height: 100%;
+
+  padding: 20px 0px 18px 0px;
+
+  border: none;
+
+  background-color: var(--color-main);
+  color: white;
+  font-size: var(--font-size-sm);
+  font-weight: bold;
+
+  border-radius: var(--border-radius-full);
+
+  cursor: pointer;
+}
+
+/* ---------------------------------------------------------------------- */

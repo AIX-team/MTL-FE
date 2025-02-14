@@ -31,12 +31,10 @@
   color: var(—color-dark-gray);
   font-size: var(—font-size-md);
 
-  border-bottom: 2px solid transparent;
 }
 
 .SJ-Travel-Tab.active {
   color: var(—color-main-hover);
-  border-bottom: 2px solid var(--color-main-hover);
   font-weight: bold;
 }
 
@@ -50,7 +48,7 @@
 .SJ-Tab-Indicator {
   width: 50%;
   height: 2px;
-  background-color: var(—color-main);
+  background-color: var(--color-main);
 }
 
 .SJ-Travel-Page-Content {

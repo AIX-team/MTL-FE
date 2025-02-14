@@ -43,7 +43,7 @@ const TravelPageModal = ({
       {showModal && (
         <>
           <div
-            className="SJ-modal-overlay"
+            className="WS-Modal-Overlay"
             onClick={() => setShowModal(false)}
           />
           <div className="SJ-modal-bottom">
@@ -96,6 +96,7 @@ const TravelPageModal = ({
                 readOnly
                 onClick={(e) => e.target.removeAttribute("readonly")}
               />
+              
               {newTitle && (
                 <button
                   className="WS-Edit-Modal-Reset-Button"
@@ -106,6 +107,7 @@ const TravelPageModal = ({
                 </button>
               )}
             </div>
+
             <div className="WS-second-Modal-Button-Container">
               <button
                 className="WS-second-Modal-Button"
