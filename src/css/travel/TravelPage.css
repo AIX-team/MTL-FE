@@ -47,7 +47,7 @@
 .SJ-Tab-Indicator {
   width: 50%;
   height: 2px;
-  background-color: var(—color-main);
+  background-color: var(--color-main);
   transition: all 0.3s;
 }
 

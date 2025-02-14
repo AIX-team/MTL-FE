@@ -1,35 +1,35 @@
 .SJ-modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 11;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 11;
 }
 
 .SJ-modal-bottom {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background-color: white;
-    border-radius: 20px 20px 0 0;
-    padding: 20px;
-    z-index: 12;
-    animation: all 0.3s ease-out;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: white;
+  border-radius: 20px 20px 0 0;
+  padding: 10px;
+  z-index: 12;
+  animation: all 0.3s ease-out;
 }
 
 .SJ-modal-content {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 8px; /* 고정해제 이름수정 사이 간격 */
 }
 
 .SJ-modal-option {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 10px; /* 아이콘과 고정해제 사이 간격 */
   padding: 15px;
   border: none;
   background: none;
@@ -37,6 +37,7 @@
   text-align: left;
   font-size: 16px;
   cursor: pointer;
+  color: var(--color-dark-gray);
 }
 
 .SJ-modal-icon {
@@ -55,7 +56,7 @@
   justify-content: center;
   align-items: center;
 
-    z-index: 13;
+  z-index: 13;
 
   background-color: rgba(0, 0, 0, 0.5);
 }
@@ -71,16 +72,16 @@
   padding-right: 20px;
   padding-left: 20px;
 
-  border-radius: 20px;
+  border-radius: 22px;
 
   width: 300px;
-  height: 240px;
+  height: 220px;
 
   background-color: white;
 }
 
 .WS-Edit-Modal-Message-Container {
-  margin-bottom: 30px;
+  margin-bottom: 25px;
   margin-left: 50px;
   text-align: left;
 
@@ -101,7 +102,7 @@
 }
 
 .WS-Edit-Modal-Input-Container {
-  margin-bottom: 45px;
+  margin-bottom: 30px;
   margin-left: 50px;
   text-align: left;
 
@@ -120,6 +121,14 @@
 
   border: none;
   border-bottom: 1px solid #48b569;
+  border-radius: 0; /* 모서리 둥글게 되는 것 방지 */
+  -webkit-appearance: none; /* iOS에서 기본 스타일 제거 */
+  appearance: none; /* 기본 스타일 제거 */
+
+  /* 모바일 키보드 관련 속성 추가 */
+  -webkit-user-select: text; /* iOS에서 텍스트 선택 가능하게 */
+  user-select: text;
+  -webkit-touch-callout: default; /* iOS에서 터치 이벤트 활성화 */
 }
 
 .WS-Edit-Modal-Input:focus {
@@ -128,8 +137,9 @@
 
 .WS-Edit-Modal-Reset-Button {
   position: absolute;
-  top: 50.7%;
+  top: 50%;
   right: 95px;
+  font-size: var(--font-size-base);
 
   background: none;
   border: none;
@@ -149,7 +159,6 @@
 .WS-second-Modal-Button {
   width: 100%;
   height: 100%;
-  padding-bottom: 5px;
 
   text-align: center;
 
@@ -177,14 +186,15 @@
   padding-right: 20px;
   padding-left: 20px;
 
-  border-radius: 20px;
+  border-radius: 22px;
 
   width: 300px;
-  height: 180px;
+  height: 160px;
 
   background-color: white;
 }
 
+/* 취소 확인 버튼 사이 간격 */
 .WS-Delete-Modal-Message-Container {
   margin-top: 10px;
   margin-bottom: 40px;
@@ -194,8 +204,7 @@
   font-size: var(--font-size-xl);
   font-weight: bold;
   color: var(--color-main);
-
-  margin-bottom: 5px;
+  margin-bottom: 7px;
 }
 
 .WS-Delete-Modal-Message {
