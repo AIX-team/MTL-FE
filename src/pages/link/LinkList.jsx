@@ -4,12 +4,14 @@ import "../../css/linkpage/LinkList.css";
 import { FaMinus } from "react-icons/fa";
 import SelectDayTab from "./SelectDayTab";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const LinkList = ({ linkData, setLinkData }) => {
   const [inputLink, setInputLink] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
   const [showDayTab, setShowDayTab] = useState(false);
+  const navigate = useNavigate();
 
   // 모달 표시 함수
   const showModal = (message) => {
@@ -57,7 +59,7 @@ const LinkList = ({ linkData, setLinkData }) => {
   };
 
   // 링크 추가 처리
-  const handleAddLink = () => {
+  const handleAddLink = async () => {
     if (linkData.length >= 5) {
       showModal("링크는 최대 5개까지만 추가할 수 있습니다.");
       return;
@@ -85,14 +87,42 @@ const LinkList = ({ linkData, setLinkData }) => {
       return;
     }
 
-    const newLink = {
-      url: inputLink,
-      type: type,
-      id: Date.now(),
-    };
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        navigate('/login');
+        return;
+      }
 
-    setLinkData((prev) => [...prev, newLink]);
-    setInputLink("");
+      // SearchYoutube.jsx와 동일한 API 엔드포인트 사용
+      const response = await axios.post('http://localhost:8080/user/save', {
+        url: inputLink,
+        title: inputLink, // 초기 제목은 URL로 설정
+        author: "직접 입력" // 직접 입력한 URL임을 표시
+      }, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+
+      if (response.status === 200) {
+        const newLink = {
+          url: inputLink,
+          type: type,
+          id: Date.now(),
+          url_title: response.data.title || inputLink,
+          author: "직접 입력"
+        };
+
+        setLinkData((prev) => [...prev, newLink]);
+        setInputLink("");
+      }
+    } catch (error) {
+      console.error("URL 저장 실패:", error);
+      let errorMessage = '링크 저장에 실패했습니다.';
+      if (error.response && error.response.data) {
+        errorMessage = error.response.data.message || JSON.stringify(error.response.data);
+      }
+      showModal(errorMessage);
+    }
   };
 
   // 링크 삭제 함수

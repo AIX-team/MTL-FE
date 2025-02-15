@@ -140,8 +140,41 @@ const MapComponent = React.memo(({ places }) => {
   return JSON.stringify(prevProps.places) === JSON.stringify(nextProps.places);
 });
 
-
-
+// 장소 타입 분류 상수 정의
+const PLACE_TYPE_CATEGORIES = {
+  landmark: [
+    'tourist_attraction',
+    'museum',
+    'art_gallery',
+    'aquarium',
+    'amusement_park',
+    'zoo',
+    'stadium',
+    'park',
+    'landmark',
+    'natural_feature',
+    'place_of_worship',
+    'church',
+    'mosque',
+    'temple',
+    'synagogue',
+    'hindu_temple',
+    'point_of_interest',
+    'campground',
+    'rv_park'
+  ],
+  restaurant: [
+    'restaurant',
+    'cafe',
+    'bakery',
+    'bar',
+    'meal_delivery',
+    'meal_takeaway',
+    'food',
+    'night_club'
+  ]
+  // etc는 위의 두 카테고리에 포함되지 않는 모든 타입
+};
 
 const TravelInfo = () => {
 
@@ -459,6 +492,13 @@ const TravelInfo = () => {
     setIsSelectModalOpen(true);
   };
 
+  // 장소 타입 체크 함수
+  const checkPlaceType = (itemType) => {
+    if (PLACE_TYPE_CATEGORIES.landmark.includes(itemType)) return 'landmark';
+    if (PLACE_TYPE_CATEGORIES.restaurant.includes(itemType)) return 'restaurant';
+    return 'etc';
+  };
+
   return (
     <div className="HG-TravelInfo-Wrapper">
       <main className='HG-TravelInfo-Container'>
@@ -562,10 +602,12 @@ const TravelInfo = () => {
 
           <div className='HG-TravelInfo-Content-Frame-Place-Slider'>
             {placeList.content.map((item, index) => {
-              const isEtcType = placeType === 'etc' && item.placeType !== 'landmark' && item.placeType !== 'restaurant';
-              const isMatchingType = item.placeType === placeType;
+              const itemCategory = checkPlaceType(item.placeType);
+              const shouldShow =
+                (placeType === itemCategory) ||
+                (placeType === 'etc' && itemCategory === 'etc');
 
-              return (isMatchingType || isEtcType) ? (
+              return shouldShow ? (
                 <div key={index} className={`WS-carousel-item ${selectedPlaces.some(selected => selected.placeId === item.placeId) ? 'HG-select-place' : ''}`}>
                   <div className='HG-trevelinfo-select-Container' onClick={() => handlePlaceClick(item)}>
                     <img
@@ -593,37 +635,37 @@ const TravelInfo = () => {
                       <div className='WS-TravelInfo-Address'>{item.placeAddress}</div>
                     </div>
 
-                  {/* 세 번째 슬라이드 */}
-                  <div className="slide-content" key={`map-${index}`}>
-                    {item?.latitude && item?.longitude && (
-                      <MapComponent
-                        key={`map-${index}`}
-                        places={[item]} />
-                    )}
-                  </div>
-                </Slider>
-              </div>
-            ) : null;
-          })}
+                    {/* 세 번째 슬라이드 */}
+                    <div className="slide-content" key={`map-${index}`}>
+                      {item?.latitude && item?.longitude && (
+                        <MapComponent
+                          key={`map-${index}`}
+                          places={[item]} />
+                      )}
+                    </div>
+                  </Slider>
+                </div>
+              ) : null;
+            })}
+          </div>
         </div>
-      </div>
-      <TitleEditModal
-        isOpen={isModalOpen}
-        onClose={handleModalClose}
-        travelDays={travelDays}
-        travelInfoTitle={travelInfoTitle}
-        onSave={handleTitleSave}
-      />
-      <div className={`${isSelectModalOpen ? 'HG-TravelInfo-Select-Modal' : 'none'}`}>
-        <SelectModal
-          isOpen={isSelectModalOpen}
-          onClose={handleSelectModalClose}
-          selectedPlaces={selectedPlaces}
-          onPlaceSelect={handlePlaceDelete}
+        <TitleEditModal
+          isOpen={isModalOpen}
+          onClose={handleModalClose}
           travelDays={travelDays}
+          travelInfoTitle={travelInfoTitle}
+          onSave={handleTitleSave}
         />
-      </div>
-    </main>
+        <div className={`${isSelectModalOpen ? 'HG-TravelInfo-Select-Modal' : 'none'}`}>
+          <SelectModal
+            isOpen={isSelectModalOpen}
+            onClose={handleSelectModalClose}
+            selectedPlaces={selectedPlaces}
+            onPlaceSelect={handlePlaceDelete}
+            travelDays={travelDays}
+          />
+        </div>
+      </main>
     </div>
   );
 };
