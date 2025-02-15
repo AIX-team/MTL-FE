@@ -467,6 +467,13 @@ const TravelInfo = () => {
     setIsSelectModalOpen(true);
   };
 
+  // 장소 타입 체크 함수
+  const checkPlaceType = (itemType) => {
+    if (PLACE_TYPE_CATEGORIES.landmark.includes(itemType)) return 'landmark';
+    if (PLACE_TYPE_CATEGORIES.restaurant.includes(itemType)) return 'restaurant';
+    return 'etc';
+  };
+
   return (
     <div className="HG-TravelInfo-Wrapper">
       <main className="HG-TravelInfo-Container">
