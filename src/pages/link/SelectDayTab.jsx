@@ -45,45 +45,8 @@ const SelectDayTab = ({ onBack, linkData }) => {
     }
   };
 
-  // "다음" 버튼 클릭 시 분석 API 호출 후, 매핑 API 호출을 진행합니다.
-  const handleNext = async () => {
-    setIsLoading(true);
-    const payload = { urls: linkData };
-    try {
-      // 분석 API 호출
-      const response = await axios.post(
-        "http://localhost:8080/url/analysis",
-        payload,
-        {
-          headers: {
-            "Content-Type": "application/json"
-          },
-        }
-      );
-
-      console.log("API 응답:", response.data);
-      // 분석 응답 내 travelInfoId가 포함되어 있다고 가정합니다.
-      
-      // 매핑 API 호출 (payload의 url정보를 기반으로 매핑 테이블에 데이터 저장)
-      const reponse_mapping =await axios.post(
-        `http://localhost:8080/url/mapping`,
-        payload,
-        {
-          headers: {
-            "Content-Type": "application/json"
-          },
-        }
-      );
-      console.log("API 응답:", reponse_mapping.data);
-      const travelInfoId = reponse_mapping.data.travelInfoId;
-
-
-      // 매핑 작업이 완료되면 travelinfos 페이지로 이동합니다.
-      navigate(`/travelinfos/${travelInfoId}`, { state: { days, analysisResult: response.data } });
-    } catch (error) {
-      console.error("API 요청 에러:", error.response?.data || error);
-      setIsLoading(false);
-    }
+  const handleNext = () => {
+    navigate("/loading", { state: { linkData, days } });
   };
 
   // axios 호출 중일 경우 Loading.jsx 로딩창을 표시
