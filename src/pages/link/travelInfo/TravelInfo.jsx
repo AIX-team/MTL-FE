@@ -771,6 +771,7 @@ const TravelInfo = () => {
             selectedPlaces={selectedPlaces}
             onPlaceSelect={handlePlaceDelete}
             travelDays={travelDays}
+            travelInfoId={travelInfoId}
           />
         </div>
       </main>
