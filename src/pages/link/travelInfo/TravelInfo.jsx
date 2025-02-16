@@ -499,6 +499,33 @@ const TravelInfo = () => {
     return 'etc';
   };
 
+  // 이미지 URL이 유효한지 검사하는 함수
+  const isValidUrl = (url) => {
+    if (!url) {
+      console.log('이미지 URL이 없음');
+      return false;
+    }
+    if (typeof url !== 'string') {
+      console.log('이미지 URL이 문자열이 아님');
+      return false;
+    }
+
+    // PlacePhoto 형식 확인 및 URL 추출
+    if (url.startsWith('[PlacePhoto(') && url.endsWith(')]')) {
+      const match = url.match(/url=([^)]+)/);
+      if (match && match[1]) {
+        return match[1];
+      }
+    }
+
+    // 일반 URL 확인
+    if (url.startsWith('https://')) {
+      return url;
+    }
+
+    return false;
+  };
+
   return (
     <div className="HG-TravelInfo-Wrapper">
       <main className='HG-TravelInfo-Container'>
@@ -622,11 +649,36 @@ const TravelInfo = () => {
                   <Slider {...sliderSettings}>
                     {/* 첫 번째 슬라이드 */}
                     <div className="slide-content">
-                      <img className="HG-slide-content-image" src={item.placeImage}
+                      <img
+                        className="HG-slide-content-image"
+                        src={(() => {
+                          try {
+                            const validUrl = isValidUrl(item.placeImage);
+                            if (validUrl) {
+                              return validUrl;
+                            }
+                            return 'https://images.unsplash.com/photo-1542051841857-5f90071e7989?ixlib=rb-4.0.3';
+                          } catch (error) {
+                            console.log('이미지 처리 중 오류 발생:', {
+                              error: error.message,
+                              stack: error.stack,
+                              data: item.placeImage,
+                              place: item.placeName
+                            });
+                            return 'https://images.unsplash.com/photo-1542051841857-5f90071e7989?ixlib=rb-4.0.3';
+                          }
+                        })()}
                         onError={(e) => {
-                          e.target.src = 'https://picsum.photos/600/300';
+                          console.log('이미지 로드 실패:', {
+                            place: item.placeName,
+                            src: e.target.src,
+                            originalImage: item.placeImage
+                          });
+                          e.target.onerror = null; // 무한 루프 방지
+                          e.target.src = 'https://images.unsplash.com/photo-1542051841857-5f90071e7989?ixlib=rb-4.0.3';
                         }}
-                        alt="placeImage" />
+                        alt={item.placeName || '장소 이미지'}
+                      />
                     </div>
 
                     {/* 두 번째 슬라이드 */}
