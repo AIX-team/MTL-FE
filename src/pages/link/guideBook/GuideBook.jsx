@@ -405,7 +405,6 @@ const GuideBook = () => {
             }
     
             setShowMoveModal(false);
-            setIsEditMode(false);
             setTargetCourse([]);
             setSelectedItems([]);
         } catch (error) {
@@ -425,7 +424,6 @@ const GuideBook = () => {
                 });
                 setShowMoveModal(false); // 이동 모달 닫기
                 setShowCopyModal(false); // 복사 모달 닫기
-                setIsEditMode(false); // 편집 모드 해제
             } catch (error) {
                 console.error('Error moving places:', error);
             }
@@ -472,7 +470,6 @@ const GuideBook = () => {
 
                 setShowMoveModal(false); // 이동 모달 닫기
                 setShowCopyModal(false);
-                setIsEditMode(false);
                 setSelectedItems([]);
 
             } catch (error) {
@@ -512,7 +509,6 @@ const GuideBook = () => {
                     updatedCourses[activeTab - 1].coursePlaces = updatedCourses[activeTab - 1].coursePlaces.filter(place => place.id !== item);
                 });
                 setShowDeleteModal(false);
-                setIsEditMode(false);
                 setSelectedItems([]);
 
                 return {
@@ -827,7 +823,7 @@ const GuideBook = () => {
 
             {/* 장소 상세 모달 */}
             {showDetailModal && selectedPlace && (
-                <div className="YC-GuideBook-detail-modal-overlay">
+                <div className=""> {/*TO-DO: 모달 배경 */}
                     <div className="YC-GuideBook-detail-modal">
                         <div className="HG-GuideBook-detail-modal-header">
                             <button className="YC-GuideBook-detail-modal-back" onClick={handleDetailModalClose}>
