@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import { FaPlus, FaMinus, FaArrowLeft } from "react-icons/fa"; // 아이콘 사용을 위한 import
 import { useNavigate } from "react-router-dom"; // 네비게이션 훅 추가
 import "../../css/linkpage/SelectDayTab.css";
+import axios from "axios";
+import Loading from "../../components/Loading/Loading"; // Loading.jsx 컴포넌트 import
 
-const SelectDayTab = ({ onBack }) => {
+const SelectDayTab = ({ onBack, linkData }) => {
   const [days, setDays] = useState(1); // 기본값 1일
   const [showPreferTab, setShowPreferTab] = useState(false); // 추가⭐️⭐️⭐️
   const [isLoading, setIsLoading] = useState(false); // 로딩페이지로 전환⭐️⭐️⭐️
@@ -43,20 +45,14 @@ const SelectDayTab = ({ onBack }) => {
     }
   };
 
-  // 다음 버튼 클릭 핸들러 추가⭐️⭐️⭐️
-  const handleNext = async () => {
-    setIsLoading(true);
-    try {
-      // 여기에 필요한 데이터 처리 로직 추가
-      // 예시: 2초 대기
-
-      // 로딩이 끝나면 다음 페이지로 이동
-      navigate("/loading", { state: { days: days } });
-    } catch (error) {
-      console.error("Error:", error);
-      setIsLoading(false);
-    }
+  const handleNext = () => {
+    navigate("/loading", { state: { linkData, days } });
   };
+
+  // axios 호출 중일 경우 Loading.jsx 로딩창을 표시
+  if (isLoading) {
+    return <Loading type="default" />;
+  }
 
   return (
     <div className="WS-SelectDayTab">
@@ -98,7 +94,7 @@ const SelectDayTab = ({ onBack }) => {
         </button>
         <button
           className={`WS-SelectDayTab-NextButton ${days >= 1 ? "active" : ""}`}
-          onClick={handleNext} // 클릭 핸들러 추가⭐️⭐️⭐️
+          onClick={handleNext}
         >
           다음
         </button>
