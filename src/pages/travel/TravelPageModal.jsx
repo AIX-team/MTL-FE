@@ -43,7 +43,7 @@ const TravelPageModal = ({
       {showModal && (
         <>
           <div
-            className="WS-Modal-Overlay"
+            className="SJ-modal-overlay"
             onClick={() => setShowModal(false)}
           />
           <div className="SJ-modal-bottom">
@@ -90,13 +90,12 @@ const TravelPageModal = ({
             <div className="WS-Edit-Modal-Input-Container">
               <input
                 type="text"
+                className="WS-Edit-Modal-Input"
+                placeholder={selectedItem?.title}
                 value={newTitle}
                 onChange={(e) => setNewTitle(e.target.value)}
-                className="WS-Edit-Modal-Input"
-                readOnly
-                onClick={(e) => e.target.removeAttribute("readonly")}
+                autoFocus
               />
-              
               {newTitle && (
                 <button
                   className="WS-Edit-Modal-Reset-Button"
@@ -107,7 +106,6 @@ const TravelPageModal = ({
                 </button>
               )}
             </div>
-
             <div className="WS-second-Modal-Button-Container">
               <button
                 className="WS-second-Modal-Button"
