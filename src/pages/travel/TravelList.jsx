@@ -280,12 +280,13 @@ const TravelList = () => {
 
         <div className="SJ-travel-grid">
           {sortedAndFilteredData.map((item) => (
-            <div key={item.id} className="SJ-travel-card">
-              <Link to={`/travelInfos/${item.travelId}`} className="HG-travel-card-link" style={{ textDecoration: "none", color: "black" }}>
-
-                {pinnedItems.includes(item.id) && (
-                  <div className="SJ-pin-icon">📌</div>
-                )}
+            <div key={item.travelId} className="SJ-travel-card">
+              {console.log("핀 렌더링:", item.travelId)}
+              <Link
+                to={`/travelInfos/${item.travelId}`}
+                className="HG-travel-card-link"
+              >
+                {item.fixed && <div className="SJ-pin-icon">📌</div>}
 
                 <div className="SJ-travel-img">
                   <img src={item.imgUrl} alt={item.title} />
@@ -300,7 +301,7 @@ const TravelList = () => {
                       <span className="SJ-card-period">
                         여행 장소: {item.placeCount} 개
                       </span>
-                      <span className="SJ-card-date">{convertDate(new Date(item.createAt))}</span>
+                      <span className="SJ-card-date">{item.createAt}</span>
                     </div>
                   </div>
                 </div>
