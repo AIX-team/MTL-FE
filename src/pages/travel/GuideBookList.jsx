@@ -226,39 +226,13 @@ function GuidebookList() {
 
   return (
     <div className="SJ-guidebook-list">
-      {/* 필터 버튼 */}
-      <div className="SJ-filter-buttons">
-        <button
-          className={`SJ-filter-btn ${
-            activeFilter === "favorite" ? "" : "active"
-          }`}
-          //activeFilter가 favorite일 때 sortAsc, 아닐 때 !sortAsc
-          onClick={() =>
-            handleFilterClick(activeFilter === "favorite" ? sortAsc : !sortAsc)
-          }
-        >
-          생성일{" "}
-          {sortAsc === true ? (
-            <HiChevronDown style={{ verticalAlign: "middle" }} />
-          ) : (
-            <HiChevronUp style={{ verticalAlign: "middle" }} />
-          )}
-        </button>
-        <button
-          className={`SJ-filter-btn ${
-            activeFilter === "favorite" ? "active" : ""
-          }`}
-          onClick={() => handleFilterClick("favorite")}
-        >
-          즐겨찾기
-        </button>
-      </div>
 
-      <div className="SJ-guidebook-search-Container">
+      <div className="SJ-search-Container">
         <input
+          id="WS-guidebook-search-input"
           type="text"
           placeholder="가이드북 제목을 검색하세요"
-          className="SJ-guidebook-search-input"
+          className="WS-Link-Input"
           value={searchText}
           onChange={(e) => setSearchText(e.target.value)}
         />
@@ -273,6 +247,34 @@ function GuidebookList() {
         </div>
       </div>
 
+      {/* 필터 버튼 */}
+      <div className="SJ-filter-buttons">
+        <button
+          className={`SJ-filter-btn ${activeFilter === "favorite" ? "" : "active"
+            }`}
+          //activeFilter가 favorite일 때 sortAsc, 아닐 때 !sortAsc
+          onClick={() =>
+            handleFilterClick(activeFilter === "favorite" ? sortAsc : !sortAsc)
+          }
+        >
+          생성일{" "}
+          {sortAsc === true ? (
+            <HiChevronDown style={{ verticalAlign: "middle" }} />
+          ) : (
+            <HiChevronUp style={{ verticalAlign: "middle" }} />
+          )}
+        </button>
+        <button
+          className={`SJ-filter-btn ${activeFilter === "favorite" ? "active" : ""
+            }`}
+          onClick={() => handleFilterClick("favorite")}
+        >
+          즐겨찾기
+        </button>
+      </div>
+
+
+
       <div className="WS-guide-container">
         {Array.isArray(sortedGuideBooks) &&
           sortedGuideBooks.map((guide) => (
@@ -283,13 +285,13 @@ function GuidebookList() {
                 <div className="SJ-guide-category">{guide.travelInfoTitle}</div>
 
                 <div
-  className="WS-favorite-button"
-  onClick={() => toggleFavorite(guide.id)}
->
-  <span className={guide.isFavorite ? "filled-heart" : "empty-heart"}>
-    {guide.isFavorite ? "♥" : "♡"}
-  </span>
-</div>
+                  className="WS-favorite-button"
+                  onClick={() => toggleFavorite(guide.id)}
+                >
+                  <span className={guide.isFavorite ? "filled-heart" : "empty-heart"}>
+                    {guide.isFavorite ? "♥" : "♡"}
+                  </span>
+                </div>
 
                 <div className="SJ-guide-header">
                   <div className="SJ-guide-title">{guide.title}</div>

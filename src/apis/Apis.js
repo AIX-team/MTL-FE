@@ -58,6 +58,26 @@ export const signUpRequest = async (signupData) => {
         });
 };
 
+// User 정보 조회
+export const checkUser = async (email) => {
+
+    const url = `/user/check?email=${email}`
+    return await axios({
+        method: 'GET', // GET요청
+        url: `${DOMAIN}${url}`,
+        data: email,
+        headers: {
+            'Content-Type': 'application/json', // JSON으로 요청
+        },
+    })
+
+    .then(res => res.data)
+    .catch(error => {
+        console.log(error);
+        throw error; // 에러를 다시 던져서 호출한 곳에서 처리할 수 있도록
+    });
+}
+
 
 // fastapi 요청
 export const fastAPIrequest = async (method, url, data) => {

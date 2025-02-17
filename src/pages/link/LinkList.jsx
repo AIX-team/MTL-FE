@@ -164,7 +164,7 @@ const LinkList = ({ linkData, setLinkData }) => {
     <div className="WS-LinkList">
       <div className="WS-Link-Input-Container">
         <input
-          id="WS-Link-Input"
+          id="WS-guidebook-search-input"
           type="text"
           placeholder="유튜브 or 블로그 링크 붙여넣기"
           className="WS-Link-Input"

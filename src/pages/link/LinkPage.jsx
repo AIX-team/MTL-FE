@@ -44,11 +44,10 @@ const LinkPage = () => {
     switch (activeTab) {
       case 'links':
         return <LinkList linkData={linkData} setLinkData={setLinkData} />
-        // refreshLinks={fetchLinks} />;
+      // refreshLinks={fetchLinks} />;
       case 'youtube':
         // SearchYoutube에 refreshLinks 함수를 전달합니다.
         return <SearchYoutube linkData={linkData} setLinkData={setLinkData} />
-        //  refreshLinks={fetchLinks} />;
       default:
         return null;
     }
@@ -61,7 +60,6 @@ const LinkPage = () => {
         {/* 유튜브검색 탭 */}
         <div className="WS-Link-Tabs">
           <div
-            id="WS-Link-youtube-tab"
             className={`WS-Link-Tab ${activeTab === "youtube" ? "active" : ""}`}
             onClick={() => setActiveTab("youtube")}
           >
@@ -77,7 +75,6 @@ const LinkPage = () => {
 
           {/* 링크 탭 */}
           <div
-            id="WS-Link-links-tab"
             onClick={() => setActiveTab("links")}
             className={`WS-Link-Tab ${activeTab === "links" ? "active" : ""}`}
           >
@@ -93,6 +90,7 @@ const LinkPage = () => {
               )}
             </div>
           </div>
+
         </div>
 
         <div className="SJ-Tab-Indicator-Container">

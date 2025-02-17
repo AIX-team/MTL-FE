@@ -22,7 +22,6 @@
 
   margin-top: 40%;
   margin-bottom: 15%;
-
 }
 
 .WS-SelectDayTab-Title {
@@ -42,9 +41,13 @@
 }
 
 .WS-SelectDayTab-Counter {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
+
+  left: 50%;
+  transform: translateX(-50%);
 
   margin-bottom: 42%;
 
@@ -87,8 +90,12 @@
 }
 
 .WS-SelectDayTab-Button-Container {
+  position: relative;
   display: flex;
   justify-content: center;
+
+  left: 50%;
+  transform: translateX(-50%);
 
   gap: 10px;
 

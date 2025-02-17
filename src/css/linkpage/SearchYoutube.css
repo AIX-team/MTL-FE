@@ -9,14 +9,22 @@
   display: flex;
   align-items: center;
   justify-content: center;
+
+  left: 50%;
+  transform: translateX(-50%);
+  width: 350px;
+  height: 40px;
 }
 
 .WS-Link-Input {
-  width: 70%;
-  padding: 3% 70px 2.5% 4%;
-  /* 커서 여유 */
-  border: 2px solid var(--color-light-gray);
+  width: 100%;
+  height: 100%;
 
+  padding-top: 2px;
+  padding-left: 15px;
+  padding-right: 60px;
+
+  border: 2px solid var(--color-light-gray);
   border-radius: var(--border-radius-full);
   font-size: var(--font-size-base);
   font-weight: 500;
@@ -28,8 +36,8 @@
 
 .WS-Link-Button-Container {
   position: absolute;
-  right: 7%;
-  top: 30%;
+  right: 10px;
+  top: 11px;
 }
 
 .WS-SearchYoutube-SearchButton {

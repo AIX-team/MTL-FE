@@ -23,18 +23,21 @@ const TravelPage = () => {
 
       <div className="SJ-Travel-Tab-Container">
         <div className="SJ-Travel-Tabs">
+          
           <div
             className={`SJ-Travel-Tab ${activeTab === "travel" ? "active" : ""}`}
             onClick={() => setActiveTab("travel")}
           >
             여행 목록
           </div>
+
           <div
             className={`SJ-Travel-Tab ${activeTab === "guide" ? "active" : ""}`}
             onClick={() => setActiveTab("guide")}
           >
             가이드북 목록
           </div>
+
         </div>
         <div className="SJ-Tab-Indicator-Container">
           <div
