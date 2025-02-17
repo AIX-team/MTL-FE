@@ -2,10 +2,53 @@ import React, { useState } from "react";
 import { FaPlus, FaMinus} from "react-icons/fa"; // 아이콘 사용을 위한 import
 import "../../css/linkpage/SelectDayTab.css";
 import Loading from "../../components/Loading/Loading";
+import axiosInstance from "../../components/AxiosInstance";
+import { useNavigate } from "react-router-dom";
 
 const SelectDayTab = ({ onBack, linkData }) => {
   const [days, setDays] = useState(1); // 기본값 1일
   const [isLoading, setIsLoading] = useState(false); // 로딩페이지로 전환⭐️⭐️⭐️
+  const navigate = useNavigate();
+
+  const runApiCalls = async () => {
+    try {
+      const token = localStorage.getItem('token'); // 토큰 가져오기
+      const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      };
+
+      const payload = { urls: linkData };
+      // 분석 API 호출
+      const analysisResponse = await axiosInstance.post(
+        "/url/analysis",
+        payload,
+        { headers }
+      );
+      console.log("API 응답 (analysis):", analysisResponse.data);
+
+      // 매핑 API 호출 (요청 body에 days 추가)
+      const mappingPayload = {
+        urls: linkData,
+        days: days
+      };
+      const mappingResponse = await axiosInstance.post(
+        "/url/mapping",
+        mappingPayload,
+        { headers }
+      );
+      console.log("API 응답 (mapping):", mappingResponse.data);
+
+      const travelInfoId = mappingResponse.data.travelInfoId;
+      // 매핑 작업 완료 후 travelinfos 페이지로 이동
+      navigate(`/travelinfos/${travelInfoId}`, {
+        state: { days, analysisResult: analysisResponse.data }
+      });
+    } catch (error) {
+      console.error("API 요청 에러:", error.response?.data || error);
+    }
+  };
+
 
   const increaseDays = () => {
     if (days < 7) {
@@ -45,10 +88,7 @@ const SelectDayTab = ({ onBack, linkData }) => {
   const handleNext = async () => {
     setIsLoading(true);
     try {
-      // 여기에 필요한 데이터 처리 로직 추가
-      // 예시: 2초 대기
-
-      // 로딩이 끝나면 다음 페이지로 이동
+      runApiCalls();
     } catch (error) {
       console.error("Error:", error);
       setIsLoading(false);
@@ -56,9 +96,17 @@ const SelectDayTab = ({ onBack, linkData }) => {
   };
 
   return (
-    <div className="WS-SelectDayTab">
+    <div>
+      {isLoading && (
+        <div>
+          <Loading type="travelInfo" />
+        </div>
+      )}
       {!isLoading && (
         <div>
+          <div className="WS-SelectDayTab">
+          {!isLoading && (
+            <div>
           <div className="WS-SelectDayTab-Title-Container">
             <div className="WS-SelectDayTab-Title">총 여행 기간은?</div>
         <div className="WS-SelectDayTab-SubTitle">여행 일정을 알려주세요!</div>
@@ -106,6 +154,9 @@ const SelectDayTab = ({ onBack, linkData }) => {
       )}
       {isLoading && <Loading type="travelInfo" />}
     </div>
+    </div>
+  )}
+  </div>
   );
 };
 

@@ -1,12 +1,14 @@
 .SJ_loading_container {
+  position: fixed;  /* viewport 기준 고정 위치 */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: white;  /* 또는 rgba(255, 255, 255, 0.9) */
+  z-index: 9999;  /* 높은 z-index 값 */
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  background-color: white;
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
 }
 
 .SJ_loading_content {
