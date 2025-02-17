@@ -3,6 +3,7 @@ import "../../css/travel/GuidebookList.css";
 import TravelPageModal from "./TravelPageModal";
 import { FaSearch, FaTimes } from "react-icons/fa";
 import { HiChevronDown, HiChevronUp  } from "react-icons/hi2";
+import { Link } from "react-router-dom";
 import axiosInstance from '../../components/AxiosInstance';
 
 function GuidebookList() {
@@ -12,6 +13,7 @@ function GuidebookList() {
   const [sortAsc, setSortAsc] = useState(true);
   const [searchText, setSearchText] = useState("");
   const [guideBookData, setGuideBookData] = useState([]);
+  const [searchAuthor, setSearchAuthor] = useState([]);
 
   useEffect(() => {
     getGuideBookList();
@@ -80,13 +82,18 @@ function GuidebookList() {
     if (!guideBookData || !Array.isArray(guideBookData)) {
       return [];
     }
-    console.log("searchText:", searchText);
     // 검색어로 먼저 필터링
     let filtered = guideBookData;
     if (searchText.trim()) {
         filtered = guideBookData.filter(item => 
             item.title.toLowerCase().includes(searchText.toLowerCase())
         );
+    }
+    //작성자로 필터링
+    if(Array.isArray(searchAuthor) && searchAuthor.length > 0){
+      filtered = filtered.filter(item => 
+        item.authors.some(author => searchAuthor.includes(author))
+      );
     }
 
     console.log("filtered:", filtered);
@@ -111,7 +118,7 @@ function GuidebookList() {
       });
     }
     return filtered;
-  }, [guideBookData, activeFilter, searchText]);
+  }, [guideBookData, activeFilter, searchText, searchAuthor]);
 
 
   // 정렬된 가이드북 데이터 계산
@@ -207,6 +214,23 @@ function GuidebookList() {
     setShowModal(false);
   };
 
+  const handleAuthorClick = (author) => {
+    if(!searchAuthor.includes(author)) setSearchAuthor([...searchAuthor, author]);
+    console.log(author);
+  };
+
+
+  // 날짜 형식 변환 함수
+  // 2025-02-03T00:39:43 형식을 2025년 2월 3일 00시 39분 형식으로 변환
+  const convertDate = (date) => {
+    const year = date.getFullYear();
+    let month = date.getMonth() + 1;
+    let day = date.getDate();
+
+    if(month < 10) month = `0${month}`;
+    if(day < 10) day = `0${day}`;
+    return `${year}-${month}-${day}`;
+  };
 
   return (
     <div className="SJ-guidebook-list">
@@ -241,29 +265,51 @@ function GuidebookList() {
         />
         <div className="SJ-search-button-container">
           {searchText && (
-            <button
-              className="WS-SearchYoutube-ClearButton"
-              onClick={() => setSearchText("")}
-            >
-              <FaTimes />
-            </button>
-          )}
           <button className="SJ-search-icon">
-            <FaSearch />
+            {!searchText ? <FaSearch /> : <FaTimes onClick={() => setSearchText("")} />}
           </button>
+          )}
         </div>
       </div>
+      {Array.isArray(searchAuthor) && searchAuthor.length > 0 && <div className='HG-search-author-container'>
+        {searchAuthor.map((author, index) => (
+          <div key={index} className='HG-search-author-item'>
+            #{author} <FaTimes onClick={() => setSearchAuthor(searchAuthor.filter((item) => item !== author))} />
+          </div>
+        ))}
+      </div>
+      }
 
       <div className="WS-guide-container">
         {Array.isArray(sortedGuideBooks) && sortedGuideBooks.map((guide) => (
           <div key={guide.id} className="SJ-guide-card">
             <div className="SJ-guide-content">
+            <Link to={`/guidebooks/${guide.id}`} style={{textDecoration: "none", color: "black"}}>
               {guide.fixed && (
-                <div className="SJ-pin-icon">📌</div>
+                  <div className="SJ-pin-icon">📌</div>
               )}
 
               <div className="SJ-guide-category">{guide.travelInfoTitle}</div>
 
+
+              <div className="SJ-guide-header">
+                <div className="SJ-guide-title">{guide.title}</div>
+                <div className="SJ-guide-score">코스 {guide.courseCount}</div>
+              </div>
+              </Link>
+              <div className="SJ-guide-footer">
+                <div className="SJ-guide-date">생성일 : {convertDate(new Date(guide.createAt))}</div>
+                <div className="SJ-guide-tags">
+                  {Array.isArray(guide.authors) && guide.authors.map((author, index) => (
+                    <span key={index} className="SJ-guide-tag"
+                    onClick={() => handleAuthorClick(author)}
+                    >
+                      #{author}
+                    </span>
+                  ))}
+                </div>
+              </div>
+              
               <div
                 className={`WS-favorite-button  ${
                   guide.fixed ? "filled" : "outlined"
@@ -271,21 +317,6 @@ function GuidebookList() {
                 onClick={() => toggleFavorite(guide.id)}
               >
                 {guide.isFavorite ? "♥" : "♡"}
-              </div>
-
-              <div className="SJ-guide-header">
-                <div className="SJ-guide-title">{guide.title}</div>
-                <div className="SJ-guide-score">코스 {guide.courseCount}</div>
-              </div>
-              <div className="SJ-guide-footer">
-                <div className="SJ-guide-date">생성일 {guide.createAt}</div>
-                <div className="SJ-guide-tags">
-                  {Array.isArray(guide.authors) && guide.authors.map((author, index) => (
-                    <span key={index} className="SJ-guide-tag">
-                      #{author}
-                    </span>
-                  ))}
-                </div>
               </div>
               <button
                 className="SJ-more-button"
