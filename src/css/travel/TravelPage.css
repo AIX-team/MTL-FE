@@ -41,7 +41,12 @@
   position: absolute;
   right: 0;
   left: 0;
-  bottom: 0;
+  bottom: 0; /* 11% 대신 0으로 변경 */
+
+  /* 모바일 기기에서만 다른 값 적용 */
+  @media screen and (max-width: 768px) {
+    bottom: 11%;
+  }
 }
 
 .SJ-Tab-Indicator {
@@ -51,7 +56,14 @@
   transition: all 0.3s;
 }
 
+.SJ-Travel-Page {
+  position: relative;
+  min-height: 100vh; /* 전체 페이지 높이 고정 */
+}
+
 .SJ-Travel-Page-Content {
   margin-top: 20%;
   width: 100%;
+  min-height: calc(100vh - 100px); /* 탭 메뉴 높이를 뺀 나머지 영역 고정 */
+  position: relative;
 }

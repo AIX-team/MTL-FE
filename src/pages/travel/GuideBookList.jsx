@@ -283,13 +283,13 @@ function GuidebookList() {
                 <div className="SJ-guide-category">{guide.travelInfoTitle}</div>
 
                 <div
-                  className={`WS-favorite-button  ${
-                    guide.fixed ? "filled" : "outlined"
-                  }`}
-                  onClick={() => toggleFavorite(guide.id)}
-                >
-                  {guide.isFavorite ? "♥" : "♡"}
-                </div>
+  className="WS-favorite-button"
+  onClick={() => toggleFavorite(guide.id)}
+>
+  <span className={guide.isFavorite ? "filled-heart" : "empty-heart"}>
+    {guide.isFavorite ? "♥" : "♡"}
+  </span>
+</div>
 
                 <div className="SJ-guide-header">
                   <div className="SJ-guide-title">{guide.title}</div>

@@ -110,3 +110,17 @@
   letter-spacing: 0.5px;
   padding-top: 4px;
 }
+
+/* 애니메이션 키프레임 추가 */
+@keyframes progressAnimation {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+.SJ_progress_bar_main.animate {
+  animation: progressAnimation 2s linear; /* 애니메이션 적용 */
+}

@@ -23,9 +23,8 @@
 }
 
 .SJ-filter-btn {
-  margin-left: 5%;
-
-  padding: 3% 5%;
+  margin-left: 20px; /* 퍼센트 대신 고정값 사용 */
+  padding: 13px 15px; /* 퍼센트 대신 고정값 사용 */
   border: 1px solid var(--color-light-gray);
 
   background: none;
@@ -36,8 +35,8 @@
   transition: all 0.3s ease;
   font-size: 12px; /* 글자 크기 키우기 */
   /* 여기에 고정 높이와 너비를 추가 */
-  height: 32%; /* 버튼 높이 고정 */
-  min-width: 20%; /* 최소 너비 고정 */
+  height: 40px; /* 버튼 높이 고정 */
+  min-width: 87px; /* 최소 너비 고정 */
 }
 
 .SJ-filter-btn.active {
@@ -237,7 +236,6 @@
   color: var(--color-main);
   right: 4%;
   top: 10%;
-  color: var(--color-main);
 }
 /* 더보기 위치 */
 .SJ-more-button {
