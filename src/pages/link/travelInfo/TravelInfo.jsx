@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../../../css/linkpage/TravelInfo/TravelInfo.css';
 import Slider from 'react-slick';
@@ -189,6 +189,7 @@ const TravelInfo = () => {
   const [loading, setLoading] = useState(false);
   const { travelInfoId } = useParams();
   const [isComponentMounted, setIsComponentMounted] = useState(false);
+  const navigate = useNavigate();
 
   const [travelInfo, setTravelInfo] = useState({
     message: '',
@@ -339,17 +340,22 @@ const TravelInfo = () => {
         setLoading(true);
         setError(null);
         const response = await axiosInstance.get(`/api/v1/travels/travelInfos/${travelInfoId}/aiSelect`);
-        setSelectedPlaces(response.data);
-        setSelectedAIPlaces(response.data);
+        if (response.data.success === "success") {
+          setSelectedPlaces(response.data.content);
+          setSelectedAIPlaces(response.data.content);
+        } else {
+          setError(response.data.message);
+        }
       } else {
         setSelectedPlaces(selectedAIPlaces);
       }
     } catch (error) {
       console.error('API Error:', error);
+      setError(error.message || '데이터를 불러오는데 실패했습니다.');
     } finally {
       setLoading(false);
     }
-  }, [travelInfoId]);
+  }, [travelInfoId, selectedAIPlaces, selectedPlaces.length]);
 
 
   useEffect(() => {
@@ -528,12 +534,15 @@ const TravelInfo = () => {
 
   return (
     <div className="HG-TravelInfo-Wrapper">
-      <main className='HG-TravelInfo-Container'>
-        <div className='HG-TravelInfo-Header'>
-          <div className='WS-TravelInfo-Header-Left'>
-            <div className='WS-TravelInfo-Header-Left-Back-Btn'>
-              <img className='WS-TravelInfo-Header-Left-Back-Btn-Icon' src={backArrowIcon} alt="backArrowIcon" />
-            </div>
+        <main className='HG-TravelInfo-Container'>
+            <div className='HG-TravelInfo-Header'>
+                <div className='WS-TravelInfo-Header-Left'>
+                    <div className='WS-TravelInfo-Header-Left-Back-Btn'>
+                        <img className='WS-TravelInfo-Header-Left-Back-Btn-Icon' 
+                        src={backArrowIcon}
+                        alt="backArrowIcon" 
+                        onClick={() => navigate(-1)} />
+                    </div>
 
             <div className='WS-TravelInfo-Header-Left-Contents'>
               <div className='WS-TravelInfo-Travel-Days'>{travelDays}일</div>
@@ -715,6 +724,7 @@ const TravelInfo = () => {
             selectedPlaces={selectedPlaces}
             onPlaceSelect={handlePlaceDelete}
             travelDays={travelDays}
+            travelInfoId={travelInfoId}
           />
         </div>
       </main>

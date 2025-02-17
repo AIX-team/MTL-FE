@@ -1,15 +1,11 @@
 import React, { useState } from "react";
-import { FaPlus, FaMinus, FaArrowLeft } from "react-icons/fa"; // 아이콘 사용을 위한 import
-import { useNavigate } from "react-router-dom"; // 네비게이션 훅 추가
+import { FaPlus, FaMinus} from "react-icons/fa"; // 아이콘 사용을 위한 import
 import "../../css/linkpage/SelectDayTab.css";
-import axios from "axios";
-import Loading from "../../components/Loading/Loading"; // Loading.jsx 컴포넌트 import
+import Loading from "../../components/Loading/Loading";
 
 const SelectDayTab = ({ onBack, linkData }) => {
   const [days, setDays] = useState(1); // 기본값 1일
-  const [showPreferTab, setShowPreferTab] = useState(false); // 추가⭐️⭐️⭐️
   const [isLoading, setIsLoading] = useState(false); // 로딩페이지로 전환⭐️⭐️⭐️
-  const navigate = useNavigate(); // 네비게이션 훅 사용
 
   const increaseDays = () => {
     if (days < 7) {
@@ -45,19 +41,26 @@ const SelectDayTab = ({ onBack, linkData }) => {
     }
   };
 
-  const handleNext = () => {
-    navigate("/loading", { state: { linkData, days } });
-  };
+  // 다음 버튼 클릭 핸들러 추가⭐️⭐️⭐️
+  const handleNext = async () => {
+    setIsLoading(true);
+    try {
+      // 여기에 필요한 데이터 처리 로직 추가
+      // 예시: 2초 대기
 
-  // axios 호출 중일 경우 Loading.jsx 로딩창을 표시
-  if (isLoading) {
-    return <Loading type="default" />;
-  }
+      // 로딩이 끝나면 다음 페이지로 이동
+    } catch (error) {
+      console.error("Error:", error);
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="WS-SelectDayTab">
-      <div className="WS-SelectDayTab-Title-Container">
-        <div className="WS-SelectDayTab-Title">총 여행 기간은?</div>
+      {!isLoading && (
+        <div>
+          <div className="WS-SelectDayTab-Title-Container">
+            <div className="WS-SelectDayTab-Title">총 여행 기간은?</div>
         <div className="WS-SelectDayTab-SubTitle">여행 일정을 알려주세요!</div>
         <div className="WS-SelectDayTab-SubTitle-date">( 최대 7일 )</div>
       </div>
@@ -98,7 +101,10 @@ const SelectDayTab = ({ onBack, linkData }) => {
         >
           다음
         </button>
-      </div>
+        </div>
+        </div> 
+      )}
+      {isLoading && <Loading type="travelInfo" />}
     </div>
   );
 };

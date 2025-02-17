@@ -244,10 +244,11 @@ const TravelList = () => {
         </div>
 
         <div className="SJ-search-Container">
+          
           <input
             type="text"
             placeholder="내가 만든 여행을 검색하세요"
-            className="SJ-search-input"
+            className="SJ-travel-search-input"
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
           />

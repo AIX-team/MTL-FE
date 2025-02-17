@@ -15,26 +15,68 @@ function Loading({ type = "default" }) {
   const lastUpdateTimeRef = useRef(Date.now());
   const loadingImages = [loadingEarth, loadingSunglass, loadingBag, loadingMap];
 
-  
+  const navigate = useNavigate();
+  const { state } = useLocation();
+  const { linkData, days } = state || {};
+
+  // API 호출 useEffect
+  useEffect(() => {
+    const runApiCalls = async () => {
+      try {
+        const token = localStorage.getItem('token'); // 토큰 가져오기
+        const headers = {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        };
+
+        const payload = { urls: linkData };
+        // 분석 API 호출
+        const analysisResponse = await axios.post(
+          "http://localhost:8080/url/analysis",
+          payload,
+          { headers }
+        );
+        console.log("API 응답 (analysis):", analysisResponse.data);
+
+        // 매핑 API 호출 (요청 body에 days 추가)
+        const mappingPayload = {
+          urls: linkData,
+          days: days
+        };
+        const mappingResponse = await axios.post(
+          "http://localhost:8080/url/mapping",
+          mappingPayload,
+          { headers }
+        );
+        console.log("API 응답 (mapping):", mappingResponse.data);
+
+        const travelInfoId = mappingResponse.data.travelInfoId;
+        // 매핑 작업 완료 후 travelinfos 페이지로 이동
+        navigate(`/travelinfos/${travelInfoId}`, {
+          state: { days, analysisResult: analysisResponse.data }
+        });
+      } catch (error) {
+        console.error("API 요청 에러:", error.response?.data || error);
+      }
+    };
+
+    if (linkData && days) {
+      runApiCalls();
+    }
+  }, [linkData, days, navigate]);
+
   // 메시지 설정
   const messages = {
-    travelInfo: {
-      main: "여행 기간에 맞는\n여행 정보를\n준비중입니다.",
+    default: {
+      main: "여행 기간에 맞는\n영상 정보를\n준비중입니다.",
       sub: "최상의 결과를 위해\n잠시만 기다려 주세요.",
     },
     guidebook: {
       main: "여행 장소를 담은\n가이드북을\n준비중입니다.",
       sub: "최상의 결과를 위해\n잠시만 기다려 주세요.",
     },
-    travelList: {
-      main: "여행 정보를 담은\n목록을\n준비중입니다.",
-      sub: "최상의 결과를 위해\n잠시만 기다려 주세요.",
-    },
-    guideList: {
-      main: "가이드북을 담은\n목록을\n준비중입니다.",
-      sub: "최상의 결과를 위해\n잠시만 기다려 주세요.",
-    },
   };
+
   const currentMessage = messages[type] || messages.default;
 
   useEffect(() => {
@@ -103,10 +145,10 @@ function Loading({ type = "default" }) {
           />
         </div>
         <p className="SJ_loading_message">
-          {currentMessage.main}
+          {"여행 기간에 맞는\n영상 정보를\n준비중입니다."}
         </p>
         <p className="SJ_loading_sub_message">
-          {currentMessage.sub}
+          {"최상의 결과를 위해 잠시만 기다려 주세요."}
         </p>
         <div className="SJ_progress_wrapper">
           <img

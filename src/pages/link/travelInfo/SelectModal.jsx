@@ -7,6 +7,9 @@ import allSelectIcon from "../../../images/select_check_deactive.svg";
 import xIcon from "../../../images/x-btn.svg";
 import TasteModal from "./TasteModal";
 import "../../../css/linkpage/TravelInfo/SelectModal.css";
+import Loading from "../../../components/Loading/Loading";
+import { useNavigate } from "react-router-dom";
+
 const axiosInstance = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
   headers: {
@@ -20,6 +23,7 @@ const SelectModal = ({
   selectedPlaces,
   onPlaceSelect,
   travelDays,
+  travelInfoId,
 }) => {
   const [isSelected, setIsSelected] = useState([]);
   const [selectedFilters, setSelectedFilters] = useState(["전체보기"]);
@@ -27,6 +31,9 @@ const SelectModal = ({
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [showTasteModal, setShowTasteModal] = useState(false);
   const [filteredPlaces, setFilteredPlaces] = useState(selectedPlaces);
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+
   // 필터 타입을 매핑하는 객체 추가
   const filterTypeMap = {
     전체보기: ["all", "landmark", "restaurant", "etc"],
@@ -36,12 +43,15 @@ const SelectModal = ({
   };
 
   const postGuidebook = async (travelTaste) => {
+    setIsLoading(true);
     try {
       const response = await axiosInstance.post("/api/v1/travels/guidebook", {
-        placeIds: isSelected.map((place) => place.placeId),
+        travelInfoId: travelInfoId,
         travelDays: travelDays,
         travelTaste: travelTaste,
+        placeIds: isSelected.map((place) => place.placeId),
       });
+      navigate("/guidebooks/" + response.data.value);
       console.log(response);
     } catch (error) {
       console.error("API Error:", error);
@@ -171,45 +181,48 @@ const SelectModal = ({
 
   return (
     <div className={` ${isOpen ? "HG-select-modal-container" : "none"}`}>
-      <div className="HG-select-modal-header">
-        <img src={backArrow} alt="backArrow" onClick={onClose} />
-        <span>선택</span>
-      </div>
-      <div className="HG-select-modal-title">
-        <div>AI 추천 장소입니다.</div>
-        <div className="HG-select-modal-title-sub">
-          평점/리뷰가 좋고 동선이 가까운 순으로 추천됩니다.
-        </div>
-      </div>
-      <div className="HG-select-modal-filter">
-        <div className="HG-select-modal-filter-btns">
-          {["전체보기", "관광지", "음식/카페", "그 외"].map((filter) => (
-            <span
-              key={filter}
-              className={`HG-select-modal-filter-btn ${
-                selectedFilters.includes(filter) ? "active" : ""
-              }`}
-              onClick={() => handleFilterSelect(filter)}
-            >
-              <input
-                value={filterTypeMap[filter]}
-                type="checkbox"
-                checked={selectedFilters.includes(filter)}
-                onChange={() => {}}
-              />
-              {filter}
-            </span>
-          ))}
-        </div>
-        <div className="HG-select-modal-select-frame">
-          <span
-            className="HG-select-modal-select-btn"
-            onClick={() =>
-              setIsSelected((prev) =>
-                prev.length === selectedPlaces.length ? [] : selectedPlaces
-              )
-            }
-          >
+      {isLoading && <Loading type="guidebook" />}
+      {!isLoading && (
+        <div>
+          <div className="HG-select-modal-header">
+            <img src={backArrow} alt="backArrow" onClick={onClose} />
+            <span>선택</span>
+          </div>
+          <div className="HG-select-modal-title">
+            <div>AI 추천 장소입니다.</div>
+            <div className="HG-select-modal-title-sub">
+              평점/리뷰가 좋고 동선이 가까운 순으로 추천됩니다.
+            </div>
+          </div>
+          <div className="HG-select-modal-filter">
+            <div className="HG-select-modal-filter-btns">
+              {["전체보기", "관광지", "음식/카페", "그 외"].map((filter) => (
+                <span
+                  key={filter}
+                  className={`HG-select-modal-filter-btn ${
+                    selectedFilters.includes(filter) ? "active" : ""
+                  }`}
+                  onClick={() => handleFilterSelect(filter)}
+                >
+                  <input
+                    value={filterTypeMap[filter]}
+                    type="checkbox"
+                    checked={selectedFilters.includes(filter)}
+                    onChange={() => {}}
+                  />
+                  {filter}
+                </span>
+              ))}
+            </div>
+            <div className="HG-select-modal-select-frame">
+              <span
+                className="HG-select-modal-select-btn"
+                onClick={() =>
+                  setIsSelected((prev) =>
+                    prev.length === selectedPlaces.length ? [] : selectedPlaces
+                  )
+                }
+              >
             <img
               src={
                 selectedPlaces.length > 0 &&
@@ -340,6 +353,8 @@ const SelectModal = ({
             </div>
           </div>
         </div>
+      )}
+    </div>
       )}
     </div>
   );
