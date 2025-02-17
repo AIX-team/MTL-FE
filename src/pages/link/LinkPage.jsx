@@ -32,9 +32,9 @@ const LinkPage = () => {
     }
   };
 
-  // useEffect(() => {
-  //   fetchLinks();
-  // }, [navigate]);
+  useEffect(() => {
+    fetchLinks();
+  }, [navigate]);
 
   useEffect(() => {
     setLinkCount(linkData.length);
