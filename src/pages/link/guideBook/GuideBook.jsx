@@ -718,7 +718,7 @@ const GuideBook = () => {
                                 className={activeTab === Number(courseNumber) + 1 ? 'WS-GuideBook-Button-Clicked' : 'WS-GuideBook-Button-Not-Clicked'}
                                 onClick={() => handleTabClick(courseNumber)}
                             >
-                                코스 {Number(courseNumber) + 1}
+                                {`코스 ${Number(courseNumber.trim()) + 1}`}  {/* trim() 추가 */}
                             </button>
                         ))}
                     </div>

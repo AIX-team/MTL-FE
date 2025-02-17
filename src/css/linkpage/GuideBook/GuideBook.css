@@ -141,7 +141,8 @@
   height: 45px;
 
   overflow-x: auto;
-  overflow-y: hidden;
+  white-space: nowrap;
+  scrollbar-width: none;
 }
 
 .WS-GuideBook-Button-Clicked {
