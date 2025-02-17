@@ -6,7 +6,7 @@ import '../../css/linkpage/SearchYoutube.css';
 import youtubeIcon from '../../images/YOUTUBE_LOGO.png';
 import Modal from '../../layouts/AlertModal';
 
-const SearchYoutube = ({ linkData, setLinkData, refreshLinks }) => {
+const SearchYoutube = ({ linkData, setLinkData }) => {
     const [searchResults, setSearchResults] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedVideos, setSelectedVideos] = useState([]);
@@ -222,7 +222,6 @@ const SearchYoutube = ({ linkData, setLinkData, refreshLinks }) => {
             }
         }
 
-        refreshLinks();
     };
 
     // 렌더링 시 현재 상태 확인

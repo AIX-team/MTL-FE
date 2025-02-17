@@ -48,7 +48,7 @@ const LinkPage = () => {
       case 'youtube':
         // SearchYoutube에 refreshLinks 함수를 전달합니다.
         return <SearchYoutube linkData={linkData} setLinkData={setLinkData} />
-         // refreshLinks={fetchLinks} />;
+        //  refreshLinks={fetchLinks} />;
       default:
         return null;
     }
