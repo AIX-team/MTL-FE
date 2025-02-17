@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import '../../../css/Modal.css';
 import { FaTimes } from "react-icons/fa";
 
 
@@ -9,7 +8,7 @@ const TitleEditModal = ({ isOpen, onClose, title, onSave }) => {
   if (!isOpen) return null;
 
   const handleOverlayClick = (e) => {
-    if (e.target.className === 'HG-modal-overlay') {
+    if (e.target.className === 'WS-Modal-Overlay') {
       onClose();
     }
   };
@@ -56,7 +55,6 @@ const TitleEditModal = ({ isOpen, onClose, title, onSave }) => {
             확인
           </button>
         </div>
-
       </div>
     </div>
   );

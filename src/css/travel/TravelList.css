@@ -19,7 +19,7 @@
 .SJ-filter-buttons {
   display: flex;
   margin-bottom: 4%;
-  margin-top: -3%; /* 버튼 위 위치 조절 */
+  margin-top: 2%;
 }
 
 .SJ-filter-btn {
@@ -47,33 +47,11 @@
   /* active 상태에서도 동일한 transition 적용 */
   transition: all 0.3s ease;
 }
-/* 검색 입력창 ============================================= */
-.SJ-search-Container {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
 
-/* 검색창 전체 길이 */
-.SJ-travel-search-input {
-  width: 70%;
-  padding: 4% 12% 4% 5%;
-  /* 검색창 내부 커서 여유 */
-  border: 2px solid var(--color-light-gray);
-
-  border-radius: var(--border-radius-full);
-  font-size: var(--font-size-base);
-}
-
-.SJ-travel-search-input:focus {
-  outline: none;
-}
 .SJ-search-button-container {
   position: absolute;
-  right: 13%;
-  top: 35%;
-  width: 30px;
+  right: 11px;
+  top: 11px;
 }
 /* 검색 아이콘 */
 .SJ-search-icon {
@@ -83,7 +61,6 @@
   font-size: var(--font-size-base);
 
   color: var(--color-guide);
-  transition: all 0.3s ease;
 }
 
 .SJ-search-icon:hover {
