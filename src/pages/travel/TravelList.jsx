@@ -223,7 +223,8 @@ const TravelList = () => {
     if (day < 10) day = `0${day}`;
     return `${year}-${month}-${day}`;
   };
-
+ 
+  
   return (
     <div className="SJ-Travel-List">
       <div className="SJ-travel-container">
