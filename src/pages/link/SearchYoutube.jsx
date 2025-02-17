@@ -37,7 +37,7 @@ const SearchYoutube = ({ linkData, setLinkData, refreshLinks }) => {
             const token = localStorage.getItem('token');
             if (token) {
                 try {
-                    const response = await axios.get('http://localhost:8080/user/search/recent', {
+                    const response = await axios.get(process.env.REACT_APP_BACKEND_URL + '/user/search/recent', {
                         headers: {
                             'Authorization': `Bearer ${token}`
                         }
@@ -90,7 +90,7 @@ const SearchYoutube = ({ linkData, setLinkData, refreshLinks }) => {
             const token = localStorage.getItem('token');
             if (token) {
                 try {
-                    await axios.post('http://localhost:8080/user/search/save',
+                    await axios.post(process.env.REACT_APP_BACKEND_URL + '/user/search/save',
                         { searchTerm: searchQuery.trim() },
                         {
                             headers: {
@@ -150,7 +150,7 @@ const SearchYoutube = ({ linkData, setLinkData, refreshLinks }) => {
         try {
             const videoUrl = `https://www.youtube.com/watch?v=${videoId}`;
             const response = await axios.post(
-                'http://localhost:8000/api/v1/youtube/check_subtitles',
+                process.env.REACT_APP_AI_API + '/api/v1/youtube/check_subtitles',
                 { video_url: videoUrl }
             );
             console.log("자막 체크 응답:", response.data);
@@ -174,7 +174,7 @@ const SearchYoutube = ({ linkData, setLinkData, refreshLinks }) => {
 
         if (exists) {
             console.log('삭제 요청 전송, videoUrl:', videoUrl);
-            await axios.delete('http://localhost:8080/user/delete', {
+            await axios.delete(process.env.REACT_APP_BACKEND_URL + '/user/delete', {
                 params: { url: videoUrl },
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -203,7 +203,7 @@ const SearchYoutube = ({ linkData, setLinkData, refreshLinks }) => {
                     author: video.channelTitle,
                 };
 
-                const response = await axios.post('http://localhost:8080/user/save', requestPayload, {
+                const response = await axios.post(process.env.REACT_APP_BACKEND_URL + '/user/save', requestPayload, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 console.log('저장 응답:', response.data);
@@ -236,7 +236,7 @@ const SearchYoutube = ({ linkData, setLinkData, refreshLinks }) => {
             if (!token) return;
 
             try {
-                const response = await axios.get('http://localhost:8080/user/url/list', {
+                const response = await axios.get(process.env.REACT_APP_BACKEND_URL + '/user/url/list', {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 const savedLinks = response.data;

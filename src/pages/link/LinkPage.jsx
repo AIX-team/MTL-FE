@@ -23,7 +23,7 @@ const LinkPage = () => {
     }
     // axios 호출 시 token이 올바르게 헤더에 추가되었는지 확인
     try {
-      const response = await axios.get('http://localhost:8080/user/url/list', {
+      const response = await axios.get(process.env.REACT_APP_BACKEND_URL + '/user/url/list', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       setLinkData(response.data);
