@@ -749,15 +749,17 @@ const GuideBook = () => {
             {showMoveModal && (
                 <div className="WS-second-Modal-Overlay" onClick={handleModalClose}>
                     <div className='WS-GuideBook-Modal-Bottom' onClick={e => e.stopPropagation()}>
-                        <div className="WS-Modal-Option">
+                        <div className="WS-Copy-Modal-Option">
                             {Object.keys(guideBook.courses).filter(courseNum => Number(courseNum) + 1 !== activeTab).map((courseNumber) => (
-                                <div className='HG-Select-Course' key={courseNumber}>
-                                    <input type="checkbox" className='HG-Select-Course-checkbox' onChange={() => handleTargetCourseSelect(guideBook.courses[courseNumber].courseId)} />
-                                    코스 {Number(courseNumber) + 1}
+                                <div className='WS-Modal-Option2' key={courseNumber}>
+                                    <label className='WS-Select-Option-checkbox-Container'>
+                                        <input type="checkbox" onChange={() => handleTargetCourseSelect(guideBook.courses[courseNumber].courseId)} />
+                                        <div className='WS-Select-Option-checkbox-text'>코스 {Number(courseNumber) + 1}</div>
+                                    </label>
                                 </div>
                             ))}
                         </div>
-                        <div className="WS-second-Modal-Button-Container">
+                        <div className="WS-Copy-Modal-Button-Container">
                             <button className="WS-Copy-Modal-Button" onClick={handleModalClose}>취소</button>
                             <button className="WS-Copy-Modal-Button" onClick={handlePlaceMove} disabled={!targetCourse}>이동</button>
                         </div>
@@ -782,36 +784,6 @@ const GuideBook = () => {
                                 </div>
                             ))}
                         </div>
-
-                        <div className="WS-Copy-Modal-Option">
-                            {Object.keys(guideBook.courses).filter(courseNum => Number(courseNum) + 1 !== activeTab).map((courseNumber) => (
-                                <div className='WS-Modal-Option2' key={courseNumber}>
-                                    <label className='WS-Select-Option-checkbox-Container'>
-                                        <input
-                                            type="checkbox"
-                                            onChange={() => handleTargetCourseSelect(guideBook.courses[courseNumber].courseId)}
-                                        />
-                                        <div className='WS-Select-Option-checkbox-text'>코스 {Number(courseNumber) + 1}</div>
-                                    </label>
-                                </div>
-                            ))}
-                        </div>
-
-                        <div className="WS-Copy-Modal-Option">
-                            {Object.keys(guideBook.courses).filter(courseNum => Number(courseNum) + 1 !== activeTab).map((courseNumber) => (
-                                <div className='WS-Modal-Option2' key={courseNumber}>
-                                    <label className='WS-Select-Option-checkbox-Container'>
-                                        <input
-                                            type="checkbox"
-                                            onChange={() => handleTargetCourseSelect(guideBook.courses[courseNumber].courseId)}
-                                        />
-                                        <div className='WS-Select-Option-checkbox-text'>코스 {Number(courseNumber) + 1}</div>
-                                    </label>
-                                </div>
-                            ))}
-                        </div>
-
-
                         <div className="WS-Copy-Modal-Button-Container">
                             <button className="WS-Copy-Modal-Button" onClick={handleModalClose}>취소</button>
                             <button className="WS-Copy-Modal-Button" onClick={handlePlaceAdd} disabled={!targetCourse}>복사</button>
@@ -841,7 +813,6 @@ const GuideBook = () => {
                                 <div className="WS-Delete-Modal-Title">삭제하시겠습니까?</div>
                                 <div className="WS-Delete-Modal-Message">삭제된 장소는 복구할 수 없습니다.</div>
                             </div>
-
                             <div className="WS-second-Modal-Button-Container">
                                 <button className="WS-second-Modal-Button" onClick={handleModalClose}>취소</button>
                                 <button className="WS-second-Modal-Button" onClick={handleDeleteConfirm}>확인</button>
@@ -853,7 +824,7 @@ const GuideBook = () => {
 
             {/* 장소 상세 모달 */}
             {showDetailModal && selectedPlace && (
-                <div className=""> {/*TO-DO: 모달 배경 */}
+                <div className="WS-GuideBook-Container">
                     <div className="YC-GuideBook-detail-modal">
                         <div className="HG-GuideBook-detail-modal-header">
                             <button className="YC-GuideBook-detail-modal-back" onClick={handleDetailModalClose}>
