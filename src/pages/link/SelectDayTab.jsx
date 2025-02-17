@@ -3,7 +3,7 @@ import { FaPlus, FaMinus} from "react-icons/fa"; // 아이콘 사용을 위한 i
 import "../../css/linkpage/SelectDayTab.css";
 import Loading from "../../components/Loading/Loading";
 
-const SelectDayTab = ({ onBack }) => {
+const SelectDayTab = ({ onBack, linkData }) => {
   const [days, setDays] = useState(1); // 기본값 1일
   const [isLoading, setIsLoading] = useState(false); // 로딩페이지로 전환⭐️⭐️⭐️
 
@@ -97,7 +97,7 @@ const SelectDayTab = ({ onBack }) => {
         </button>
         <button
           className={`WS-SelectDayTab-NextButton ${days >= 1 ? "active" : ""}`}
-          onClick={handleNext} // 클릭 핸들러 추가⭐️⭐️⭐️
+          onClick={handleNext}
         >
           다음
         </button>

@@ -1,4 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import axios from "axios";
 import "./Loading.css";
 import loadingEarth from "../../images/loading_earth.png";
 import loadingSunglass from "../../images/loading_sunglass.png";
@@ -7,7 +9,6 @@ import loadingMap from "../../images/loading_map.png";
 import loadingAirplane from "../../images/loading_airplane.png";
 
 function Loading({ type = "default" }) {
-  // type prop 추가
   const [progress, setProgress] = useState(0);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const animationFrameRef = useRef();
