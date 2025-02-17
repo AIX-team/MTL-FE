@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import '../../../css/Modal.css';
-import resetIcon from '../../../images/resetBtn.svg';
+import { FaTimes } from "react-icons/fa";
 
 
 const TitleEditModal = ({ isOpen, onClose, title, onSave }) => {
   const [updateTitle, setUpdateTitle] = useState(title);
 
   if (!isOpen) return null;
-  
+
   const handleOverlayClick = (e) => {
     if (e.target.className === 'HG-modal-overlay') {
       onClose();
@@ -20,39 +20,41 @@ const TitleEditModal = ({ isOpen, onClose, title, onSave }) => {
   };
 
   return (
-    <div className="HG-modal-overlay" onClick={handleOverlayClick}>
-      <div className="HG-modal-content">
-        <div className='HG-modal-title-guidebook'>가이드북 제목 수정</div>
-        <div className='HG-modal-description-guidebook'>가이드북의 제목을 수정할 수 있습니다.</div>
-        <div className='HG-TravelInfo-Edit-Frame'>
-          <div className="HG-input-wrapper">
-            <input 
-
-              className="HG-modal-input-guidebook"
-              type="text"
-              value={updateTitle}
-              onChange={(e) => setUpdateTitle(e.target.value)}
-            />
-
-            {updateTitle && (
-              <button 
-                className="HG-reset-button"
-                onClick={() => setUpdateTitle('')}
-                type="button"
-              >
-                <img src={resetIcon} alt="resetIcon" />
-
-              </button>
-            )}
+    <div className="WS-Modal-Overlay" onClick={handleOverlayClick}>
+      <div className="WS-second-Modal-Content">
+        <div className="WS-Edit-Modal-Message-Container">
+          <div className="WS-Edit-Modal-Title">가이드북 제목 수정</div>
+          <div className="WS-Edit-Modal-Message">
+            가이드북의 제목을 수정할 수 있습니다.
           </div>
         </div>
 
-        <div className="HG-modal-buttons">
-          <div className="HG-modal-button" onClick={onClose}>취소</div>
-          <div className="HG-modal-button-submit" onClick={() => {
+        <div className="WS-Edit-Modal-Input-Container">
+          <input
+            className="WS-Edit-Modal-Input"
+            type="text"
+            value={updateTitle}
+            onChange={(e) => setUpdateTitle(e.target.value)}
+          />
+          {updateTitle && (
+            <button
+              className="WS-Edit-Modal-Reset-Button"
+              onClick={() => setUpdateTitle('')}
+              type="button"
+            >
+              <FaTimes />
+            </button>
+          )}
+        </div>
+
+        <div className="WS-second-Modal-Button-Container">
+          <button className="WS-second-Modal-Button" onClick={onClose}>취소</button>
+          <button className="WS-second-Modal-Button" onClick={() => {
             onSave(updateTitle);
             onClose();
-          }}>확인</div>
+          }}>
+            확인
+          </button>
         </div>
 
       </div>

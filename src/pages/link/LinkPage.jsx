@@ -32,9 +32,9 @@ const LinkPage = () => {
     }
   };
 
-  useEffect(() => {
-    fetchLinks();
-  }, [navigate]);
+  // useEffect(() => {
+  //   fetchLinks();
+  // }, [navigate]);
 
   useEffect(() => {
     setLinkCount(linkData.length);
@@ -43,10 +43,12 @@ const LinkPage = () => {
   const renderContent = () => {
     switch (activeTab) {
       case 'links':
-        return <LinkList linkData={linkData} setLinkData={setLinkData} refreshLinks={fetchLinks} />;
+        return <LinkList linkData={linkData} setLinkData={setLinkData} />
+        // refreshLinks={fetchLinks} />;
       case 'youtube':
         // SearchYoutube에 refreshLinks 함수를 전달합니다.
-        return <SearchYoutube linkData={linkData} setLinkData={setLinkData} refreshLinks={fetchLinks} />;
+        return <SearchYoutube linkData={linkData} setLinkData={setLinkData} />
+         // refreshLinks={fetchLinks} />;
       default:
         return null;
     }

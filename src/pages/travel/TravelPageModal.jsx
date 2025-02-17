@@ -90,11 +90,11 @@ const TravelPageModal = ({
             <div className="WS-Edit-Modal-Input-Container">
               <input
                 type="text"
+                className="WS-Edit-Modal-Input"
+                placeholder={selectedItem?.title}
                 value={newTitle}
                 onChange={(e) => setNewTitle(e.target.value)}
-                className="WS-Edit-Modal-Input"
-                readOnly
-                onClick={(e) => e.target.removeAttribute("readonly")}
+                autoFocus
               />
               {newTitle && (
                 <button
