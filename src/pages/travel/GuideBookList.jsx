@@ -22,70 +22,57 @@ function GuidebookList() {
   // 가이드북 목록 조회 api
   const getGuideBookList = async () => {
     try {
-      const response = await axiosInstance.get(
-        "/api/v1/travels/guidebooks/list"
-      );
+      const response = await axiosInstance.get('/api/v1/travels/guidebooks/list');
       setGuideBookData(response.data.guideBooks || []);
       console.log(response.data.guideBooks);
-    } catch (error) {
-      console.error("가이드북 목록을 가져오는 중 오류가 발생했습니다:", error);
+    } catch (error) { 
+      console.error('가이드북 목록을 가져오는 중 오류가 발생했습니다:', error);
     }
   };
 
   // 즐겨찾기 업데이트 api
   const putFavorite = async (id, favorite) => {
     try {
-      const response = await axiosInstance.put(
-        `/api/v1/travels/guidebooks/${id}/favorite`,
-        {
-          isTrue: favorite,
-        }
-      );
+      const response = await axiosInstance.put(`/api/v1/travels/guidebooks/${id}/favorite`, {
+        isTrue: favorite
+      });
       console.log(response.data);
     } catch (error) {
-      console.error("즐겨찾기 업데이트 중 오류가 발생했습니다:", error);
+      console.error('즐겨찾기 업데이트 중 오류가 발생했습니다:', error);
     }
   };
 
   // 고정 업데이트 api
   const putPin = async (id, pin) => {
     try {
-      const response = await axiosInstance.put(
-        `/api/v1/travels/guidebooks/${id}/fixed`,
-        {
-          isTrue: pin,
-        }
-      );
+      const response = await axiosInstance.put(`/api/v1/travels/guidebooks/${id}/fixed`, {
+        isTrue: pin
+      });
       console.log(response.data);
     } catch (error) {
-      console.error("고정 업데이트 중 오류가 발생했습니다:", error);
+      console.error('고정 업데이트 중 오류가 발생했습니다:', error);
     }
   };
 
   // 제목 업데이트 api
   const putUpdateTitle = async (id, title) => {
     try {
-      const response = await axiosInstance.put(
-        `/api/v1/travels/guidebooks/${id}/title`,
-        {
-          value: title,
-        }
-      );
+      const response = await axiosInstance.put(`/api/v1/travels/guidebooks/${id}/title`, {
+        value: title
+      });
       console.log(response.data);
     } catch (error) {
-      console.error("제목 업데이트 중 오류가 발생했습니다:", error);
+      console.error('제목 업데이트 중 오류가 발생했습니다:', error);
     }
   };
 
   // 가이드북 삭제 api
   const deleteGuideBook = async (id) => {
     try {
-      const response = await axiosInstance.delete(
-        `/api/v1/travels/guidebooks/${id}`
-      );
+      const response = await axiosInstance.delete(`/api/v1/travels/guidebooks/${id}`);
       console.log(response.data);
     } catch (error) {
-      console.error("가이드북 삭제 중 오류가 발생했습니다:", error);
+      console.error('가이드북 삭제 중 오류가 발생했습니다:', error);
     }
   };
 
@@ -115,14 +102,14 @@ function GuidebookList() {
     if (activeFilter === "favorite") {
       return filtered.filter((item) => item.isFavorite === true);
     }
-    if (activeFilter === true) {
+    if(activeFilter === true){
       // 최신순 정렬
       return filtered.sort((a, b) => {
         const dateA = new Date(a.createAt);
         const dateB = new Date(b.createAt);
         return dateB - dateA;
       });
-    } else if (activeFilter === false) {
+    }else if(activeFilter === false){
       // 오래된 순 정렬
       return filtered.sort((a, b) => {
         const dateA = new Date(a.createAt);
@@ -147,9 +134,9 @@ function GuidebookList() {
 
       // 고정 상태가 같은 경우 날짜순 정렬
       if (isPinnedA === isPinnedB) {
-        if (sortAsc) {
+        if(sortAsc){
           return new Date(b.createAt) - new Date(a.createAt);
-        } else {
+        }else{
           return new Date(a.createAt) - new Date(b.createAt);
         }
       }
@@ -198,34 +185,29 @@ function GuidebookList() {
   const handleUpdateTitle = (item, newTitle) => {
     try {
       console.log(item.id, newTitle);
-      putUpdateTitle(item.id, newTitle);
-      setGuideBookData(
-        guideBookData.map((guide) =>
+        putUpdateTitle(item.id, newTitle);
+        setGuideBookData(guideBookData.map((guide) => 
           guide.id === item.id ? { ...guide, title: newTitle } : guide
-        )
-      );
+        ));
     } catch (error) {
-      console.error(
-        "가이드북 제목을 업데이트하는 중 오류가 발생했습니다:",
-        error
-      );
+      console.error('가이드북 제목을 업데이트하는 중 오류가 발생했습니다:', error);
     }
   };
-
+  
   const handleFilterClick = (filter) => {
     console.log(filter);
     console.log(sortAsc);
-    if (filter === true) {
+    if(filter === true){
       setSortAsc(filter);
       setActiveFilter(filter);
-    } else if (filter === false) {
+    }else if(filter === false){
       setSortAsc(filter);
       setActiveFilter(filter);
-    } else {
+    }else{
       setActiveFilter(filter);
     }
   };
-
+  
   const handleDeleteItem = (item) => {
     setGuideBookData(guideBookData.filter((guide) => guide.id !== item.id));
     deleteGuideBook(item.id);
@@ -253,38 +235,31 @@ function GuidebookList() {
   return (
     <div className="SJ-guidebook-list">
       {/* 필터 버튼 */}
-      <div className="SJ-filter-buttons">
-        <button
-          className={`SJ-filter-btn ${
-            activeFilter === "favorite" ? "" : "active"
-          }`}
-          //activeFilter가 favorite일 때 sortAsc, 아닐 때 !sortAsc
-          onClick={() =>
-            handleFilterClick(activeFilter === "favorite" ? sortAsc : !sortAsc)
-          }
-        >
-          생성일{" "}
-          {sortAsc === true ? (
-            <HiChevronDown style={{ verticalAlign: "middle" }} />
-          ) : (
-            <HiChevronUp style={{ verticalAlign: "middle" }} />
-          )}
-        </button>
-        <button
-          className={`SJ-filter-btn ${
-            activeFilter === "favorite" ? "active" : ""
-          }`}
-          onClick={() => handleFilterClick("favorite")}
-        >
-          즐겨찾기
-        </button>
-      </div>
+        <div className="SJ-filter-buttons">
+          <button
+            className={`SJ-filter-btn ${
+              activeFilter === "favorite" ? "" : "active"
+            }`}
+            //activeFilter가 favorite일 때 sortAsc, 아닐 때 !sortAsc
+            onClick={() => handleFilterClick(activeFilter === "favorite" ? sortAsc : !sortAsc)}
+          >
+            생성일 {sortAsc === true ? <HiChevronDown style={{verticalAlign:"middle"}} /> : <HiChevronUp style={{verticalAlign:"middle"}} />}
+          </button>
+          <button
+            className={`SJ-filter-btn ${
+              activeFilter === "favorite" ? "active" : ""
+            }`}
+            onClick={() => handleFilterClick("favorite")}
+          >
+            즐겨찾기
+          </button>
+        </div>
 
-      <div className="SJ-guidebook-search-Container">
+      <div className="WS-Link-Input-Container">
         <input
           type="text"
-          placeholder="가이드북 제목을 검색하세요"
-          className="SJ-guidebook-search-input"
+          placeholder="검색어를 입력하세요"
+          className="WS-Link-Input"
           value={searchText}
           onChange={(e) => setSearchText(e.target.value)}
         />
@@ -306,13 +281,15 @@ function GuidebookList() {
       }
 
       <div className="WS-guide-container">
-        {Array.isArray(sortedGuideBooks) &&
-          sortedGuideBooks.map((guide) => (
-            <div key={guide.id} className="SJ-guide-card">
-              <div className="SJ-guide-content">
-                {guide.fixed && <div className="SJ-pin-icon">📌</div>}
+        {Array.isArray(sortedGuideBooks) && sortedGuideBooks.map((guide) => (
+          <div key={guide.id} className="SJ-guide-card">
+            <div className="SJ-guide-content">
+            <Link to={`/guidebooks/${guide.id}`} style={{textDecoration: "none", color: "black"}}>
+              {guide.fixed && (
+                  <div className="SJ-pin-icon">📌</div>
+              )}
 
-                <div className="SJ-guide-category">{guide.travelInfoTitle}</div>
+              <div className="SJ-guide-category">{guide.travelInfoTitle}</div>
 
                 <div
                   className={`WS-favorite-button  ${
