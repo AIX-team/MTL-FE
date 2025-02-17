@@ -20,13 +20,17 @@
   background-color: white;
 
   z-index: 11;
+
+  transition: none;
+
+  overflow: hidden;
 }
 
 .WS-GuideBook-Header {
   display: flex;
 
   width: 96%;
-  height: 9%;
+  height: 8%;
 }
 
 .WS-GuideBook-Header-Left-Container {
@@ -183,7 +187,7 @@
 .WS-GuideBook-Button-EditBtn {
   background: none;
   border: none;
-
+  font-size: var(--font-size-base);
   color: var(--color-guide);
   font-weight: 900;
 
@@ -192,7 +196,6 @@
 
 .WS-GuideBook-Contents-List {
   width: 100%;
-  height: 70%;
   overflow-y: auto;
 
   background-color: white;
@@ -775,30 +778,17 @@
 }
 
 /* ---------------------------------------------------------------- */
-.WS-GuideBook-Modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  overflow: hidden;
-}
-
 .WS-GuideBook-Modal-Bottom {
   display: flex;
   flex-direction: column;
+
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
 
   margin: 0 auto;
-  max-width: 470px;
+  width: 420px;
 
   padding: 20px;
 
@@ -808,7 +798,7 @@
   border: 3px solid var(--color-light-gray);
   border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
 
-  z-index: 12;
+  z-index: 9;
 }
 
 .WS-Modal-Option {
@@ -823,13 +813,20 @@
   cursor: pointer;
 }
 
+.WS-Modal-Option:hover {
+  background-color: var(--color-light-gray);
+}
+
 
 .WS-Copy-Modal-Option {
   display: flex;
+  flex-direction: column;
   align-items: center;
 
   width: 100%;
   height: 100%;
+
+  gap: 3px;
 
   cursor: pointer;
 }
