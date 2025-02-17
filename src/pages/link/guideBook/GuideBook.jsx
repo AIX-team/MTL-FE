@@ -282,7 +282,7 @@ const GuideBook = () => {
             console.error('Error posting guidebook title:', error);
         }
     }
-    
+
     const putTravelInfoMove = async (travelInfoMoveRequest) => {
         try {
             await axiosInstance.put(`/api/v1/courses/place/move`, travelInfoMoveRequest);
@@ -343,19 +343,19 @@ const GuideBook = () => {
 
 
     const handlePlaceMove = () => {
-        if(selectedItems.length > 1){
+        if (selectedItems.length > 1) {
             alert("이동할 장소를 1개만 선택해주세요.");
             return;
         }
-        
+
         // 이동할 코스 정보 가져오기
         const coursesArray = Object.values(guideBook.courses);
-        const targetCourseInfo = coursesArray.find(course => course.courseId === targetCourse[0]);   
-        if(targetCourseInfo.coursePlaces.some(place => place.id === selectedItems[0])){
+        const targetCourseInfo = coursesArray.find(course => course.courseId === targetCourse[0]);
+        if (targetCourseInfo.coursePlaces.some(place => place.id === selectedItems[0])) {
             alert("이미 코스에 추가된 장소입니다.");
             return;
         }
-    
+
         try {
             // 1. API 요청
             const travelInfoMoveRequest = {
@@ -364,27 +364,27 @@ const GuideBook = () => {
                 placeId: selectedItems[0]
             }
             putTravelInfoMove(travelInfoMoveRequest);
-    
+
             // 2. 프론트엔드 상태 업데이트
-            if(targetCourse.length > 0) {
+            if (targetCourse.length > 0) {
 
                 setGuideBook(prevGuideBook => {
                     // 업데이트 할 전체 코스 정보 가져오기
                     const updatedCourses = { ...prevGuideBook.courses };
- 
-                    
+
+
                     // 이동할 장소 정보 저장
                     const placeToMove = updatedCourses[activeTab - 1].coursePlaces.find(
                         place => selectedItems.includes(place.id)
                     );
-    
+
                     // 기존 코스에서 장소 제거
                     updatedCourses[activeTab - 1].coursePlaces = updatedCourses[activeTab - 1].coursePlaces
                         .filter(place => !selectedItems.includes(place.id));
-    
+
                     // 기존 코스 장소 순서 재정렬
                     updatedCourses[activeTab - 1].coursePlaces.sort((a, b) => a.num - b.num);
-    
+
                     // 대상 코스에 장소 추가
                     if (placeToMove) {
                         // targetCourseInfo의 인덱스 찾기
@@ -396,14 +396,14 @@ const GuideBook = () => {
                         targetCourseInfo.coursePlaces.push(placeToMove);
                         updatedCourses[targetCourseIndex] = targetCourseInfo;
                     }
-    
+
                     return {
                         ...prevGuideBook,
                         courses: updatedCourses
                     };
                 });
             }
-    
+
             setShowMoveModal(false);
             setTargetCourse([]);
             setSelectedItems([]);
@@ -671,10 +671,10 @@ const GuideBook = () => {
                 <div className="WS-GuideBook-Header-Left-Container">
                     <div className="WS-GuideBook-Header-Back-Btn-Container">
                         <Link to={`/travelInfos/${guideBook.travelInfoId}`}>
-                            <img className="WS-GuideBook-Header-Back-Btn" 
-                            src={backArrow} 
-                            alt="뒤로가기" 
-                            onClick={() => navigate(-1)} />
+                            <img className="WS-GuideBook-Header-Back-Btn"
+                                src={backArrow}
+                                alt="뒤로가기"
+                                onClick={() => navigate(-1)} />
                         </Link>
                     </div>
 
@@ -819,7 +819,6 @@ const GuideBook = () => {
                     </div>
                 </div>
             )}
-
 
             {/* 제목 편집 모달 */}
             {
