@@ -30,6 +30,7 @@
   cursor: pointer;
   color: var(—color-dark-gray);
   font-size: var(—font-size-md);
+
 }
 
 .SJ-Travel-Tab.active {
@@ -47,8 +48,7 @@
 .SJ-Tab-Indicator {
   width: 50%;
   height: 2px;
-  background-color: var(—color-main);
-  transition: all 0.3s;
+  background-color: var(--color-main);
 }
 
 .SJ-Travel-Page-Content {

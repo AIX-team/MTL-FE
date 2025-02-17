@@ -39,6 +39,7 @@
     font-weight: 900;
 }
 
+
 .WS-Link-Tab-Content {
     display: flex;
     align-items: center;
@@ -74,7 +75,6 @@
     color: white;
 
     font-size: var(--font-size-sm);
-
 }
 
 /* 핸드폰 확인 */
