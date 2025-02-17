@@ -6,7 +6,7 @@ import LINK from "../images/Link.png";
 import TRAVEL from "../images/Travel.png";
 import MYPAGE from "../images/MyPage.png";
 import Wish from "./Wish";
-import Wish_icon from "../images/wish_icon.png";
+import Wish_icon from "../images/wish_icon.png"; 
 
 const FooterComponent = () => {
   const [isWishOpen, setIsWishOpen] = useState(false);
@@ -21,14 +21,17 @@ const FooterComponent = () => {
   const getClassName = (path) => {
     switch (path) {
       case "/link":
-        return `WS-Footer-Item${currentPath.startsWith("/link") ? " active" : ""
-          }`;
+        return `WS-Footer-Item${
+          currentPath.startsWith("/link") ? " active" : ""
+        }`;
       case "/travel":
-        return `WS-Footer-Item${currentPath.startsWith("/travel") ? " active" : ""
-          }`;
+        return `WS-Footer-Item${
+          currentPath.startsWith("/travel") ? " active" : ""
+        }`;
       case "/mypage":
-        return `WS-Footer-Item${currentPath.startsWith("/mypage") ? " active" : ""
-          }`;
+        return `WS-Footer-Item${
+          currentPath.startsWith("/mypage") ? " active" : ""
+        }`;
       default:
         return "WS-Footer-Item";
     }
@@ -58,7 +61,7 @@ const FooterComponent = () => {
         {/* Wish 버튼 */}
         {/* 위시 이미지로 변경 보류 */}
         <div className="WS-Footer-Item" onClick={() => setIsWishOpen(true)}>
-
+          <img src={Wish_icon} className="WS-Footer-Wish" />
           <div className="WS-Footer-Text">Wish</div>
         </div>
       </footer>
