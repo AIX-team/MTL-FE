@@ -291,7 +291,6 @@ function GuidebookList() {
 
                 <div className="SJ-guide-category">{guide.travelInfoTitle}</div>
 
-
                 <div className="SJ-guide-header">
                   <div className="SJ-guide-title">{guide.title}</div>
                   <div className="SJ-guide-score">코스 {guide.courseCount}</div>
