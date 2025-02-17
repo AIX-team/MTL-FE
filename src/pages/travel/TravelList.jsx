@@ -214,11 +214,33 @@ const TravelList = () => {
   return (
     <div className="SJ-Travel-List">
       <div className="SJ-travel-container">
+
+        <div className="SJ-search-Container">
+
+          <input
+            id="WS-guidebook-search-input"
+            type="text"
+            placeholder="내가 만든 여행을 검색하세요"
+            className="WS-Link-Input"
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
+          />
+
+          <div className="SJ-search-button-container">
+            <button className="SJ-search-icon">
+              {!searchText ? (
+                <FaSearch />
+              ) : (
+                <FaTimes onClick={() => setSearchText("")} />
+              )}
+            </button>
+          </div>
+        </div>
+
         <div className="SJ-filter-buttons">
           <button
-            className={`SJ-filter-btn ${
-              activeFilter === "favorite" ? "" : "active"
-            }`}
+            className={`SJ-filter-btn ${activeFilter === "favorite" ? "" : "active"
+              }`}
             //activeFilter가 favorite일 때 sortAsc, 아닐 때 !sortAsc
             onClick={() =>
               handleFilterClick(
@@ -234,34 +256,12 @@ const TravelList = () => {
             )}
           </button>
           <button
-            className={`SJ-filter-btn ${
-              activeFilter === "favorite" ? "active" : ""
-            }`}
+            className={`SJ-filter-btn ${activeFilter === "favorite" ? "active" : ""
+              }`}
             onClick={() => handleFilterClick("favorite")}
           >
             즐겨찾기
           </button>
-        </div>
-
-        <div className="SJ-search-Container">
-          
-          <input
-            type="text"
-            placeholder="내가 만든 여행을 검색하세요"
-            className="SJ-travel-search-input"
-            value={searchText}
-            onChange={(e) => setSearchText(e.target.value)}
-          />
-
-          <div className="SJ-search-button-container">
-            <button className="SJ-search-icon">
-              {!searchText ? (
-                <FaSearch />
-              ) : (
-                <FaTimes onClick={() => setSearchText("")} />
-              )}
-            </button>
-          </div>
         </div>
 
         <div className="SJ-travel-grid">
@@ -294,9 +294,8 @@ const TravelList = () => {
               </Link>
               <div className="HG-favorite-button-container">
                 <div
-                  className={`WS-favorite-button ${
-                    item.favorite ? "filled" : "outlined"
-                  }`}
+                  className={`WS-favorite-button ${item.favorite ? "filled" : "outlined"
+                    }`}
                   onClick={() => toggleFavorite(item)}
                 >
                   {item.favorite ? "♥" : "♡"}

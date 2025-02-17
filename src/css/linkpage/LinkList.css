@@ -3,15 +3,10 @@
   height: 100%;
 }
 
-#WS-Link-Input {
-  width: 76%;
-  padding-right: 9%;
-}
-
 .WS-LinkList-AddButton {
   position: absolute;
-  right: 7%;
-  top: 30%;
+  right: 11px;
+  top: 11px;
 
   background: none;
   border: none;
