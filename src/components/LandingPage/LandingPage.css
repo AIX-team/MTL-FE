@@ -1,19 +1,25 @@
+/* 최상단에 추가 */
+body {
+  background-color: #f7f6f6;
+}
+
 .WS-Landing-Page {
   width: 100%;
   min-height: 100vh;
   background-color: #f7f6f6;
-  margin-top: 18%;
+  margin-top: 25%;
   font-family: "NanumBarunGothic", sans-serif;
 }
 /* 상단 멘트 유튜브 링크로 */
 .SJ-header {
   text-align: center;
   margin-bottom: 60px;
+  font-weight: bold;
 }
 
 /* 첫 여행도 두렵지 않게 */
 .SJ-header h3 {
-  font-size: 18px;
+  font-size: 16px;
   color: #3e3e3e;
   margin-bottom: 10px;
 }
@@ -66,7 +72,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 0 20px;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 }
 /* 여행 일정을 한 눈에! 글자 */
 .SJ-map-title {
@@ -266,23 +272,25 @@
   color: #919191;
   font-size: 14px;
 }
-
+/* 빠니보틀이 먹었던 냄비우동집 알려줘 버튼 */
 .SJ-restaurant-button {
-  width: 100%;
+  width: 70%;
   padding: 15px 20px;
   background-color: #c92b2a;
   color: white;
   border: none;
-  border-radius: 10px;
+  border-radius: 22px;
   font-size: 14px;
   margin: 20px 0;
   text-align: left;
   cursor: pointer;
+  margin-left: auto; /* 오른쪽 정렬을 위해 추가 */
+  display: block; /* 블록 레벨 요소로 변경 */
 }
 
 .SJ-chat-response {
   background-color: #f0f0f0;
-  border-radius: 10px;
+  border-radius: 22px;
   padding: 15px;
   display: flex;
   gap: 15px;

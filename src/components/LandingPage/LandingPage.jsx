@@ -50,7 +50,7 @@ function LandingPage() {
       <div className="SJ-preference-section">
         <div className="SJ-preference-header">
           <div className="SJ-preference-text">
-            <h2>내 취향에 맞게</h2>
+            <h2>내 취향에 딱 맞게</h2>
             <p>원하는 장소, 일정, 동선까지 자유롭게 추천 가능</p>
           </div>
           <img src={loadingMap} alt="Map" className="SJ-preference-icon" />
@@ -65,7 +65,7 @@ function LandingPage() {
 
         <div className="SJ-selected">
           <span className="SJ-check">✓</span>
-          <span>선택 상태</span>
+          <span>전체 선택</span>
         </div>
 
         <div className="SJ-places">
