@@ -211,6 +211,19 @@ const TravelList = () => {
     setShowModal(false);
   };
 
+
+  // 날짜 형식 변환 함수
+  // 2025-02-03T00:39:43 형식을 2025년 2월 3일 00시 39분 형식으로 변환
+  const convertDate = (date) => {
+    const year = date.getFullYear();
+    let month = date.getMonth() + 1;
+    let day = date.getDate();
+
+    if(month < 10) month = `0${month}`;
+    if(day < 10) day = `0${day}`;
+    return `${year}-${month}-${day}`;
+  };
+
   return (
     <div className="SJ-Travel-List">
       <div className="SJ-travel-container">
@@ -265,32 +278,29 @@ const TravelList = () => {
 
         <div className="SJ-travel-grid">
           {sortedAndFilteredData.map((item) => (
-            <div key={item.travelId} className="SJ-travel-card">
-              {console.log("핀 렌더링:", item.travelId)}
-              <Link
-                to={`/travelInfos/${item.travelId}`}
-                className="HG-travel-card-link"
-              >
-                {item.fixed && <div className="SJ-pin-icon">📌</div>}
+            <div key={item.id} className="SJ-travel-card">
+                  <Link to={`/travelInfos/${item.travelId}`} className="HG-travel-card-link" style={{textDecoration: "none", color: "black"}}>
+              
+                {pinnedItems.includes(item.id) && (
+                  <div className="SJ-pin-icon">📌</div>
+                )}
 
                 <div className="SJ-travel-img">
                   <img src={item.imgUrl} alt={item.title} />
                 </div>
 
-                <div className="SJ-card-content">
-                  <div className="HG-card-content-container">
-                    <div className="SJ-card-header">
-                      <div className="SJ-card-title">{item.title}</div>
-                    </div>
-                    <div className="SJ-card-footer">
-                      <span className="SJ-card-period">
-                        여행 장소: {item.placeCount} 개
-                      </span>
-                      <span className="SJ-card-date">{item.createAt}</span>
-                    </div>
+              <div className="SJ-card-content">
+                <div className="HG-card-content-container">
+                  <div className="SJ-card-header">
+                    <div className="SJ-card-title">{item.title}</div>
+                  </div>
+                  <div className="SJ-card-footer">
+                    <span className="SJ-card-period">여행 장소: {item.placeCount} 개</span>
+                    <span className="SJ-card-date">{convertDate(new Date(item.createAt))}</span>
                   </div>
                 </div>
-              </Link>
+              </div>
+              </Link>              
               <div className="HG-favorite-button-container">
                 <div
                   className={`WS-favorite-button ${

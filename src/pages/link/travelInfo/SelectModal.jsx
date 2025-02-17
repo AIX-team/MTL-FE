@@ -20,6 +20,7 @@ const SelectModal = ({
   selectedPlaces,
   onPlaceSelect,
   travelDays,
+  travelInfoId,
 }) => {
   const [isSelected, setIsSelected] = useState([]);
   const [selectedFilters, setSelectedFilters] = useState(["전체보기"]);
@@ -35,12 +36,16 @@ const SelectModal = ({
     "그 외": "etc",
   };
 
+
+  console.log(isSelected);
   const postGuidebook = async (travelTaste) => {
     try {
+
       const response = await axiosInstance.post("/api/v1/travels/guidebook", {
-        placeIds: isSelected.map((place) => place.placeId),
+        travelInfoId: travelInfoId,
         travelDays: travelDays,
         travelTaste: travelTaste,
+        placeIds: isSelected.map((place) => place.placeId),
       });
       console.log(response);
     } catch (error) {

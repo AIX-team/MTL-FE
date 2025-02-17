@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../../../css/linkpage/TravelInfo/TravelInfo.css';
 import Slider from 'react-slick';
@@ -140,8 +140,41 @@ const MapComponent = React.memo(({ places }) => {
   return JSON.stringify(prevProps.places) === JSON.stringify(nextProps.places);
 });
 
-
-
+// 장소 타입 분류 상수 정의
+const PLACE_TYPE_CATEGORIES = {
+  landmark: [
+    'tourist_attraction',
+    'museum',
+    'art_gallery',
+    'aquarium',
+    'amusement_park',
+    'zoo',
+    'stadium',
+    'park',
+    'landmark',
+    'natural_feature',
+    'place_of_worship',
+    'church',
+    'mosque',
+    'temple',
+    'synagogue',
+    'hindu_temple',
+    'point_of_interest',
+    'campground',
+    'rv_park'
+  ],
+  restaurant: [
+    'restaurant',
+    'cafe',
+    'bakery',
+    'bar',
+    'meal_delivery',
+    'meal_takeaway',
+    'food',
+    'night_club'
+  ]
+  // etc는 위의 두 카테고리에 포함되지 않는 모든 타입
+};
 
 const TravelInfo = () => {
 
@@ -156,6 +189,7 @@ const TravelInfo = () => {
   const [loading, setLoading] = useState(false);
   const { travelInfoId } = useParams();
   const [isComponentMounted, setIsComponentMounted] = useState(false);
+  const navigate = useNavigate();
 
   const [travelInfo, setTravelInfo] = useState({
     message: '',
@@ -459,14 +493,51 @@ const TravelInfo = () => {
     setIsSelectModalOpen(true);
   };
 
+  // 장소 타입 체크 함수
+  const checkPlaceType = (itemType) => {
+    if (PLACE_TYPE_CATEGORIES.landmark.includes(itemType)) return 'landmark';
+    if (PLACE_TYPE_CATEGORIES.restaurant.includes(itemType)) return 'restaurant';
+    return 'etc';
+  };
+
+  // 이미지 URL이 유효한지 검사하는 함수
+  const isValidUrl = (url) => {
+    if (!url) {
+      console.log('이미지 URL이 없음');
+      return false;
+    }
+    if (typeof url !== 'string') {
+      console.log('이미지 URL이 문자열이 아님');
+      return false;
+    }
+
+    // PlacePhoto 형식 확인 및 URL 추출
+    if (url.startsWith('[PlacePhoto(') && url.endsWith(')]')) {
+      const match = url.match(/url=([^)]+)/);
+      if (match && match[1]) {
+        return match[1];
+      }
+    }
+
+    // 일반 URL 확인
+    if (url.startsWith('https://')) {
+      return url;
+    }
+
+    return false;
+  };
+
   return (
     <div className="HG-TravelInfo-Wrapper">
-      <main className='HG-TravelInfo-Container'>
-        <div className='HG-TravelInfo-Header'>
-          <div className='WS-TravelInfo-Header-Left'>
-            <div className='WS-TravelInfo-Header-Left-Back-Btn'>
-              <img className='WS-TravelInfo-Header-Left-Back-Btn-Icon' src={backArrowIcon} alt="backArrowIcon" />
-            </div>
+        <main className='HG-TravelInfo-Container'>
+            <div className='HG-TravelInfo-Header'>
+                <div className='WS-TravelInfo-Header-Left'>
+                    <div className='WS-TravelInfo-Header-Left-Back-Btn'>
+                        <img className='WS-TravelInfo-Header-Left-Back-Btn-Icon' 
+                        src={backArrowIcon}
+                        alt="backArrowIcon" 
+                        onClick={() => navigate(-1)} />
+                    </div>
 
             <div className='WS-TravelInfo-Header-Left-Contents'>
               <div className='WS-TravelInfo-Travel-Days'>{travelDays}일</div>
@@ -562,10 +633,12 @@ const TravelInfo = () => {
 
           <div className='HG-TravelInfo-Content-Frame-Place-Slider'>
             {placeList.content.map((item, index) => {
-              const isEtcType = placeType === 'etc' && item.placeType !== 'landmark' && item.placeType !== 'restaurant';
-              const isMatchingType = item.placeType === placeType;
+              const itemCategory = checkPlaceType(item.placeType);
+              const shouldShow =
+                (placeType === itemCategory) ||
+                (placeType === 'etc' && itemCategory === 'etc');
 
-              return (isMatchingType || isEtcType) ? (
+              return shouldShow ? (
                 <div key={index} className={`WS-carousel-item ${selectedPlaces.some(selected => selected.placeId === item.placeId) ? 'HG-select-place' : ''}`}>
                   <div className='HG-trevelinfo-select-Container' onClick={() => handlePlaceClick(item)}>
                     <img
@@ -580,11 +653,36 @@ const TravelInfo = () => {
                   <Slider {...sliderSettings}>
                     {/* 첫 번째 슬라이드 */}
                     <div className="slide-content">
-                      <img className="HG-slide-content-image" src={item.placeImage}
+                      <img
+                        className="HG-slide-content-image"
+                        src={(() => {
+                          try {
+                            const validUrl = isValidUrl(item.placeImage);
+                            if (validUrl) {
+                              return validUrl;
+                            }
+                            return 'https://images.unsplash.com/photo-1542051841857-5f90071e7989?ixlib=rb-4.0.3';
+                          } catch (error) {
+                            console.log('이미지 처리 중 오류 발생:', {
+                              error: error.message,
+                              stack: error.stack,
+                              data: item.placeImage,
+                              place: item.placeName
+                            });
+                            return 'https://images.unsplash.com/photo-1542051841857-5f90071e7989?ixlib=rb-4.0.3';
+                          }
+                        })()}
                         onError={(e) => {
-                          e.target.src = 'https://picsum.photos/600/300';
+                          console.log('이미지 로드 실패:', {
+                            place: item.placeName,
+                            src: e.target.src,
+                            originalImage: item.placeImage
+                          });
+                          e.target.onerror = null; // 무한 루프 방지
+                          e.target.src = 'https://images.unsplash.com/photo-1542051841857-5f90071e7989?ixlib=rb-4.0.3';
                         }}
-                        alt="placeImage" />
+                        alt={item.placeName || '장소 이미지'}
+                      />
                     </div>
 
                     {/* 두 번째 슬라이드 */}
@@ -593,37 +691,38 @@ const TravelInfo = () => {
                       <div className='WS-TravelInfo-Address'>{item.placeAddress}</div>
                     </div>
 
-                  {/* 세 번째 슬라이드 */}
-                  <div className="slide-content" key={`map-${index}`}>
-                    {item?.latitude && item?.longitude && (
-                      <MapComponent
-                        key={`map-${index}`}
-                        places={[item]} />
-                    )}
-                  </div>
-                </Slider>
-              </div>
-            ) : null;
-          })}
+                    {/* 세 번째 슬라이드 */}
+                    <div className="slide-content" key={`map-${index}`}>
+                      {item?.latitude && item?.longitude && (
+                        <MapComponent
+                          key={`map-${index}`}
+                          places={[item]} />
+                      )}
+                    </div>
+                  </Slider>
+                </div>
+              ) : null;
+            })}
+          </div>
         </div>
-      </div>
-      <TitleEditModal
-        isOpen={isModalOpen}
-        onClose={handleModalClose}
-        travelDays={travelDays}
-        travelInfoTitle={travelInfoTitle}
-        onSave={handleTitleSave}
-      />
-      <div className={`${isSelectModalOpen ? 'HG-TravelInfo-Select-Modal' : 'none'}`}>
-        <SelectModal
-          isOpen={isSelectModalOpen}
-          onClose={handleSelectModalClose}
-          selectedPlaces={selectedPlaces}
-          onPlaceSelect={handlePlaceDelete}
+        <TitleEditModal
+          isOpen={isModalOpen}
+          onClose={handleModalClose}
           travelDays={travelDays}
+          travelInfoTitle={travelInfoTitle}
+          onSave={handleTitleSave}
         />
-      </div>
-    </main>
+        <div className={`${isSelectModalOpen ? 'HG-TravelInfo-Select-Modal' : 'none'}`}>
+          <SelectModal
+            isOpen={isSelectModalOpen}
+            onClose={handleSelectModalClose}
+            selectedPlaces={selectedPlaces}
+            onPlaceSelect={handlePlaceDelete}
+            travelDays={travelDays}
+            travelInfoId={travelInfoId}
+          />
+        </div>
+      </main>
     </div>
   );
 };
