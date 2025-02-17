@@ -339,17 +339,22 @@ const TravelInfo = () => {
         setLoading(true);
         setError(null);
         const response = await axiosInstance.get(`/api/v1/travels/travelInfos/${travelInfoId}/aiSelect`);
-        setSelectedPlaces(response.data);
-        setSelectedAIPlaces(response.data);
+        if (response.data.success === "success") {
+          setSelectedPlaces(response.data.content);
+          setSelectedAIPlaces(response.data.content);
+        } else {
+          setError(response.data.message);
+        }
       } else {
         setSelectedPlaces(selectedAIPlaces);
       }
     } catch (error) {
       console.error('API Error:', error);
+      setError(error.message || '데이터를 불러오는데 실패했습니다.');
     } finally {
       setLoading(false);
     }
-  }, [travelInfoId]);
+  }, [travelInfoId, selectedAIPlaces, selectedPlaces.length]);
 
 
   useEffect(() => {
