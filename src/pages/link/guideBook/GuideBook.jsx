@@ -724,23 +724,24 @@ const GuideBook = () => {
                     </div>
                 </div>
 
-                <div className="WS-GuideBook-Contents-List">
+                <div className="WS-GuideBook-Contents-List" style={{
+                    height: isEditMode ? '36%' : '70%'
+                }}>
                     {renderContent()}
                 </div>
-                {isEditMode && selectedItems.length > 0 && (
-                    <div className="WS-GuideBook-Modal">
-                        <div className='WS-GuideBook-Modal-Bottom' onClick={e => e.stopPropagation()}>
-                            <div className="WS-Modal-Option" onClick={handleMoveClick}>
-                                <span className="SJ-modal-icon">🔀</span>
-                                이동
-                            </div>
-                            <div className="WS-Modal-Option" onClick={handleCopyClick}>
-                                <span className="SJ-modal-icon">📄</span>
-                                장소 복사</div>
-                            <div className="WS-Modal-Option" onClick={handleDeleteClick}>
-                                <span className="SJ-modal-icon">🗑️</span>
-                                삭제</div>
+
+                {isEditMode && (
+                    <div className='WS-GuideBook-Modal-Bottom' onClick={e => e.stopPropagation()}>
+                        <div className="WS-Modal-Option" onClick={handleMoveClick}>
+                            <span className="SJ-modal-icon">🔀</span>
+                            이동
                         </div>
+                        <div className="WS-Modal-Option" onClick={handleCopyClick}>
+                            <span className="SJ-modal-icon">📄</span>
+                            장소 복사</div>
+                        <div className="WS-Modal-Option" onClick={handleDeleteClick}>
+                            <span className="SJ-modal-icon">🗑️</span>
+                            삭제</div>
                     </div>
                 )}
             </div>
