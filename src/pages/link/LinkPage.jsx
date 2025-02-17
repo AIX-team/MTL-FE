@@ -14,23 +14,23 @@ const LinkPage = () => {
   const [linkData, setLinkData] = useState([]); // 빈 배열로 초기화
   const [linkCount, setLinkCount] = useState(0); // 0으로 초기화
 
-  // // 링크 데이터를 가져오는 API 호출 함수
-  // const fetchLinks = async () => {
-  //   const token = localStorage.getItem('token');
-  //   if (!token) {
-  //     navigate('/login');
-  //     return;
-  //   }
-  //   // axios 호출 시 token이 올바르게 헤더에 추가되었는지 확인
-  //   try {
-  //     const response = await axios.get('http://localhost:8080/user/url/list', {
-  //       headers: { 'Authorization': `Bearer ${token}` }
-  //     });
-  //     setLinkData(response.data);
-  //   } catch (error) {
-  //     console.error('링크 목록 조회 실패:', error);
-  //   }
-  // };
+  // 링크 데이터를 가져오는 API 호출 함수
+  const fetchLinks = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      navigate('/login');
+      return;
+    }
+    // axios 호출 시 token이 올바르게 헤더에 추가되었는지 확인
+    try {
+      const response = await axios.get(process.env.REACT_APP_BACKEND_URL + '/user/url/list', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      setLinkData(response.data);
+    } catch (error) {
+      console.error('링크 목록 조회 실패:', error);
+    }
+  };
 
   // useEffect(() => {
   //   fetchLinks();
@@ -48,7 +48,6 @@ const LinkPage = () => {
       case 'youtube':
         // SearchYoutube에 refreshLinks 함수를 전달합니다.
         return <SearchYoutube linkData={linkData} setLinkData={setLinkData} />
-      // refreshLinks={fetchLinks} />;
       default:
         return null;
     }

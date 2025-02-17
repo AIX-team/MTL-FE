@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const DOMAIN = 'http://localhost:8080'; // backend (spring) 연결
-const DOMAIN2 = 'http://localhost:8000' // fastapi (ai) 연결
+const DOMAIN = process.env.REACT_APP_BACKEND_URL; // backend (spring) 연결
+const DOMAIN2 = process.env.REACT_APP_AI_API; // fastapi (ai) 연결
 
 // backend 요청
 export const request = async (method, url, data) => {
