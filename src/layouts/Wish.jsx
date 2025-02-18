@@ -178,20 +178,26 @@ const Wish = ({ onClose }) => {
       답변:`;
 
       // OpenAI API 호출 (예시: text-davinci-003 모델 사용)
-      const response = await fetch("https://api.openai.com/v1/completions", {
+      const response = await fetch("https://api.openai.com/v1/chat/completions", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${process.env.REACT_APP_OPENAI_API_KEY}`,
         },
         body: JSON.stringify({
-          model: "text-davinci-003", // 혹은 원하는 모델을 사용
-          prompt: prompt,
+          model: "gpt-4o-mini",  // 최신 모델 사용
+          messages: [
+            {
+              role: "system",
+              content: prompt
+            },
+            {
+              role: "user",
+              content: userMessage
+            }
+          ],
           max_tokens: 200,
           temperature: 0.7,
-          top_p: 1,
-          n: 1,
-          stop: null,
         }),
       });
 
@@ -200,8 +206,8 @@ const Wish = ({ onClose }) => {
       }
 
       const data = await response.json();
-      if (data && data.choices && data.choices[0] && data.choices[0].text) {
-        return data.choices[0].text.trim();
+      if (data && data.choices && data.choices[0] && data.choices[0].message) {
+        return data.choices[0].message.content.trim();
       }
       throw new Error("응답 형식 오류");
     } catch (error) {
@@ -215,54 +221,58 @@ const Wish = ({ onClose }) => {
     if (inputMessage.trim() === "" || isLoading) return;
 
     try {
-      setIsLoading(true);
-
-      // 사용자 메시지 생성 시 고유 id 부여
-      const userMessage = {
-        id: uuidv4(), // 고유한 id 사용
-        type: "user",
-        content: inputMessage,
-      };
-      setMessages((prev) => [...prev, userMessage]);
-      setInputMessage(""); // 입력창 초기화
-
-      // 검색 분기나 일반 응답 처리...
-      if (inputMessage.startsWith("검색:")) {
-        const query = inputMessage.replace("검색:", "").trim();
-        const searchResults = await searchContent(query);
-
-        const botResponse =
-          searchResults.length > 0
-            ? searchResults
-                .map(
-                  (result, index) =>
-                    `검색 결과 ${index + 1}:\n내용: ${
-                      result.content
-                    }\n메타데이터: ${JSON.stringify(result.metadata)}`
-                )
-                .join("\n\n")
-            : "검색 결과가 없습니다.";
-
-        const botMessage = {
-          id: uuidv4(), // 고유 id 사용
-          type: "bot",
-          content: botResponse,
+        setIsLoading(true);
+        
+        // 사용자 메시지 추가
+        const userMessage = {
+            id: uuidv4(),
+            type: "user",
+            content: inputMessage,
         };
-        setMessages((prev) => [...prev, botMessage]);
-      } else {
-        const botResponse = await generateBotResponse(inputMessage);
+        setMessages(prev => [...prev, userMessage]);
+        setInputMessage("");
+
+        // 백엔드 API 호출
+        const response = await fetch("http://localhost:8000/api/chat", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                message: inputMessage,
+                chat_history: messages
+                    .filter(m => m.type === "user" || m.type === "bot")
+                    .map(m => [m.type === "user" ? m.content : "", m.type === "bot" ? m.content : ""])
+                    .filter(([q, a]) => q || a)
+            }),
+        });
+
+        if (!response.ok) {
+            throw new Error("API 응답 오류");
+        }
+
+        const data = await response.json();
+        
+        // 봇 응답 추가
         const botMessage = {
-          id: uuidv4(), // 고유 id 사용
-          type: "bot",
-          content: botResponse,
+            id: uuidv4(),
+            type: "bot",
+            content: data.response,
+            sources: data.search_results  // 검색 결과가 있다면 표시
         };
-        setMessages((prev) => [...prev, botMessage]);
-      }
+        setMessages(prev => [...prev, botMessage]);
+
     } catch (error) {
-      // 오류 처리...
+        console.error("메시지 처리 중 오류:", error);
+        const errorMessage = {
+            id: uuidv4(),
+            type: "bot",
+            content: "죄송합니다. 일시적인 오류가 발생했습니다. 다시 시도해 주세요."
+        };
+        setMessages(prev => [...prev, errorMessage]);
     } finally {
-      setIsLoading(false);
-      scrollToBottom();
+        setIsLoading(false);
+        scrollToBottom();
     }
   };
 
@@ -395,6 +405,20 @@ const Wish = ({ onClose }) => {
                             )}
                             <div className="WS-Wish-Message-Content">
                                 {message.content}
+                                {message.sources && message.sources.length > 0 && (
+                                    <div className="WS-Wish-Sources">
+                                        <small>참고 자료:</small>
+                                        <ul>
+                                            {message.sources.map((source, index) => (
+                                                <li key={index}>
+                                                    <a href={source.url} target="_blank" rel="noopener noreferrer">
+                                                        {source.title || source.url}
+                                                    </a>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     ))}
