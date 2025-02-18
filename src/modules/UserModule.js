@@ -2,7 +2,7 @@ import { createActions, handleActions } from "redux-actions"
 
 // 초기 state 값
 const initialState = {
-    userInfo: [],
+    userInfo: {},
     token: null,
     users: [],
     showSignUp : false, 

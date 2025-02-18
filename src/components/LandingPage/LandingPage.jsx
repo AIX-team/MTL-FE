@@ -13,6 +13,7 @@ import mapAirplane from "../../images/map_airplane.png";
 function LandingPage() {
   const navigate = useNavigate();
 
+
   return (
     <div className="WS-Landing-Page">
       <div className="SJ-header">
@@ -28,6 +29,7 @@ function LandingPage() {
         <div className="SJ-content">
           <div className="SJ-title-red">여행 장소 탐색 • 관리</div>
           <div className="SJ-subtitle">유튜브 여행 영상 속 장소 자동 추출</div>
+
         </div>
         <img src={youtubeLogo} alt="YouTube" className="SJ-youtube-logo" />
       </div>

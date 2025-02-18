@@ -10,45 +10,43 @@
 }
 
 .WS-guide-container {
-  position: relative;  /* 컨테이너 기준점 설정 */
-  height: 100%;       /* 또는 min-height: 100% */
+  position: relative;
+  /* 컨테이너 기준점 설정 */
+  height: 100%;
+  /* 또는 min-height: 100% */
   display: grid;
   align-content: start;
-  gap: 2%; /* 카드 간격 */
+  gap: 2%;
+  /* 카드 간격 */
   padding-top: 5%;
   align-items: center;
 
   width: 100%;
-  height: 457px; /* 여기가 스크롤 영역의 높이를 제한 */
+  height: 457px;
+  /* 여기가 스크롤 영역의 높이를 제한 */
   overflow-y: auto;
   overflow-x: hidden;
 }
 
 /* 검색 컨테이너 (TravelList 스타일) */
-.SJ-guidebook-search-Container {
+.SJ-search-Container {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-/* ⭐️⭐️⭐️⭐️⭐️⭐️ */
-/* 검색창 (TravelList 스타일) */
-.SJ-guidebook-search-input {
-  width: 70%;
-  padding: 4% 12% 4% 5%;
 
-  border: 2px solid var(--color-light-gray);
-
-  border-radius: var(--border-radius-full);
-  font-size: var(--font-size-base);
-}
-
-.SJ-guidebook-search-input:focus {
-  outline: none;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 350px;
+  height: 40px;
 }
 
 .WS-guide-container::-webkit-scrollbar {
   width: 4px;
+}
+
+#WS-guidebook-search-input {
+  padding-right: 40px;
 }
 
 .WS-guide-container::-webkit-scrollbar-track {
@@ -73,7 +71,8 @@
 }
 
 .SJ-guide-card {
-  min-height: 120px;  /* 카드 전체 높이 고정⭐️ */
+  min-height: 120px;
+  /* 카드 전체 높이 고정⭐️ */
   position: relative;
   display: flex;
   align-items: center;
@@ -113,6 +112,7 @@
   align-items: center;
   margin-bottom: 1%;
 }
+
 /* 코스3 위치 */
 .SJ-guide-score {
   position: absolute;
@@ -126,8 +126,10 @@
   display: flex;
   flex-direction: column;
   gap: 10%;
-  height: 45px;  /* 푸터 높이 고정⭐️ */
-  margin-top: auto;  /* 상단 여백 자동 조정⭐️ */
+  height: 45px;
+  /* 푸터 높이 고정⭐️ */
+  margin-top: auto;
+  /* 상단 여백 자동 조정⭐️ */
 }
 
 .SJ-guide-date {
@@ -139,25 +141,35 @@
 .SJ-guide-tags {
   display: flex;
   gap: 1%;
-  flex-wrap: wrap; /* 태그들이 너비를 초과할 경우 다음 줄로 넘어가도록 설정 */
-  max-width: 90%; /* 태그 컨테이너의 최대 너비를 부모 요소의 90%로 제한 */
-  margin-top: 1%; /* 위쪽 여백 추가 */
+  flex-wrap: wrap;
+  /* 태그들이 너비를 초과할 경우 다음 줄로 넘어가도록 설정 */
+  max-width: 90%;
+  /* 태그 컨테이너의 최대 너비를 부모 요소의 90%로 제한 */
+  margin-top: 1%;
+  /* 위쪽 여백 추가 */
 }
 
 .SJ-guide-tag {
   color: var(--color-dark-gray);
   font-size: 77%;
-  background-color: #e3e3e3; /* 태그 배경색 설정 */
-  padding: 1% 3%; /* 상하 1%, 좌우 3% 여백으로 태그 내부 여백 설정 */
-  border-radius: 22px; /* 태그 모서리를 둥글게 처리 */
-  white-space: nowrap; /* 태그 텍스트가 한 줄로 유지되도록 설정 */
-  margin-bottom: 1%; /* 태그가 다음 줄로 넘어갈 때의 아래 여백 */
+  background-color: #e3e3e3;
+  /* 태그 배경색 설정 */
+  padding: 1% 3%;
+  /* 상하 1%, 좌우 3% 여백으로 태그 내부 여백 설정 */
+  border-radius: 22px;
+  /* 태그 모서리를 둥글게 처리 */
+  white-space: nowrap;
+  /* 태그 텍스트가 한 줄로 유지되도록 설정 */
+  margin-bottom: 1%;
+  /* 태그가 다음 줄로 넘어갈 때의 아래 여백 */
 }
 
 .WS-favorite-button .empty-heart {
-  color: var(--color-dark-gray); /* 빈 하트 */
+  color: var(--color-dark-gray);
+  /* 빈 하트 */
 }
 
 .WS-favorite-button .filled-heart {
-  color: var(--color-main); /* 채워진 하트 */
+  color: var(--color-main);
+  /* 채워진 하트 */
 }
