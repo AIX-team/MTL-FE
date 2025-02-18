@@ -4,11 +4,19 @@ body {
 }
 
 .WS-Landing-Page {
-  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 400px;
+  height: 500px;
+  margin: 0 auto;
   min-height: 100vh;
   background-color: #f7f6f6;
-  margin-top: 25%;
+  margin-top: 5%;
   font-family: "NanumBarunGothic", sans-serif;
+  overflow-y: auto;
 }
 /* 상단 멘트 유튜브 링크로 */
 .SJ-header {
@@ -35,8 +43,8 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
-  padding: 0 30px;
+  margin-bottom: 30px;
+  padding: 0 20px;
   font-weight: bold;
 }
 
