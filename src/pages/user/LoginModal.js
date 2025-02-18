@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import '../../css/login/LoginModal.css'; // 모달 스타일을 위한 CSS 파일
 import googleLogo from '../../images/google_logo.png';
 import Logo from '../../images/LOGO.png';
+import backArrow from '../../images/backArrow.svg';
 
 const LoginModal = ({ isOpen, onClose }) => {
     const navigate = useNavigate();
@@ -26,7 +27,11 @@ const LoginModal = ({ isOpen, onClose }) => {
     return (
         <div className="WS-login" onClick={handleClose}>
             <div className='WS-login-header-Container'>
-                <button className='WS-login-back-button' onClick={handleClose}>&lt;</button>
+                <button className='WS-login-back-button' onClick={handleClose}>
+                    <img className="WS-GuideBook-Header-Back-Btn"
+                        src={backArrow}
+                        alt="뒤로가기" />
+                </button>
             </div>
 
             <div className="WS-login-body-container" onClick={e => e.stopPropagation()}>

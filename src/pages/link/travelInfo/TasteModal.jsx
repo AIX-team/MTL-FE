@@ -84,7 +84,6 @@ const TasteModal = ({ isOpen, onClose, onSave }) => {
               onSave(updateTaste);
               onClose();
             }}
-
           >
             생성
           </div>

@@ -1,8 +1,4 @@
 /* 최상단에 추가 */
-body {
-  background-color: #f7f6f6;
-}
-
 .WS-Landing-Page {
   position: fixed;
   top: 0;
@@ -15,6 +11,7 @@ body {
   height: 100%;
   max-height: 1000px;
   margin: 0 auto;
+
 
   background-color: #f7f6f6;
   overflow-y: auto;
