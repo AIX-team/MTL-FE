@@ -490,6 +490,7 @@ const TravelInfo = () => {
     });
   };
 
+  
   const handleAISelected = async () => {
     try {
       setShowLoading(true);
