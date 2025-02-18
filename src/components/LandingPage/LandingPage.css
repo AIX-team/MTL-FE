@@ -1,30 +1,336 @@
-.WS-Landing-Page {
-    position: absolute;
-    top: 0;
-    left: 0;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-
-    width: 100%;
-    height: 100%;
-
-    background-color: var(--color-light-gray);
+/* 최상단에 추가 */
+body {
+  background-color: #f7f6f6;
 }
 
+.WS-Landing-Page {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 400px;
+  height: 500px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background-color: #f7f6f6;
+  margin-top: 5%;
+  font-family: "NanumBarunGothic", sans-serif;
+  overflow-y: auto;
+}
+/* 상단 멘트 유튜브 링크로 */
+.SJ-header {
+  text-align: center;
+  margin-bottom: 60px;
+  font-weight: bold;
+}
+
+/* 첫 여행도 두렵지 않게 */
+.SJ-header h3 {
+  font-size: 16px;
+  color: #3e3e3e;
+  margin-bottom: 10px;
+}
+
+.SJ-header h1 {
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 1.4;
+}
+
+/* 여행 장소 탐색 • 관리 */
+.SJ-youtube-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding: 0 20px;
+  font-weight: bold;
+}
+
+
+.SJ-title-red {
+  color: #c92b2a;
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.SJ-subtitle {
+  color: #3e3e3e;
+  font-size: 14px;
+}
+
+.SJ-youtube-logo {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+.SJ-search-image {
+  width: 100%;
+  margin-bottom: 30px;
+}
+
+.SJ-map-section {
+  margin-bottom: 1%;
+}
+/* 여행 일정을 한 눈에 헤더 */
+.SJ-map-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  margin-bottom: 30px;
+}
+/* 여행 일정을 한 눈에! 글자 */
+.SJ-map-title {
+  color: #c92b2a;
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+/* AI가 짜주는 최적의 동선으로 글자 */
+.SJ-map-subtitle {
+  color: #3e3e3e;
+  font-size: 14px;
+}
+
+
+.SJ-earth-icon {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+.SJ-map-image {
+  width: 100%;
+  border-radius: 22px;
+}
+
+/* 따라다니는 버튼 */
 .WS-Landing-Page-Button {
-    padding: 20px;
+  width: 100%;
+  padding: 20px;
+  background-color: #c92b2a;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  position: sticky;
+  bottom: 15px;
+  z-index: 100;
+  margin: 0 auto;
+}
 
-    width: 90%;
-    height: 70px;
+/* 버튼 호버 효과 추가 (선택사항) */
+.WS-Landing-Page-Button:hover {
+  background-color: #b42524;
+}
+/* 내 취향에 맞게 위의 여유 */
+.SJ-preference-section {
+  margin-top: 10px;
+  padding: 20px;
+}
 
-    background-color: var(--color-main);
-    color: white;
-    border: none;
-    border-radius: var(--border-radius-full);
+.SJ-preference-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
 
-    font-size: var(--font-size-lg);
-    font-weight: bold;
+/* 내 취향에 맞게 글자 */
+.SJ-preference-text h2 {
+  color: #c92b2a;
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.SJ-preference-text p {
+  color: var(--dark-gray);
+  font-size: 14px;
+}
+
+.SJ-preference-icon {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+/* 전체보기 라인 */
+.SJ-tags {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.SJ-tag {
+  padding: 8px 16px;
+  border-radius: 22px;
+  border: 1px solid #ddd;
+  background: none;
+  cursor: pointer;
+  color: #3e3e3e;
+}
+
+.SJ-tag.active {
+  background-color: #c92b2a;
+  color: white;
+  border-color: #c92b2a;
+}
+
+.SJ-tag.secondary {
+  background-color: white;
+  color: #3e3e3e;
+  border: 1px solid #3e3e3e;
+}
+
+.SJ-selected {
+  color: #3e3e3e;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.SJ-check {
+  color: #c92b2a;
+  margin-right: 5px;
+}
+
+.SJ-places {
+  margin-bottom: 10px;
+}
+
+.SJ-place-item {
+  display: flex;
+  align-items: center;
+  background: white;
+  padding: 12px;
+  border-radius: 20px;
+  margin-bottom: 10px;
+}
+/* 장소 사진 이미지 */
+.SJ-place-item img {
+  width: 90px;
+  height: 70px;
+  border-radius: 10px;
+  object-fit: cover;
+  margin-right: 10px;
+}
+
+.SJ-place-info {
+  flex: 1;
+}
+
+.SJ-place-info h3 {
+  font-size: 16px;
+  margin-bottom: 3px;
+}
+
+.SJ-place-info p {
+  color: #666;
+  font-size: 12px;
+}
+
+.SJ-close {
+  border: none;
+  background: none;
+  font-size: 20px;
+  color: #919191;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.SJ-travel-section {
+  margin-top: 30px;
+}
+
+/* 여행 중에도 편리하게 상단 여유 */
+.SJ-travel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.SJ-travel-text h2 {
+  color: #c92b2a;
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.SJ-travel-text p {
+  color: #919191;
+  font-size: 14px;
+}
+
+.SJ-travel-icon {
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+  object-fit: contain;
+}
+
+/* 부제목 스타일도 통일 */
+.SJ-subtitle,
+.SJ-map-subtitle,
+.SJ-preference-text p,
+.SJ-travel-text p {
+  color: #919191;
+  font-size: 14px;
+}
+/* 빠니보틀이 먹었던 냄비우동집 알려줘 버튼 */
+.SJ-restaurant-button {
+  width: 70%;
+  padding: 15px 20px;
+  background-color: #c92b2a;
+  color: white;
+  border: none;
+  border-radius: 22px;
+  font-size: 14px;
+  margin: 20px 0;
+  text-align: left;
+  cursor: pointer;
+  margin-left: auto; /* 오른쪽 정렬을 위해 추가 */
+  display: block; /* 블록 레벨 요소로 변경 */
+}
+
+.SJ-chat-response {
+  background-color: #f0f0f0;
+  border-radius: 22px;
+  padding: 15px;
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.SJ-ai-icon {
+  width: 36px;
+  height: 36px;
+  background-color: #c92b2a;
+  border-radius: 50%;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.SJ-chat-content {
+  flex: 1;
+}
+
+.SJ-chat-content p {
+  margin: 5px 0;
+  font-size: 14px;
+}
+
+.SJ-restaurant-info {
+  color: #666;
+  line-height: 1.5;
+  margin-top: 10px !important;
 }
