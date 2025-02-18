@@ -341,10 +341,17 @@ const TravelInfo = () => {
         setError(null);
         const response = await axiosInstance.get(`/api/v1/travels/travelInfos/${travelInfoId}/aiSelect`);
         if (response.data.success === "success") {
-          setSelectedPlaces(response.data.content);
+          for(let place of response.data.content){
+            const findPlace = allPlaceList.content.find(item => item.placeId === place.placeId);
+              setSelectedPlaces(prev => [...prev, findPlace]);
+            }
           setSelectedAIPlaces(response.data.content);
         } else {
-          setError(response.data.message);
+          for(let place of response.data.content){
+            if(allPlaceList.content.some(item => item.placeId === place.placeId)){
+              setSelectedPlaces(prev => [...prev, place]);
+            }
+          }
         }
       } else {
         setSelectedPlaces(selectedAIPlaces);
@@ -355,7 +362,7 @@ const TravelInfo = () => {
     } finally {
       setLoading(false);
     }
-  }, [travelInfoId, selectedAIPlaces, selectedPlaces.length]);
+  }, [travelInfoId, selectedAIPlaces, selectedPlaces.length, allPlaceList]);
 
 
   useEffect(() => {

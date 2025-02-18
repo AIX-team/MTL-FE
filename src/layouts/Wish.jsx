@@ -233,7 +233,7 @@ const Wish = ({ onClose }) => {
         setInputMessage("");
 
         // 백엔드 API 호출
-        const response = await fetch("http://localhost:8000/api/chat", {
+        const response = await fetch(process.env.REACT_APP_AI_API + "/api/chat", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
