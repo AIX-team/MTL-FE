@@ -14,7 +14,7 @@ import SelectModal from './SelectModal';
 import aiIcon from '../../../images/chatbot.gif';
 import { GoogleMap } from '@react-google-maps/api';
 import axiosInstance from '../../../components/AxiosInstance';
-
+import Loading from '../../../components/Loading/Loading';
 
 // 구글 맵 컴포넌트(경로)
 const MapComponent = React.memo(({ places }) => {
@@ -333,21 +333,42 @@ const TravelInfo = () => {
     }
   }, [travelInfoId, travelInfoTitle, travelDays]); // 의존성 배열에 필요한 값들 추가
 
+  // ============================================================================================
+
+  // const getAISelect = useCallback(async () => {
+  //   try {
+  //     if (selectedAIPlaces.length === 0 || selectedAIPlaces.length !== selectedPlaces.length) {
+  //       setLoading(true);
+  //       setError(null);
+  //       const response = await axiosInstance.get(`/api/v1/travels/travelInfos/${travelInfoId}/aiSelect`);
+  //       if (response.data.success === "success") {
+  //         setSelectedPlaces(response.data.content);
+  //         setSelectedAIPlaces(response.data.content);
+  //       } else {
+  //         setError(response.data.message);
+  //       }
+  //     } else {
+  //       setSelectedPlaces(selectedAIPlaces);
+  //     }
+  //   } catch (error) {
+  //     console.error('API Error:', error);
+  //     setError(error.message || '데이터를 불러오는데 실패했습니다.');
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // }, [travelInfoId, selectedAIPlaces, selectedPlaces.length]);
 
   const getAISelect = useCallback(async () => {
     try {
-      if (selectedAIPlaces.length === 0 || selectedAIPlaces.length !== selectedPlaces.length) {
-        setLoading(true);
-        setError(null);
-        const response = await axiosInstance.get(`/api/v1/travels/travelInfos/${travelInfoId}/aiSelect`);
-        if (response.data.success === "success") {
-          setSelectedPlaces(response.data.content);
-          setSelectedAIPlaces(response.data.content);
-        } else {
-          setError(response.data.message);
-        }
+      setLoading(true);
+      setError(null);
+      const response = await axiosInstance.get(`/api/v1/travels/travelInfos/${travelInfoId}/aiSelect`);
+      if (response.data.success === "success") {
+        // 응답을 받은 후 직접 상태 설정
+        setSelectedPlaces(response.data.content);
+        setSelectedAIPlaces(response.data.content);
       } else {
-        setSelectedPlaces(selectedAIPlaces);
+        setError(response.data.message);
       }
     } catch (error) {
       console.error('API Error:', error);
@@ -355,8 +376,9 @@ const TravelInfo = () => {
     } finally {
       setLoading(false);
     }
-  }, [travelInfoId, selectedAIPlaces, selectedPlaces.length]);
+  }, [travelInfoId]);
 
+  // ============================================================================================
 
   useEffect(() => {
     setIsComponentMounted(true);
@@ -410,7 +432,15 @@ const TravelInfo = () => {
     }
   }, [isComponentMounted]);
 
-  if (showLoading) return <div>로딩 중...</div>;
+  useEffect(() => {
+    console.log("selectedPlaces 변경됨:", selectedPlaces);
+  }, [selectedPlaces]);
+
+  useEffect(() => {
+    console.log("selectedAIPlaces 변경됨:", selectedAIPlaces);
+  }, [selectedAIPlaces]);
+
+  if (showLoading) return <Loading type="travelInfo" />;
   if (showError) return <div>에러: {error}</div>;
   if (showNoData) return <div>데이터가 없습니다.</div>;
 
@@ -460,11 +490,29 @@ const TravelInfo = () => {
     });
   };
 
-  const handleAISelected = () => {
-    setIsAISelected(!isAISelected);
-    getAISelect();
-    if (!isAISelected) {
-      setSelectedPlaces([]);
+  
+  const handleAISelected = async () => {
+    try {
+      setShowLoading(true);
+      console.log("이전 선택된 장소들:", selectedPlaces);
+
+      // 이전 상태와 관계없이 빈 배열로 초기화
+      setSelectedPlaces(prevPlaces => {
+        console.log("이전 places:", prevPlaces);
+        return [];
+      });
+      
+      setSelectedAIPlaces(prevAIPlaces => {
+        console.log("이전 AI places:", prevAIPlaces);
+        return [];
+      });
+      // AI 선택 관련 기능 실행
+      await getAISelect();
+
+    } catch (error) {
+      console.error('AI 선택 중 오류 발생:', error);
+    } finally {
+      setShowLoading(false);
     }
   };
 
@@ -534,15 +582,15 @@ const TravelInfo = () => {
 
   return (
     <div className="HG-TravelInfo-Wrapper">
-        <main className='HG-TravelInfo-Container'>
-            <div className='HG-TravelInfo-Header'>
-                <div className='WS-TravelInfo-Header-Left'>
-                    <div className='WS-TravelInfo-Header-Left-Back-Btn'>
-                        <img className='WS-TravelInfo-Header-Left-Back-Btn-Icon' 
-                        src={backArrowIcon}
-                        alt="backArrowIcon" 
-                        onClick={() => navigate(-1)} />
-                    </div>
+      <main className='HG-TravelInfo-Container'>
+        <div className='HG-TravelInfo-Header'>
+          <div className='WS-TravelInfo-Header-Left'>
+            <div className='WS-TravelInfo-Header-Left-Back-Btn'>
+              <img className='WS-TravelInfo-Header-Left-Back-Btn-Icon'
+                src={backArrowIcon}
+                alt="backArrowIcon"
+                onClick={() => navigate(-1)} />
+            </div>
 
             <div className='WS-TravelInfo-Header-Left-Contents'>
               <div className='WS-TravelInfo-Travel-Days'>{travelDays}일</div>
@@ -628,7 +676,7 @@ const TravelInfo = () => {
             </span>
           </div>
           <div className='HG-TravelInfo-aiselect-btn'>
-            <span className={`${isAISelected ? 'HG-TravelInfo-aiselect-btn-ai-icon-selected' : 'HG-TravelInfo-aiselect-btn-text'}`}
+            <span className={`HG-TravelInfo-aiselect-btn-ai-icon-selected`}
               onClick={handleAISelected}>
               <img className={`HG-TravelInfo-aiselect-btn-ai-icon`}
                 src={aiIcon} alt="aiIcon" />

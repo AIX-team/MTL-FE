@@ -16,6 +16,10 @@ function Loading({ type = "default" }) {
   
   // 메시지 설정
   const messages = {
+    default: {  // 기본 메시지 추가
+      main: "잠시만 기다려주세요.",
+      sub: "최상의 결과를 위해\n준비중입니다.",
+    },
     travelInfo: {
       main: "여행 기간에 맞는\n여행 정보를\n준비중입니다.",
       sub: "최상의 결과를 위해\n잠시만 기다려 주세요.",
