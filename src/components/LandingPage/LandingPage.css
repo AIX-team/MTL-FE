@@ -1,26 +1,27 @@
 /* 최상단에 추가 */
-body {
-  background-color: #f7f6f6;
-}
-
 .WS-Landing-Page {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  width: 400px;
-  height: 500px;
+
+  width: 93%;
+  max-width: 500px;
+  height: 100%;
+  max-height: 1000px;
   margin: 0 auto;
-  min-height: 100vh;
+
   background-color: #f7f6f6;
-  margin-top: 5%;
-  font-family: "NanumBarunGothic", sans-serif;
   overflow-y: auto;
+}
+.WS-Landing-Page::-webkit-scrollbar {
+  display: none;
 }
 /* 상단 멘트 유튜브 링크로 */
 .SJ-header {
   text-align: center;
+  margin-top: 20%;
   margin-bottom: 60px;
   font-weight: bold;
 }
@@ -95,7 +96,6 @@ body {
   color: #3e3e3e;
   font-size: 14px;
 }
-
 
 .SJ-earth-icon {
   width: 40px;

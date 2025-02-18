@@ -75,12 +75,11 @@
   padding-left: 1.5%;
 
   width: 97%;
-  height: 420px;
+  height: 100%;
+  max-height: 700px;
 
   overflow-x: hidden;
   overflow-y: auto;
-
-  background-color: white;
 }
 
 .SJ-travel-grid::-webkit-scrollbar {
