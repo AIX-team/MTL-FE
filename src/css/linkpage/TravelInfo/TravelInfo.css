@@ -214,18 +214,18 @@ a,
   padding: 3px 10px;
   display: flex;
   align-items: center;
+  border: 2px solid var(--color-light-gray);
+  border-radius: var(--border-radius-full);
+}
+
+.HG-TravelInfo-aiselect-btn-ai-icon-selected:hover {
+  padding: 3px 10px;
+  display: flex;
+  align-items: center;
   border: 2px solid var(--color-main-hover);
   border-radius: var(--border-radius-full);
 
   scale: 1.05;
-}
-
-.HG-TravelInfo-aiselect-btn-text {
-  padding: 3px 10px;
-  display: flex;
-  align-items: center;
-  border: 2px solid var(--color-light-gray);
-  border-radius: var(--border-radius-full);
 }
 
 .HG-TravelInfo-aiselect-btn-ai-icon {
@@ -236,7 +236,8 @@ a,
 .HG-TravelInfo-Content-Frame-Place-Slider {
   margin-top: 2%;
 
-  height: 425px;
+  height: 100%;
+  max-height: 600px;
 
   overflow-y: auto;
   overflow-x: hidden;
@@ -268,7 +269,6 @@ a,
 }
 
 .WS-carousel-item {
-
   margin-bottom: 2%;
 
   height: 300px;
