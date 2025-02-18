@@ -3,38 +3,44 @@ import "./LandingPage.css";
 import { useNavigate } from "react-router-dom";
 import youtubeLogo from "../../images/YOUTUBE_LOGO.png";
 import landingSearch from "../../images/landing_search.png";
+import landingPic1 from "../../images/landing_1pic.png";
 import earthAirplane from "../../images/earth_airplane.png";
 import landingGoogleMap from "../../images/landing_google_map.png";
 import loadingMap from "../../images/loading_map.png";
 import landingImage22 from "../../images/landing_image22.png";
 import landingImage23 from "../../images/landing_image23.png";
 import mapAirplane from "../../images/map_airplane.png";
+import mapYoutube from "../../images/mapyoutube.png";
 
 function LandingPage() {
   const navigate = useNavigate();
 
-
   return (
     <div className="WS-Landing-Page">
+      <div className="SJ-top-image">
+        <img src={mapYoutube} alt="Map Youtube" />
+      </div>
       <div className="SJ-header">
         <h3>첫 여행도 두렵지 않게,</h3>
         <h1>
-          유튜브 링크로 완성하는
+          유튜브 링크 하나로
           <br />
-          나만의 여행 가이드북
+          나만의 여행 플랜 완성!
         </h1>
       </div>
 
       <div className="SJ-youtube-section">
         <div className="SJ-content">
-          <div className="SJ-title-red">여행 장소 탐색 • 관리</div>
+          <div className="SJ-title-red">편리한 여행 장소 탐색</div>
           <div className="SJ-subtitle">유튜브 여행 영상 속 장소 자동 추출</div>
-
         </div>
         <img src={youtubeLogo} alt="YouTube" className="SJ-youtube-logo" />
       </div>
 
-      <img src={landingSearch} alt="Search" className="SJ-search-image" />
+      <div className="SJ-search-section">
+        <img src={landingSearch} alt="Search" className="SJ-search-image" />
+        <img src={landingPic1} alt="Landing 1" className="SJ-landing-pic1" />
+      </div>
 
       <div className="SJ-map-section">
         <div className="SJ-map-header">
@@ -66,26 +72,33 @@ function LandingPage() {
         </div>
 
         <div className="SJ-selected">
-          <span className="SJ-check">✓</span>
+          <span className="SJ-check">✔️</span>
           <span>전체 선택</span>
         </div>
 
         <div className="SJ-places">
           <div className="SJ-place-item">
+            <div className="SJ-circle-checkbox"></div>
             <img src={landingImage22} alt="Urban Park" />
             <div className="SJ-place-info">
-              <h3>Urban Park</h3>
-              <p>City escape</p>
+              <h3>도고 온천 본관</h3>
+              <p>유서깊은 관광지, 온천</p>
             </div>
-            <button className="SJ-close">×</button>
+            <button className="SJ-menu">
+              <span className="SJ-hamburger"></span>
+            </button>
           </div>
+
           <div className="SJ-place-item">
+            <div className="SJ-circle-checkbox"></div>
             <img src={landingImage23} alt="Senso-ji Temple" />
             <div className="SJ-place-info">
-              <h3>Senso-ji Temple</h3>
-              <p>Vibrant temple area with traditional shops</p>
+              <h3>도고 온천 별관</h3>
+              <p>관광지, 온천</p>
             </div>
-            <button className="SJ-close">×</button>
+            <button className="SJ-menu">
+              <span className="SJ-hamburger"></span>
+            </button>
           </div>
         </div>
 
@@ -98,9 +111,9 @@ function LandingPage() {
             <img src={mapAirplane} alt="Travel" className="SJ-travel-icon" />
           </div>
 
-          <button className="SJ-restaurant-button">
+          <div className="SJ-restaurant-button">
             빠니보틀이 먹었던 냄비우동집 알려줘
-          </button>
+          </div>
 
           <div className="SJ-chat-response">
             <div className="SJ-ai-icon">AI</div>
@@ -117,6 +130,11 @@ function LandingPage() {
             </div>
           </div>
         </div>
+      </div>
+
+      <div className="SJ-cta-text">
+        <p>유튜브 링크 하나로 시작하는 나만의 여행!</p>
+        <p> 👇🏻지금 바로👇🏻</p>
       </div>
 
       <button
