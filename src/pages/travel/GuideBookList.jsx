@@ -252,6 +252,7 @@ function GuidebookList() {
           )}
         </div>
       </div>
+
       {Array.isArray(searchAuthor) && searchAuthor.length > 0 && <div className='HG-search-author-container'>
         {searchAuthor.map((author, index) => (
           <div key={index} className='HG-search-author-item'>

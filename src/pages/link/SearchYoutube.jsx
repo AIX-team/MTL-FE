@@ -251,7 +251,7 @@ const SearchYoutube = ({ linkData, setLinkData }) => {
 
     return (
         <div className="WS-SearchYoutube-Tab">
-            
+
             <div className="WS-Link-Input-Container">
                 <input
                     type="text"
@@ -285,7 +285,7 @@ const SearchYoutube = ({ linkData, setLinkData }) => {
                 </div>
             </div>
 
-            {/* <div className="WS-SearchYoutube-RecentSearches">
+            <div className="WS-SearchYoutube-RecentSearches">
                 {isLoggedIn ? (
                     recentSearches.length > 0 ? (
                         <>
@@ -313,7 +313,7 @@ const SearchYoutube = ({ linkData, setLinkData }) => {
                         검색어 저장을 위해 로그인이 필요합니다.
                     </p>
                 )}
-            </div> */}
+            </div>
 
             <div className={`WS-SearchYoutube-Results ${selectedVideos.length > 0 ? 'has-selected' : ''}`}>
                 {isLoading ? (
