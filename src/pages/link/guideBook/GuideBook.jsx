@@ -5,7 +5,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { GoogleMap, Polyline } from '@react-google-maps/api';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
-import downloadbtn from '../../../images/download.png';
 import backArrow from '../../../images/backArrow.svg';
 import { useParams } from 'react-router-dom';
 import ReactDOM from 'react-dom';
@@ -687,10 +686,6 @@ const GuideBook = () => {
                         </div>
                     </div>
                 </div>
-                <div className='WS-GuideBook-Header-Right-Container'>
-                    <img src={downloadbtn} alt="여행 정보 이미지" />
-                </div>
-
             </div>
 
             <div className="WS-GuideBook-Body">
