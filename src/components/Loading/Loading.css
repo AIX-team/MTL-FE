@@ -39,11 +39,21 @@
   transition: opacity 0.2s ease; /* 이미지 전환 효과 추가 */
 }
 
+.SJ_loading_sub_message {
+  color: #919191;
+  font-size: 16px;
+  font-weight: normal;
+  text-align: center;
+  margin: -20px 0 0 0;
+  white-space: pre-line;
+  letter-spacing: 0.5px;
+  padding-top: 4px;
+}
+
 .SJ_progress_wrapper {
   position: relative;
   width: 300px;
   margin-top: 50px;
-  -webkit-transform: translateZ(0);
   transform: translateZ(0);
 }
 
@@ -53,38 +63,8 @@
   width: 21px;
   height: 21px;
   transform: translateX(-100%) translateZ(0) rotate(95deg);
-  -webkit-transform: translateX(-50%) translateZ(0) rotate(95deg);
   z-index: 2;
-  will-change: left, opacity;
-  transition: opacity 0.2s ease;
-}
-
-.SJ_progress_container {
-  width: 300px;
-  height: 8px;
-  background-color: #919191;
-  border-radius: 22px;
-  position: relative;
-  overflow: visible !important;
-}
-
-.SJ_progress_bar_main {
-  height: 100%;
-  background-color: #c92b2a;
-  position: absolute;
-  left: 0;
-  top: 0;
-  border-radius: 22px; /* 내부 바에도 border-radius 추가 */
-  will-change: width;
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
-}
-
-.SJ_progress_bar_background {
-  width: 100%;
-  height: 100%;
-  background-color: #919191;
-  border-radius: 22px; /* 배경 바에도 border-radius 추가 */
+  animation: moveAirplane 3s linear infinite;
 }
 
 /* 여행 기간에 맞는 영상 정보 준비중 */
@@ -101,14 +81,102 @@
   margin-bottom: 5px;
 }
 
-.SJ_loading_sub_message {
-  color: #919191;
-  font-family: "NanumBarunGothic", sans-serif;
-  font-size: 16px;
-  font-weight: normal;
-  text-align: center;
-  margin: -20px 0 0 0;
-  white-space: pre-line;
-  letter-spacing: 0.5px;
-  padding-top: 4px;
+.SJ_progress_container {
+  position: relative;
+  width: 300px;
+  height: 8px;
+  border-radius: var(--border-radius-full);
+  overflow: hidden;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+
+  border: 2px solid var(--color-light-gray);
+}
+
+.SJ_progress_bar_main {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  border-radius: var(--border-radius-full);
+
+  background: linear-gradient(
+    90deg,
+    var(--color-main) 0%,
+    var(--color-main-light, #ff6b6b) 50%,
+    var(--color-main) 100%
+  );
+  z-index: 2;
+  animation: progressAnimation 3s linear infinite;
+  box-shadow: 0 0 10px var(--color-main);
+  background-size: 200% 100%;
+  animation: progressAnimation 3s linear infinite,
+             shimmer 2s linear infinite;
+}
+
+.SJ_progress_bar_background {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    #919191,
+    #a8a8a8,
+    #919191
+  );
+  
+  z-index: 1;
+}
+
+@keyframes moveAirplane {
+  0% {
+    left: 0%;
+    opacity: 1;
+  }
+  95% {
+    opacity: 1;
+  }
+  100% {
+    left: 100%;
+    opacity: 0;
+  }
+}
+
+@keyframes progressAnimation {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* 추가적인 효과를 위한 스타일 */
+.SJ_progress_container::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  z-index: 3;
+}
+
+/* 호버 효과 */
+.SJ_progress_wrapper:hover .SJ_progress_bar_main {
+  box-shadow: 0 0 15px var(--color-main);
 }

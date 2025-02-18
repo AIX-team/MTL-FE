@@ -1,6 +1,4 @@
 import React, { useEffect, useState, useRef } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import axios from "axios";
 import "./Loading.css";
 import loadingEarth from "../../images/loading_earth.png";
 import loadingSunglass from "../../images/loading_sunglass.png";
@@ -59,11 +57,16 @@ function Loading({ type = "default" }) {
     const animate = () => {
       const currentTime = Date.now();
       const deltaTime = currentTime - lastUpdateTimeRef.current;
+      
+      // 3700ms 동안 진행되도록 설정 (비행기와 동일)
+      const duration = 3700;
 
       setProgress((prevProgress) => {
-        const newProgress = prevProgress + (deltaTime / 3700) * 100;
+        // 비행기와 동일한 속도로 진행
+        const newProgress = prevProgress + (deltaTime / duration) * 100;
 
         if (newProgress >= 100) {
+          // 100%에 도달하면 약간의 지연 후 리셋
           setTimeout(() => {
             setProgress(0);
           }, 15);
@@ -87,9 +90,8 @@ function Loading({ type = "default" }) {
     };
   }, []);
 
-  // 비행기의 투명도 계산
+  // 비행기와 프로그레스 바가 동시에 사라지도록 설정
   const airplaneOpacity = progress >= 98 ? 0 : 1;
-  // 프로그레스바 너비 계산
   const progressWidth = progress >= 100 ? 0 : progress;
 
   return (
@@ -113,21 +115,9 @@ function Loading({ type = "default" }) {
             src={loadingAirplane}
             alt="Loading Airplane"
             className="SJ_loading_airplane"
-            style={{
-              left: `calc(${progress}%)`,
-              willChange: "left",
-              opacity: airplaneOpacity,
-            }}
           />
           <div className="SJ_progress_container">
-            <div
-              className="SJ_progress_bar_main"
-              style={{
-                width: `${Math.max(0, progressWidth)}%`,
-                opacity: 1,
-                willChange: "width",
-              }}
-            />
+            <div className="SJ_progress_bar_main" />
             <div className="SJ_progress_bar_background" />
           </div>
         </div>

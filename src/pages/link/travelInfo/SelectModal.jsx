@@ -11,7 +11,6 @@ import Loading from "../../../components/Loading/Loading";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../../components/AxiosInstance";
 
-
 const SelectModal = ({
   isOpen,
   onClose,
