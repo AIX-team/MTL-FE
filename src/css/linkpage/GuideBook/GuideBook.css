@@ -41,18 +41,6 @@
   width: 85%;
 }
 
-.WS-GuideBook-Header-Right-Container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  width: 15%;
-
-  padding-top: 20px;
-
-  cursor: pointer;
-}
-
 .WS-GuideBook-Header-Back-Btn-Container {
   display: flex;
   align-items: center;

@@ -219,7 +219,6 @@ function GuidebookList() {
     console.log(author);
   };
 
-
   // 날짜 형식 변환 함수
   // 2025-02-03T00:39:43 형식을 2025년 2월 3일 00시 39분 형식으로 변환
   const convertDate = (date) => {
@@ -245,17 +244,20 @@ function GuidebookList() {
         />
 
         <div className="SJ-search-button-container">
-          {searchText && (
-            <button className="SJ-search-icon">
-              {!searchText ? <FaSearch /> : <FaTimes onClick={() => setSearchText("")} />}
-            </button>
-          )}
+          <button className="SJ-search-icon">
+            {!searchText ? (
+              <FaSearch />
+            ) : (
+              < FaTimes onClick={() => setSearchText("")} />
+            )}
+          </button>
         </div>
       </div>
+
       {Array.isArray(searchAuthor) && searchAuthor.length > 0 && <div className='HG-search-author-container'>
         {searchAuthor.map((author, index) => (
           <div key={index} className='HG-search-author-item'>
-            #{author} <FaTimes onClick={() => setSearchAuthor(searchAuthor.filter((item) => item !== author))} />
+            #{author.length > 8 ? `${author.slice(0, 8)}...` : author} <FaTimes className="WS-search-author-item-delete-icon" onClick={() => setSearchAuthor(searchAuthor.filter((item) => item !== author))} />
           </div>
         ))}
       </div>

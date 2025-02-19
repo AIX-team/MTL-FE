@@ -140,6 +140,8 @@
 
 .HG-select-modal-select-list {
   flex: 1;
+  height: 500px;
+  overflow-y: auto;
   padding-bottom: 120px;
 }
 
@@ -204,7 +206,7 @@
 }
 
 .HG-select-modal-footer {
-  position: absolute;
+  position: sticky;
   bottom: 0;
   left: 0;
   right: 0;
