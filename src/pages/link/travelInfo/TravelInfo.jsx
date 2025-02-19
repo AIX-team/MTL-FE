@@ -462,20 +462,18 @@ const TravelInfo = () => {
     slidesToScroll: 1,
     arrows: true,
     lazyLoad: true,
-    fade: true,
-    swipeToSlide: currentSlide !== 2,  // 세 번째 슬라이드(index: 2)에서 스와이프 비활성화
+    fade: false,
+    swipeToSlide: currentSlide !== 2,  // 세 번째 슬라이드에서는 스와이프 비활성화
     adaptiveHeight: true,
     initialSlide: 0,
-    waitForAnimate: false,
+    waitForAnimate: true,
     beforeChange: (current, next) => {
       setCurrentSlide(next);
-      if (Math.abs(current - next) === 2) {
-        if (sliderRef.current) {
-          sliderRef.current.slickGoTo(next);
-        }
-      }
     },
-    swipe: currentSlide !== 2  // 세 번째 슬라이드에서 스와이프 비활성화
+    swipe: currentSlide !== 2,  // 세 번째 슬라이드에서는 스와이프 비활성화
+    touchThreshold: currentSlide === 2 ? 10 : 3,  // 세 번째 슬라이드에서는 터치 감도를 매우 낮게 설정
+    useCSS: true,
+    useTransform: true
   };
 
   const handleSpanClick = (num) => {
