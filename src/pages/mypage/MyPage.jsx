@@ -38,38 +38,38 @@ function MyPage() {
   //       console.error("로그인 상태 확인 실패:", error);
   //     }
   //   };
-    
+
   //   checkGoogleLogin();
   // }, []);
 
   useEffect(() => {
     // 사용자 정보 불러오는 함수
-      const fetchUserInfo = async () => {
-        const email = localStorage.getItem("userEmail"); // localStorage에서 이메일 가져오기
-        console.log(email);
-        try {
-          if (!email) {
-            console.warn("로그인 정보가 없습니다. 로그인 페이지로 이동합니다.");
-            navigate("/login");
-            return;
-          }
-  
-          // checkUser API 호출
-          const userData = await checkUser(email);
-          setUserInfo(userData); // API에서 받아온 데이터를 상태로 업데이트
-          console.log("유저 정보:", userData); // 콘솔 출력
-        } catch (error) {
-          console.error("유저 정보 조회 실패:", error);
-          alert("유저 정보를 불러오지 못했습니다. 다시 로그인 해주세요.");
-          navigate("/login"); // 에러 발생 시 로그인 페이지로 이동
+    const fetchUserInfo = async () => {
+      const email = localStorage.getItem("userEmail"); // localStorage에서 이메일 가져오기
+      console.log(email);
+      try {
+        if (!email) {
+          console.warn("로그인 정보가 없습니다. 로그인 페이지로 이동합니다.");
+          navigate("/login");
+          return;
         }
-      };
+
+        // checkUser API 호출
+        const userData = await checkUser(email);
+        setUserInfo(userData); // API에서 받아온 데이터를 상태로 업데이트
+        console.log("유저 정보:", userData); // 콘솔 출력
+      } catch (error) {
+        console.error("유저 정보 조회 실패:", error);
+        alert("유저 정보를 불러오지 못했습니다. 다시 로그인 해주세요.");
+        navigate("/login"); // 에러 발생 시 로그인 페이지로 이동
+      }
+    };
 
     fetchUserInfo();
   }, [navigate]);
 
-   // 링크 페이지로 이동하는 함수
-   const handleCreateLink = () => {
+  // 링크 페이지로 이동하는 함수
+  const handleCreateLink = () => {
     navigate("/Link"); // '/link'는 링크 페이지의 경로입니다
   };
 

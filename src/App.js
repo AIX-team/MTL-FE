@@ -11,7 +11,7 @@ import './css/styles/variables.css';
 
 
 import Login from "./pages/user/Login";
-import LoginSuccess from "./pages/user/LoiginSuccess";
+import LoginSuccess from "./pages/user/LoginSuccess";
 import GoogleMapsWrapper from './components/GoogleMapsWrapper';
 
 import LandingPage from "./components/LandingPage/LandingPage";
@@ -22,7 +22,7 @@ function App() {
       <GoogleMapsWrapper>
         <Routes>
           <Route path="/" element={<LandingPage />} />
-          
+
           {/* 로그인 페이지  */}
           <Route path="/login" element={<Login />} />
           <Route path="/loginSuccess" element={<LoginSuccess />} />
