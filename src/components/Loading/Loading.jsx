@@ -22,19 +22,19 @@ function Loading({ type = "default" }) {
     },
     travelInfo: {
       main: "여행 기간에 맞는\n여행 정보를\n준비중입니다.",
-      sub: "최상의 결과를 위해\n잠시만 기다려 주세요.",
+      sub: "최상의 결과를 위해\n2~3분만 기다려 주세요.",
     },
     guidebook: {
       main: "여행 장소를 담은\n가이드북을\n준비중입니다.",
-      sub: "최상의 결과를 위해\n잠시만 기다려 주세요.",
+      sub: "최상의 결과를 위해\n2~3분만 기다려 주세요.",
     },
     travelList: {
       main: "여행 정보를 담은\n목록을\n준비중입니다.",
-      sub: "최상의 결과를 위해\n잠시만 기다려 주세요.",
+      sub: "최상의 결과를 위해\n2~3분만 기다려 주세요.",
     },
     guideList: {
       main: "가이드북을 담은\n목록을\n준비중입니다.",
-      sub: "최상의 결과를 위해\n잠시만 기다려 주세요.",
+      sub: "최상의 결과를 위해\n2~3분만 기다려 주세요.",
     },
   };
   const currentMessage = messages[type] || messages.default;
