@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import '../../css/login/LoginModal.css';
 import googleLogo from '../../images/google_logo.png';
 import Logo from '../../images/LOGO.png';
+import backArrowIcon from '../../images/backArrow.svg';
 
 const LoginModal = ({ isOpen, onClose }) => {
     const navigate = useNavigate();
@@ -32,9 +33,10 @@ const LoginModal = ({ isOpen, onClose }) => {
     return (
         <div className="WS-login" onClick={handleClose}>
             <div className='WS-login-header-Container'>
-                <button className='WS-login-back-button' onClick={handleClose}>&lt;</button>
+                <button className='WS-login-back-button' onClick={handleClose}>
+                    <img src={backArrowIcon} alt="backArrowIcon" />
+                </button>
             </div>
-
             <div className="WS-login-body-container" onClick={e => {
                 e.stopPropagation();
                 console.log("[LoginModal] Preventing propagation");
