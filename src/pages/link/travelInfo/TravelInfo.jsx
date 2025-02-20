@@ -262,6 +262,21 @@ const TravelInfo = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [sliderReady, setSliderReady] = useState(false);
 
+  // 전체선택 상태를 추가
+  const [isAllSelected, setIsAllSelected] = useState(false);
+
+  const handleSelectAll = () => {
+    if (isAllSelected) {
+      // 전체 해제
+      setSelectedPlaces([]);
+      setIsAllSelected(false);
+    } else {
+      // 전체 선택
+      setSelectedPlaces(placeList.content);
+      setIsAllSelected(true);
+    }
+  };
+
   const getTravelInfo = useCallback(async () => {
     try {
       setLoading(true);
@@ -488,7 +503,7 @@ const TravelInfo = () => {
     });
   };
 
-  
+
   const handleAISelected = async () => {
     try {
       setShowLoading(true);
@@ -499,7 +514,7 @@ const TravelInfo = () => {
         console.log("이전 places:", prevPlaces);
         return [];
       });
-      
+
       setSelectedAIPlaces(prevAIPlaces => {
         console.log("이전 AI places:", prevAIPlaces);
         return [];
@@ -599,7 +614,6 @@ const TravelInfo = () => {
                   onClick={handleTitleEdit}
                 >편집</span>
               </div>
-
             </div>
           </div>
 
@@ -673,14 +687,28 @@ const TravelInfo = () => {
               그 외
             </span>
           </div>
-          <div className='HG-TravelInfo-aiselect-btn'>
+          <div className='WS-TravelInfo-aiselect-btn-Container'>
             <span className={`HG-TravelInfo-aiselect-btn-ai-icon-selected`}
               onClick={handleAISelected}>
               <img className={`HG-TravelInfo-aiselect-btn-ai-icon`}
                 src={aiIcon} alt="aiIcon" />
               AI 추천선택</span>
-          </div>
 
+            <span className='WS-TravelInfo-btn-select-all' onClick={handleSelectAll}>
+              {isAllSelected ? '전체 해제' : '전체 선택'}
+            </span>
+          </div>
+          
+          {selectedPlaces.length > 0 && (
+            <div className={`WS-TravelInfo-btn-select-text-Container ${selectedPlaces.length === 0 ? 'exit' : ''}`}>
+              <div className="WS-TravelInfo-btn-select-text-bold">
+                {travelDays}일 기준:
+              </div>
+              <div className="WS-TravelInfo-btn-select-text">
+                최소 {travelDays * 2}개 - 최대 {travelDays * 5}개 가능
+              </div>
+            </div>
+          )}
 
           <div className='HG-TravelInfo-Content-Frame-Place-Slider'>
             {placeList.content.map((item, index) => {
