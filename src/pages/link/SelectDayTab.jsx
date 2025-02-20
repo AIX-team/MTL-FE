@@ -12,41 +12,63 @@ const SelectDayTab = ({ onBack, linkData }) => {
 
   const runApiCalls = async () => {
     try {
-      const token = localStorage.getItem('token'); // 토큰 가져오기
+      setIsLoading(true);
+      const token = localStorage.getItem('token');
       const headers = {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
       };
 
       const payload = { urls: linkData };
-      // 분석 API 호출
-      const analysisResponse = await axiosInstance.post(
-        "/url/analysis",
-        payload,
-        { headers }
-      );
-      console.log("API 응답 (analysis):", analysisResponse.data);
 
-      // 매핑 API 호출 (요청 body에 days 추가)
+      // 1. 비동기 분석 API 호출하여 작업 ID 받기
+      const asyncResponse = await axiosInstance.post("/url/analysis/async", payload, { headers });
+      const jobId = asyncResponse.data;
+      console.log("작업 ID 발급됨:", jobId);
+
+      // 2. 작업 상태 주기적으로 확인 (폴링)
+      let isCompleted = false;
+      let retryCount = 0;
+      const maxRetries = 180; // 15분 (5초 * 180)
+      const pollingInterval = 5000; // 5초
+
+      while (!isCompleted && retryCount < maxRetries) {
+        const statusResponse = await axiosInstance.get(`/url/analysis/status/${jobId}`, { headers });
+        const status = statusResponse.data;
+        console.log(`작업 상태 확인 (${retryCount + 1}/${maxRetries}):`, status);
+
+        if (status === "Completed") {
+          isCompleted = true;
+        } else if (status === "Failed") {
+          throw new Error("분석 작업 실패");
+        } else {
+          // 5초 대기 후 다시 확인
+          await new Promise(resolve => setTimeout(resolve, pollingInterval));
+          retryCount++;
+        }
+      }
+
+      if (!isCompleted) {
+        throw new Error("분석 작업 시간 초과");
+      }
+
+      // 3. 매핑 API 호출
       const mappingPayload = {
         urls: linkData,
         days: days
       };
-      const mappingResponse = await axiosInstance.post(
-        "/url/mapping",
-        mappingPayload,
-        { headers }
-      );
-      console.log("API 응답 (mapping):", mappingResponse.data);
+      const mappingResponse = await axiosInstance.post("/url/mapping", mappingPayload, { headers });
+      console.log("매핑 API 응답:", mappingResponse.data);
 
+      // 4. 결과 페이지로 이동
       const travelInfoId = mappingResponse.data.travelInfoId;
-      // 매핑 작업 완료 후 travelinfos 페이지로 이동
       navigate(`/travelinfos/${travelInfoId}`, {
-        state: { days, analysisResult: analysisResponse.data }
+        state: { days, analysisResult: "분석 완료" }
       });
+
     } catch (error) {
       console.error("API 요청 에러:", error.response?.data || error);
-      if (error.response && error.response.status === 504) {
+      if (error.response?.status === 504) {
         alert("서버 응답이 지연되고 있습니다. 잠시 후 다시 시도해주세요.");
       } else {
         alert("API 요청에 실패했습니다. 다시 시도해주세요.");
