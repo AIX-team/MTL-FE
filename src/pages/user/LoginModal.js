@@ -56,5 +56,5 @@ const LoginModal = ({ isOpen, onClose }) => {
         </div>
     );
 };
-
 export default LoginModal;
+
