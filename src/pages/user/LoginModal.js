@@ -58,3 +58,6 @@ const LoginModal = ({ isOpen, onClose }) => {
 };
 
 export default LoginModal;
+
+
+//수정 X
