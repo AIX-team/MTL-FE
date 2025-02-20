@@ -17,14 +17,9 @@
     position: relative;
 
     z-index: 2;
-}
 
-#WS-Footer-Wish {
     cursor: pointer;
 }
-
-/* 위시 이미지로 보류 */
-
 /* 푸터 메뉴 아이콘 이미지 스타일 */
 .WS-Footer-Item img {
     width: 25px;
