@@ -1,47 +1,50 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../../css/login/LoginModal.css'; // 모달 스타일을 위한 CSS 파일
+import '../../css/login/LoginModal.css';
 import googleLogo from '../../images/google_logo.png';
 import Logo from '../../images/LOGO.png';
-import backArrow from '../../images/backArrow.svg';
 
 const LoginModal = ({ isOpen, onClose }) => {
     const navigate = useNavigate();
 
-    if (!isOpen) return null;
+    if (!isOpen) {
+        console.log("[LoginModal] Modal is not open.");
+        return null;
+    }
 
     const handleGoogleLogin = () => {
-        const clientId = '493235437055-i3vpr6aqus0mqfarsvfm65j2rkllo97t.apps.googleusercontent.com';        // 구글 클라이언트 ID
-        const redirectUri = process.env.REACT_APP_FRONTEND_URL + '/loginSuccess'; // 리디렉션 URI
-        const scope = 'profile email'; // 요청할 권한
+        console.log("[LoginModal] Google login button clicked");
+        const clientId = '493235437055-i3vpr6aqus0mqfarsvfm65j2rkllo97t.apps.googleusercontent.com';
+        const redirectUri = 'https://mytravellink.site/auth/google/callback';
+        const scope = 'profile email';
         const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=${scope}`;
-
-        window.location.href = authUrl; // 구글 로그인 페이지로 리디렉션
+        console.log("[LoginModal] Redirecting to Google auth URL:", authUrl);
+        window.location.href = authUrl;
     };
 
     const handleClose = () => {
+        console.log("[LoginModal] Closing modal");
         onClose(); // 모달 닫기
+        console.log("[LoginModal] Navigating to landing page");
         navigate('/'); // 랜딩페이지로 이동
     };
 
     return (
         <div className="WS-login" onClick={handleClose}>
             <div className='WS-login-header-Container'>
-                <button className='WS-login-back-button' onClick={handleClose}>
-                    <img className="WS-GuideBook-Header-Back-Btn"
-                        src={backArrow}
-                        alt="뒤로가기" />
-                </button>
+                <button className='WS-login-back-button' onClick={handleClose}>&lt;</button>
             </div>
 
-            <div className="WS-login-body-container" onClick={e => e.stopPropagation()}>
-
+            <div className="WS-login-body-container" onClick={e => {
+                e.stopPropagation();
+                console.log("[LoginModal] Preventing propagation");
+            }}>
                 <div className='WS-login-logo'>
-                    <img src={Logo}></img>
+                    <img src={Logo} alt="Logo" />
                 </div>
 
                 <div className='WS-login-button' onClick={handleGoogleLogin}>
-                    <img src={googleLogo}></img>
+                    <img src={googleLogo} alt="Google Logo" />
                     <span>구글 계정으로 시작하기</span>
                 </div>
 

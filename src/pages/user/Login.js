@@ -2,13 +2,11 @@ import React, { useState } from 'react';
 import LoginModal from './LoginModal';
 
 function Login() {
-    const [isModalOpen, setModalOpen] = useState(true); 
-
-   /* const openLoginModal = () => {
-        setModalOpen(true);
-    }; */
+    const [isModalOpen, setModalOpen] = useState(true);
+    console.log("[Login] Initial modal open state:", isModalOpen);
 
     const closeModal = () => {
+        console.log("[Login] Closing modal");
         setModalOpen(false);
     };
 
@@ -16,7 +14,7 @@ function Login() {
         <div>
             <LoginModal isOpen={isModalOpen} onClose={closeModal} />
         </div>
-    )
+    );
 }
 
 export default Login;
