@@ -351,21 +351,21 @@ const TravelInfo = () => {
         if (!title || !days) {
           console.error('필수 값이 누락되었습니다:', { title, days });
           return;
-      }
-
-
-      await axiosInstance.put(
-        `/api/v1/travels/travelInfos/${travelInfoId}`,
-        {
-          travelInfoTitle: title,
-          travelDays: parseInt(days) // 숫자로 변환
-        },
-        {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
         }
-      );
+
+
+        await axiosInstance.put(
+          `/api/v1/travels/travelInfos/${travelInfoId}`,
+          {
+            travelInfoTitle: title,
+            travelDays: parseInt(days) // 숫자로 변환
+          },
+          {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          }
+        );
       } else {
         console.error('토큰이 없습니다.');
       }
@@ -389,21 +389,21 @@ const TravelInfo = () => {
             }
           });
           if (response.data.success === "success") {
-          for(let place of response.data.content){
-            const findPlace = allPlaceList.content.find(item => item.placeId === place.placeId);
+            for (let place of response.data.content) {
+              const findPlace = allPlaceList.content.find(item => item.placeId === place.placeId);
               setSelectedPlaces(prev => [...prev, findPlace]);
               setSelectedAIPlaces(prev => [...prev, findPlace]);
             }
-        } else {
-          for(let place of response.data.content){
-            if(allPlaceList.content.some(item => item.placeId === place.placeId)){
-              setSelectedPlaces(prev => [...prev, place]);
+          } else {
+            for (let place of response.data.content) {
+              if (allPlaceList.content.some(item => item.placeId === place.placeId)) {
+                setSelectedPlaces(prev => [...prev, place]);
+              }
             }
           }
+        } else {
+          setSelectedPlaces(selectedAIPlaces);
         }
-      } else {
-        setSelectedPlaces(selectedAIPlaces);
-      }
       } else {
         console.error('토큰이 없습니다.');
       }
@@ -721,9 +721,9 @@ const TravelInfo = () => {
               {isAllSelected ? '전체 해제' : '전체 선택'}
             </span>
           </div>
-          
+
           {selectedPlaces.length > 0 && (
-            <div className={`WS-TravelInfo-btn-select-text-Container ${selectedPlaces.length === 0 ? 'exit' : ''}`}>
+            <div className="WS-TravelInfo-btn-select-text-Container">
               <div className="WS-TravelInfo-btn-select-text-bold">
                 {travelDays}일 기준:
               </div>
