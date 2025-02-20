@@ -306,7 +306,6 @@ a,
 .slide-content {
   position: relative;
   height: 250px;
-
 }
 
 .slick-slider {
@@ -337,7 +336,6 @@ a,
   padding-bottom: 5px;
 
   font-size: var(--font-size-sm);
-
 }
 
 .WS-TravelInfo-Address {
