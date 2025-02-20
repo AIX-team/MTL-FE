@@ -748,8 +748,15 @@ const TravelInfo = () => {
                       src={`${selectedPlaces.some(selected => selected.placeId === item.placeId) ? isSelectedIcon : selectIcon}`}
                       alt="selectIcon"
                     />
-                    <span className='HG-trevelinfo-content-frame-select-name'>{item.placeName}</span>
-                    <span className='HG-trevelinfo-content-frame-select-intro'>{item.intro}</span>
+
+                    {/* ================================================================================== */}
+                    <span className='HG-trevelinfo-content-frame-select-name'>
+                      {item.placeName.length > 20 ? `${item.placeName.substring(0, 20)}...` : item.placeName}
+                    </span>
+                    <span className='HG-trevelinfo-content-frame-select-intro'>
+                      {item.intro?.length > 50 ? `${item.intro.substring(0, 50)}...` : item.intro}
+                    </span>
+                    {/* ================================================================================== */}
                   </div>
 
                   <Slider {...sliderSettings}>
@@ -789,8 +796,14 @@ const TravelInfo = () => {
 
                     {/* 두 번째 슬라이드 */}
                     <div className="slide-content">
-                      <div className='WS-TravelInfo-Description'>{item.placeDescription}</div>
-                      <div className='WS-TravelInfo-Address'>{item.placeAddress}</div>
+                      {/* ================================================================================== */}
+                      <div className='WS-TravelInfo-Description'>
+                        {item.placeDescription?.length > 200 ? `${item.placeDescription.substring(0, 200)}...` : item.placeDescription}
+                      </div>
+                      <div className='WS-TravelInfo-Address'>
+                        {item.placeAddress?.length > 100 ? `${item.placeAddress.substring(0, 100)}...` : item.placeAddress}
+                      </div>
+                      {/* ================================================================================== */}
                     </div>
 
                     {/* 세 번째 슬라이드 */}
