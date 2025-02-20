@@ -10,13 +10,14 @@ export function callLoginAPI(code) {
             const result = await loginRequest('GET', `/auth/google/callback?code=${code}`);
             console.log('구글 login result : ', result);
 
-            const userInfo = result.data.results.user;
-            const token = result.data.results.token;
+            const userInfo = result.data.email;
+            const token = result.data.token;
 
             if (userInfo) {
                 dispatch(login({ token, userInfo })); // 사용자 정보 저장
 
                 localStorage.setItem('token', token);
+                localStorage.setItem('userEmail', userInfo);
                 return { status: 200, userInfo }; // 로그인 성공
             } else {
                 dispatch(showSignUp());

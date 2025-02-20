@@ -14,6 +14,7 @@ import './css/styles/variables.css';
 import Login from "./pages/user/Login";
 import LoginSuccess from "./pages/user/LoginSuccess";
 import GoogleMapsWrapper from './components/GoogleMapsWrapper';
+import GoogleCallback from "./pages/user/GoogleCallback";
 
 import LandingPage from "./components/LandingPage/LandingPage";
 
@@ -40,6 +41,8 @@ function App() {
           {/* 로그인 페이지  */}
           <Route path="/login" element={<Login />} />
           <Route path="/loginSuccess" element={<LoginSuccess />} />
+          
+          <Route path="/auth/google/callback" element={<GoogleCallback />} />
 
           {/* 로딩 페이지 추가 */}
           <Route path="/loading" element={<Loading message="여행 기간에 맞는 영상 정보 준비중" />} />

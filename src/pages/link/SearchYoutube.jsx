@@ -15,13 +15,19 @@ const SearchYoutube = ({ linkData, setLinkData }) => {
     const [modalMessage, setModalMessage] = useState('');
     const [recentSearches, setRecentSearches] = useState([]);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [currentTravelInfoId, setCurrentTravelInfoId] = useState(null);
+    const [isShortcut, setIsShortcut] = useState(false);
+
     const navigate = useNavigate();
 
     // 상태가 변경될 때마다 localStorage에 저장
     useEffect(() => {
-        localStorage.x('youtubeSearchQuery', searchQuery);
-        searchYoutube();
+        if (searchQuery) {
+            localStorage.setItem('youtubeSearchQuery', searchQuery);
+            if (isShortcut) {
+                searchYoutube();
+                setIsShortcut(false);
+            }
+        }
     }, [searchQuery]);
 
     useEffect(() => {
@@ -151,7 +157,7 @@ const SearchYoutube = ({ linkData, setLinkData }) => {
         try {
             const videoUrl = `https://www.youtube.com/watch?v=${videoId}`;
             const response = await axios.post(
-                process.env.REACT_APP_BACKEND_URL + '/url/check_youtube_subtitles',
+                process.env.REACT_APP_AI_API + '/api/v1/youtube/check_subtitles',
                 { video_url: videoUrl }
             );
             console.log("자막 체크 응답:", response.data);
@@ -286,35 +292,6 @@ const SearchYoutube = ({ linkData, setLinkData }) => {
                 </div>
             </div>
 
-            <div className="WS-SearchYoutube-RecentSearches">
-                {isLoggedIn ? (
-                    recentSearches.length > 0 ? (
-                        <>
-                            <h4>최근 검색어</h4>
-                            <div className="WS-SearchYoutube-RecentSearches-List">
-                                {recentSearches.map((term, index) => (
-                                    <div
-                                        key={index}
-                                        className="WS-SearchYoutube-RecentSearch-Item"
-                                        onClick={() => {
-                                            setSearchQuery(term.word);
-                                        }}
-                                    >
-                                        {term.word}
-                                    </div>
-                                ))}
-                            </div>
-                        </>
-                    ) : (
-                        <p className="WS-SearchYoutube-NoSearches">최근 검색 기록이 없습니다.</p>
-                    )
-                ) : (
-                    <p className="WS-SearchYoutube-LoginRequired">
-                        검색어 저장을 위해 로그인이 필요합니다.
-                    </p>
-                )}
-            </div>
-
             <div className={`WS-SearchYoutube-Results ${selectedVideos.length > 0 ? 'has-selected' : ''}`}>
                 {isLoading ? (
                     <div className="WS-SearchYoutube-Loading">검색 중...</div>
@@ -363,33 +340,21 @@ const SearchYoutube = ({ linkData, setLinkData }) => {
                     </>
                 ) : (
                     <div className="WS-SearchYoutube-NoResults">
-                        {isLoggedIn ? (
-                            recentSearches.length > 0 ? (
-                                <>
-                                    <div className="WS-SearchYoutube-RecentSearches-Title">최근 검색어</div>
-                                    <div className="WS-SearchYoutube-RecentSearches">
-                                        {recentSearches.map((term, index) => (
-                                            <button
-                                                key={index}
-                                                className="WS-SearchYoutube-RecentSearch-Tag"
-                                                onClick={() => {
-                                                    setSearchQuery(term.word);
-                                                    searchYoutube();
-                                                }}
-                                            >
-                                                {term.word}
-                                            </button>
-                                        ))}
-                                    </div>
-                                </>
-                            ) : (
-                                <p className="WS-SearchYoutube-NoSearches">최근 검색 기록이 없습니다.</p>
-                            )
-                        ) : (
-                            <p className="WS-SearchYoutube-LoginRequired">
-                                검색어 저장을 위해 로그인이 필요합니다.
-                            </p>
-                        )}
+                        <div className="WS-SearchYoutube-RecentSearches-Title">최근 검색어</div>
+                        <div className="WS-SearchYoutube-RecentSearches">
+                            {recentSearches.map((keyword, index) => (
+                                <button
+                                    key={index}
+                                    className="WS-SearchYoutube-RecentSearch-Tag"
+                                    onClick={() => {
+                                        setSearchQuery(keyword);
+                                        setIsShortcut(true);
+                                    }}
+                                >
+                                    {keyword}
+                                </button>
+                            ))}
+                        </div>
                     </div>
                 )}
             </div>
