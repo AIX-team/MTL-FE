@@ -363,21 +363,33 @@ const SearchYoutube = ({ linkData, setLinkData }) => {
                     </>
                 ) : (
                     <div className="WS-SearchYoutube-NoResults">
-                        <div className="WS-SearchYoutube-RecentSearches-Title">최근 검색어</div>
-                        <div className="WS-SearchYoutube-RecentSearches">
-                            {recentSearches.map((keyword, index) => (
-                                <button
-                                    key={index}
-                                    className="WS-SearchYoutube-RecentSearch-Tag"
-                                    onClick={() => {
-                                        setSearchQuery(keyword);
-                                        searchYoutube();
-                                    }}
-                                >
-                                    {keyword}
-                                </button>
-                            ))}
-                        </div>
+                        {isLoggedIn ? (
+                            recentSearches.length > 0 ? (
+                                <>
+                                    <div className="WS-SearchYoutube-RecentSearches-Title">최근 검색어</div>
+                                    <div className="WS-SearchYoutube-RecentSearches">
+                                        {recentSearches.map((term, index) => (
+                                            <button
+                                                key={index}
+                                                className="WS-SearchYoutube-RecentSearch-Tag"
+                                                onClick={() => {
+                                                    setSearchQuery(term.word);
+                                                    searchYoutube();
+                                                }}
+                                            >
+                                                {term.word}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </>
+                            ) : (
+                                <p className="WS-SearchYoutube-NoSearches">최근 검색 기록이 없습니다.</p>
+                            )
+                        ) : (
+                            <p className="WS-SearchYoutube-LoginRequired">
+                                검색어 저장을 위해 로그인이 필요합니다.
+                            </p>
+                        )}
                     </div>
                 )}
             </div>

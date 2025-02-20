@@ -16,7 +16,7 @@ function LoginSuccess() {
         const tokenFromUrl = params.get('token');
         const emailFromUrl = params.get('email');
         const nameFromUrl = params.get('name');
-    
+
         if (tokenFromUrl) {
             console.log("[LoginSuccess] Received token from URL:", tokenFromUrl);
             localStorage.setItem("token", tokenFromUrl);
@@ -37,7 +37,7 @@ function LoginSuccess() {
                 console.log("[LoginSuccess] Dispatching callLoginAPI with code:", code);
                 const result = await dispatch(callLoginAPI(code));
                 console.log("[LoginSuccess] callLoginAPI result:", result);
-    
+
                 if (result) {
                     alert("로그인 성공");
                     console.log("[LoginSuccess] Navigating to /link");
@@ -53,7 +53,7 @@ function LoginSuccess() {
             console.log("[LoginSuccess] URL에 token과 code 모두 없음");
         }
     }, [location, navigate, dispatch]);
-    
+
 
     // localStorage에 저장된 토큰 검증 및 다음 단계로 진행
     useEffect(() => {
@@ -63,7 +63,7 @@ function LoginSuccess() {
         console.log("[LoginSuccess] Retrieved token:", token);
         console.log("[LoginSuccess] Retrieved email:", email);
         console.log("[LoginSuccess] Retrieved name:", name);
-    
+
         if (
             !token || token === "Bearer undefined" || token === "Bearerundefined" ||
             !email || !name
@@ -91,7 +91,7 @@ function LoginSuccess() {
             navigate("/login");
         }
     }, [navigate]);
-    
+
 
     return (
         <></>

@@ -1,3 +1,4 @@
+
 import axios from 'axios';
 
 const DOMAIN = process.env.REACT_APP_BACKEND_URL; // backend (spring) 연결
@@ -71,11 +72,11 @@ export const checkUser = async (email) => {
         },
     })
 
-    .then(res => res.data)
-    .catch(error => {
-        console.log(error);
-        throw error; // 에러를 다시 던져서 호출한 곳에서 처리할 수 있도록
-    });
+        .then(res => res.data)
+        .catch(error => {
+            console.log(error);
+            throw error; // 에러를 다시 던져서 호출한 곳에서 처리할 수 있도록
+        });
 }
 
 
@@ -125,4 +126,3 @@ export const searchContent = async (query) => {
         return [];
     }
 };
-

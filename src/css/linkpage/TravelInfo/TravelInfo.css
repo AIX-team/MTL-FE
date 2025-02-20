@@ -86,7 +86,7 @@ a,
   display: inline-flex;
   align-items: center;
   justify-content: right;
-  width: 21%;
+  width: 25%;
   height: 40px;
   cursor: pointer;
 }
@@ -196,18 +196,20 @@ a,
   cursor: pointer;
 }
 
-.HG-TravelInfo-aiselect-btn {
+.WS-TravelInfo-aiselect-btn-Container {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+
+  position: relative;
 
   margin-left: 5%;
   margin-right: 5%;
 
   height: 50px;
+  max-height: 70px;
 
-  border-bottom: 1px solid var(--color-main);
-
-  cursor: pointer;
+  border-bottom: 1px solid var(--color-dark-gray);
 }
 
 .HG-TravelInfo-aiselect-btn-ai-icon-selected {
@@ -216,6 +218,8 @@ a,
   align-items: center;
   border: 2px solid var(--color-light-gray);
   border-radius: var(--border-radius-full);
+
+  cursor: pointer;
 }
 
 .HG-TravelInfo-aiselect-btn-ai-icon-selected:hover {
@@ -231,6 +235,60 @@ a,
 .HG-TravelInfo-aiselect-btn-ai-icon {
   width: 30px;
   height: 30px;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: scaleY(0);
+  }
+  to {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+.WS-TravelInfo-btn-select-text-Container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+
+  padding: 5px 10px;
+  margin-left: 20px;
+  margin-right: 20px;
+
+  border-radius: 0 0 var(--border-radius-lg) var(--border-radius-lg);
+  background-color: var(--color-light-gray);
+
+  animation: slideDown 0.3s ease-out forwards;
+  transform-origin: top; /* 위쪽을 기준으로 scale 변환 */
+}
+
+.WS-TravelInfo-btn-select-text-bold {
+  font-size: var(--font-size-xs);
+  color: var(--color-main);
+  font-weight: bold;
+}
+
+.WS-TravelInfo-btn-select-text {
+  font-size: var(--font-size-xs);
+  color: var(--color-main);
+
+}
+
+.WS-TravelInfo-btn-select-all {
+  font-size: var(--font-size-sm);
+  font-weight: bold;
+  color: var(--color-dark-gray);
+  cursor: pointer;
+
+  position: absolute;
+  bottom: 10px;
+  right: 0;
+
+  border: none;
+  background-color: none;
 }
 
 .HG-TravelInfo-Content-Frame-Place-Slider {

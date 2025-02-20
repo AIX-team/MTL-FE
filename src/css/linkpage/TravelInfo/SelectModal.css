@@ -140,9 +140,9 @@
 
 .HG-select-modal-select-list {
   flex: 1;
-  height: 500px;
+  height: 100%;
+  max-height: 610px;
   overflow-y: auto;
-  padding-bottom: 120px;
 }
 
 .HG-select-modal-select-list-type {

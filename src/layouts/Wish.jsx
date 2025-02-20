@@ -5,21 +5,21 @@ import OpenAI from "openai";
 import { v4 as uuidv4 } from "uuid";
 import ReactDOM from "react-dom";
 import SendIcon from "@mui/icons-material/Send";
- 
+
 import { searchContent } from "../apis/Apis";
 
 const Wish = ({ onClose }) => {
-    const [messages, setMessages] = useState([
-        {
-            id: uuidv4(),
-            type: 'bot',
-            content: '안녕하세요! 여행 계획에 대해 어떤 도움이 필요하신가요?'
-        }
-    ]);
-    const [inputMessage, setInputMessage] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
-    const messagesEndRef = useRef(null);
-    const modalRef = useRef(null);
+  const [messages, setMessages] = useState([
+    {
+      id: uuidv4(),
+      type: 'bot',
+      content: '안녕하세요! 여행 계획에 대해 어떤 도움이 필요하신가요?'
+    }
+  ]);
+  const [inputMessage, setInputMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const messagesEndRef = useRef(null);
+  const modalRef = useRef(null);
 
   // OpenAI 클라이언트 초기화
   const openai = new OpenAI({
@@ -36,19 +36,19 @@ const Wish = ({ onClose }) => {
     scrollToBottom();
   }, [messages]);
 
-    // 모달 외부 클릭 처리
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (modalRef.current && !modalRef.current.contains(event.target)) {
-                onClose();
-            }
-        };
+  // 모달 외부 클릭 처리
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (modalRef.current && !modalRef.current.contains(event.target)) {
+        onClose();
+      }
+    };
 
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, [onClose]);
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [onClose]);
 
   // 날씨 상태 한글 매핑
   const weatherTranslation = {
@@ -221,58 +221,58 @@ const Wish = ({ onClose }) => {
     if (inputMessage.trim() === "" || isLoading) return;
 
     try {
-        setIsLoading(true);
-        
-        // 사용자 메시지 추가
-        const userMessage = {
-            id: uuidv4(),
-            type: "user",
-            content: inputMessage,
-        };
-        setMessages(prev => [...prev, userMessage]);
-        setInputMessage("");
+      setIsLoading(true);
 
-        // 백엔드 API 호출
-        const response = await fetch(process.env.REACT_APP_AI_API + "/api/chat", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                message: inputMessage,
-                chat_history: messages
-                    .filter(m => m.type === "user" || m.type === "bot")
-                    .map(m => [m.type === "user" ? m.content : "", m.type === "bot" ? m.content : ""])
-                    .filter(([q, a]) => q || a)
-            }),
-        });
+      // 사용자 메시지 추가
+      const userMessage = {
+        id: uuidv4(),
+        type: "user",
+        content: inputMessage,
+      };
+      setMessages(prev => [...prev, userMessage]);
+      setInputMessage("");
 
-        if (!response.ok) {
-            throw new Error("API 응답 오류");
-        }
+      // 백엔드 API 호출ㄷe
+      const response = await fetch(process.env.REACT_APP_BACKEND_URL + "/api/v1/chat/send", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          message: inputMessage,
+          chat_history: messages
+            .filter(m => m.type === "user" || m.type === "bot")
+            .map(m => [m.type === "user" ? m.content : "", m.type === "bot" ? m.content : ""])
+            .filter(([q, a]) => q || a)
+        }),
+      });
 
-        const data = await response.json();
-        
-        // 봇 응답 추가
-        const botMessage = {
-            id: uuidv4(),
-            type: "bot",
-            content: data.response,
-            sources: data.search_results  // 검색 결과가 있다면 표시
-        };
-        setMessages(prev => [...prev, botMessage]);
+      if (!response.ok) {
+        throw new Error("API 응답 오류");
+      }
+
+      const data = await response.json();
+
+      // 봇 응답 추가
+      const botMessage = {
+        id: uuidv4(),
+        type: "bot",
+        content: data.response,
+        sources: data.search_results  // 검색 결과가 있다면 표시
+      };
+      setMessages(prev => [...prev, botMessage]);
 
     } catch (error) {
-        console.error("메시지 처리 중 오류:", error);
-        const errorMessage = {
-            id: uuidv4(),
-            type: "bot",
-            content: "죄송합니다. 일시적인 오류가 발생했습니다. 다시 시도해 주세요."
-        };
-        setMessages(prev => [...prev, errorMessage]);
+      console.error("메시지 처리 중 오류:", error);
+      const errorMessage = {
+        id: uuidv4(),
+        type: "bot",
+        content: "죄송합니다. 일시적인 오류가 발생했습니다. 다시 시도해 주세요."
+      };
+      setMessages(prev => [...prev, errorMessage]);
     } finally {
-        setIsLoading(false);
-        scrollToBottom();
+      setIsLoading(false);
+      scrollToBottom();
     }
   };
 
@@ -300,9 +300,8 @@ const Wish = ({ onClose }) => {
         const errorMessage = {
           id: messages.length + 1,
           type: "bot",
-          content: `날씨 정보를 가져오는데 실패했습니다. ${
-            weatherInfo?.message || ""
-          } ${weatherInfo?.details || ""}`,
+          content: `날씨 정보를 가져오는데 실패했습니다. ${weatherInfo?.message || ""
+            } ${weatherInfo?.details || ""}`,
         };
         setMessages((prev) => [...prev, errorMessage]);
         scrollToBottom();
@@ -381,94 +380,94 @@ const Wish = ({ onClose }) => {
     }
   };
 
-    return ReactDOM.createPortal(
-        <div className="WS-Modal-Overlay">
-            <div className="WS-Wish" ref={modalRef}>
-                <div className="WS-Wish-Header">
-                    <h3>AI 여행 도우미</h3>
-                    <button
-                        className="WS-Wish-Close-Button"
-                        onClick={onClose}
-                    >
-                        <FaTimes />
-                    </button>
-                </div>
+  return ReactDOM.createPortal(
+    <div className="WS-Modal-Overlay">
+      <div className="WS-Wish" ref={modalRef}>
+        <div className="WS-Wish-Header">
+          <h3>AI 여행 도우미</h3>
+          <button
+            className="WS-Wish-Close-Button"
+            onClick={onClose}
+          >
+            <FaTimes />
+          </button>
+        </div>
 
-                <div className="WS-Wish-Messages">
-                    {messages.map(message => (
-                        <div
-                            key={message.id}
-                            className={`WS-Wish-Message ${message.type}`}
-                        >
-                            {message.type === 'bot' && (
-                                <div className="WS-Wish-Bot-Avatar">AI</div>
-                            )}
-                            <div className="WS-Wish-Message-Content">
-                                {message.content}
-                                {message.sources && message.sources.length > 0 && (
-                                    <div className="WS-Wish-Sources">
-                                        <small>참고 자료:</small>
-                                        <ul>
-                                            {message.sources.map((source, index) => (
-                                                <li key={index}>
-                                                    <a href={source.url} target="_blank" rel="noopener noreferrer">
-                                                        {source.title || source.url}
-                                                    </a>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    ))}
-                    {isLoading && (
-                        <div className="WS-Wish-Message bot">
-                            <div className="WS-Wish-Bot-Avatar">A</div>
-                            <div className="WS-Wish-Message-Content">
-                                답변을 생성하고 있습니다...
-                            </div>
-                        </div>
-                    )}
-                    <div ref={messagesEndRef} />
-                </div>
-
-                <div className="WS-Wish-Weather-Button-Container">
-                    <button
-                        onClick={handleWeatherButton}
-                        className="WS-Wish-Weather-Button"
-                    >
-                        날씨 ☀
-                    </button>
-                    <button
-                        className="WS-Wish-Exchange-Button"
-                        onClick={handleExchangeButton}
-                    >
-                        환율 💴
-                    </button>
-                </div>
-                <div className="WS-Wish-Input-Container">
-                    <input
-                        className="WS-Wish-Input"
-                        type="text"
-                        value={inputMessage}
-                        onChange={(e) => setInputMessage(e.target.value)}
-                        onKeyPress={handleKeyPress}
-                        placeholder="메시지를 입력하세요."
-                        disabled={isLoading}
-                    />
-                    <button
-                        className="WS-Wish-Send-Button"
-                        onClick={handleSendMessage}
-                        disabled={isLoading}
-                    >
-                        <SendIcon />
-                    </button>
-                </div>
+        <div className="WS-Wish-Messages">
+          {messages.map(message => (
+            <div
+              key={message.id}
+              className={`WS-Wish-Message ${message.type}`}
+            >
+              {message.type === 'bot' && (
+                <div className="WS-Wish-Bot-Avatar">AI</div>
+              )}
+              <div className="WS-Wish-Message-Content">
+                {message.content}
+                {message.sources && message.sources.length > 0 && (
+                  <div className="WS-Wish-Sources">
+                    <small>참고 자료:</small>
+                    <ul>
+                      {message.sources.map((source, index) => (
+                        <li key={index}>
+                          <a href={source.url} target="_blank" rel="noopener noreferrer">
+                            {source.title || source.url}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
             </div>
-        </div>,
-        document.body
-    );
+          ))}
+          {isLoading && (
+            <div className="WS-Wish-Message bot">
+              <div className="WS-Wish-Bot-Avatar">A</div>
+              <div className="WS-Wish-Message-Content">
+                답변을 생성하고 있습니다...
+              </div>
+            </div>
+          )}
+          <div ref={messagesEndRef} />
+        </div>
+
+        <div className="WS-Wish-Weather-Button-Container">
+          <button
+            onClick={handleWeatherButton}
+            className="WS-Wish-Weather-Button"
+          >
+            날씨 ☀
+          </button>
+          <button
+            className="WS-Wish-Exchange-Button"
+            onClick={handleExchangeButton}
+          >
+            환율 💴
+          </button>
+        </div>
+        <div className="WS-Wish-Input-Container">
+          <input
+            className="WS-Wish-Input"
+            type="text"
+            value={inputMessage}
+            onChange={(e) => setInputMessage(e.target.value)}
+            onKeyPress={handleKeyPress}
+            placeholder="메시지를 입력하세요."
+            disabled={isLoading}
+          />
+          <button
+            className="WS-Wish-Send-Button"
+            onClick={handleSendMessage}
+            disabled={isLoading}
+          >
+            <SendIcon />
+          </button>
+        </div>
+      </div>
+    </div>,
+    document.body
+  );
 };
 
 export default Wish;
