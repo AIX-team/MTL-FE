@@ -20,7 +20,8 @@ const SearchYoutube = ({ linkData, setLinkData }) => {
 
     // 상태가 변경될 때마다 localStorage에 저장
     useEffect(() => {
-        localStorage.setItem('youtubeSearchQuery', searchQuery);
+        localStorage.x('youtubeSearchQuery', searchQuery);
+        searchYoutube();
     }, [searchQuery]);
 
     useEffect(() => {
@@ -297,7 +298,6 @@ const SearchYoutube = ({ linkData, setLinkData }) => {
                                         className="WS-SearchYoutube-RecentSearch-Item"
                                         onClick={() => {
                                             setSearchQuery(term.word);
-                                            searchYoutube();
                                         }}
                                     >
                                         {term.word}
