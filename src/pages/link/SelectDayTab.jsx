@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FaPlus, FaMinus} from "react-icons/fa"; // 아이콘 사용을 위한 import
+import { FaPlus, FaMinus } from "react-icons/fa"; // 아이콘 사용을 위한 import
 import "../../css/linkpage/SelectDayTab.css";
 import Loading from "../../components/Loading/Loading";
 import axiosInstance from "../../components/AxiosInstance";
@@ -46,6 +46,12 @@ const SelectDayTab = ({ onBack, linkData }) => {
       });
     } catch (error) {
       console.error("API 요청 에러:", error.response?.data || error);
+      if (error.response && error.response.status === 504) {
+        alert("서버 응답이 지연되고 있습니다. 잠시 후 다시 시도해주세요.");
+      } else {
+        alert("API 요청에 실패했습니다. 다시 시도해주세요.");
+      }
+      setIsLoading(false);
     }
   };
 
@@ -88,7 +94,7 @@ const SelectDayTab = ({ onBack, linkData }) => {
   const handleNext = async () => {
     setIsLoading(true);
     try {
-      runApiCalls();
+      await runApiCalls();
     } catch (error) {
       console.error("Error:", error);
       setIsLoading(false);
@@ -105,58 +111,58 @@ const SelectDayTab = ({ onBack, linkData }) => {
       {!isLoading && (
         <div>
           <div className="WS-SelectDayTab">
-          {!isLoading && (
-            <div>
-          <div className="WS-SelectDayTab-Title-Container">
-            <div className="WS-SelectDayTab-Title">총 여행 기간은?</div>
-        <div className="WS-SelectDayTab-SubTitle">여행 일정을 알려주세요!</div>
-        <div className="WS-SelectDayTab-SubTitle-date">( 최대 7일 )</div>
-      </div>
-      <div className="WS-SelectDayTab-Counter">
-        <button
-          className="WS-Counter-Button"
-          onClick={decreaseDays}
-          disabled={days <= 1}
-        >
-          <FaMinus />
-        </button>
+            {!isLoading && (
+              <div>
+                <div className="WS-SelectDayTab-Title-Container">
+                  <div className="WS-SelectDayTab-Title">총 여행 기간은?</div>
+                  <div className="WS-SelectDayTab-SubTitle">여행 일정을 알려주세요!</div>
+                  <div className="WS-SelectDayTab-SubTitle-date">( 최대 7일 )</div>
+                </div>
+                <div className="WS-SelectDayTab-Counter">
+                  <button
+                    className="WS-Counter-Button"
+                    onClick={decreaseDays}
+                    disabled={days <= 1}
+                  >
+                    <FaMinus />
+                  </button>
 
-        <input
-          type="text"
-          className="WS-Counter-Input"
-          value={days}
-          onChange={handleInputChange}
-          onBlur={handleBlur}
-          maxLength={1}
-        />
+                  <input
+                    type="text"
+                    className="WS-Counter-Input"
+                    value={days}
+                    onChange={handleInputChange}
+                    onBlur={handleBlur}
+                    maxLength={1}
+                  />
 
-        <button
-          className="WS-Counter-Button"
-          onClick={increaseDays}
-          disabled={days >= 7}
-        >
-          <FaPlus />
-        </button>
-      </div>
+                  <button
+                    className="WS-Counter-Button"
+                    onClick={increaseDays}
+                    disabled={days >= 7}
+                  >
+                    <FaPlus />
+                  </button>
+                </div>
 
-      <div className="WS-SelectDayTab-Button-Container">
-        <button className="WS-SelectDayTab-BackButton" onClick={onBack}>
-          이전
-        </button>
-        <button
-          className={`WS-SelectDayTab-NextButton ${days >= 1 ? "active" : ""}`}
-          onClick={handleNext}
-        >
-          다음
-        </button>
+                <div className="WS-SelectDayTab-Button-Container">
+                  <button className="WS-SelectDayTab-BackButton" onClick={onBack}>
+                    이전
+                  </button>
+                  <button
+                    className={`WS-SelectDayTab-NextButton ${days >= 1 ? "active" : ""}`}
+                    onClick={handleNext}
+                  >
+                    다음
+                  </button>
+                </div>
+              </div>
+            )}
+            {isLoading && <Loading type="travelInfo" />}
+          </div>
         </div>
-        </div> 
       )}
-      {isLoading && <Loading type="travelInfo" />}
     </div>
-    </div>
-  )}
-  </div>
   );
 };
 
