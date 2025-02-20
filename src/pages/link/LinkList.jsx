@@ -179,7 +179,7 @@ const LinkList = ({ linkData, setLinkData }) => {
 
       <div className="WS-LinkList-Items">
         {linkData.map((link, index) => {
-          const displayTitle = link.url_title || link.url || "제목 없음";
+          const displayTitle = link.url_title || "제목 없음";
           const typeValue = getLinkType(link.url);
           return (
             <div key={index} className={`WS-LinkList-Item ${typeValue}`}>

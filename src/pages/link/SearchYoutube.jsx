@@ -20,7 +20,8 @@ const SearchYoutube = ({ linkData, setLinkData }) => {
 
     // 상태가 변경될 때마다 localStorage에 저장
     useEffect(() => {
-        localStorage.setItem('youtubeSearchQuery', searchQuery);
+        localStorage.x('youtubeSearchQuery', searchQuery);
+        searchYoutube();
     }, [searchQuery]);
 
     useEffect(() => {
@@ -284,6 +285,36 @@ const SearchYoutube = ({ linkData, setLinkData }) => {
                     </button>
                 </div>
             </div>
+
+            <div className="WS-SearchYoutube-RecentSearches">
+                {isLoggedIn ? (
+                    recentSearches.length > 0 ? (
+                        <>
+                            <h4>최근 검색어</h4>
+                            <div className="WS-SearchYoutube-RecentSearches-List">
+                                {recentSearches.map((term, index) => (
+                                    <div
+                                        key={index}
+                                        className="WS-SearchYoutube-RecentSearch-Item"
+                                        onClick={() => {
+                                            setSearchQuery(term.word);
+                                        }}
+                                    >
+                                        {term.word}
+                                    </div>
+                                ))}
+                            </div>
+                        </>
+                    ) : (
+                        <p className="WS-SearchYoutube-NoSearches">최근 검색 기록이 없습니다.</p>
+                    )
+                ) : (
+                    <p className="WS-SearchYoutube-LoginRequired">
+                        검색어 저장을 위해 로그인이 필요합니다.
+                    </p>
+                )}
+            </div>
+
             <div className={`WS-SearchYoutube-Results ${selectedVideos.length > 0 ? 'has-selected' : ''}`}>
                 {isLoading ? (
                     <div className="WS-SearchYoutube-Loading">검색 중...</div>
