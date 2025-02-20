@@ -1,3 +1,4 @@
+import React, { useEffect } from "react";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import MainLayout from "./layouts/MainLayout";
 import LinkPage from './pages/link/LinkPage';
@@ -17,6 +18,19 @@ import GoogleMapsWrapper from './components/GoogleMapsWrapper';
 import LandingPage from "./components/LandingPage/LandingPage";
 
 function App() {
+
+  // 페이지 로드 시 localStorage에서 토큰 확인 및 리다이렉트 처리
+  // useEffect(() => {
+  //   const token = localStorage.getItem("access_token"); // localStorage에서 토큰 확인
+  //   if (token) {
+  //     // 토큰이 있다면 /link로 리다이렉트
+  //     window.location.href = "/link";
+  //   } else {
+  //     // 토큰이 없다면 /로 리다이렉트
+  //     // window.location.href = "/";
+  //   }
+  // }, []);
+
   return (
     <BrowserRouter>
       <GoogleMapsWrapper>
