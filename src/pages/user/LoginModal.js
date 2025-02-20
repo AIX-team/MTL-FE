@@ -17,6 +17,7 @@ const LoginModal = ({ isOpen, onClose }) => {
         console.log("[LoginModal] Google login button clicked");
         const clientId = '493235437055-i3vpr6aqus0mqfarsvfm65j2rkllo97t.apps.googleusercontent.com';
         const redirectUri = 'https://mytravellink.site/auth/google/callback';
+        //const redirectUri = 'http://localhost:3000/auth/google/callback';
         const scope = 'profile email';
         const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=${scope}`;
         console.log("[LoginModal] Redirecting to Google auth URL:", authUrl);
