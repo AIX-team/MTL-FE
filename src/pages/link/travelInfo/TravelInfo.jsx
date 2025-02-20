@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import '../../../css/linkpage/TravelInfo/TravelInfo.css';
 import Slider from 'react-slick';
 import "slick-carousel/slick/slick.css";
@@ -180,7 +179,6 @@ const TravelInfo = () => {
 
   const [placeType, setPlaceType] = useState("landmark");
   const [activeSpan, setActiveSpan] = useState(1);
-  const [isAISelected, setIsAISelected] = useState(false);
   const [travelDays, setTravelDays] = useState();
   const [travelInfoTitle, setTravelInfoTitle] = useState();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -258,18 +256,26 @@ const TravelInfo = () => {
 
   const [timer, setTimer] = useState(null);
 
-  const sliderRef = useRef(null);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [sliderReady, setSliderReady] = useState(false);
+  const [token, setToken] = useState(localStorage.getItem('token'));
 
   const getTravelInfo = useCallback(async () => {
     try {
-      setLoading(true);
-      setError(null);
-      const response = await axiosInstance.get(`/api/v1/travels/travelInfos/${travelInfoId}`);
-      setTravelInfo(response.data);
-      setTravelDays(response.data.travelDays);
-      setTravelInfoTitle(response.data.travelInfoTitle);
+      if (token) {
+        setLoading(true);
+        setError(null);
+        const response = await axiosInstance.get(`/api/v1/travels/travelInfos/${travelInfoId}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        setTravelInfo(response.data);
+        setTravelDays(response.data.travelDays);
+        setTravelInfoTitle(response.data.travelInfoTitle);
+      } else {
+        console.error('토큰이 없습니다.');
+      }
     } catch (error) {
       console.error('API Error:', error);
       setError(error.message || '데이터를 불러오는데 실패했습니다.');
@@ -280,11 +286,19 @@ const TravelInfo = () => {
 
   const getPlaceList = useCallback(async () => {
     try {
-      setLoading(true);
-      setError(null);
-      const response = await axiosInstance.get(`/api/v1/travels/travelInfos/${travelInfoId}/places`);
-      setPlaceList(response.data);
-      setAllPlaceList(response.data);
+      if (token) {
+        setLoading(true);
+        setError(null);
+        const response = await axiosInstance.get(`/api/v1/travels/travelInfos/${travelInfoId}/places`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        setPlaceList(response.data);
+        setAllPlaceList(response.data);
+      } else {
+        console.error('토큰이 없습니다.');
+      }
     } catch (error) {
       console.error('API Error:', error);
       setError(error.message || '데이터를 불러오는데 실패했습니다.');
@@ -295,10 +309,18 @@ const TravelInfo = () => {
 
   const getUrlPlaceList = useCallback(async (urlId) => {
     try {
-      setLoading(true);
-      setError(null);
-      const response = await axiosInstance.get(`/api/v1/travels/travelInfos/urls/${urlId}`);
-      setPlaceList(response.data);
+      if (token) {
+        setLoading(true);
+        setError(null);
+        const response = await axiosInstance.get(`/api/v1/travels/travelInfos/urls/${urlId}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        setPlaceList(response.data);
+      } else {
+        console.error('토큰이 없습니다.');
+      }
     } catch (error) {
       console.error('API Error:', error);
       setError(error.message || '데이터를 불러오는데 실패했습니다.');
@@ -309,10 +331,11 @@ const TravelInfo = () => {
 
   const putTravelInfoUpdate = useCallback(async (days, title) => {
     try {
-      // 값 유효성 검사
-      if (!title || !days) {
-        console.error('필수 값이 누락되었습니다:', { title, days });
-        return;
+      if (token) {
+        // 값 유효성 검사
+        if (!title || !days) {
+          console.error('필수 값이 누락되었습니다:', { title, days });
+          return;
       }
 
 
@@ -321,10 +344,16 @@ const TravelInfo = () => {
         {
           travelInfoTitle: title,
           travelDays: parseInt(days) // 숫자로 변환
+        },
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
         }
       );
-
-
+      } else {
+        console.error('토큰이 없습니다.');
+      }
     } catch (error) {
       console.error('API Error:', error);
       setError(error.message || '데이터를 불러오는데 실패했습니다.');
@@ -333,42 +362,35 @@ const TravelInfo = () => {
     }
   }, [travelInfoId, travelInfoTitle, travelDays]); // 의존성 배열에 필요한 값들 추가
 
-  // ============================================================================================
-
-  // const getAISelect = useCallback(async () => {
-  //   try {
-  //     if (selectedAIPlaces.length === 0 || selectedAIPlaces.length !== selectedPlaces.length) {
-  //       setLoading(true);
-  //       setError(null);
-  //       const response = await axiosInstance.get(`/api/v1/travels/travelInfos/${travelInfoId}/aiSelect`);
-  //       if (response.data.success === "success") {
-  //         setSelectedPlaces(response.data.content);
-  //         setSelectedAIPlaces(response.data.content);
-  //       } else {
-  //         setError(response.data.message);
-  //       }
-  //     } else {
-  //       setSelectedPlaces(selectedAIPlaces);
-  //     }
-  //   } catch (error) {
-  //     console.error('API Error:', error);
-  //     setError(error.message || '데이터를 불러오는데 실패했습니다.');
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // }, [travelInfoId, selectedAIPlaces, selectedPlaces.length]);
-
   const getAISelect = useCallback(async () => {
     try {
-      setLoading(true);
-      setError(null);
-      const response = await axiosInstance.get(`/api/v1/travels/travelInfos/${travelInfoId}/aiSelect`);
-      if (response.data.success === "success") {
-        // 응답을 받은 후 직접 상태 설정
-        setSelectedPlaces(response.data.content);
-        setSelectedAIPlaces(response.data.content);
+      if (token) {
+        if (selectedAIPlaces.length === 0 || selectedAIPlaces.length !== selectedPlaces.length) {
+          setLoading(true);
+          setError(null);
+          const response = await axiosInstance.get(`/api/v1/travels/travelInfos/${travelInfoId}/aiSelect`, {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          });
+          if (response.data.success === "success") {
+          for(let place of response.data.content){
+            const findPlace = allPlaceList.content.find(item => item.placeId === place.placeId);
+              setSelectedPlaces(prev => [...prev, findPlace]);
+              setSelectedAIPlaces(prev => [...prev, findPlace]);
+            }
+        } else {
+          for(let place of response.data.content){
+            if(allPlaceList.content.some(item => item.placeId === place.placeId)){
+              setSelectedPlaces(prev => [...prev, place]);
+            }
+          }
+        }
       } else {
-        setError(response.data.message);
+        setSelectedPlaces(selectedAIPlaces);
+      }
+      } else {
+        console.error('토큰이 없습니다.');
       }
     } catch (error) {
       console.error('API Error:', error);
@@ -376,12 +398,13 @@ const TravelInfo = () => {
     } finally {
       setLoading(false);
     }
-  }, [travelInfoId]);
+  }, [travelInfoId, selectedAIPlaces, selectedPlaces.length, allPlaceList]);
 
   // ============================================================================================
 
   useEffect(() => {
     setIsComponentMounted(true);
+    setToken(localStorage.getItem('token'));
   }, []);
 
   useEffect(() => {
@@ -394,7 +417,7 @@ const TravelInfo = () => {
   useEffect(() => {
     const timers = [];
 
-    if (loading) {
+    if (loading && !showLoading) {
       timers.push(setTimeout(() => setShowLoading(true), 2000));
     } else {
       setShowLoading(false);

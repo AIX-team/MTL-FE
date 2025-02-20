@@ -188,6 +188,7 @@ const GuideBook = () => {
     }
     const [isTitleEditModalOpen, setIsTitleEditModalOpen] = useState(false);
     const [mapKey, setMapKey] = useState(0);
+    const [token, setToken] = useState(localStorage.getItem('token'));
 
     const [guideBook, setGuideBook] = useState({
         success: '',
@@ -208,27 +209,44 @@ const GuideBook = () => {
 
     // 가이드북 데이터 가져오기
     const getGuideBook = async () => {
-        try {
-            const response = await axiosInstance.get(`/api/v1/travels/guidebooks/${guidebookId}`);
-            setGuideBook(response.data);
-            setPlaces(response.data.courses[0].coursePlaces || []);
-        } catch (error) {
-            console.error('Error fetching guidebook:', error);
+        if (token) {
+            try {
+                const response = await axiosInstance.get(`/api/v1/travels/guidebooks/${guidebookId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                setGuideBook(response.data);
+                setPlaces(response.data.courses[0].coursePlaces || []);
+            } catch (error) {
+                console.error('Error fetching guidebook:', error);
+            }
+        } else {
+            console.error('토큰이 없습니다.');
         }
     }
 
     useEffect(() => {
+        setToken(localStorage.getItem('token'));
         getGuideBook();
     }, []);
 
     const putCoursePlacesNum = async (coursePlaceRequest) => {
-        try {
-            await axiosInstance.put(`/api/v1/courses/`, coursePlaceRequest);
-        } catch (error) {
-            //자세한 에러 정보 출력
+        if (token) {
+            try {
+                await axiosInstance.put(`/api/v1/courses/`, coursePlaceRequest, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+            } catch (error) {
+                //자세한 에러 정보 출력
             console.error('Error putting course places num:', {
-                data: error.response.data,
-            });
+                    data: error.response.data,
+                });
+            }
+        } else {
+            console.error('토큰이 없습니다.');
         }
     }
 
@@ -269,24 +287,40 @@ const GuideBook = () => {
     };
 
     const putGuideBookTitle = async (title) => {
-        try {
+        if (token) {
+        try {   
             await axiosInstance.put(`/api/v1/travels/guidebooks/${guidebookId}/title`, {
                 title: title
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
             });
             setGuideBook(prevGuideBook => ({
                 ...prevGuideBook,
                 guideBookTitle: title
             }));
         } catch (error) {
-            console.error('Error posting guidebook title:', error);
+                console.error('Error posting guidebook title:', error);
+            }
+        } else {
+            console.error('토큰이 없습니다.');
         }
     }
 
     const putTravelInfoMove = async (travelInfoMoveRequest) => {
-        try {
-            await axiosInstance.put(`/api/v1/courses/place/move`, travelInfoMoveRequest);
-        } catch (error) {
-            console.error('Error posting travel info move:', error);
+        if (token) {
+            try {
+                await axiosInstance.put(`/api/v1/courses/place/move`, travelInfoMoveRequest, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+            } catch (error) {
+                console.error('Error posting travel info move:', error);
+            }
+        } else {
+            console.error('토큰이 없습니다.');
         }
     }
 

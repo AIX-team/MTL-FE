@@ -1,6 +1,5 @@
 import backArrow from "../../../images/backArrow.svg";
 import { useState, useEffect } from "react";
-import axios from "axios";
 import selectIcon from "../../../images/select.svg";
 import isSelectedIcon from "../../../images/isselect.svg";
 import allSelectIcon from "../../../images/select_check_deactive.svg";
@@ -27,6 +26,7 @@ const SelectModal = ({
   const [filteredPlaces, setFilteredPlaces] = useState(selectedPlaces);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const [token, setToken] = useState(localStorage.getItem('token'));
 
   // 필터 타입을 매핑하는 객체 추가
   const filterTypeMap = {
@@ -39,14 +39,22 @@ const SelectModal = ({
   const postGuidebook = async (travelTaste) => {
     setIsLoading(true);
     try {
-      const response = await axiosInstance.post("/api/v1/travels/guidebook", {
-        travelInfoId: travelInfoId,
-        travelDays: travelDays,
-        travelTaste: travelTaste,
-        placeIds: isSelected.map((place) => place.placeId),
-      });
-      navigate("/guidebooks/" + response.data.value);
-      console.log(response);
+      if (token) {
+        const response = await axiosInstance.post("/api/v1/travels/guidebook", {
+          travelInfoId: travelInfoId,
+          travelDays: travelDays,
+          travelTaste: travelTaste,
+          placeIds: isSelected.map((place) => place.placeId),
+        }, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        navigate("/guidebooks/" + response.data.value);
+        console.log(response);
+      } else {
+        console.error('토큰이 없습니다.');
+      }
     } catch (error) {
       console.error("API Error:", error);
     }
@@ -136,6 +144,10 @@ const SelectModal = ({
   };
 
   // useEffect를 사용하여 모달 상태에 따라 body 클래스 토글
+
+  useEffect(() => {
+    setToken(localStorage.getItem('token'));
+  }, []);
 
   useEffect(() => {
     if (isOpen) {
