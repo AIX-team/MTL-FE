@@ -14,17 +14,27 @@ function GuidebookList() {
   const [searchText, setSearchText] = useState("");
   const [guideBookData, setGuideBookData] = useState([]);
   const [searchAuthor, setSearchAuthor] = useState([]);
+  const [token, setToken] = useState(localStorage.getItem('token'));
 
   useEffect(() => {
     getGuideBookList();
+    setToken(localStorage.getItem('token'));
   }, []);
 
   // 가이드북 목록 조회 api
   const getGuideBookList = async () => {
     try {
-      const response = await axiosInstance.get('/api/v1/travels/guidebooks/list');
-      setGuideBookData(response.data.guideBooks || []);
-      console.log(response.data.guideBooks);
+      if (token) {
+        const response = await axiosInstance.get('/api/v1/travels/guidebooks/list', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        setGuideBookData(response.data.guideBooks || []);
+        console.log(response.data.guideBooks);
+      } else {
+        console.error('토큰이 없습니다.');
+      }
     } catch (error) {
       console.error('가이드북 목록을 가져오는 중 오류가 발생했습니다:', error);
     }
@@ -33,10 +43,18 @@ function GuidebookList() {
   // 즐겨찾기 업데이트 api
   const putFavorite = async (id, favorite) => {
     try {
-      const response = await axiosInstance.put(`/api/v1/travels/guidebooks/${id}/favorite`, {
-        isTrue: favorite
-      });
-      console.log(response.data);
+      if (token) {
+        const response = await axiosInstance.put(`/api/v1/travels/guidebooks/${id}/favorite`, {
+          isTrue: favorite
+        }, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        console.log(response.data);
+      } else {
+        console.error('토큰이 없습니다.');
+      }
     } catch (error) {
       console.error('즐겨찾기 업데이트 중 오류가 발생했습니다:', error);
     }
@@ -45,10 +63,18 @@ function GuidebookList() {
   // 고정 업데이트 api
   const putPin = async (id, pin) => {
     try {
-      const response = await axiosInstance.put(`/api/v1/travels/guidebooks/${id}/fixed`, {
-        isTrue: pin
-      });
-      console.log(response.data);
+      if (token) {
+        const response = await axiosInstance.put(`/api/v1/travels/guidebooks/${id}/fixed`, {
+          isTrue: pin
+        }, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        console.log(response.data);
+      } else {
+        console.error('토큰이 없습니다.');
+      }
     } catch (error) {
       console.error('고정 업데이트 중 오류가 발생했습니다:', error);
     }
@@ -57,10 +83,18 @@ function GuidebookList() {
   // 제목 업데이트 api
   const putUpdateTitle = async (id, title) => {
     try {
-      const response = await axiosInstance.put(`/api/v1/travels/guidebooks/${id}/title`, {
-        value: title
-      });
-      console.log(response.data);
+      if (token) {
+        const response = await axiosInstance.put(`/api/v1/travels/guidebooks/${id}/title`, {
+          value: title
+        }, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        console.log(response.data);
+      } else {
+        console.error('토큰이 없습니다.');
+      }
     } catch (error) {
       console.error('제목 업데이트 중 오류가 발생했습니다:', error);
     }
@@ -69,8 +103,16 @@ function GuidebookList() {
   // 가이드북 삭제 api
   const deleteGuideBook = async (id) => {
     try {
-      const response = await axiosInstance.delete(`/api/v1/travels/guidebooks/${id}`);
-      console.log(response.data);
+      if (token) {
+        const response = await axiosInstance.delete(`/api/v1/travels/guidebooks/${id}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        console.log(response.data);
+      } else {
+        console.error('토큰이 없습니다.');
+      }
     } catch (error) {
       console.error('가이드북 삭제 중 오류가 발생했습니다:', error);
     }
