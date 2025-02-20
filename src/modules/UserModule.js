@@ -1,3 +1,7 @@
+
+
+
+
 import { createActions, handleActions } from "redux-actions"
 
 // 초기 state 값
@@ -5,7 +9,7 @@ const initialState = {
     userInfo: {},
     token: null,
     users: [],
-    showSignUp : false, 
+    showSignUp: false,
 }
 
 //액션 타입 설정
@@ -17,12 +21,12 @@ export const SHOW_SIGN_UP = 'user/SHOW_SIGN_UP';
 export const HIDE_SIGN_UP = 'user/HIDE_SIGN_UP';
 
 //유저 관련 액션 함수
-export const { user: {login, logOut,getAllProfileImage,loadUser,showSignUp,hideSignUp}} = createActions({
-    [LOGIN] : ({ token, userInfo }) => ({ token, userInfo }),
+export const { user: { login, logOut, getAllProfileImage, loadUser, showSignUp, hideSignUp } } = createActions({
+    [LOGIN]: ({ token, userInfo }) => ({ token, userInfo }),
     [LOG_OUT]: ({ token, userInfo }) => ({ token, userInfo }),
     [GET_ALL_PROFILE_IMAGE]: (data) => (data),
     [LOAD_USER]: (data) => (data),
-    [SHOW_SIGN_UP]: () => ({}), 
+    [SHOW_SIGN_UP]: () => ({}),
     [HIDE_SIGN_UP]: () => ({}),
 });
 
@@ -34,24 +38,24 @@ const userReducer = handleActions(
                 console.error('No token received');
                 return state;
             }
-            
+
             // 토큰 저장 시 공백 추가 확인
             localStorage.setItem("token", "Bearer " + token);
             localStorage.setItem("userEmail", userInfo.email);
-            
+
             return {
                 ...state,
                 userInfo,
                 token,
             };
         },
-        [LOG_OUT] : () => {
+        [LOG_OUT]: () => {
             localStorage.removeItem('token'); // 로그인 토큰 삭제
             return initialState;
         },
-        [GET_ALL_PROFILE_IMAGE]: (state, data) =>{
-            
-            return{
+        [GET_ALL_PROFILE_IMAGE]: (state, data) => {
+
+            return {
                 ...state,
                 image: data.payload, // 상태 업데이트
             };
@@ -65,10 +69,10 @@ const userReducer = handleActions(
                 userInfo: data.payload, // 상태 업데이트
             };
         },
-        [SHOW_SIGN_UP]:(state) => {
+        [SHOW_SIGN_UP]: (state) => {
             return {
                 ...state,
-                showSignUp:  true,
+                showSignUp: true,
             };
         },
         [HIDE_SIGN_UP]: (state) => {
