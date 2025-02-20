@@ -379,41 +379,53 @@ const TravelInfo = () => {
 
   const getAISelect = useCallback(async () => {
     try {
-      if (token) {
-        if (selectedAIPlaces.length === 0 || selectedAIPlaces.length !== selectedPlaces.length) {
-          setLoading(true);
-          setError(null);
-          const response = await axiosInstance.get(`/api/v1/travels/travelInfos/${travelInfoId}/aiSelect`, {
-            headers: {
-              'Authorization': `Bearer ${token}`
-            }
-          });
-          if (response.data.success === "success") {
-            for (let place of response.data.content) {
-              const findPlace = allPlaceList.content.find(item => item.placeId === place.placeId);
-              setSelectedPlaces(prev => [...prev, findPlace]);
-              setSelectedAIPlaces(prev => [...prev, findPlace]);
-            }
-          } else {
-            for (let place of response.data.content) {
-              if (allPlaceList.content.some(item => item.placeId === place.placeId)) {
-                setSelectedPlaces(prev => [...prev, place]);
-              }
-            }
+      if (!token) {
+        throw new Error('토큰이 없습니다');
+      }
+
+      if (selectedAIPlaces.length === 0 || selectedAIPlaces.length !== selectedPlaces.length) {
+        setLoading(true);
+        setError(null);
+
+        // 토큰 유효성 확인
+        if (!localStorage.getItem('token')) {
+          throw new Error('토큰이 만료되었습니다');
+        }
+
+        const response = await axiosInstance.get(`/api/v1/travels/travelInfos/${travelInfoId}/aiSelect`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
           }
-        } else {
-          setSelectedPlaces(selectedAIPlaces);
+        });
+
+        // 응답 데이터 유효성 검사 추가
+        if (!response.data || !response.data.content) {
+          throw new Error('유효하지 않은 응답 데이터입니다');
+        }
+
+        if (response.data.success === "success") {
+          for (let place of response.data.content) {
+            const findPlace = allPlaceList.content.find(item => item.placeId === place.placeId);
+            if (!findPlace) {
+              console.warn(`Place not found: ${place.placeId}`);
+              continue;
+            }
+            setSelectedPlaces(prev => [...prev, findPlace]);
+            setSelectedAIPlaces(prev => [...prev, findPlace]);
+          }
         }
       } else {
-        console.error('토큰이 없습니다.');
+        setSelectedPlaces(selectedAIPlaces);
       }
     } catch (error) {
-      console.error('API Error:', error);
-      setError(error.message || '데이터를 불러오는데 실패했습니다.');
+      console.error('AI 선택 중 오류 발생:', error);
+      setError(error.message || 'AI 선택 중 오류가 발생했습니다');
+      // 사용자에게 오류 메시지 표시
+      alert('AI 선택 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
     } finally {
       setLoading(false);
     }
-  }, [travelInfoId, selectedAIPlaces, selectedPlaces.length, allPlaceList]);
+  }, [travelInfoId, selectedAIPlaces, selectedPlaces.length, allPlaceList, token]);
 
   // ============================================================================================
 

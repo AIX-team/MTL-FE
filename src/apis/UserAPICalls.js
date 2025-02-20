@@ -28,5 +28,3 @@ export function callLoginAPI(code) {
         }
     }
 }
-
-

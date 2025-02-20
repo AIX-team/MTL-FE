@@ -18,7 +18,7 @@ export const LOG_OUT = 'user/LOG_OUT';
 export const GET_ALL_PROFILE_IMAGE = 'user/GET_ALL_PROFILE_IMAGE';
 export const LOAD_USER = 'user/LOAD_USER';
 export const SHOW_SIGN_UP = 'user/SHOW_SIGN_UP';
-export const HIDE_SIGN_UP = 'user/HIDE_SIGN_UP';
+export const HIDE_SIGN_UP = 'usea/HIDE_SIGN_UP';
 
 //유저 관련 액션 함수
 export const { user: { login, logOut, getAllProfileImage, loadUser, showSignUp, hideSignUp } } = createActions({

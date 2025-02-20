@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import MainLayout from "./layouts/MainLayout";
 import LinkPage from './pages/link/LinkPage';
@@ -9,33 +9,30 @@ import TravelInfo from './pages/link/travelInfo/TravelInfo';
 import GuideBook from './pages/link/guideBook/GuideBook';
 import Loading from './components/Loading/Loading';  // 추가
 import './css/styles/variables.css';
-
-
 import Login from "./pages/user/Login";
 import LoginSuccess from "./pages/user/LoginSuccess";
 import GoogleMapsWrapper from './components/GoogleMapsWrapper';
-
 import LandingPage from "./components/LandingPage/LandingPage";
 
 function App() {
+  const [isAuthenticated, setIsAuthenicated] = useState(null);
 
   // 페이지 로드 시 localStorage에서 토큰 확인 및 리다이렉트 처리
-  // useEffect(() => {
-  //   const token = localStorage.getItem("access_token"); // localStorage에서 토큰 확인
-  //   if (token) {
-  //     // 토큰이 있다면 /link로 리다이렉트
-  //     window.location.href = "/link";
-  //   } else {
-  //     // 토큰이 없다면 /로 리다이렉트
-  //     // window.location.href = "/";
-  //   }
-  // }, []);
+  useEffect(() => {
+    const token = localStorage.getItem("access_token"); // localStorage에서 토큰 확인
+    if (token) {
+      setIsAuthenicated(true); // 토큰이 있으면 true 상태
+    } else {
+      setIsAuthenicated(false); // 토큰이 없으면 false 상태
+    }
+  }, []);
 
   return (
     <BrowserRouter>
       <GoogleMapsWrapper>
         <Routes>
-          <Route path="/" element={<LandingPage />} />
+          <Route path="/" element={isAuthenticated ? <Navigate to="/link" replace /> :
+            <LandingPage />} />
 
           {/* 로그인 페이지  */}
           <Route path="/login" element={<Login />} />

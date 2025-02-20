@@ -157,7 +157,7 @@ const SearchYoutube = ({ linkData, setLinkData }) => {
         try {
             const videoUrl = `https://www.youtube.com/watch?v=${videoId}`;
             const response = await axios.post(
-                process.env.REACT_APP_AI_API + '/api/v1/youtube/check_subtitles',
+                process.env.REACT_APP_BACKEND_URL + '/url/check_youtube_subtitles',
                 { video_url: videoUrl }
             );
             console.log("자막 체크 응답:", response.data);
@@ -175,6 +175,7 @@ const SearchYoutube = ({ linkData, setLinkData }) => {
             return;
         }
 
+        console.log('video:', video);
         const videoUrl = `https://www.youtube.com/watch?v=${video.id}`;
         const exists = selectedVideos.find(v => v.url === videoUrl);
         let updatedSelection = [];
