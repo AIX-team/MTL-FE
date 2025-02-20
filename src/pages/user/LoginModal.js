@@ -11,7 +11,7 @@ const LoginModal = ({ isOpen, onClose }) => {
     if (!isOpen) return null;
 
     const handleGoogleLogin = () => {
-        const clientId = '197908814644-velr9kl1pr3ej9k416evvgr19880iuvu.apps.googleusercontent.com'; // 구글 클라이언트 ID
+        const clientId = '493235437055-i3vpr6aqus0mqfarsvfm65j2rkllo97t.apps.googleusercontent.com';        // 구글 클라이언트 ID
         const redirectUri = process.env.REACT_APP_FRONTEND_URL + '/loginSuccess'; // 리디렉션 URI
         const scope = 'profile email'; // 요청할 권한
         const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=${scope}`;

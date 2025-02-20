@@ -14,13 +14,23 @@ const TravelList = () => {
   const [pinnedItems, setPinnedItems] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [sortAsc, setSortAsc] = useState(true);
+  const [token, setToken] = useState(localStorage.getItem('token'));
 
   const getTravelList = async () => {
     try {
-      const response = await axiosInstance.get(
-        "/api/v1/travels/travelInfos/list"
-      );
-      setTravelItems(response.data.travelInfoList);
+      if (token) {
+        const response = await axiosInstance.get(
+          "/api/v1/travels/travelInfos/list",
+          {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          }
+        );
+        setTravelItems(response.data.travelInfoList);
+      } else {
+        console.error('토큰이 없습니다.');
+      }
     } catch (error) {
       console.error("여행 목록을 가져오는 중 오류가 발생했습니다:", error);
     }
@@ -28,10 +38,19 @@ const TravelList = () => {
 
   const putFavorite = async (travelId, isFavorite) => {
     try {
-      await axiosInstance.put(
-        `/api/v1/travels/travelInfos/${travelId}/favorite`,
-        { isTrue: isFavorite }
-      );
+      if (token) {
+        await axiosInstance.put(
+          `/api/v1/travels/travelInfos/${travelId}/favorite`,
+          { isTrue: isFavorite },
+          {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          }
+        );
+      } else {
+        console.error('토큰이 없습니다.');
+      }
     } catch (error) {
       console.error(
         "즐겨찾기 상태를 업데이트하는 중 오류가 발생했습니다:",
@@ -42,9 +61,17 @@ const TravelList = () => {
 
   const putPin = async (travelId, isFixed) => {
     try {
-      await axiosInstance.put(`/api/v1/travels/travelInfos/${travelId}/fixed`, {
-        isTrue: isFixed,
-      });
+      if (token) {
+        await axiosInstance.put(`/api/v1/travels/travelInfos/${travelId}/fixed`, {
+          isTrue: isFixed,
+        }, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+      } else {
+        console.error('토큰이 없습니다.');
+      }
     } catch (error) {
       console.error("고정 상태를 업데이트하는 중 오류가 발생했습니다:", error);
     }
@@ -52,10 +79,18 @@ const TravelList = () => {
 
   const putUpdateTitle = async (item, newTitle) => {
     try {
-      await axiosInstance.put(`/api/v1/travels/travelInfos/${item.travelId}`, {
-        travelInfoTitle: newTitle,
-        travelDays: parseInt(item.travelDays), // 숫자로 변환
-      });
+      if (token) {
+        await axiosInstance.put(`/api/v1/travels/travelInfos/${item.travelId}`, {
+          travelInfoTitle: newTitle,
+          travelDays: parseInt(item.travelDays), // 숫자로 변환
+        }, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+      } else {
+        console.error('토큰이 없습니다.');
+      }
     } catch (error) {
       console.error("여행 제목을 업데이트하는 중 오류가 발생했습니다:", error);
     }
@@ -63,7 +98,15 @@ const TravelList = () => {
 
   const deleteTravel = async (travelId) => {
     try {
-      await axiosInstance.delete(`/api/v1/travels/travelInfos/${travelId}`);
+      if (token) {
+        await axiosInstance.delete(`/api/v1/travels/travelInfos/${travelId}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+      } else {
+        console.error('토큰이 없습니다.');
+      }
     } catch (error) {
       console.error("여행을 삭제하는 중 오류가 발생했습니다:", error);
     }
@@ -122,6 +165,7 @@ const TravelList = () => {
   // 데이터 구조 확인
   useEffect(() => {
     getTravelList();
+    setToken(localStorage.getItem('token'));
   }, []);
 
   // 필터링된 데이터 계산
