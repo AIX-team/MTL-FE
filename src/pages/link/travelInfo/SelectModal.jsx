@@ -60,6 +60,70 @@ const SelectModal = ({
     }
   };
 
+  const runApiCalls = async (travelTaste) => {
+    try {
+      setIsLoading(true);
+      const token = localStorage.getItem('token');
+      const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      };
+  
+      // 1. 비동기 가이드북 생성 API 호출
+      const asyncResponse = await axiosInstance.post("/api/v1/travels/guidebook/async", {
+        travelInfoId: travelInfoId,
+        travelDays: travelDays,
+        travelTaste: travelTaste,
+        placeIds: isSelected.map((place) => place.placeId),
+      }, { headers });
+      
+      const jobId = asyncResponse.data;
+      console.log("작업 ID 발급됨:", jobId);
+  
+      // 2. 작업 상태 주기적으로 확인 (폴링)
+      let isCompleted = false;
+      let retryCount = 0;
+      const maxRetries = 180; // 15분 (5초 * 180)
+      const pollingInterval = 5000; // 5초
+  
+      while (!isCompleted && retryCount < maxRetries) {
+        const statusResponse = await axiosInstance.get(`/guidebook/status/${jobId}`, { headers });
+        const { status, guideId, error } = statusResponse.data;
+        console.log(`작업 상태 확인 (${retryCount + 1}/${maxRetries}):`, status);
+  
+        if (status === "COMPLETED" && guideId) {
+          isCompleted = true;
+          // 생성된 가이드북 페이지로 이동
+          navigate(`/guidebooks/${guideId}`, {
+            state: { message: "가이드북이 성공적으로 생성되었습니다." }
+          });
+          break;
+        } else if (status === "FAILED") {
+          throw new Error(error || "가이드북 생성 실패");
+        } else {
+          // 5초 대기 후 다시 확인
+          await new Promise(resolve => setTimeout(resolve, pollingInterval));
+          retryCount++;
+        }
+      }
+  
+      if (!isCompleted) {
+        throw new Error("가이드북 생성 시간 초과");
+      }
+  
+    } catch (error) {
+      console.error("가이드북 생성 에러:", error.response?.data || error);
+      if (error.response?.status === 504) {
+        alert("서버 응답이 지연되고 있습니다. 잠시 후 다시 시도해주세요.");
+      } else {
+        alert(error.message || "가이드북 생성에 실패했습니다. 다시 시도해주세요.");
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  
   const handlePlaceSelect = (placeId) => {
     setIsSelected((prev) => {
       const isExist = prev.some((item) => item.placeId === placeId);
@@ -140,7 +204,7 @@ const SelectModal = ({
   };
 
   const handleTasteSave = (e) => {
-    postGuidebook(e);
+    runApiCalls(e);
   };
 
   // useEffect를 사용하여 모달 상태에 따라 body 클래스 토글
