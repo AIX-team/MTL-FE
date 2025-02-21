@@ -189,9 +189,9 @@ const SearchYoutube = ({ linkData, setLinkData }) => {
             updatedSelection = selectedVideos.filter(v => v.url !== videoUrl);
             setSelectedVideos(updatedSelection);
             setLinkData(prev => prev.filter(v => v.url !== videoUrl));
-        } else {
+          } else {
             if (linkData.length >= 5) {
-                setModalMessage('링크는 최대 5개까지만 추가할 수 있습니다.');
+                setModalMessage('링크는 최대 5개까지만 추가 가능합니다.');
                 setModalOpen(true);
                 return;
             }
@@ -199,7 +199,7 @@ const SearchYoutube = ({ linkData, setLinkData }) => {
             // 클라이언트에서 바로 자막 여부 체크
             const hasSubtitles = await checkVideoSubtitles(video.id);
             if (!hasSubtitles) {
-                setModalMessage('죄송합니다. 해당 영상은 자막이 포함되어 있지 않아요. 다른 영상을 선택해 주세요.');
+                setModalMessage('자막이 포함된 영상을 선택해주세요!');
                 setModalOpen(true);
                 return;
             }
