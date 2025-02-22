@@ -27,12 +27,13 @@ const TravelList = () => {
             }
           }
         );
+        console.log("API Response:", response.data);
         setTravelItems(response.data.travelInfoList);
       } else {
-        console.error('토큰이 없습니다.');
+        console.log("No token available");
       }
     } catch (error) {
-      console.error("여행 목록을 가져오는 중 오류가 발생했습니다:", error);
+      console.error("API Error:", error.response || error);
     }
   };
 
@@ -164,8 +165,11 @@ const TravelList = () => {
 
   // 데이터 구조 확인
   useEffect(() => {
-    getTravelList();
-    setToken(localStorage.getItem('token'));
+    const storedToken = localStorage.getItem('token');
+    setToken(storedToken);
+    if (storedToken) {
+      getTravelList();
+    }
   }, []);
 
   // 필터링된 데이터 계산
@@ -267,6 +271,12 @@ const TravelList = () => {
     if (day < 10) day = `0${day}`;
     return `${year}-${month}-${day}`;
   };
+
+  // 데이터 상태 확인
+  useEffect(() => {
+    console.log("Current travelItems:", travelItems);
+    console.log("Filtered Data:", filteredData);
+  }, [travelItems, filteredData]);
 
   return (
     <div className="SJ-Travel-List">
