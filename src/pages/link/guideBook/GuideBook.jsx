@@ -216,6 +216,7 @@ const GuideBook = () => {
                         'Authorization': `Bearer ${token}`
                     }
                 });
+                console.log('Initial Data:', response.data.courses[0].coursePlaces[0].image);
                 setGuideBook(response.data);
                 setPlaces(response.data.courses[0].coursePlaces || []);
             } catch (error) {
@@ -363,13 +364,13 @@ const GuideBook = () => {
         const coursesArray = Object.values(guideBook.courses);
         const currentCourse = coursesArray.find(course => course.courseNum === activeTab);
         if (currentCourse?.coursePlaces) {
+            console.log('Places Update:', currentCourse.coursePlaces[0].image);
             const updatedPlaces = currentCourse.coursePlaces.map((place, index) => ({
                 ...place,
                 num: index + 1
             }));
             if (places !== updatedPlaces) {
                 setPlaces(updatedPlaces);
-
             }
         }
     }, [activeTab]);
@@ -604,6 +605,7 @@ const GuideBook = () => {
     // 장소 클릭 핸들러
     const handlePlaceClick = (place) => {
         if (!isEditMode) {
+            console.log('Modal Image:', place.image);
             setSelectedPlace(place);
             setShowDetailModal(true);
         }
@@ -673,7 +675,6 @@ const GuideBook = () => {
                                                     id="YC-GuideBook-place-image"
                                                     src={place.image || "https://placehold.co/90x70?text=No+Image"}
                                                     alt="관광지 이미지"
-                                                    crossOrigin="anonymous"
                                                     onError={(e) => {
                                                         e.target.src = "https://placehold.co/90x70?text=No+Image";
                                                     }}
