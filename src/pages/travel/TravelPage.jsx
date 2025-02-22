@@ -7,6 +7,14 @@ import '../../css/travel/TravelPage.css';
 const TravelPage = () => {
   const [activeTab, setActiveTab] = useState('travel');
 
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      navigate('/login');
+    }
+  }, [navigate]);
+
+
   const renderContent = () => {
     switch (activeTab) {
       case 'travel':

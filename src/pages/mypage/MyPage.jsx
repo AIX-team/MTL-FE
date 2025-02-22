@@ -82,7 +82,7 @@ function MyPage() {
 
 
   if (showSettings) {
-    return <AccountSettings onBack={() => setShowSettings(false)} />;
+    return <AccountSettings userInfo={userInfo} onBack={() => setShowSettings(false)} />;
   }
 
   return (
