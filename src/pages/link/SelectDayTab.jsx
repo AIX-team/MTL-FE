@@ -34,8 +34,9 @@ const SelectDayTab = ({ onBack, linkData }) => {
 
       while (!isCompleted && retryCount < maxRetries) {
         const statusResponse = await axiosInstance.get(`/url/analysis/status/${jobId}`, { headers });
-        const status = statusResponse.data;
-        console.log(`작업 상태 확인 (${retryCount + 1}/${maxRetries}):`, status);
+        const statusResponseData = statusResponse.data;
+        const status = statusResponseData.status;
+        console.log(`작업 상태 확인 (${retryCount + 1}/${maxRetries}):`, statusResponseData);
 
         if (status === "Completed") {
           isCompleted = true;
