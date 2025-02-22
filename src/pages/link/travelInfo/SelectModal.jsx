@@ -40,7 +40,7 @@ const SelectModal = ({
     setIsLoading(true);
     try {
       if (token) {
-        const response = await axiosInstance.post("/api/v1/travels/guidebook", {
+        const response = await axiosInstance.post("/api/v1/travels/guidebooks", {
           travelInfoId: travelInfoId,
           travelDays: travelDays,
           travelTaste: travelTaste,
@@ -70,7 +70,7 @@ const SelectModal = ({
       };
   
       // 1. 비동기 가이드북 생성 API 호출
-      const asyncResponse = await axiosInstance.post("/api/v1/travels/guidebook/async", {
+      const asyncResponse = await axiosInstance.post("/api/v1/travels/guidebooks/async", {
         travelInfoId: travelInfoId,
         travelDays: travelDays,
         travelTaste: travelTaste,
@@ -87,7 +87,7 @@ const SelectModal = ({
       const pollingInterval = 5000; // 5초
   
       while (!isCompleted && retryCount < maxRetries) {
-        const statusResponse = await axiosInstance.get(`/guidebook/status/${jobId}`, { headers });
+        const statusResponse = await axiosInstance.get(`/api/v1/travels/guidebooks/status/${jobId}`, { headers });
         const { status, guideId, error } = statusResponse.data;
         console.log(`작업 상태 확인 (${retryCount + 1}/${maxRetries}):`, status);
   
