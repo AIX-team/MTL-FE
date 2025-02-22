@@ -1,8 +1,10 @@
 import React from "react";
 import "../../css/mypage/AccountSettings.css";
 import GoogleLogo from "../../images/google_logo.png";
+import { useNavigate } from 'react-router-dom';
 
 function AccountSettings( { userInfo, onBack }) {
+  const navigate = useNavigate();
   // 나중에 구글 로그아웃 구현을 위한 주석 처리
   const handleLogout = async () => {
     try {
