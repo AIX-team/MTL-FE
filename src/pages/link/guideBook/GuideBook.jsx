@@ -228,7 +228,14 @@ const GuideBook = () => {
     }
 
     useEffect(() => {
-        setToken(localStorage.getItem('token'));
+
+        if (!token) {
+            setToken(localStorage.getItem('token'));
+            if (!token) {
+                navigate('/login');
+            } 
+        } 
+
         getGuideBook();
     }, []);
 

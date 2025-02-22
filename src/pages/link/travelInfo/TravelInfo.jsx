@@ -431,7 +431,13 @@ const TravelInfo = () => {
 
   useEffect(() => {
     setIsComponentMounted(true);
-    setToken(localStorage.getItem('token'));
+
+    if (!token) {
+      setToken(localStorage.getItem('token'));
+      if (!token) {
+        navigate('/login');
+      } 
+    } 
   }, []);
 
   useEffect(() => {
