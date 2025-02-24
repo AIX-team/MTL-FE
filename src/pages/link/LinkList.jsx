@@ -108,7 +108,7 @@ const LinkList = ({ linkData, setLinkData }) => {
           ...prev,
           {
             url: inputLink,
-            type:type,
+            type: type,
             id: Date.now(),
             url_title: response.data.title || inputLink,
             author: "직접 입력",
@@ -123,7 +123,7 @@ const LinkList = ({ linkData, setLinkData }) => {
       if (error.response && error.response.data) {
         errorMessage = error.response.data.message || JSON.stringify(error.response.data);
       }
-      showModal(errorMessage);
+      showModal(errorMessage); // 
     }
   };
 
@@ -154,6 +154,46 @@ const LinkList = ({ linkData, setLinkData }) => {
   const handleBack = () => {
     setShowDayTab(false);
   };
+
+  // 컴포넌트 마운트 시 저장된 URL 목록 가져오기
+  useEffect(() => {
+    const fetchSavedUrls = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          navigate("/login");
+          return;
+        }
+
+        const response = await axios.get(
+          process.env.REACT_APP_BACKEND_URL + "/user/url/list",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+
+        if (response.status === 200 && response.data) {
+          const urls = response.data.map(item => ({
+            url: item.url,
+            type: getLinkType(item.url),
+            id: item.id || Date.now(),
+            url_title: item.urlTitle || item.url,
+            author: item.urlAuthor || "직접 입력"
+          }));
+          setLinkData(urls);
+        }
+      } catch (error) {
+        console.error("URL 목록 가져오기 실패:", error);
+        let errorMessage = "저장된 URL 목록을 가져오는데 실패했습니다.";
+        if (error.response && error.response.data) {
+          errorMessage = error.response.data.message || JSON.stringify(error.response.data);
+        }
+        showModal(errorMessage);
+      }
+    };
+
+    fetchSavedUrls();
+  }, []); // 컴포넌트 마운트 시 한 번만 실행
 
   if (showDayTab) {
     // linkData는 { url, type, id } 객체 배열입니다.
