@@ -1,11 +1,22 @@
 import React, { useState } from 'react';
 import TravelList from "./TravelList";
 import GuidebookList from "./GuideBookList";
+import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 import '../../css/travel/TravelPage.css';
 
 const TravelPage = () => {
   const [activeTab, setActiveTab] = useState('travel');
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      navigate('/login');
+    }
+  }, [navigate]);
+
 
   const renderContent = () => {
     switch (activeTab) {

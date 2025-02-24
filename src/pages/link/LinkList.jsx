@@ -104,15 +104,17 @@ const LinkList = ({ linkData, setLinkData }) => {
       });
 
       if (response.status === 200) {
-        const newLink = {
-          url: inputLink,
-          type: type,
-          id: Date.now(),
-          url_title: response.data.title || inputLink,
-          author: "직접 입력"
-        };
+        setLinkData((prev) => [
+          ...prev,
+          {
+            url: inputLink,
+            type: type,
+            id: Date.now(),
+            url_title: response.data.title || inputLink,
+            author: "직접 입력",
+          },
+        ]);
 
-        setLinkData((prev) => [...prev, newLink]);
         setInputLink("");
       }
     } catch (error) {
@@ -121,7 +123,7 @@ const LinkList = ({ linkData, setLinkData }) => {
       if (error.response && error.response.data) {
         errorMessage = error.response.data.message || JSON.stringify(error.response.data);
       }
-      showModal(errorMessage);
+      showModal(errorMessage); // 
     }
   };
 
@@ -153,13 +155,53 @@ const LinkList = ({ linkData, setLinkData }) => {
     setShowDayTab(false);
   };
 
+  // 컴포넌트 마운트 시 저장된 URL 목록 가져오기
+  useEffect(() => {
+    const fetchSavedUrls = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          navigate("/login");
+          return;
+        }
+
+        const response = await axios.get(
+          process.env.REACT_APP_BACKEND_URL + "/user/url/list",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+
+        if (response.status === 200 && response.data) {
+          const urls = response.data.map(item => ({
+            url: item.url,
+            type: getLinkType(item.url),
+            id: item.id || Date.now(),
+            url_title: item.urlTitle || item.url,
+            author: item.urlAuthor || "직접 입력"
+          }));
+          setLinkData(urls);
+        }
+      } catch (error) {
+        console.error("URL 목록 가져오기 실패:", error);
+        let errorMessage = "저장된 URL 목록을 가져오는데 실패했습니다.";
+        if (error.response && error.response.data) {
+          errorMessage = error.response.data.message || JSON.stringify(error.response.data);
+        }
+        showModal(errorMessage);
+      }
+    };
+
+    fetchSavedUrls();
+  }, []); // 컴포넌트 마운트 시 한 번만 실행
+
   if (showDayTab) {
     // linkData는 { url, type, id } 객체 배열입니다.
     // URL 문자열만 추출하여 linkData prop으로 전달합니다.
     const linkUrls = linkData.map((link) => link.url);
     return <SelectDayTab onBack={handleBack} linkData={linkUrls} />;
   }
-
+  
   return (
     <div className="WS-LinkList">
       <div className="WS-Link-Input-Container">
@@ -188,8 +230,8 @@ const LinkList = ({ linkData, setLinkData }) => {
                   {typeValue === "youtube" ? "YOUTUBE" : "BLOG"}
                 </span>
                 <span className="WS-LinkList-Text" title={displayTitle}>
-                  {displayTitle.length > 25
-                    ? `${displayTitle.substring(0, 25)}...`
+                  {displayTitle.length > 23
+                    ? `${displayTitle.substring(0, 23)}...`
                     : displayTitle}
                 </span>
               </div>

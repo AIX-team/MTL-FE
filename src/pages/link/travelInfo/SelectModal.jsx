@@ -36,29 +36,29 @@ const SelectModal = ({
     "그 외": "etc",
   };
 
-  const postGuidebook = async (travelTaste) => {
-    setIsLoading(true);
-    try {
-      if (token) {
-        const response = await axiosInstance.post("/api/v1/travels/guidebook", {
-          travelInfoId: travelInfoId,
-          travelDays: travelDays,
-          travelTaste: travelTaste,
-          placeIds: isSelected.map((place) => place.placeId),
-        }, {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        });
-        navigate("/guidebooks/" + response.data.value);
-        console.log(response);
-      } else {
-        console.error('토큰이 없습니다.');
-      }
-    } catch (error) {
-      console.error("API Error:", error);
-    }
-  };
+  // const postGuidebook = async (travelTaste) => {
+  //   setIsLoading(true);
+  //   try {
+  //     if (token) {
+  //       const response = await axiosInstance.post("/api/v1/travels/guidebooks", {
+  //         travelInfoId: travelInfoId,
+  //         travelDays: travelDays,
+  //         travelTaste: travelTaste,
+  //         placeIds: isSelected.map((place) => place.placeId),
+  //       }, {
+  //         headers: {
+  //           'Authorization': `Bearer ${token}`
+  //         }
+  //       });
+  //       navigate("/guidebooks/" + response.data.value);
+  //       console.log(response);
+  //     } else {
+  //       console.error('토큰이 없습니다.');
+  //     }
+  //   } catch (error) {
+  //     console.error("API Error:", error);
+  //   }
+  // };
 
   const runApiCalls = async (travelTaste) => {
     try {
@@ -76,8 +76,8 @@ const SelectModal = ({
         travelTaste: travelTaste,
         placeIds: isSelected.map((place) => place.placeId),
       }, { headers });
-
-      const jobId = asyncResponse.data;
+      
+      const jobId = asyncResponse.data.jobId;
       console.log("작업 ID 발급됨:", jobId);
 
       // 2. 작업 상태 주기적으로 확인 (폴링)
@@ -87,7 +87,7 @@ const SelectModal = ({
       const pollingInterval = 5000; // 5초
 
       while (!isCompleted && retryCount < maxRetries) {
-        const statusResponse = await axiosInstance.get(`/guidebook/status/${jobId}`, { headers });
+        const statusResponse = await axiosInstance.get(`/api/v1/travels/guidebook/status/${jobId}`, { headers });
         const { status, guideId, error } = statusResponse.data;
         console.log(`작업 상태 확인 (${retryCount + 1}/${maxRetries}):`, status);
 

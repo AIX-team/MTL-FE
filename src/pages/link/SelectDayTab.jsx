@@ -4,7 +4,6 @@ import "../../css/linkpage/SelectDayTab.css";
 import Loading from "../../components/Loading/Loading";
 import axiosInstance from "../../components/AxiosInstance";
 import { useNavigate } from "react-router-dom";
-import ReactDOM from "react-dom";
 
 const SelectDayTab = ({ onBack, linkData }) => {
   const [days, setDays] = useState(1); // 기본값 1일
@@ -35,8 +34,9 @@ const SelectDayTab = ({ onBack, linkData }) => {
 
       while (!isCompleted && retryCount < maxRetries) {
         const statusResponse = await axiosInstance.get(`/url/analysis/status/${jobId}`, { headers });
-        const status = statusResponse.data;
-        console.log(`작업 상태 확인 (${retryCount + 1}/${maxRetries}):`, status);
+        const statusResponseData = statusResponse.data;
+        const status = statusResponseData.status;
+        console.log(`작업 상태 확인 (${retryCount + 1}/${maxRetries}):`, statusResponseData);
 
         if (status === "Completed") {
           isCompleted = true;
@@ -124,7 +124,8 @@ const SelectDayTab = ({ onBack, linkData }) => {
     }
   };
 
-  return ReactDOM.createPortal(
+
+  return (
     <div>
       {isLoading && (
         <div>
@@ -132,9 +133,11 @@ const SelectDayTab = ({ onBack, linkData }) => {
         </div>
       )}
       {!isLoading && (
+
         <div className="WS-SelectDayTab-background">
           <div className="WS-SelectDayTab">
             {!isLoading && (
+
               <div className="WS-SelectDayTab-Container">
                 <div className="WS-SelectDayTab-Title-Container">
                   <div className="WS-SelectDayTab-Title">총 여행 기간은?</div>
@@ -185,8 +188,7 @@ const SelectDayTab = ({ onBack, linkData }) => {
           </div>
         </div>
       )}
-    </div>,
-    document.body
+    </div>
   );
 };
 
