@@ -176,6 +176,11 @@
   line-height: 1.4;
   cursor: pointer;
   color: black;
+
+  width: 90%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .WS-SearchYoutube-ChannelInfo {
