@@ -336,7 +336,7 @@ const TravelList = () => {
             <div key={item.id} className="SJ-travel-card">
               <Link to={`/travelInfos/${item.travelId}`} className="HG-travel-card-link" style={{ textDecoration: "none", color: "black" }}>
 
-                {pinnedItems.includes(item.id) && (
+                {item.fixed && (
                   <div className="SJ-pin-icon">📌</div>
                 )}
 

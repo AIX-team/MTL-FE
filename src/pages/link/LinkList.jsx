@@ -177,7 +177,7 @@ const LinkList = ({ linkData, setLinkData }) => {
             url: item.url,
             type: getLinkType(item.url),
             id: item.id || Date.now(),
-            url_title: item.urlTitle || item.url,
+            url_title: response.data.title || inputLink,
             author: item.urlAuthor || "직접 입력"
           }));
           setLinkData(urls);
