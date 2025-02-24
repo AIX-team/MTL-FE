@@ -201,7 +201,7 @@ const LinkList = ({ linkData, setLinkData }) => {
     const linkUrls = linkData.map((link) => link.url);
     return <SelectDayTab onBack={handleBack} linkData={linkUrls} />;
   }
-
+  
   return (
     <div className="WS-LinkList">
       <div className="WS-Link-Input-Container">
@@ -230,8 +230,8 @@ const LinkList = ({ linkData, setLinkData }) => {
                   {typeValue === "youtube" ? "YOUTUBE" : "BLOG"}
                 </span>
                 <span className="WS-LinkList-Text" title={displayTitle}>
-                  {displayTitle.length > 25
-                    ? `${displayTitle.substring(0, 25)}...`
+                  {displayTitle.length > 23
+                    ? `${displayTitle.substring(0, 23)}...`
                     : displayTitle}
                 </span>
               </div>
