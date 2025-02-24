@@ -104,15 +104,17 @@ const LinkList = ({ linkData, setLinkData }) => {
       });
 
       if (response.status === 200) {
-        const newLink = {
-          url: inputLink,
-          type: type,
-          id: Date.now(),
-          url_title: response.data.title || inputLink,
-          author: "직접 입력"
-        };
+        setLinkData((prev) => [
+          ...prev,
+          {
+            url: inputLink,
+            type:type,
+            id: Date.now(),
+            url_title: response.data.title || inputLink,
+            author: "직접 입력",
+          },
+        ]);
 
-        setLinkData((prev) => [...prev, newLink]);
         setInputLink("");
       }
     } catch (error) {
