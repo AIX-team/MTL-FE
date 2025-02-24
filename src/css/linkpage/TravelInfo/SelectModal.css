@@ -140,7 +140,9 @@
 
 .HG-select-modal-select-list {
   flex: 1;
+
   height: 430px;
+
 
   overflow-y: auto;
 }

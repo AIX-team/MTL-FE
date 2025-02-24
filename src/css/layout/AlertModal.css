@@ -21,6 +21,8 @@
     flex-direction: column;
     align-items: center;
 
+    position: relative;
+
     padding-top: 50px;
 
     border-radius: var(--border-radius-xl);
@@ -38,8 +40,9 @@
 
 .WS-AlertModal-Message-Container {
     text-align: center;
+    width: 90%;
 
-    margin-bottom: 13%;
+    margin-bottom: 30px;
 }
 
 .WS-AlertModal-Title {
@@ -47,7 +50,7 @@
     font-weight: bold;
     color: var(--color-main);
 
-    margin-bottom: 9%;
+    margin-bottom: 12%;
 }
 
 .WS-AlertModal-Message {
@@ -58,14 +61,20 @@
 .WS-AlertModal-Button-Container {
     display: flex;
     justify-content: center;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
 
     width: 100%;
+    height: 60px;
+
     border-top: 2px solid var(--color-light-gray);
 }
 
 .WS-AlertModal-Button {
     width: 100%;
-    height: 60px;
+    padding: 5px 0;
 
     background: none;
     border: none;

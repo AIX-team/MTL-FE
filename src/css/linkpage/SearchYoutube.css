@@ -176,6 +176,11 @@
   line-height: 1.4;
   cursor: pointer;
   color: black;
+
+  width: 90%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .WS-SearchYoutube-ChannelInfo {
@@ -241,7 +246,7 @@
 }
 
 .WS-SearchYoutube-RecentSearch-Tag {
-  padding: 3% 5%;
+  padding: 5px 10px;
 
   background-color: var(--color-light-gray);
   border: none;
