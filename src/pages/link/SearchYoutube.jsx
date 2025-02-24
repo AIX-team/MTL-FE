@@ -81,8 +81,8 @@ const SearchYoutube = ({ linkData, setLinkData }) => {
 
     // 제목 텍스트 제한 함수 수정
     const truncateTitle = (title) => {
-        if (title.length > 45) {
-            return title.substring(0, 45) + '...';
+        if (title.length > 35) {
+            return title.substring(0, 35) + '...';
         }
         return title;
     };
