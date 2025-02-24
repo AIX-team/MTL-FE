@@ -4,6 +4,7 @@ import "../../css/linkpage/SelectDayTab.css";
 import Loading from "../../components/Loading/Loading";
 import axiosInstance from "../../components/AxiosInstance";
 import { useNavigate } from "react-router-dom";
+import ReactDOM from "react-dom";
 
 const SelectDayTab = ({ onBack, linkData }) => {
   const [days, setDays] = useState(1); // 기본값 1일
@@ -124,7 +125,8 @@ const SelectDayTab = ({ onBack, linkData }) => {
     }
   };
 
-  return (
+
+  return ReactDOM.createPortal(
     <div>
       {isLoading && (
         <div>
@@ -132,10 +134,10 @@ const SelectDayTab = ({ onBack, linkData }) => {
         </div>
       )}
       {!isLoading && (
-        <div>
+        <div className="WS-SelectDayTab-background">
           <div className="WS-SelectDayTab">
             {!isLoading && (
-              <div>
+              <div className="WS-SelectDayTab-Container">
                 <div className="WS-SelectDayTab-Title-Container">
                   <div className="WS-SelectDayTab-Title">총 여행 기간은?</div>
                   <div className="WS-SelectDayTab-SubTitle">여행 일정을 알려주세요!</div>
@@ -185,7 +187,8 @@ const SelectDayTab = ({ onBack, linkData }) => {
           </div>
         </div>
       )}
-    </div>
+    </div>,
+    document.body
   );
 };
 

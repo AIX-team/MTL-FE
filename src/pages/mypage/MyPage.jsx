@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../css/mypage/MyPage.css";
-import ProfileExample from "../../images/Profile_example.png"; // 현재는 이 이미지 사용
 import BasicProfile from "../../images/basic profile.png"; // 나중에 사용할 기본 이미지
 import AccountSettings from "./AccountSettings";
 import Logo from "../../layouts/LogoHeader"
@@ -94,7 +93,7 @@ function MyPage() {
       <div className="SJ_profile_section">
         <div className="SJ_profile_image">
           <img
-            src={userInfo.profileImg || ProfileExample}
+            src={userInfo.profileImg || BasicProfile}
             alt="Profile"
             className="SJ_profile_img"
             onError={(e) => {
