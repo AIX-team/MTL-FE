@@ -81,8 +81,8 @@ const SearchYoutube = ({ linkData, setLinkData }) => {
 
     // 제목 텍스트 제한 함수 수정
     const truncateTitle = (title) => {
-        if (title.length > 45) {
-            return title.substring(0, 45) + '...';
+        if (title.length > 35) {
+            return title.substring(0, 35) + '...';
         }
         return title;
     };
@@ -191,7 +191,7 @@ const SearchYoutube = ({ linkData, setLinkData }) => {
             setLinkData(prev => prev.filter(v => v.url !== videoUrl));
         } else {
             if (linkData.length >= 5) {
-                setModalMessage('링크는 최대 5개까지만 추가할 수 있습니다.');
+                setModalMessage('링크는 최대 5개까지만 가능합니다.');
                 setModalOpen(true);
                 return;
             }
@@ -199,7 +199,7 @@ const SearchYoutube = ({ linkData, setLinkData }) => {
             // 클라이언트에서 바로 자막 여부 체크
             const hasSubtitles = await checkVideoSubtitles(video.id);
             if (!hasSubtitles) {
-                setModalMessage('죄송합니다. 해당 영상은 자막이 포함되어 있지 않아요. 다른 영상을 선택해 주세요.');
+                setModalMessage('자막이 없습니다.');
                 setModalOpen(true);
                 return;
             }

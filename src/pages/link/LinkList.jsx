@@ -190,8 +190,8 @@ const LinkList = ({ linkData, setLinkData }) => {
                   {typeValue === "youtube" ? "YOUTUBE" : "BLOG"}
                 </span>
                 <span className="WS-LinkList-Text" title={displayTitle}>
-                  {displayTitle.length > 25
-                    ? `${displayTitle.substring(0, 25)}...`
+                  {displayTitle.length > 20
+                    ? `${displayTitle.substring(0, 20)}...`
                     : displayTitle}
                 </span>
               </div>
