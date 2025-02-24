@@ -35,20 +35,16 @@ a,
 .WS-TravelInfo-Header-Left {
   display: flex;
   align-items: center;
-
-  cursor: pointer;
 }
 
 .WS-TravelInfo-Header-Left-Contents {
   margin-left: 50px;
-
-  cursor: pointer;
 }
 
 .WS-TravelInfo-Header-Left-Back-Btn {
   position: absolute;
   left: 2%;
-  
+
   cursor: pointer;
 }
 
@@ -242,6 +238,7 @@ a,
     opacity: 0;
     transform: scaleY(0);
   }
+
   to {
     opacity: 1;
     transform: scaleY(1);
@@ -262,7 +259,8 @@ a,
   background-color: var(--color-light-gray);
 
   animation: slideDown 0.3s ease-out forwards;
-  transform-origin: top; /* 위쪽을 기준으로 scale 변환 */
+  transform-origin: top;
+  /* 위쪽을 기준으로 scale 변환 */
 }
 
 .WS-TravelInfo-btn-select-text-bold {
@@ -295,7 +293,7 @@ a,
   margin-top: 2%;
 
   height: 100%;
-  max-height: 600px;
+  max-height: 550px;
 
   overflow-y: auto;
   overflow-x: hidden;
@@ -341,9 +339,8 @@ a,
 
 .HG-trevelinfo-select-Container {
   display: flex;
-  align-items: center;
-
-  gap: 10px;
+  flex-direction: row;
+  position: relative;
 }
 
 .HG-trevelinfo-content-frame-select {
@@ -352,13 +349,22 @@ a,
 }
 
 .HG-trevelinfo-content-frame-select-name {
+  margin-top: 3px;
+  margin-left: -7px;
   font-size: var(--font-size-lg);
   font-weight: bold;
+  max-width: 300px;
 }
 
 .HG-trevelinfo-content-frame-select-intro {
+  margin-left: 10px;
+  margin-top: 5px;
   font-size: var(--font-size-sm);
-  font-weight: bold;
+  font-weight: var(--font-weight-sm);
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 200px;
 }
 
 .slide-content {
