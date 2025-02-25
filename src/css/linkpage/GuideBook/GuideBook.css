@@ -196,6 +196,8 @@
   padding-left: 50px;
   min-height: 95px;
 
+  overflow-y: auto;
+  height: 480px;
 }
 
 /* 코스 메뉴 장소 컨테이너 */
