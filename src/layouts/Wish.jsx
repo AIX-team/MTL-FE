@@ -5,6 +5,7 @@ import OpenAI from "openai";
 import { v4 as uuidv4 } from "uuid";
 import ReactDOM from "react-dom";
 import SendIcon from "@mui/icons-material/Send";
+import wishBotIcon from "../images/basic profile.png";
 
 import { searchContent } from "../apis/Apis";
 
@@ -384,7 +385,7 @@ const Wish = ({ onClose }) => {
     <div className="WS-Modal-Overlay">
       <div className="WS-Wish" ref={modalRef}>
         <div className="WS-Wish-Header">
-          <h3>AI 여행 도우미</h3>
+          <h3>Wish : AI 여행 도우미</h3>
           <button
             className="WS-Wish-Close-Button"
             onClick={onClose}
@@ -400,7 +401,9 @@ const Wish = ({ onClose }) => {
               className={`WS-Wish-Message ${message.type}`}
             >
               {message.type === 'bot' && (
-                <div className="WS-Wish-Bot-Avatar">AI</div>
+                <div className="WS-Wish-Bot-Avatar">
+                  <img className="WS-Wish-Bot-Avatar-Icon" src={wishBotIcon} alt="wishBotIcon" />
+                </div>
               )}
               <div className="WS-Wish-Message-Content">
                 {message.content}

@@ -1,17 +1,39 @@
-.WS-SelectDayTab {
-  display: flex;
-  flex-direction: column;
-  position: absolute;
-  align-items: center;
-
+.WS-SelectDayTab-background {
+  position: fixed;
   top: 0;
   left: 0;
+  right: 0;
+  bottom: 0;
+
 
   width: 100%;
   height: 100%;
 
   background-color: white;
-  z-index: 8;
+  z-index: 7;
+}
+
+.WS-SelectDayTab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  position: relative;
+
+  max-width: 450px;
+  height: 1000px;
+
+  margin: 0 auto;
+}
+
+.WS-SelectDayTab-Container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  width: 100%;
+  height: 65%;
 }
 
 .WS-SelectDayTab-Title-Container {
@@ -20,36 +42,32 @@
   align-items: center;
   justify-content: center;
 
-  margin-top: 40%;
-  margin-bottom: 15%;
+  margin-top: 30%;
 }
 
 .WS-SelectDayTab-Title {
   font-size: var(--font-size-2xl);
   font-weight: bold;
-
-  margin-bottom: 20%;
 }
 
 .WS-SelectDayTab-SubTitle {
+  margin-top: 30%;
   font-size: var(--font-size-base);
-  margin-bottom: 5%;
 }
 
 .WS-SelectDayTab-SubTitle-date {
+  margin-top: 5%;
   font-size: var(--font-size-base);
 }
 
 .WS-SelectDayTab-Counter {
-  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
 
-  left: 50%;
-  transform: translateX(-50%);
+  position: relative;
 
-  margin-bottom: 42%;
+  margin-top: 25%;
 
   gap: 100px;
 
@@ -90,21 +108,20 @@
 }
 
 .WS-SelectDayTab-Button-Container {
-  position: relative;
   display: flex;
   justify-content: center;
 
-  left: 50%;
-  transform: translateX(-50%);
+  position: absolute;
+  bottom: 0;
 
   gap: 10px;
 
-  width: 85%;
+  width: 95%;
 }
 
 .WS-SelectDayTab-BackButton,
 .WS-SelectDayTab-NextButton {
-  padding: 6%;
+  padding: 5%;
 
   width: 180px;
 

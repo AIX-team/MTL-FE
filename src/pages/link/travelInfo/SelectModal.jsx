@@ -36,29 +36,29 @@ const SelectModal = ({
     "그 외": "etc",
   };
 
-  const postGuidebook = async (travelTaste) => {
-    setIsLoading(true);
-    try {
-      if (token) {
-        const response = await axiosInstance.post("/api/v1/travels/guidebook", {
-          travelInfoId: travelInfoId,
-          travelDays: travelDays,
-          travelTaste: travelTaste,
-          placeIds: isSelected.map((place) => place.placeId),
-        }, {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        });
-        navigate("/guidebooks/" + response.data.value);
-        console.log(response);
-      } else {
-        console.error('토큰이 없습니다.');
-      }
-    } catch (error) {
-      console.error("API Error:", error);
-    }
-  };
+  // const postGuidebook = async (travelTaste) => {
+  //   setIsLoading(true);
+  //   try {
+  //     if (token) {
+  //       const response = await axiosInstance.post("/api/v1/travels/guidebooks", {
+  //         travelInfoId: travelInfoId,
+  //         travelDays: travelDays,
+  //         travelTaste: travelTaste,
+  //         placeIds: isSelected.map((place) => place.placeId),
+  //       }, {
+  //         headers: {
+  //           'Authorization': `Bearer ${token}`
+  //         }
+  //       });
+  //       navigate("/guidebooks/" + response.data.value);
+  //       console.log(response);
+  //     } else {
+  //       console.error('토큰이 없습니다.');
+  //     }
+  //   } catch (error) {
+  //     console.error("API Error:", error);
+  //   }
+  // };
 
   const runApiCalls = async (travelTaste) => {
     try {
@@ -68,7 +68,7 @@ const SelectModal = ({
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
       };
-  
+
       // 1. 비동기 가이드북 생성 API 호출
       const asyncResponse = await axiosInstance.post("/api/v1/travels/guidebook/async", {
         travelInfoId: travelInfoId,
@@ -77,20 +77,20 @@ const SelectModal = ({
         placeIds: isSelected.map((place) => place.placeId),
       }, { headers });
       
-      const jobId = asyncResponse.data;
+      const jobId = asyncResponse.data.jobId;
       console.log("작업 ID 발급됨:", jobId);
-  
+
       // 2. 작업 상태 주기적으로 확인 (폴링)
       let isCompleted = false;
       let retryCount = 0;
       const maxRetries = 180; // 15분 (5초 * 180)
       const pollingInterval = 5000; // 5초
-  
+
       while (!isCompleted && retryCount < maxRetries) {
-        const statusResponse = await axiosInstance.get(`/guidebook/status/${jobId}`, { headers });
+        const statusResponse = await axiosInstance.get(`/api/v1/travels/guidebook/status/${jobId}`, { headers });
         const { status, guideId, error } = statusResponse.data;
         console.log(`작업 상태 확인 (${retryCount + 1}/${maxRetries}):`, status);
-  
+
         if (status === "COMPLETED" && guideId) {
           isCompleted = true;
           // 생성된 가이드북 페이지로 이동
@@ -106,11 +106,11 @@ const SelectModal = ({
           retryCount++;
         }
       }
-  
+
       if (!isCompleted) {
         throw new Error("가이드북 생성 시간 초과");
       }
-  
+
     } catch (error) {
       console.error("가이드북 생성 에러:", error.response?.data || error);
       if (error.response?.status === 504) {
@@ -123,7 +123,7 @@ const SelectModal = ({
     }
   };
 
-  
+
   const handlePlaceSelect = (placeId) => {
     setIsSelected((prev) => {
       const isExist = prev.some((item) => item.placeId === placeId);
@@ -269,16 +269,15 @@ const SelectModal = ({
               {["전체보기", "관광지", "음식/카페", "그 외"].map((filter) => (
                 <span
                   key={filter}
-                  className={`HG-select-modal-filter-btn ${
-                    selectedFilters.includes(filter) ? "active" : ""
-                  }`}
+                  className={`HG-select-modal-filter-btn ${selectedFilters.includes(filter) ? "active" : ""
+                    }`}
                   onClick={() => handleFilterSelect(filter)}
                 >
                   <input
                     value={filterTypeMap[filter]}
                     type="checkbox"
                     checked={selectedFilters.includes(filter)}
-                    onChange={() => {}}
+                    onChange={() => { }}
                   />
                   {filter}
                 </span>
@@ -293,138 +292,139 @@ const SelectModal = ({
                   )
                 }
               >
-            <img
-              src={
-                selectedPlaces.length > 0 &&
-                isSelected.length === selectedPlaces.length
-                  ? isSelectedIcon
-                  : allSelectIcon
-              }
-              alt="selectIcon"
-            />
-            전체 선택
-          </span>
-          <span
-            className="HG-select-modal-select-delete"
-            onClick={() => handleDeleteClick()}
-          >
-            선택 삭제
-          </span>
-        </div>
-      </div>
-      <div className="HG-select-modal-select-list">
-        {Object.entries({
-          landmark: "관광지",
-          restaurant: "음식/카페",
-          etc: "그 외",
-        }).map(([type, koreanType]) => {
-          const placesOfType = filteredPlaces.filter((place) => {
-            if (type === "etc") {
-              // etc 타입일 경우 landmark와 restaurant가 아닌 모든 항목 필터링
-              return !["landmark", "restaurant"].includes(place.placeType);
-            }
-            // 그 외의 경우 일치하는 타입만 필터링
-            return place.placeType === type;
-          });
+                <img
+                  src={
+                    selectedPlaces.length > 0 &&
+                      isSelected.length === selectedPlaces.length
+                      ? isSelectedIcon
+                      : allSelectIcon
 
-          return (
-            placesOfType.length > 0 && (
-              <div className="HG-select-modal-select-list-type" key={type}>
-                <div className="HG-select-modal-type-header">{koreanType}</div>
-                {placesOfType.map((place, index) => (
-                  <div key={index} className="HG-select-modal-select-list-item">
-                    <div className="HG-select-modal-select-list-item-content">
-                      <span>
-                        <img
-                          className="HG-trevelinfo-content-frame-select"
-                          onClick={() => handlePlaceSelect(place.placeId)}
-                          src={
-                            isSelected.some(
-                              (item) => item.placeId === place.placeId
-                            )
-                              ? isSelectedIcon
-                              : selectIcon
-                          }
-                          alt="selectIcon"
-                        />
-                      </span>
-                      <span onClick={() => handlePlaceSelect(place.placeId)}>
-                        <img
-                          className="HG-select-modal-select-list-item-place-img"
-                          src={place.placeImage}
-                          onError={(e) => {
-                            e.target.src = "https://picsum.photos/600/300";
-                          }}
-                          alt="placeImage"
-                        />
-                      </span>
-                      <div onClick={() => handlePlaceSelect(place.placeId)}>
-                        <div className="HG-select-modal-select-list-item-place-info-name">
-                          {place.placeName}
-                        </div>
-                        <div className="HG-select-modal-select-list-item-place-info-intro">
-                          {place.intro}
-                        </div>
-                      </div>
-                      <div className="HG-select-modal-select-list-item-place-delete">
-                        <img
-                          src={xIcon}
-                          alt="xIcon"
-                          onClick={() => handleDeleteClick(place.placeId)}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )
-          );
-        })}
-      </div>
-      <div className="HG-select-modal-footer">
-        <div className="HG-select-modal-footer-text-frame">
-          <span className="HG-select-modal-footer-text-bold">
-            {travelDays}일 기준:
-          </span>
-          <span className="HG-select-modal-footer-text">
-            최소 {travelDays * 2}개 - 최대 {travelDays * 5}개까지 선택가능합니다
-          </span>
-        </div>
-        <div
-          className="HG-select-modal-footer-btn"
-          onClick={handleGuidebookCreate}
-        >
-          가이드북 생성 {isSelected.length}
-        </div>
-      </div>
-
-      {/* 가이드북 생성 일정 취향 모달 추가 */}
-      <TasteModal
-        isOpen={showTasteModal}
-        onClose={() => setShowTasteModal(false)}
-        onSave={(e) => handleTasteSave(e)}
-      />
-
-      {/* 삭제 확인 모달 추가 */}
-      {showDeleteModal && (
-        <div className="HG-delete-confirm-modal">
-          <div className="HG-delete-confirm-content">
-            <p className="WS-delete-confirm-message">정말 삭제하시겠습니까?</p>
-            <div className="HG-delete-confirm-buttons">
-              <button
-                className="HG-Modal-Button"
-                onClick={() => setShowDeleteModal(false)}
+                  }
+                  alt="selectIcon"
+                />
+                전체 선택
+              </span>
+              <span
+                className="HG-select-modal-select-delete"
+                onClick={() => handleDeleteClick()}
               >
-                취소
-              </button>
-              <button className="HG-Modal-Button" onClick={handleDelete}>
-                확인
-              </button>
+                선택 삭제
+              </span>
             </div>
           </div>
+          <div className="HG-select-modal-select-list">
+            {Object.entries({
+              landmark: "관광지",
+              restaurant: "음식/카페",
+              etc: "그 외",
+            }).map(([type, koreanType]) => {
+              const placesOfType = filteredPlaces.filter((place) => {
+                if (type === "etc") {
+                  // etc 타입일 경우 landmark와 restaurant가 아닌 모든 항목 필터링
+                  return !["landmark", "restaurant"].includes(place.placeType);
+                }
+                // 그 외의 경우 일치하는 타입만 필터링
+                return place.placeType === type;
+              });
+
+              return (
+                placesOfType.length > 0 && (
+                  <div className="HG-select-modal-select-list-type" key={type}>
+                    <div className="HG-select-modal-type-header">{koreanType}</div>
+                    {placesOfType.map((place, index) => (
+                      <div key={index} className="HG-select-modal-select-list-item">
+                        <div className="HG-select-modal-select-list-item-content">
+                          <span>
+                            <img
+                              className="HG-trevelinfo-content-frame-select"
+                              onClick={() => handlePlaceSelect(place.placeId)}
+                              src={
+                                isSelected.some(
+                                  (item) => item.placeId === place.placeId
+                                )
+                                  ? isSelectedIcon
+                                  : selectIcon
+                              }
+                              alt="selectIcon"
+                            />
+                          </span>
+                          <span onClick={() => handlePlaceSelect(place.placeId)}>
+                            <img
+                              className="HG-select-modal-select-list-item-place-img"
+                              src={place.placeImage}
+                              onError={(e) => {
+                                e.target.src = "https://picsum.photos/600/300";
+                              }}
+                              alt="placeImage"
+                            />
+                          </span>
+                          <div onClick={() => handlePlaceSelect(place.placeId)}>
+                            <div className="HG-select-modal-select-list-item-place-info-name">
+                              {place.placeName}
+                            </div>
+                            <div className="HG-select-modal-select-list-item-place-info-intro">
+                              {place.intro?.slice(0, 10)}
+                            </div>
+                          </div>
+                          <div className="HG-select-modal-select-list-item-place-delete">
+                            <img
+                              src={xIcon}
+                              alt="xIcon"
+                              onClick={() => handleDeleteClick(place.placeId)}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )
+              );
+            })}
+          </div>
+          <div className="HG-select-modal-footer">
+            <div className="HG-select-modal-footer-text-frame">
+              <span className="HG-select-modal-footer-text-bold">
+                {travelDays}일 기준:
+              </span>
+              <span className="HG-select-modal-footer-text">
+                최소 {travelDays * 2}개 - 최대 {travelDays * 5}개까지 선택가능합니다
+              </span>
+            </div>
+            <div
+              className="HG-select-modal-footer-btn"
+              onClick={handleGuidebookCreate}
+            >
+              가이드북 생성 {isSelected.length}
+            </div>
+          </div>
+
+          {/* 가이드북 생성 일정 취향 모달 추가 */}
+          <TasteModal
+            isOpen={showTasteModal}
+            onClose={() => setShowTasteModal(false)}
+            onSave={(e) => handleTasteSave(e)}
+          />
+
+          {/* 삭제 확인 모달 추가 */}
+          {showDeleteModal && (
+            <div className="HG-delete-confirm-modal">
+              <div className="HG-delete-confirm-content">
+                <p className="WS-delete-confirm-message">정말 삭제하시겠습니까?</p>
+                <div className="HG-delete-confirm-buttons">
+                  <button
+                    className="HG-Modal-Button"
+                    onClick={() => setShowDeleteModal(false)}
+                  >
+                    취소
+                  </button>
+                  <button className="HG-Modal-Button" onClick={handleDelete}>
+                    확인
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
-      )}
-    </div>
       )}
     </div>
   );
