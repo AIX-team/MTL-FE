@@ -292,9 +292,7 @@ a,
 .HG-TravelInfo-Content-Frame-Place-Slider {
   margin-top: 2%;
 
-
   height: 410px;
-
 
   overflow-y: auto;
   overflow-x: hidden;
@@ -369,9 +367,13 @@ a,
 }
 
 .slide-content {
-  position: relative;
   height: 250px;
+  position: relative;
+  text-align: left;
+  border-radius: var(--border-radius-xl);
+  background: var(--color-light-gray);
 }
+
 
 .slick-slider {
   margin-top: 10px;
@@ -399,12 +401,12 @@ a,
   align-items: center;
   justify-content: center;
   padding-bottom: 5px;
-
-  font-size: var(--font-size-sm);
 }
 
-.WS-TravelInfo-Address {
+.WS-TravelInfo-Address,
+.WS-TravelInfo-Description {
   font-size: var(--font-size-sm);
+  padding: 20px;
 }
 
 /* 각 도트 버튼 스타일링 */
@@ -424,4 +426,5 @@ a,
   color: var(--color-main-hover) !important;
   /* 활성 도트 색상 */
 }
+
 /* ------------------------------------------------------------------------------------- */

@@ -84,8 +84,8 @@ const MapComponent = React.memo(({ places }) => {
                         content: new window.google.maps.marker.PinElement({
                             glyph: `${index + 1}`,  // place.num 대신 index + 1 사용
                             glyphColor: '#FFFFFF',
-                            background: '#4285f4',
-                            borderColor: '#4285f4'
+                            background: '#C92B2A',
+                            borderColor: '#C92B2A'
                         }).element
                     });
 
@@ -143,13 +143,18 @@ const MapComponent = React.memo(({ places }) => {
                 <Polyline
                     path={path}
                     options={{
-                        strokeColor: '#000000',
-                        strokeOpacity: 1,
+                        strokeColor: '#3E3E3E',
+                        strokeOpacity: 0,
                         strokeWeight: 2,
-                        strokePattern: [
-                            { offset: '0', repeat: '10px' },     // 선
-                            { offset: '10px', repeat: '10px' }   // 공백
-                        ],
+                        icons: [{              // 점선 스타일 설정
+                            icon: {
+                                path: 'M 0,-1 0,1',  // 점 모양 정의
+                                strokeOpacity: 1,
+                                scale: 3          // 점 크기
+                            },
+                            offset: '0',
+                            repeat: '15px'      // 점 간격
+                        }],
                         geodesic: true
                     }}
                 />
