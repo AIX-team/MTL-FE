@@ -155,6 +155,7 @@ const MapComponent = React.memo(({ places }) => {
 }, (prevProps, nextProps) => {
     // places 배열의 실제 내용이 변경되었을 때만 리렌더링
     return JSON.stringify(prevProps.places) === JSON.stringify(nextProps.places);
+    
 });
 
 
