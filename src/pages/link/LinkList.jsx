@@ -94,11 +94,10 @@ const LinkList = ({ linkData, setLinkData }) => {
         return;
       }
 
-      // SearchYoutube.jsx와 동일한 API 엔드포인트 사용
       const response = await axios.post(process.env.REACT_APP_BACKEND_URL + '/user/save', {
         url: inputLink,
-        title: inputLink, // 초기 제목은 URL로 설정
-        author: "직접 입력" // 직접 입력한 URL임을 표시
+        title: inputLink,
+        author: "직접 입력"
       }, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -110,11 +109,10 @@ const LinkList = ({ linkData, setLinkData }) => {
             url: inputLink,
             type: type,
             id: Date.now(),
-            url_title: response.data.title || inputLink,
+            url_title: response.data.url_title || response.data.title || inputLink,
             author: "직접 입력",
           },
         ]);
-
         setInputLink("");
       }
     } catch (error) {
@@ -123,7 +121,7 @@ const LinkList = ({ linkData, setLinkData }) => {
       if (error.response && error.response.data) {
         errorMessage = error.response.data.message || JSON.stringify(error.response.data);
       }
-      showModal(errorMessage); // 
+      showModal(errorMessage);
     }
   };
 
@@ -177,7 +175,7 @@ const LinkList = ({ linkData, setLinkData }) => {
             url: item.url,
             type: getLinkType(item.url),
             id: item.id || Date.now(),
-            url_title: response.data.title || inputLink,
+            url_title: item.url_title || item.urlTitle || item.url,
             author: item.urlAuthor || "직접 입력"
           }));
           setLinkData(urls);
