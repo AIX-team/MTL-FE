@@ -143,9 +143,13 @@ const MapComponent = React.memo(({ places }) => {
                 <Polyline
                     path={path}
                     options={{
-                        strokeColor: '#FF0000',
+                        strokeColor: '#000000',
                         strokeOpacity: 1,
                         strokeWeight: 2,
+                        strokePattern: [
+                            { offset: '0', repeat: '10px' },     // 선
+                            { offset: '10px', repeat: '10px' }   // 공백
+                        ],
                         geodesic: true
                     }}
                 />
@@ -263,6 +267,8 @@ const GuideBook = () => {
     const handleTabClick = (courseNumber) => {
         setActiveTab(Number(courseNumber) + 1); // 활성화된 탭 변경
         setTargetCourse([]);
+        // 맵 강제 리렌더링 추가
+        setMapKey(prev => prev + 1);
     };
 
 
@@ -371,17 +377,18 @@ const GuideBook = () => {
     useEffect(() => {
         const coursesArray = Object.values(guideBook.courses);
         const currentCourse = coursesArray.find(course => course.courseNum === activeTab);
+        
         if (currentCourse?.coursePlaces) {
-            console.log('Places Update:', currentCourse.coursePlaces[0].image);
+            console.log('Places Update:', currentCourse.coursePlaces);
             const updatedPlaces = currentCourse.coursePlaces.map((place, index) => ({
                 ...place,
                 num: index + 1
             }));
-            if (places !== updatedPlaces) {
-                setPlaces(updatedPlaces);
-            }
+            setPlaces(updatedPlaces);
+            // 맵 리렌더링 트리거
+            setMapKey(prev => prev + 1);
         }
-    }, [activeTab]);
+    }, [activeTab, guideBook.courses]);
 
 
     const handlePlaceMove = () => {
