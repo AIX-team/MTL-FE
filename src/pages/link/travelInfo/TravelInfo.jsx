@@ -436,8 +436,8 @@ const TravelInfo = () => {
       setToken(localStorage.getItem('token'));
       if (!token) {
         navigate('/login');
-      } 
-    } 
+      }
+    }
   }, []);
 
   useEffect(() => {
@@ -807,7 +807,18 @@ const TravelInfo = () => {
 
                     {/* 두 번째 슬라이드 */}
                     <div className="slide-content">
-                      <div className='WS-TravelInfo-Description'>{item.placeDescription}</div>
+                      <div className='WS-TravelInfo-Description'>
+                        {item.placeDescription.split('-').map((part, index) => {
+                          const [label, content] = part.trim().split(':').map(s => s.trim());
+                          if (!content) return null;
+                          return (
+                            <span key={index} className="WS-TravelInfo-Description-Item">
+                              <span className="WS-TravelInfo-Description-Label">{label}:</span>
+                              {content}
+                            </span>
+                          );
+                        })}
+                      </div>
                       <div className='WS-TravelInfo-Address'>{item.placeAddress}</div>
                     </div>
 
