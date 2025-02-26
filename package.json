@@ -40,7 +40,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "postbuild": "xcopy /i /s /y build\\* \"C:\\AIX_proj\\MTL\\MTL-BE\\MyTravelLink\\src\\main\\resources\\static\\\"",
+    "postbuild": "cp -r build/* /Users/yuchan/Desktop/AIFinal/MTL-BE/MyTravelLink/src/main/resources/static/",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
